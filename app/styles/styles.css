@@ -79,10 +79,15 @@ div.header-subbar {
 }
 
 div.homepage-search {
+  text-align: justify;
   background-image: url(/draft-bg.png);
   min-height: 12em;
   padding-top: 8em;
   text-align: center;
+  margin-bottom: 4em;
+  position: relative;
+  width: 104%;
+  right: 2%;
 }
 
 div.homepage-search h2 {
@@ -134,6 +139,7 @@ div.tv-menu-container {
   height: 20em;
   overflow-x: scroll;
   overflow-y: hidden;
+  margin-bottom: 4em;
 }
 
 div.tv-menu-container.three {
@@ -148,7 +154,7 @@ div.tv-menu-container h2 {
 }
 
 div.tv-menu-container div.tv-menu-program {
-  background-color: #ff0;
+/*  background-color: #ff0;*/
   margin-left: 1.2em;
   margin-right: 1.2em;
   margin-bottom: 2em;
@@ -243,10 +249,15 @@ div.summary-box  {
   display: block;
 }
 
+.drawer-item:first-child {
+  margin-top: 1.5em;
+}
+
 .drawer-item {
   text-decoration: none;
   text-align: left;
   padding-left: 1.4em;
+  margin-bottom: 2em;
   display: block;
   color: var(--black);
 }
@@ -285,7 +296,7 @@ div.drawermenu-container div.drawermenu-items:before {
 }
 
 div.drawermenu-items {
-  min-width: 15rem;
+  min-width: 16rem;
   background-color: #fff;
 /*  border: 1px solid var(--white);*/
   box-shadow: 0px 2px 4px 1px #ddd;

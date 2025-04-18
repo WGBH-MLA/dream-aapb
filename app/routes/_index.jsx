@@ -100,8 +100,7 @@ export const loader = async () => {
 export default function Index() {
   let data = useLoaderData()
   return (
-    <div className='body-container'>
-
+    <>
       <div className="homepage-search">
         <h2>
           Discover historic programs of publicly funded radio and television across America. Watch and listen.
@@ -109,9 +108,10 @@ export default function Index() {
         <LayoutSearch />
       </div>
 
-
-      <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-      <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
-    </div>
+      <div className='body-container'>
+        <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
+        <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+      </div>
+    </>
   )
 }

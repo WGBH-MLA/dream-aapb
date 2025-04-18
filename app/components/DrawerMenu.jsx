@@ -47,6 +47,5 @@ const DrawerItem = (props) => {
         {props.label + ' '}
       </h4>
       <div className='drawer-subtitle'>{props.subLabel}</div>
-      {props.last ? null : <hr />}
     </a>)
 }
