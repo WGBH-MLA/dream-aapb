@@ -1,4 +1,4 @@
-// import { ExternalLink, ChevronDown } from 'lucide-react'
+import { ExternalLink, ChevronDown } from 'lucide-react'
 
 export default function DrawerMenu(props) {
   let items
@@ -26,6 +26,7 @@ export default function DrawerMenu(props) {
     <div className={drawerClasses}>
       <span className='drawermenu-label'>
         {props.label}
+        <ChevronDown />
       </span>
 
       <div className='drawermenu-items'>{items}</div>
@@ -44,7 +45,7 @@ const DrawerItem = (props) => {
       href={props.url}
       {...(props.external ? { target: '_blank' } : {})}>
       <h4 className='drawer-title'>
-        {props.label + ' '}
+        {props.label}
       </h4>
       <div className='drawer-subtitle'>{props.subLabel}</div>
     </a>)

@@ -5,9 +5,9 @@ export default function ScoreLight(props) {
   let score = parseFloat(props.score)
   if(score){
     if(score > 1 && score < 9){
-      color =  "#ff0"
+      color =  "#ffa"
     } else if(score >= 9){
-      color = "#0f0"
+      color = "#afa"
     }
   }
   return (

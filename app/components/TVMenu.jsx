@@ -31,12 +31,12 @@ export default function TVMenu(props){
 
 function TVProgram(props){
   return (
-    <a href={props.url} >
-      <div className={"tv-menu-program" + (props.classes ? props.classes : "")} >
+    <div className={"tv-menu-program" + (props.classes ? props.classes : "")} >
+      <a href={props.url} >
         <img src={ props.thumbnail } />
         <h4>{ props.title }</h4>
         <h5>{ props.subtitle }</h5>
-      </div>
-    </a>
+      </a>
+    </div>
   )
 }

@@ -35,7 +35,7 @@ export default function Search() {
     search_settings: {
       highlight_attributes: ["pbcoreDescriptionDocument.pbCoreTitle.text"],
 
-      search_attributes: [ "pbcoreDescriptionDocument.pbcoreDescription","pbcoreDescriptionDocument.pbcoreTitle.first.text","pbcoreDescriptionDocument.pbcoreAnnotation.first.text","pbcoreDescriptionDocument.pbcoreIdentifier", ],
+      search_attributes: [ "pbcoreDescriptionDocument.pbcoreDescription","pbcoreDescriptionDocument.pbcoreTitle.first.text","pbcoreDescriptionDocument.pbcoreAnnotation.first.text","pbcoreDescriptionDocument.pbcoreIdentifier", "pbcoreDescriptionDocument.pbcoreCreator"],
       // search_attributes: [ "pbcoreDescriptionDocument.pbcoreTitle.text"],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
@@ -65,7 +65,19 @@ export default function Search() {
           field: "text",
           type: "string",
           nestedPath: "pbcoreDescriptionDocument.pbcoreAssetDate"
-        }
+        },
+        { 
+          attribute: "pbcoreDescriptionDocument.pbcoreCreator.creator", 
+          field: "creator",
+          type: "string",
+          nestedPath: "pbcoreDescriptionDocument.pbcoreCreator"
+        },
+        { 
+          attribute: "pbcoreDescriptionDocument.pbcoreCreator", 
+          field: "pbcoreCreator",
+          type: "nested",
+          nestedPath: "pbcoreDescriptionDocument"
+        }        
       ]
     },
   })
@@ -87,7 +99,6 @@ export default function Search() {
   }
 
   const sonyCiIds = (items) => {
-    console.log( 'hey now hey now', items )
     return items
     // return items.map((item) => {
     //   if(item.value.source == "")
@@ -144,6 +155,15 @@ export default function Search() {
     // })
       
   }
+
+  const producingOrganization = (items) => {
+    console.log( 'itemz', items )
+
+    return items.filter((pbcoreCreator) => {
+      return pbcoreCreator.creatorRole && pbcoreCreator.creatorRole == "Producing Organization"
+    })
+  }
+
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
       return {
@@ -209,6 +229,18 @@ export default function Search() {
                   }
                 }
               }
+            },
+            {
+              nested: {
+                path: "pbcoreDescriptionDocument.pbcoreCreator",
+                query: {
+                  match: {
+                    "pbcoreDescriptionDocument.pbcoreCreator.creator": {
+                      query: query
+                    }
+                  }
+                }
+              }
             }
           ]
         }
@@ -220,6 +252,7 @@ export default function Search() {
     <div className="body-container">
 
       <InstantSearch
+        routing={true}
         indexName="aapb"
         searchClient={ searchClient }
       >
@@ -236,6 +269,19 @@ export default function Search() {
           <RefinementList
             attribute="pbcoreDescriptionDocument.pbcoreIdentifier.text"
             transformItems={ sonyCiIds }
+          />
+
+          Producing Organization
+          <RefinementList
+            attribute="pbcoreDescriptionDocument.pbcoreCreator.creator"
+            transformItems={ producingOrganization }
+          />
+
+          creatizz
+          <RefinementList
+            attribute="pbcoreDescriptionDocument.pbcoreCreator"
+            transformItems={ producingOrganization }
+            
           />
 
           Annotation Type

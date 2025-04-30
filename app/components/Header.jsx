@@ -45,7 +45,7 @@ const drawerItems = {
   about: [
       {
         label: "About the AAPB",
-        url: "/about",
+        url: "/s/about",
         external: false,
                 
       },

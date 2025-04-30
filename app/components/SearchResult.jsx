@@ -41,25 +41,45 @@ function resultDescription(descriptions){
   }
 }
 
+function producingOrganization(creators){
+  return creators ? creators.find(creator => creator.creatorRole?.[0] == "Producing Organization").creator : null 
+}
+
 export default function SearchResult({hit}){
   let guid = aapbGuid(hit.pbcoreDescriptionDocument)
   let description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
+  let producingOrg = producingOrganization(hit.pbcoreDescriptionDocument.pbcoreCreator)
 
   return (
     <div className="search-result">
+      <a href={`/search/${guid}`} >
+        <pre>
+          { "" || JSON.stringify(hit) }
+        </pre>
 
-      <Thumbnail guid={ guid } />
+        <div className="hit-thumbnail-container">
+          <Thumbnail guid={ guid } />
+        </div>      
 
-      <h3 className="hit-title">{ niceTitle(hit.pbcoreDescriptionDocument.pbcoreTitle) }</h3>
-      
-      <div>{ hit.pbcoreDescriptionDocument.pbcoreAssetDate ? hit.pbcoreDescriptionDocument.pbcoreAssetDate.text : " " }</div>
+        <div className="hit-info-container">
 
-      <div className="hit-description">
-        { description }
-      </div>
+          <h3 className="hit-title">{ niceTitle(hit.pbcoreDescriptionDocument.pbcoreTitle) }</h3>
 
-      <div className="hit-score">
-      </div>
+          <div>{ hit.pbcoreDescriptionDocument.pbcoreAssetDate ? hit.pbcoreDescriptionDocument.pbcoreAssetDate.text : " " }</div>
+          
+        </div>
+
+        <div className="hit-producer">
+          <b>Produced By:</b> { producingOrg }
+        </div>
+        <div className="hit-description">
+          { description }
+        </div>
+
+        <div className="hit-score">
+          <ScoreLight score={ hit._score } />
+        </div>
+      </a>
     </div>
   )
 }
