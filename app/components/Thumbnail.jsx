@@ -7,6 +7,7 @@ function hitThumbnail(guid){
 export default function Thumbnail(props) {
   const [exists, setExists] = useState(false)
   var url = hitThumbnail(props.guid)
+  var classes = props.searchResult ? "hit-thumbnail" : "show-thumbnail"
 
   var img
   if(exists){
@@ -20,7 +21,7 @@ export default function Thumbnail(props) {
   })
 
   return (
-    <div className="hit-thumbnail">
+    <div className={ classes }>
        {exists}
       { img }
     </div>

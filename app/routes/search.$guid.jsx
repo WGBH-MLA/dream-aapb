@@ -1,251 +1,40 @@
-// import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from '@remix-run/react'
+import Thumbnail from "../components/Thumbnail"
+import { getRecord } from '../util/getRecord'
+import { niceTitle } from '../util/niceTitle'
 
-// export default function Record() {
+export const loader = async ({params, request}) => {
+  let data = await getRecord(params.guid)
+  if(data && data.hits && data.hits.hits && data.hits.hits[0]){
+    return data.hits.hits[0]._source
+  } else {
+    return null
+  }
+}
 
-//   const sk = new Searchkit({
-//     connection: {
-//       host: 'http://localhost:9200',
-//       // with an apiKey
-//       // https://www.searchkit.co/docs/guides/setup-elasticsearch#connecting-with-api-key
-//       apiKey: "Z1pqdVE1VUJlMTdpbU5oSXNoby06SGtSZERqY0dSaHVpS2hvbVJnMEJwdw=="
-//       // with a username/password
-//       // https://www.searchkit.co/docs/guides/setup-elasticsearch#connecting-with-usernamepassword
-//       //auth: {
-//       //  username: "elastic",
-//       //  password: "changeme"
-//       //}
-//     },
+export default function Collection() {
+  const data = useLoaderData()
 
-//     search_settings: {
-//       highlight_attributes: ["pbcoreDescriptionDocument.pbCoreTitle.text"],
+  let title, description
+  if(data){
+    title = niceTitle(data.pbcoreTitle)
+    description = data.pbcoreDescription && data.pbcoreDescription[0] ? data.pbcoreDescription[0] : "No Description Available"
+  }
+  return (
+    <div className="skinny-body-container">
+      <div className="show-title">
+        <h2>{ title }</h2>
+      </div>
 
-//       search_attributes: [ "pbcoreDescriptionDocument.pbcoreDescription","pbcoreDescriptionDocument.pbcoreTitle.first.text","pbcoreDescriptionDocument.pbcoreAnnotation.first.text","pbcoreDescriptionDocument.pbcoreIdentifier", ],
-//       // search_attributes: [ "pbcoreDescriptionDocument.pbcoreTitle.text"],
+      <div className="show-media">
+        <Thumbnail guid={ data.guid } />
+      </div>
 
-//       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-//       result_attributes: ["pbcoreDescriptionDocument","pbcoreDescriptionDocument.pbcoreDescription"],
+      <div className="show-description">
+        { description }
+      </div>
+    </div>
 
-//       facet_attributes: [
-//         { 
-//           attribute: "pbcoreDescriptionDocument.pbcoreAudienceLevel", 
-//           field: "pbcoreAudienceLevel", 
-//           type: "string",
-//           nestedPath: "pbcoreDescriptionDocument"
-//         },
-//         { 
-//           attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text", 
-//           field: "text", 
-//           type: "string",
-//           nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
-//         },
-//         { 
-//           attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType", 
-//           field: "annotationType", 
-//           type: "string",
-//           nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
-//         },
-//         { 
-//           attribute: "pbcoreDescriptionDocument.pbcoreAssetDate.text", 
-//           field: "text",
-//           type: "string",
-//           nestedPath: "pbcoreDescriptionDocument.pbcoreAssetDate"
-//         }
-//       ]
-//     },
-//   })
+  )
+}
 
-//         // <div>IDs:<ul>{ hit && hit.pbcoreDescriptionDocument.pbcoreIdentifier ? hit.pbcoreDescriptionDocument.pbcoreIdentifier.map( (id,i) => <li key={i}>{id.source}: {id?.text}</li>) : "No IDs" }</ul></div>
-
-
-
-//   const dateToYear = (items) => {
-//     return items.map((item) => {
-//       if(item.value){
-//         var notYear = item.value.match(/^\d{4}(.*)/)[1]
-//         item.value = item.value.replace( notYear, "")
-//         item.label = item.label.replace( notYear, "")
-//       }
-      
-//       return item
-//     })
-//   }
-
-//   const sonyCiIds = (items) => {
-//     console.log( 'hey now hey now', items )
-//     return items
-//     // return items.map((item) => {
-//     //   if(item.value.source == "")
-//     //   return item
-//     // })    
-//   }
-
-//   const accessLevelAnnotation = (items) => {
-//     return items.map((descdoc) => {
-//       if(descdoc && descdoc.pbcoreIdentifier && descdoc.pbcoreIdentifier.length > 0){
-//         // check for sony ci ids
-//         var ci_ids = descdoc.pbcoreIdentifier.filter( (id) => {
-//           id.source == "Sony Ci"
-//         })
-
-//         if(ci_ids.length > 0){
-//           var accessLevelAnno = descdoc.pbcoreAnnotation.find((anno) => {
-//             anno.annotationType == "Level of User Access"
-//           })
-
-//           if(accessLevelAnno){
-//             return {
-//               label: accessLevelAnno.value,
-//               value: accessLevelAnno.value
-//             }
-//           } else {
-
-//             return {
-//               label: "Private",
-//               value: "Private"
-//             }            
-//           }
-
-//         } else {
-//           return {
-//             label: "Private",
-//             value: "Private"
-//           }
-//         }
-//       }
-
-
-//     })
-
-//     // return items.filter((item) => {
-//     //   item.annotationsannotationType == "Level of User Access"
-//     // }).map((item) => {
-//     //   if(item.value){
-//     //     // item.value = item.value.replace( notYear, "")
-//     //     item.label = item.label + "wow ow wow!"
-//     //   }
-      
-//     //   return item
-//     // })
-      
-//   }
-//   const searchClient = Client(sk, {
-//     getQuery: (query, search_attributes) => {
-//       return {
-//         bool: {
-//           should: [
-//             {
-//               nested: {
-//                 path: "pbcoreDescriptionDocument",
-//                 query: {
-//                   match: {
-//                     "pbcoreDescriptionDocument": {
-//                       query: query
-//                     }
-//                   }
-//                 }
-//               } 
-//             },
-//             {
-//               nested: {
-//                 path: "pbcoreDescriptionDocument",
-//                 query: {
-//                   match: {
-//                     "pbcoreDescriptionDocument.pbcoreDescription": {
-//                       query: query
-//                     }
-//                   }
-//                 }
-//               } 
-//             },
-//             {
-//               nested: {
-//                 // PATH MUST GO TO THE FIELD A LEVEL ABOVE THE TARGET, NOTTTTTTT THE TOP LEVEL FIELD
-//                 path: "pbcoreDescriptionDocument.pbcoreTitle",
-//                 query: {
-//                   match: {
-//                     "pbcoreDescriptionDocument.pbcoreTitle.text": {
-//                       query: query
-//                     }
-//                   }
-//                 }
-//               } 
-//             },
-//             {
-//               nested: {
-//                 path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-//                 query: {
-//                   match: {
-//                     "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-//                       query: query
-//                     }
-//                   }
-//                 }
-//               } 
-//             },
-//             {
-//               nested: {
-//                 path: "pbcoreDescriptionDocument.pbcoreIdentifier",
-//                 query: {
-//                   match: {
-//                     "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
-//                       query: query
-//                     }
-//                   }
-//                 }
-//               }
-//             }
-//           ]
-//         }
-//       }
-//     }
-//   })
-
-//   return (
-//     <div className="body-container">
-
-//       <InstantSearch
-//         routing={true}
-//         indexName="aapb"
-//         searchClient={ searchClient }
-//       >
-//         <div className="page-sidebar">
-//           <SearchBox autoFocus />
-
-//           Availability
-//           <RefinementList
-//             attribute="pbcoreDescriptionDocument"
-//             transformItems={ accessLevelAnnotation }
-//           />
-
-//           Digitized?
-//           <RefinementList
-//             attribute="pbcoreDescriptionDocument.pbcoreIdentifier.text"
-//             transformItems={ sonyCiIds }
-//           />
-
-//           Annotation Type
-//           <RefinementList
-//             attribute="pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType"
-//           />
-
-//           Annotation Text
-//           <RefinementList
-//             attribute="pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text"
-//           />
-
-//           Asset Year
-//           <RefinementList
-//             attribute="pbcoreDescriptionDocument.pbcoreAssetDate.text"
-//             searchable={true}
-//             transformItems={ dateToYear }
-//           />          
-//           <CurrentRefinements />
-//         </div>
-//         <div className="page-maincolumn">
-//           <Hits hitComponent={SearchResult} />
-//           <Pagination />
-//         </div>
-//       </InstantSearch>
-//     </div>
-//   )
-// }
