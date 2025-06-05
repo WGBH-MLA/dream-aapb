@@ -637,12 +637,28 @@ div.page-maincolumn {
   width: 70vw;
 }
 
+div.clear-refinements-container {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: inline-flex;
+  width: 10%;
+}
+
+div.clear-refinements-container div.ais-ClearRefinements {
+  margin-right: 2em;
+}
+
+div.ais-ClearRefinements button {
+  width: 100%;
+}
+
 /*show page*/
 div.show-title {
   text-align: center;
 }
 
 div.show-description {
+  min-height: 2em;
   margin-left: 25%;
   margin-bottom: 4em;
   width: 50%;
@@ -711,6 +727,11 @@ div.top-refinements-bar {
   font-size: 0.8em;
   padding-top: 0.1em;
   background-color: rgba(238, 230, 240);
+}
+
+div.current-refinements-container {
+  display: inline-flex;
+  width: 90%;
 }
 
 /*hide the 'container' label containing facets for a particular field*/

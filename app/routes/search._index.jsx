@@ -16,6 +16,7 @@ import {
           Hits,
           RefinementList,
           CurrentRefinements,
+          ClearRefinements,
           ToggleRefinement,
           Pagination,
           RangeInput,
@@ -55,8 +56,8 @@ export default function Search() {
           nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         },
         { 
-          attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType", 
-          field: "annotationType", 
+          attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType.text",
+          field: "text", 
           type: "string",
           nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         },
@@ -73,10 +74,10 @@ export default function Search() {
           nestedPath: "pbcoreDescriptionDocument.pbcoreGenre"
         },
         { 
-          attribute: "pbcoreDescriptionDocument.pbcoreAssetType", 
-          field: "pbcoreAssetType",
+          attribute: "pbcoreDescriptionDocument.pbcoreAssetType.text", 
+          field: "text",
           type: "string",
-          nestedPath: "pbcoreDescriptionDocument"
+          nestedPath: "pbcoreDescriptionDocument.pbcoreAssetType"
         },
         { 
           attribute: "pbcoreDescriptionDocument.pbcoreDescription.text", 
@@ -103,6 +104,11 @@ export default function Search() {
         { 
           attribute: "genres", 
           field: "genres",
+          type: "string",
+        },
+        { 
+          attribute: "contributing_orgs", 
+          field: "contributing_orgs",
           type: "string",
         }
       ],
@@ -264,10 +270,10 @@ export default function Search() {
             },
             {
               nested: {
-                path: "pbcoreDescriptionDocument",
+                path: "pbcoreDescriptionDocument.pbcoreDescription",
                 query: {
                   match: {
-                    "pbcoreDescriptionDocument.pbcoreDescription": {
+                    "pbcoreDescriptionDocument.pbcoreDescription.text": {
                       query: query
                     }
                   }
@@ -313,10 +319,10 @@ export default function Search() {
             },
             {
               nested: {
-                path: "pbcoreDescriptionDocument.pbcoreCreator",
+                path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
                 query: {
                   match: {
-                    "pbcoreDescriptionDocument.pbcoreCreator.creator": {
+                    "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
                       query: query
                     }
                   }
@@ -341,32 +347,6 @@ export default function Search() {
     }
   })
 
-  // const addOrStyle = () => {
-  //   let breadcrumbs = document.querySelector("div.top-refinements-bar span.ais-CurrentRefinements-categoryLabel")
-  //   console.log( 'um hey', breadcrumbs )
-
-  //   if(breadcrumbs && breadcrumbs.length > 0){
-  //     breadcrumbs.forEach((bc) => {
-  //       console.log( 'ha ha ha', bc )
-  //       if(bc.text.includes("Producing Organization: ")){
-  //         bc.text = "LETS FFF GOOOO"
-  //       }
-  //     })
-  //   }
-  // }
-  // how to add styles on facet change...........
-  // style the top bar breadcrumb things according to or vs and fields
-  // the sidebar facets aren't there when the
-  // useEffect(() => {
-  //   // target all the sidebar facet checkboxes
-  //   let ele = document.querySelector("li.ais-RefinementList-item span.ais-RefinementList-labelText input.ais-RefinementList-checkbox")
-
-  //   console.log( 'elelelele', ele )
-  //   if(ele){
-  //     ele.addEventListener("click", addOrStyle)
-  //   }
-  // })
-
   return (
     <div className="body-container">
 
@@ -382,15 +362,22 @@ export default function Search() {
         </div>
 
         <div className="top-refinements-bar marbot marleft marright">
-          <CurrentRefinements
-            transformItems={prettyCurrentRefinements}
-          />
+          <div className="current-refinements-container">
+            <CurrentRefinements
+              transformItems={prettyCurrentRefinements}
+            />
+          </div>
+          <div className="clear-refinements-container">
+            <ClearRefinements />
+          </div>
           {/*<SortBy
             items={[
               { label: 'Relevance', value: 'aapb_augmented_default' },
               { label: 'Title', value: 'aapb_augmented_title_desc' }
             ]}
           />*/}
+
+
         </div>
 
 
@@ -434,6 +421,17 @@ export default function Search() {
 
           <hr />
 
+          <SearchAccordion title="Asset Type" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="pbcoreDescriptionDocument.pbcoreAssetType"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
           <SearchAccordion title="Producing Organization" content={
             <>
               <RefinementList
@@ -445,7 +443,7 @@ export default function Search() {
 
           <hr />
 
-          <SearchAccordion title="Genre" content={
+          <SearchAccordion title="Genre" startClosed={true} content={
             <>
               <RefinementList
                 attribute="genres"
@@ -456,16 +454,39 @@ export default function Search() {
 
           <hr />
 
-          <SearchAccordion title="Asset Type" content={
+          <SearchAccordion title="Topic" startClosed={true} content={
             <>
               <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType"
+                attribute="topics"
                 // transformItems={ producingOrganization }
               />
             </>
           }/>
 
           <hr />
+
+          <SearchAccordion title="Contributing Organization" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="contributing_orgs"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Collection" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="collections"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
 
         </div>
 

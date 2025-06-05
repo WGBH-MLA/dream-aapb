@@ -14,7 +14,7 @@ function aapbGuid(descdoc){
 
 function resultDescription(descriptions){
   if(descriptions.length > 0 && descriptions[0].text && descriptions[0].text.toLowerCase() !== "no description available"){
-    return `Description: ${descriptions[0].text.substring(0, 500)}`
+    return `${descriptions[0].text.substring(0, 500)}`
   } else {
     return ""
   }

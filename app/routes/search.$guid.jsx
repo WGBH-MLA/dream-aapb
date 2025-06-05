@@ -5,21 +5,30 @@ import { niceTitle } from '../util/niceTitle'
 
 export const loader = async ({params, request}) => {
   let data = await getRecord(params.guid)
-  if(data && data.hits && data.hits.hits && data.hits.hits[0]){
+    console.log( 'hey its the data', data.hits.hits[0] )
+
+  if(data && data.hits && data.hits.hits && data.hits.hits[0] && data.hits.hits[0]._source){
     return data.hits.hits[0]._source
   } else {
     return null
   }
 }
 
-export default function Collection() {
+export default function ShowRecord() {
   const data = useLoaderData()
 
   let title, description
   if(data){
-    title = niceTitle(data.pbcoreTitle)
-    description = data.pbcoreDescription && data.pbcoreDescription[0] ? data.pbcoreDescription[0] : "No Description Available"
+    title = niceTitle(data.pbcoreDescriptionDocument.pbcoreTitle)
+    if(data?.pbcoreDescriptionDocument?.pbcoreDescription[0] && data.pbcoreDescriptionDocument.pbcoreDescription[0]?.text){
+      description = data.pbcoreDescriptionDocument.pbcoreDescription[0].text
+    } else {
+      description = "No Description Available"
+    }
   }
+
+
+  console.log( 'scwiption', description )
   return (
     <div className="skinny-body-container">
       <div className="show-title">
