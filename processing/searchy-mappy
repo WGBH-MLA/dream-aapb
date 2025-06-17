@@ -1,0 +1,230 @@
+curl -v -X PUT "localhost:9200/aapb_augmented/" \
+-H "Authorization: ApiKey "Z1pqdVE1VUJlMTdpbU5oSXNoby06SGtSZERqY0dSaHVpS2hvbVJnMEJwdw=="" \
+-H "Content-Type: application/json" \
+-d'{
+
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "default": {
+          "type": "custom",
+          "tokenizer": "sweet_tokenizer",
+          "char_filter": [
+            "html_strip"
+          ],
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "classic"
+          ]
+        }
+      },
+      "tokenizer": {
+        "sweet_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 3,
+          "max_gram": 3,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+
+      "producing_org": { "type": "keyword" },
+      "media_type": { "type": "keyword" },
+      "access_level": { "type": "keyword" },
+      "genres": { "type": "keyword" },
+      "contributing_orgs": { "type": "keyword" },
+      "special_collections": { "type": "keyword" },
+      "topics": { "type": "keyword" },
+      "broadcast_date": { "type": "date" },
+
+      "guid": { "type": "text" },
+      "title": { "type": "text" },
+      "pbcoreDescriptionDocument": {
+        "type": "nested",
+        "properties": {
+          "pbcoreDescription": {
+            "type": "nested",
+            "properties": {
+              "descriptionType": {"type": "text"},
+              "text": {"type": "text"}
+            }
+          },
+          "pbcoreTitle": {
+            "type": "nested",
+            "properties": {
+              "titleType": { "type": "text" },
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreAssetType": {
+            "type": "nested",
+            "properties": {
+              "text": { "type": "keyword" }
+            }
+          },
+          "pbcoreGenre": {
+            "type": "nested",
+            "properties": {
+              "annotation": { "type": "text" },
+              "source": { "type": "text" },
+              "text": { "type": "keyword" }
+            }
+          },
+          "pbcoreAnnotation": {
+            "type": "nested",
+            "properties": {
+              "annotationType": { "type": "text" },
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreIdentifier": {
+            "type": "nested",
+            "properties": {
+              "source": { "type": "text" },
+              "text": { "type": "text" }
+            }
+          },
+
+          "pbcoreAssetDate": {
+            "type": "nested",
+            "properties": {
+              "dateType": {"type": "text"},
+              "text": {"type": "text"}
+            }
+          },
+          "pbcoreCreator": {
+            "type": "nested",
+            "properties": {
+              "creator": {
+                "type": "nested",
+                "properties": {
+                  "affiliation": {"type": "text"},
+                  "ref": {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "creatorRole": {
+                "type": "nested",
+                "properties": {
+                  "text": {"type": "text"}
+                }
+              }
+            }
+          },
+          "pbcorePublisher": {
+            "type": "nested",
+            "properties": {
+              "publisher": {
+                "type": "nested",
+                "properties": {
+                  "affiliation": {"type": "text"},
+                  "ref": {"type": "text"},
+                  "text": {"type": "keyword"}
+                }
+              },
+              "publisherRole": {
+                "type": "nested",
+                "properties": {
+                  "text": {"type": "text"}
+                }
+              }
+            }
+          },
+          "pbcoreContributor": {
+            "type": "nested",
+            "properties": {
+              "contributor": {
+                "type": "nested",
+                "properties": {
+                  "affiliation": {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "contributorRole": {
+                "type": "nested",
+                "properties": {
+                  "text": {"type": "text"}
+                }
+              }
+            }
+          },
+          "pbcoreInstantiation": {
+            "type": "nested",
+            "properties": {
+              "instantiationMediaType": {
+                "type": "nested",
+                "properties": {
+                  "text": {"type": "keyword"}
+                }
+              },
+              "instantiationDuration": {
+                "type": "nested",
+                "properties": {
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationDate": {
+                "type": "nested",
+                "properties": {
+                  "dateType": {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationFilesize": {
+                "type": "nested",
+                "properties": {
+                  "unitsOfMeasure" : {"type": "text"},
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationIdentifier": {
+                "type": "nested",
+                "properties": {
+                  "source": { "type": "text" },
+                  "text": { "type": "text" }
+                }
+              },
+              "instantiationPhysical": {
+                "type": "nested",
+                "properties": {
+                  "text": { "type": "text" }
+                }
+              },
+              "instantiationDigital": {
+                "type": "nested",
+                "properties": {
+                  "text": { "type": "text" }
+                }
+              },
+              "instantiationLocation": {
+                "type": "nested",
+                "properties": {
+                  "text": { "type": "text" }
+                }
+              },
+              "instantiationAnnotation": {
+                "type": "nested",
+                "properties": {
+                  "annotationType": { "type": "text" },
+                  "text": { "type": "text" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}'
+

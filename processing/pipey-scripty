@@ -1,0 +1,257 @@
+// copied
+
+// not needed v
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreDescription != null && ctx.pbcoreDescriptionDocument.pbcoreDescription.length > 0){
+  for(int x=0; x<ctx.pbcoreDescriptionDocument.pbcoreDescription.length; x++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreDescription[x] != null && ctx.pbcoreDescriptionDocument.pbcoreDescription[x] instanceof String){
+      String descVal = ctx.pbcoreDescriptionDocument.pbcoreDescription[x];
+      ctx.pbcoreDescriptionDocument.pbcoreDescription[x] = new HashMap();
+      ctx.pbcoreDescriptionDocument.pbcoreDescription[x].text = descVal;
+    }
+  }
+}
+
+// needed 6.17.25
+
+// fix instantiation cardinality
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation instanceof HashMap){
+  HashMap instVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation;
+  ctx.pbcoreDescriptionDocument.pbcoreInstantiation = new ArrayList();
+  ctx.pbcoreDescriptionDocument.pbcoreInstantiation.add(instVal);
+}
+
+// fix instantiationAnnotation cardinality
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null){
+  for(int y=0; y < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; y++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y] != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y].instantiationAnnotation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y].instantiationAnnotation instanceof HashMap){
+      HashMap iAVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y].instantiationAnnotation;
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y].instantiationAnnotation = new ArrayList();
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[y].instantiationAnnotation.add(iAVal);
+    }
+  }
+}
+
+// fix pbcoreAnnotation cardinality
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation != null){
+
+  if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation instanceof HashMap){
+
+    HashMap annoVal = ctx.pbcoreDescriptionDocument.pbcoreAnnotation;
+    ctx.pbcoreDescriptionDocument.pbcoreAnnotation = new ArrayList();
+    ctx.pbcoreDescriptionDocument.pbcoreAnnotation.add(annoVal);
+  }
+}
+
+// fix pbcoreAssetDate cardinality
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null){
+
+  if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate instanceof HashMap){
+
+    HashMap assVal = ctx.pbcoreDescriptionDocument.pbcoreAssetDate;
+    ctx.pbcoreDescriptionDocument.pbcoreAssetDate = new ArrayList();
+    ctx.pbcoreDescriptionDocument.pbcoreAssetDate.add(assVal);
+  }
+}
+
+// reall v
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// producing org field
+ctx.producing_org = null;
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+
+  for (int i = 0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.text == "Producing Organization"){
+      if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
+        ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
+      }
+    }
+  }
+}
+
+// media type - needed because each mediatype is in a different pbcoreInstantiation
+if(ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation?.length > 0){
+  for(int z=0; z < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; z++){
+    if(ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z] != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z].instantiationMediaType != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z].instantiationMediaType.text != null){
+      ctx.media_type = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[z].instantiationMediaType.text;
+    }
+  }
+}
+
+// availability -> digitzed + level of user access
+ctx.access_level = "Private";
+if(ctx.pbcoreDescriptionDocument.pbcoreIdentifier != null && ctx.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
+
+  for(int a=0; a < ctx.pbcoreDescriptionDocument.pbcoreIdentifier.length; a++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreIdentifier[a] != null && ctx.pbcoreDescriptionDocument.pbcoreIdentifier[a].source == "Sony Ci"){
+      // its digitized if ci id is present ^
+
+      if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length > 0){
+
+        // look for a level of user access annotation
+        for(int z=0; z < ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length; z++){
+
+          if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z] != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z].annotationType == "Level of User Access"){
+            ctx.access_level = ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z].text;
+          }
+        }
+      }
+    }
+  }
+}
+
+// pbcoreGenre[annotation=genre]
+ctx.genres = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDocument.pbcoreGenre.length > 0){
+  for(int b=0; b < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; b++){
+    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[b] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation.text != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation.text == "genre") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source == "AAPB Format Genre") ){
+      ctx.genres.add(ctx.pbcoreDescriptionDocument.pbcoreGenre[b].text);
+    }
+  }
+}
+
+// sanitized guid
+ctx.guid = null;
+if(ctx?.pbcoreDescriptionDocument?.pbcoreIdentifier != null && ctx?.pbcoreDescriptionDocument?.pbcoreIdentifier?.length > 0){
+  for(int c=0; c < ctx.pbcoreDescriptionDocument.pbcoreIdentifier.length; c++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreIdentifier[c] != null && ctx.pbcoreDescriptionDocument.pbcoreIdentifier[c].source != null && ctx.pbcoreDescriptionDocument.pbcoreIdentifier[c].text != null && ctx.pbcoreDescriptionDocument.pbcoreIdentifier[c].source == "http://americanarchiveinventory.org"){
+      ctx.guid = ctx.pbcoreDescriptionDocument.pbcoreIdentifier[c].text.replace("cpb-aacip/", "cpb-aacip-");
+      ctx.guid = ctx.guid.replace("cpb-aacip_", "cpb-aacip-");
+    }
+  }
+}
+
+
+
+
+
+// contributing_orgs
+ctx.contributing_orgs = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
+
+  for(int d=0; d < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; d++){
+
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d] != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation.length > 0){
+
+      for(int e=0; e < ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation.length; e++){
+
+        if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation[e] != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation[e].annotationType != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation[e].annotationType == "organization" && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation[e].text != null){
+
+          ctx.contributing_orgs.add(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[d].instantiationAnnotation[e].text);
+        }
+      }
+    }
+  }
+}
+
+
+
+
+// collection membership
+ctx.special_collections = new ArrayList();
+if(ctx?.pbcoreDescriptionDocument?.pbcoreAnnotation != null && ctx?.pbcoreDescriptionDocument?.pbcoreAnnotation?.length > 0){
+
+  // look for a level of user access annotation
+  for(int f=0; f < ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length; f++){
+    if(ctx?.pbcoreDescriptionDocument?.pbcoreAnnotation[f] != null && ctx?.pbcoreDescriptionDocument?.pbcoreAnnotation[f].annotationType == "special_collections"){
+      ctx.special_collections.add(ctx.pbcoreDescriptionDocument.pbcoreAnnotation[f].text);
+    }
+  }
+}
+
+
+
+
+// pbcoreGenre[annotation=topic]
+ctx.topics = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDocument.pbcoreGenre.length > 0){
+  for(int g=0; g < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; g++){
+
+    // not sure if both annotation AND source values are required but feels reasonable to take either as close enough
+    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[g] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation.text != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation.text == "topic") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source == "AAPB Topical Genre") ){
+      ctx.topics.add(ctx.pbcoreDescriptionDocument.pbcoreGenre[g].text);
+    }
+  }
+}
+
+
+
+
+// stored display title -> people will think they can search for the displayed title, which is not txt from a single element
+ctx.title = null;
+
+ArrayList display_titles = new ArrayList();
+ArrayList series_titles = new ArrayList();
+ArrayList episode_titles = new ArrayList();
+ArrayList episode_numbers = new ArrayList();
+ArrayList alternative_titles = new ArrayList();
+
+if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle.length > 0){
+  for(int h=0; h < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; h++){
+
+    if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Series"){
+      series_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Episode"){
+      episode_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Episode Number"){
+      episode_numbers.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Alternative"){
+      alternative_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
+    }
+  }
+
+  if(series_titles.length > 1 && episode_numbers.length > 0 && episode_titles.length > 0){
+    // if more than one series title and ep nums present, show all ep titles
+    display_titles = episode_titles;
+  } else if(episode_numbers.length > 1 && series_titles.length == 1 && episode_titles.length > 0){
+    // if more than one ep number and exactly one series title, and any episode titles, show series titles + ep titles
+    display_titles = series_titles;
+    for(int j=0; j < episode_titles.length; j++){
+      display_titles.add(episode_titles[j]);
+    }
+  } else {
+
+    if(alternative_titles.length > 0 && alternative_titles.length == ctx.pbcoreDescriptionDocument.pbcoreTitle.length){
+      // if they're all alternative titles, use em all
+      display_titles = alternative_titles;
+    } else {
+      for(int k=0; k < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; k++){
+        // use any titles *except* alternative
+        if(ctx.pbcoreDescriptionDocument.pbcoreTitle[k].titleType != "Alternative"){
+          display_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[k].text);
+        }
+      }
+    }
+  }
+
+  ctx.title = display_titles.join("; ");
+}
+
+
+
+
+// parse date to date field if valid
+ctx.broadcast_date = null;
+if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
+  for(int l=0; l < ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length; l++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l] != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType.toLowerCase() == "broadcast"){
+
+      ZonedDateTime zdt = ZonedDateTime.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text);
+      ctx.broadcast_date = zdt;
+    }
+  }
+}

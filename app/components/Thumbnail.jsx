@@ -11,18 +11,17 @@ export default function Thumbnail(props) {
 
   var img
   if(exists){
-    img = <img src={ url } />
+    img = <img crossOrigin="anonymous" src={ url } />
   } else {
     img = <img src="/VIDEO.png" />
   }
 
   useEffect(() => {
-    fetch(url, {method: "HEAD"}).then((resp) => setExists(resp.ok))
+    fetch(url, {method: "HEAD", headers: {"Referer": "http://localhost:4000"}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
   })
 
   return (
     <div className={ classes }>
-       {exists}
       { img }
     </div>
   )

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLoaderData } from '@remix-run/react'
 import Searchkit from "searchkit"
 import { SortBy } from "react-instantsearch"
@@ -28,6 +28,12 @@ import SearchAccordion from "../components/SearchAccordion"
 
 export default function Search() {
 
+  const [customQuery, setCustomQuery] = useState({
+    all: null,
+    title: null,
+    none: null
+  })
+
   const sk = new Searchkit({
     connection: {
       host: 'http://localhost:9200',
@@ -35,20 +41,24 @@ export default function Search() {
     },
 
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbCoreTitle.text"],
+      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
 
-      search_attributes: [ "pbcoreDescriptionDocument.pbcoreDescription","pbcoreDescriptionDocument.pbcoreTitle.first.text","pbcoreDescriptionDocument.pbcoreAnnotation.first.text","pbcoreDescriptionDocument.pbcoreIdentifier", "pbcoreDescriptionDocument.pbcoreCreator"],
+      search_attributes: [
+        // "guid",
+        // "genres"
+        // "pbcoreDescriptionDocument.pbcoreDescription",
+        // "pbcoreDescriptionDocument.pbcoreTitle.text",
+        // { field: "pbcoreDescriptionDocument.pbcoreTitle.text", weight: 5 },
+        // { field: "pbcoreDescriptionDocument.pbcoreCreator", weight: 2 }
+        // "pbcoreDescriptionDocument.pbcoreAnnotation.first.text",
+        // "pbcoreDescriptionDocument.pbcoreIdentifier",
+        
+      ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["pbcoreDescriptionDocument","pbcoreDescriptionDocument.pbcoreDescription"],
+      result_attributes: ["guid", "title", "pbcoreDescriptionDocument"],
 
       facet_attributes: [
-        { 
-          attribute: "pbcoreDescriptionDocument.pbcoreAudienceLevel", 
-          field: "pbcoreAudienceLevel", 
-          type: "string",
-          nestedPath: "pbcoreDescriptionDocument"
-        },
         { 
           attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text", 
           field: "text", 
@@ -110,6 +120,16 @@ export default function Search() {
           attribute: "contributing_orgs", 
           field: "contributing_orgs",
           type: "string",
+        },
+        { 
+          attribute: "special_collections", 
+          field: "special_collections",
+          type: "string",
+        },
+        { 
+          attribute: "topics", 
+          field: "topics",
+          type: "string",
         }
       ],
 
@@ -138,62 +158,14 @@ export default function Search() {
     })
   }
 
-  const sonyCiIds = (items) => {
-    return items
-    // return items.map((item) => {
-    //   if(item.value.source == "")
-    //   return item
-    // })    
-  }
-
-  const accessLevelAnnotation = (items) => {
-    return items.map((descdoc) => {
-      if(descdoc && descdoc.pbcoreIdentifier && descdoc.pbcoreIdentifier.length > 0){
-        // check for sony ci ids
-        var ci_ids = descdoc.pbcoreIdentifier.filter( (id) => {
-          id.source == "Sony Ci"
-        })
-
-        if(ci_ids.length > 0){
-          var accessLevelAnno = descdoc.pbcoreAnnotation.find((anno) => {
-            anno.annotationType == "Level of User Access"
-          })
-
-          if(accessLevelAnno){
-            return {
-              label: accessLevelAnno.value,
-              value: accessLevelAnno.value
-            }
-          } else {
-
-            return {
-              label: "Private",
-              value: "Private"
-            }            
-          }
-
-        } else {
-          return {
-            label: "Private",
-            value: "Private"
-          }
-        }
+  const accessLevel = (items) => {
+    return items.map( (item) => {
+      if(!item.label){
+        item.label = "Private"
       }
 
-
+      return item
     })
-
-    // return items.filter((item) => {
-    //   item.annotationsannotationType == "Level of User Access"
-    // }).map((item) => {
-    //   if(item.value){
-    //     // item.value = item.value.replace( notYear, "")
-    //     item.label = item.label + "wow ow wow!"
-    //   }
-      
-    //   return item
-    // })
-      
   }
 
 
@@ -206,6 +178,9 @@ export default function Search() {
       case "producing_org":
         return "Producing Organization"
         break
+      case "contributing_orgs":
+        return "Contributing Organization"
+        break        
       case "media_type":
         return "Media Type"
         break
@@ -215,9 +190,15 @@ export default function Search() {
       case "genres":
         return "Genre"
         break
-      case "pbcoreDescriptionDocument.pbcoreAssetType":
+      case "topics":
+        return "Topic"
+        break        
+      case "pbcoreDescriptionDocument.pbcoreAssetType.text":
         return "Asset Type"
         break
+      case "collections":
+        return "Collection"
+        break        
     }
   }
 
@@ -239,111 +220,176 @@ export default function Search() {
     return attributes
   }
 
-  // //produces correct values for 
-  // const producingOrganization = (items, search_result_obj) => {
-  //   var producingOrgs = search_result_obj.results.hits.map((hit) => {
-  //     return hit.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creatorRole == "Producing Organization").map((pbc) => pbc.creator )
-  //   }).flat().filter(onlyUnique)
-  //   return items.filter((facetEntry) => producingOrgs.some((producingOrg) => producingOrg == facetEntry.value))
-  // }
-
   function onlyUnique(value, index, array) {
     return array.indexOf(value) === index;
   }
 
+  // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
-      return {
-        bool: {
-          should: [
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument": {
-                      query: query
-                    }
-                  }
-                }
-              } 
-            },
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument.pbcoreDescription",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                      query: query
-                    }
-                  }
-                }
-              } 
-            },
-            {
-              nested: {
-                // PATH MUST GO TO THE FIELD A LEVEL ABOVE THE TARGET, NOTTTTTTT THE TOP LEVEL FIELD
-                path: "pbcoreDescriptionDocument.pbcoreTitle",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                      query: query
-                    }
-                  }
-                }
-              } 
-            },
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                      query: query
-                    }
-                  }
-                }
-              } 
-            },
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument.pbcoreIdentifier",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
-                      query: query
-                    }
-                  }
-                }
-              }
-            },
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                      query: query
-                    }
-                  }
-                }
-              }
-            },
-            {
-              nested: {
-                path: "pbcoreDescriptionDocument.pbcoreGenre",
-                query: {
-                  match: {
-                    "pbcoreDescriptionDocument.pbcoreGenre.text": {
-                      query: query
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
+      var queryHash
+
+      var title_if_present
+      if(customQuery.title && customQuery.title.length > 0){
+        title_if_present = customQuery.title
       }
+
+      // look for quoted phrases in the main search box
+      if(query && query.includes('\"')){
+        var quoted = query.match(/"(\\.|[^"\\])*"/g)
+        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+
+        var full_query
+        if(quoted && quoted.length > 0){
+          // require one of quoted strings, or optional everything else unquoted
+          full_query = `+${quoted.join(" | +")}`
+
+          if(unquoted.length > 0 && unquoted.trim().length > 0){
+            full_query = full_query + ` OR (${unquoted})`
+          }
+        } else {
+          full_query = unquoted
+        }
+
+        if(customQuery.none && customQuery.none.length > 0){
+          var none_terms = customQuery.none.split(" ")
+
+          full_query += ` -(${none_terms.join(" OR ")})`
+        }
+
+        // queryHash = {
+        //   bool: {
+        //     should: [
+        //       {
+        //         simple_query_string: {
+        //           query: full_query,
+        //           // default_operator: "and"
+        //         }
+        //       },
+        //       {
+        //         match: {
+        //           "title": title_if_present || full_query
+        //         }
+        //       }
+        //     ]
+        //   }
+        // }
+        queryHash = {
+          simple_query_string: {
+            query: full_query,
+            // default_operator: "and"
+          }
+        }
+
+      } else {
+        // no quotes -> just match these fields
+
+        full_query = query
+        if(customQuery.none && customQuery.none.length > 0){
+          var none_terms = customQuery.none.split(" ")
+          if(none_terms.length == 1){
+            full_query += ` -${none_terms[0]}`
+          } else {
+            full_query += ` -${none_terms.join(" -")}`
+          }
+        }
+
+        queryHash = {
+          bool: {
+            should: [
+              // simplified syntax that works but omits options
+              {
+                match: {
+                  "guid": full_query
+                }
+              },
+              {
+                match: {
+                  "genres": full_query,
+                }
+              },
+              {
+                match: {
+                  "topics": full_query,
+                }
+              },
+              
+              //full syntax w options
+              {
+                match: {
+                  title: {
+                    query: title_if_present || full_query,
+                    boost: 8
+                  }
+                }
+              },
+     
+
+              {
+                nested: {
+                  path: "pbcoreDescriptionDocument.pbcoreDescription",
+                  query: {
+                    match: {
+                      "pbcoreDescriptionDocument.pbcoreDescription.text": {
+                        query: full_query,
+                      }
+                    }
+                  }
+                } 
+              },
+              {
+                nested: {
+                  path: "pbcoreDescriptionDocument.pbcoreTitle",
+                  query: {
+                    match: {
+                      "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                        query: full_query,
+                        boost: 5
+                      }
+                    }
+                  },
+                } 
+              },
+              {
+                nested: {
+                  path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+                  query: {
+                    match: {
+                      "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
+                        query: full_query
+                      }
+                    }
+                  }
+                } 
+              },
+              {
+                nested: {
+                  path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+                  query: {
+                    match: {
+                      "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+                        query: full_query,
+                        boost: 2
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+
+        // too rigid
+        // queryHash = {
+        //   query_string: {
+        //     query: 'title:"Chemical Valley"'
+        //   }
+        // }
+
+      }
+
+      console.log( 'hey i can see again!!', queryHash  )
+      return queryHash
     }
   })
 
@@ -388,13 +434,12 @@ export default function Search() {
           <SearchAccordion title="Keywords" content={
             <>
               <h4>All these words</h4>
-              <SearchBox className="sidebar-search smarbot" autoFocus />
+              <SearchBox className="sidebar-search smarbot" />
+              <input className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, all: e.target.value}) } />
               <h4>This title</h4>
-              <input className="sidebar-search smarbot" type="text" />
-              <h4>This exact word or phrase</h4>
-              <input className="sidebar-search smarbot" type="text" />
+              <input className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, title: e.target.value}) } />
               <h4>None of these words</h4>
-              <input className="sidebar-search smarbot" type="text" />
+              <input className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, none: e.target.value}) } />
             </>
           }/>
 
@@ -404,7 +449,7 @@ export default function Search() {
             <>
               <RefinementList
                 attribute="access_level"
-                // transformItems={ accessLevelAnnotation }
+                transformItems={ accessLevel }
               />
             </>
           }/>
@@ -424,7 +469,7 @@ export default function Search() {
           <SearchAccordion title="Asset Type" startClosed={true} content={
             <>
               <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType"
+                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
                 // transformItems={ producingOrganization }
               />
             </>
@@ -479,7 +524,7 @@ export default function Search() {
           <SearchAccordion title="Collection" startClosed={true} content={
             <>
               <RefinementList
-                attribute="collections"
+                attribute="special_collections"
                 // transformItems={ producingOrganization }
               />
             </>

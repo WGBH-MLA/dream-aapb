@@ -31,6 +31,12 @@ export default function ShowRecord() {
   console.log( 'scwiption', description )
   return (
     <div className="skinny-body-container">
+
+      <pre style={{ fontSize: "10px" }}>
+        {JSON.stringify(data, null, 20)}
+      </pre>
+
+
       <div className="show-title">
         <h2>{ title }</h2>
       </div>
@@ -42,6 +48,7 @@ export default function ShowRecord() {
       <div className="show-description">
         { description }
       </div>
+
     </div>
 
   )
