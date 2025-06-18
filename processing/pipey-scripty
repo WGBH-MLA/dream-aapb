@@ -84,9 +84,9 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 }
 
 // media type - needed because each mediatype is in a different pbcoreInstantiation
-if(ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation?.length > 0){
+if(ctx?.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
   for(int z=0; z < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; z++){
-    if(ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z] != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z].instantiationMediaType != null && ctx?.pbcoreDescriptionDocument?.pbcoreInstantiation[z].instantiationMediaType.text != null){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[z] != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[z].instantiationMediaType != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[z].instantiationMediaType.text != null){
       ctx.media_type = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[z].instantiationMediaType.text;
     }
   }
@@ -249,9 +249,23 @@ ctx.broadcast_date = null;
 if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
   for(int l=0; l < ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length; l++){
     if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l] != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType.toLowerCase() == "broadcast"){
+      ZonedDateTime zdt;
 
-      ZonedDateTime zdt = ZonedDateTime.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text);
-      ctx.broadcast_date = zdt;
+      def dateSplit = ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text.splitOnToken("-");
+      String month = dateSplit[0];
+      String day = dateSplit[1];
+      String year = dateSplit[2];
+
+      if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
+        // dont fail the date parse ^
+        try {
+          zdt = ZonedDateTime.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text);
+          ctx.broadcast_date = zdt;
+        } catch(Exception e) {
+          // Debug.explain("Great!");
+        }        
+      }
+
     }
   }
 }
