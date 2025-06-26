@@ -1,37 +1,37 @@
-curl -v -X PUT "localhost:9200/aapb_augmented/" \
+curl -v -X PUT "localhost:9200/aapb_augmented_biggram/" \
 -H "Authorization: ApiKey "Z1pqdVE1VUJlMTdpbU5oSXNoby06SGtSZERqY0dSaHVpS2hvbVJnMEJwdw=="" \
 -H "Content-Type: application/json" \
 -d'{
-
   "settings": {
-    "analysis": {
-      "analyzer": {
-        "default": {
-          "type": "custom",
-          "tokenizer": "sweet_tokenizer",
-          "char_filter": [
-            "html_strip"
-          ],
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "classic"
-          ]
-        }
-      },
-      "tokenizer": {
-        "sweet_tokenizer": {
-          "type": "edge_ngram",
-          "min_gram": 3,
-          "max_gram": 3,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        }
-      }
-    }
-  },
+     "analysis": {
+       "analyzer": {
+         "default": {
+           "type": "custom",
+           "tokenizer": "sweet_tokenizer",
+           "char_filter": [
+             "html_strip"
+           ],
+           "filter": [
+             "lowercase",
+             "asciifolding",
+             "classic"
+           ]
+         }
+       },
+       "tokenizer": {
+         "sweet_tokenizer": {
+           "type": "edge_ngram",
+           "min_gram": 3,
+           "max_gram": 12,
+           "token_chars": [
+             "letter",
+             "digit"
+           ]
+         }
+       }
+     }
+   },
+
   "mappings": {
     "properties": {
 

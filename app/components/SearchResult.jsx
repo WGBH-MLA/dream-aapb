@@ -38,37 +38,38 @@ export default function SearchResult({hit}){
 
   if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
     // this needs to be changed to a field producing_org that will be at the top level
-    producingOrg = (<><b>Produced By:</b> { producingOrganization(hit.pbcoreDescriptionDocument.pbcoreCreator.text) }</>)
+    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
   }
 
   return (
     <div className="search-result">
-      <a href={`/search/${guid}`} >
-        <pre>
-          { "" || JSON.stringify(hit) }
-        </pre>
+      <pre>
+        { "" || JSON.stringify(hit) }
+      </pre>
 
+      <a href={`/search/${guid}`} >
         <div className="hit-thumbnail-container">
           <Thumbnail guid={ guid } searchResult={true} />
-        </div>      
-
-        <div className="hit-info-container">
-          {/*<h3 className="hit-title">{ niceTitle(hit.pbcoreDescriptionDocument.pbcoreTitle) }</h3>*/}
-          <h3 className="hit-title">{ hit.title }</h3>
-
         </div>
-
-        <div className="hit-details marbot">
-          <ScoreLight score={ hit._score } />
-          { date }
-          { producingOrg }
-        </div>
-        
-        <div className="hit-description marbot">
-          { description }
-        </div>
-
       </a>
+
+      <div className="hit-info-container">
+        {/*<h3 className="hit-title">{ niceTitle(hit.pbcoreDescriptionDocument.pbcoreTitle) }</h3>*/}
+        <a href={`/search/${guid}`} >
+          <h3 className="hit-title">{ hit.title }</h3>
+        </a>
+      </div>
+
+      <div className="hit-details marbot">
+        <ScoreLight score={ hit._score } />
+        { date }
+        { producingOrg }
+      </div>
+      
+      <div className="hit-description marbot">
+        { description }
+      </div>
+
       <hr />
     </div>
   )

@@ -263,7 +263,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
           ctx.broadcast_date = zdt;
         } catch(Exception e) {
           // Debug.explain("Great!");
-        }        
+        }
       }
 
     }
