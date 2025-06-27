@@ -364,13 +364,17 @@ export default function Search() {
 
       sorting: {
         _default: {
-          field: '_score',
-          order: 'desc'
+          field: "_score",
+          order: "desc"
         },
-        _title_desc: {
-          field: 'pbcoreDescriptionDocument.pbcoreTitle.text',
-          order: 'desc'
-        }
+        _title_asc: {
+          field: "title",
+          order: "asc"
+        },
+        _broadcast_date_desc: {
+          field: "broadcast_date",
+          order: "desc"
+        },
       }
     }
   })
@@ -581,12 +585,12 @@ export default function Search() {
           <div className="clear-refinements-container">
             <ClearRefinements />
           </div>
-          {/*<SortBy
+          <SortBy
             items={[
-              { label: 'Relevance', value: 'aapb_augmented_default' },
-              { label: 'Title', value: 'aapb_augmented_title_desc' }
+              { label: "Relevance", value: "aapb_augmented_biggram_default" },
+              { label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
             ]}
-          />*/}
+          />
 
 
         </div>

@@ -43,9 +43,11 @@ curl -v -X PUT "localhost:9200/aapb_augmented_biggram/" \
       "special_collections": { "type": "keyword" },
       "topics": { "type": "keyword" },
       "broadcast_date": { "type": "date" },
-
       "guid": { "type": "text" },
       "title": { "type": "text" },
+
+      "title_keyword": { "type": "keyword" },
+
       "pbcoreDescriptionDocument": {
         "type": "nested",
         "properties": {

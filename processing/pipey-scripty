@@ -11,8 +11,8 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
   }
 }
 
-// needed 6.17.25
 
+// needed 6.17.25
 // fix instantiation cardinality
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation instanceof HashMap){
   HashMap instVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation;
@@ -239,6 +239,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDoc
   }
 
   ctx.title = display_titles.join("; ");
+  ctx.title_keyword = display_titles.join("; ");
 }
 
 
