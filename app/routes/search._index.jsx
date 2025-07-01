@@ -28,7 +28,9 @@ import SearchAccordion from "../components/SearchAccordion"
 
 export const loader = async ({params, request}) => {
   return {
-    indexName: process.env.ES_INDEX_NAME || "aapb_augmented_biggram"
+    indexName: process.env.ES_INDEX_NAME || "aapb_augmented_biggram",
+    apiKey: process.env.ES_API_KEY,
+    esURL: process.env.ES_URL
   }
 }
 export default function Search() {
@@ -39,6 +41,18 @@ export default function Search() {
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || ""
   })
+
+  // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
+  const [showingRefinements, setShowingRefinements] = useState(false)
+  let currentRefinementsClasses, showRefinementButtonText
+    // if(!showMoreRefinements && numberOfRefinements > 3){
+  if(!showingRefinements){
+    currentRefinementsClasses = "current-refinements-container closed"
+    showRefinementButtonText = "Show More"
+  } else {
+    currentRefinementsClasses = "current-refinements-container"
+    showRefinementButtonText = "Show Less"
+  }
 
   function titleQuery(tQuery){
     // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
@@ -70,87 +84,87 @@ export default function Search() {
 
   function allFieldsArray(query){
     return [
-              // simplified syntax that works but omits options
-              {
-                match: {
-                  "guid": query
-                }
-              },
-              {
-                match: {
-                  "genres": query,
-                }
-              },
-              {
-                match: {
-                  "topics": query,
-                }
-              },
-              
-              //full syntax w options
-              {
-                match: {
-                  title: {
-                    query: query,
-                    analyzer: "standard",
-                    boost: 4
-                  }
-                }
-              },
-     
+      // simplified syntax that works but omits options
+      {
+        match: {
+          "guid": query
+        }
+      },
+      {
+        match: {
+          "genres": query,
+        }
+      },
+      {
+        match: {
+          "topics": query,
+        }
+      },
+      
+      //full syntax w options
+      {
+        match: {
+          title: {
+            query: query,
+            analyzer: "standard",
+            boost: 4
+          }
+        }
+      },
 
-              {
-                nested: {
-                  path: "pbcoreDescriptionDocument.pbcoreDescription",
-                  query: {
-                    match: {
-                      "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                        query: query,
-                      }
-                    }
-                  }
-                } 
-              },
-              {
-                nested: {
-                  path: "pbcoreDescriptionDocument.pbcoreTitle",
-                  query: {
-                    match: {
-                      "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                        query: query,
-                        analyzer: "standard",
-                        boost: 3
-                      }
-                    }
-                  },
-                } 
-              },
-              {
-                nested: {
-                  path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-                  query: {
-                    match: {
-                      "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                        query: query
-                      }
-                    }
-                  }
-                } 
-              },
-              {
-                nested: {
-                  path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-                  query: {
-                    match: {
-                      "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                        query: query,
-                        boost: 1
-                      }
-                    }
-                  }
-                }
+
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreDescription",
+          query: {
+            match: {
+              "pbcoreDescriptionDocument.pbcoreDescription.text": {
+                query: query,
               }
-            ]
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreTitle",
+          query: {
+            match: {
+              "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                query: query,
+                analyzer: "standard",
+                boost: 3
+              }
+            }
+          },
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          query: {
+            match: {
+              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
+                query: query
+              }
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          query: {
+            match: {
+              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+                query: query,
+                boost: 1
+              }
+            }
+          }
+        }
+      }
+    ]
   }
 
   function allFieldsTermArray(query){
@@ -260,8 +274,8 @@ export default function Search() {
 
   const sk = new Searchkit({
     connection: {
-      host: 'http://localhost:9200',
-      apiKey: "Z1pqdVE1VUJlMTdpbU5oSXNoby06SGtSZERqY0dSaHVpS2hvbVJnMEJwdw=="
+      host: data.esURL,
+      apiKey: data.apiKey
     },
 
     search_settings: {
@@ -280,7 +294,7 @@ export default function Search() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "pbcoreDescriptionDocument"],
+      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument"],
 
       facet_attributes: [
         // { 
@@ -367,8 +381,8 @@ export default function Search() {
           field: "_score",
           order: "desc"
         },
-        _title_asc: {
-          field: "title",
+        _title_keyword_asc: {
+          field: "title_keyword",
           order: "asc"
         },
         _broadcast_date_desc: {
@@ -489,23 +503,6 @@ export default function Search() {
           full_query += ` -(${none_terms.join(" OR ")})`
         }
 
-        // queryHash = {
-        //   bool: {
-        //     should: [
-        //       {
-        //         simple_query_string: {
-        //           query: full_query,
-        //           // default_operator: "and"
-        //         }
-        //       },
-        //       {
-        //         match: {
-        //           "title": title_if_present || full_query
-        //         }
-        //       }
-        //     ]
-        //   }
-        // }
         queryHash = {
           simple_query_string: {
             query: full_query,
@@ -516,7 +513,19 @@ export default function Search() {
       } else {
         // no quotes -> just match these fields, plus other field bee ess
 
-        var mainAllFieldsArray = allFieldsArray(query)
+        
+        var mainAllFieldsArray
+        // creepy quote handling
+        if(false && query && query.includes('\"')){
+          var quoted = query.match(/"(\\.|[^"\\])*"/g)
+          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+          if(quoted.length > 0){
+            // make a one-hit-required term array for each distinct quoted term
+            queryHash.bool.filter = quoted.map( (quoterm) => allFieldsArray(quoterm) ).flat()
+          }
+        } else {
+          mainAllFieldsArray = allFieldsArray(query)
+        }
 
         queryHash = {
           // top bool
@@ -541,9 +550,6 @@ export default function Search() {
             }
           }
           queryHash.bool.should.push(allQuery)
-
-          // need something from both big should clauses to match if 'all these words' present
-          // this may be more troub than its worth
           queryHash.bool.minimum_should_match = 2
         }
 
@@ -556,7 +562,11 @@ export default function Search() {
           queryHash.bool.must = [ titleQuery( customQuery.title ) ]
         }
 
-        // console.log( 'hey i can see again!!', queryHash  )
+
+        // set num of refinments for show more refinements UI
+        // not working
+        // setNumberOfRefinements( document.getElementsByClassName("span.ais-CurrentRefinements-category").length )
+
         return queryHash
       }
     }
@@ -577,22 +587,28 @@ export default function Search() {
         </div>
 
         <div className="top-refinements-bar marbot marleft marright">
-          <div className="current-refinements-container">
+          <div className="sort-container">
+            <SortBy
+              items={[
+                { key: "sort1", label: "Relevance", value: "aapb_augmented_biggram_default" },
+                { key: "sort2", label: "Title", value: "aapb_augmented_biggram_title_keyword_asc" },
+                { key: "sort3", label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
+              ]}
+            />
+          </div>
+
+          <div className={ currentRefinementsClasses }>
             <CurrentRefinements
               transformItems={prettyCurrentRefinements}
             />
           </div>
           <div className="clear-refinements-container">
             <ClearRefinements />
+            <div className="more-refinements">
+              <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
+            </div>
           </div>
-          <SortBy
-            items={[
-              { label: "Relevance", value: "aapb_augmented_biggram_default" },
-              { label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
-            ]}
-          />
-
-
+          
         </div>
 
 
@@ -701,8 +717,6 @@ export default function Search() {
           }/>
 
           <hr />
-
-
         </div>
 
         <div className="page-maincolumn">

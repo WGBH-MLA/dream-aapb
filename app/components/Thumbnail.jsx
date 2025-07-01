@@ -14,7 +14,7 @@ export default function Thumbnail(props) {
   }
 
   useEffect(() => {
-    fetch(url, {method: "HEAD", headers: {"Referer": "http://localhost:4000"}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
+    fetch(url, {method: "HEAD", headers: {"Referer": "http://18.235.155.36:4000"}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
   })
 
   return (

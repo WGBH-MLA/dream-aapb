@@ -1,0 +1,1 @@
+import{c as l,e as a}from"/build/_shared/chunk-MFPRU5OA.js";var t=l(a(),1);function m(e){let i;return e.title&&e.title.length>0&&(i=(0,t.jsx)("h2",{children:e.title})),(0,t.jsxs)("div",{className:"summary-box-container",children:[i,(0,t.jsx)("div",{className:"summary-box",children:e.text})]})}export{m as a};

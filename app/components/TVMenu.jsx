@@ -1,3 +1,5 @@
+import Thumbnail from "./Thumbnail"
+
 export default function TVMenu(props){
   let programs = props.programs
   if(props.programs){
@@ -31,9 +33,9 @@ export default function TVMenu(props){
 
 function TVProgram(props){
   return (
-    <div className={"tv-menu-program" + (props.classes ? props.classes : "")} >
+    <div key={props.key} className={"tv-menu-program" + (props.classes ? props.classes : "")} >
       <a href={props.url} >
-        <img src={ props.thumbnail } />
+        <Thumbnail url={props.thumbnail} />
         <h4>{ props.title }</h4>
         <h5>{ props.subtitle }</h5>
       </a>

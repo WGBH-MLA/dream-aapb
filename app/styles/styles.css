@@ -17,6 +17,11 @@ span.ais-RefinementList-count {
   margin-left: 1em;
 }
 
+div.ais-SortBy select {
+  padding: 0.6em;
+}
+
+
 body {
   margin: 0;
   font-family: helvetica;
@@ -351,6 +356,10 @@ div.tv-menu-container.three {
   overflow-x: hidden;
 }
 
+div.tv-menu-container.three img {
+  background-size: 50%;
+}
+
 div.tv-menu-container.three div.tv-menu-body {
   max-height: 20em;
   height: 20em;
@@ -639,15 +648,8 @@ div.page-maincolumn {
   width: 70vw;
 }
 
-div.clear-refinements-container {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  display: inline-flex;
-  width: 10%;
-}
-
 div.clear-refinements-container div.ais-ClearRefinements {
-  margin-right: 2em;
+  padding: 0.6em;
 }
 
 div.ais-ClearRefinements button {
@@ -696,7 +698,7 @@ div.show-header-bar {
 }
 
 div.show-box {
-  font-size: 1em;
+  font-size: 0.8em;
   margin-left: 1em;
   padding-top: 1em;
   padding-bottom: 1.2em;
@@ -713,8 +715,8 @@ div.show-metadata-container {
 div.show-metadata-container div.show-metadata-header {
   font-weight: bold;
   padding-left: 1em;
-  padding-top: 1em;
-  padding-bottom: 1.2em;
+  padding-top: 0.8em;
+  padding-bottom: 1em;
   background-color: #d2d5e2;
 }
 
@@ -746,7 +748,7 @@ div.search-result pre {
 div.hit-thumbnail-container, div.hit-info-container {
   vertical-align: top;
   display: inline-block;
-  min-height: 8rem;
+  min-height: 9rem;
 }
 
 div.hit-thumbnail-container {
@@ -758,9 +760,9 @@ div.hit-info-container {
 }
 
 div.hit-thumbnail img {
-  object-fit: contain;
-  width: 8rem;
-  height: 8rem;
+  object-fit: cover;
+  width: 12rem;
+  height: 9rem;
 }
 
 h3.hit-title {
@@ -783,9 +785,39 @@ div.top-refinements-bar {
   background-color: rgba(238, 230, 240);
 }
 
+
+div.sort-container {
+  text-align: top;
+  display: inline-flex;
+  width: 10%;
+  margin-top: 2em;
+  margin-left: 2em;
+}
+
 div.current-refinements-container {
   display: inline-flex;
-  width: 90%;
+  width: 77%;
+}
+
+div.current-refinements-container.closed {
+  height: 4em;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(#f00, transparent);
+  mask-image: linear-gradient(#f00, transparent);
+}
+
+
+div.clear-refinements-container {
+  margin-right: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  display: inline-flex;
+  width: 10%;
+}
+
+div.clear-refinements-container div.more-refinements {
+  padding: 0.6em;
+  margin-right: 2em;
 }
 
 /*hide the 'container' label containing facets for a particular field*/

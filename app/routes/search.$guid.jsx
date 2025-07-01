@@ -1,16 +1,15 @@
 import { useLoaderData } from '@remix-run/react'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
+import ShowBox from "../components/ShowBox"
 import { getRecord } from '../util/getRecord'
 import { niceTitle } from '../util/niceTitle'
 
 export const loader = async ({params, request}) => {
   let data = await getRecord(params.guid)
-    console.log( 'hey its the data', data.hits.hits[0] )
 
-  if(data && data.hits && data.hits.hits && data.hits.hits[0] && data.hits.hits[0]._source){
-    console.log( 'fuckin', data.hits.hits[0] )
-    return data.hits.hits[0]._source
+  if(data){
+    return data
   } else {
     return null
   }
@@ -19,8 +18,8 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
 
-  let people, orgs
-  let title, description, identifiers, producingOrg, creators, coverages
+  let people, orgs, identifiers
+  let title, description, mediaType, eachId, producingOrg, creators, coverages
   if(data){
     title = niceTitle(data.pbcoreDescriptionDocument.pbcoreTitle)
 
@@ -32,23 +31,16 @@ export default function ShowRecord() {
         description = "No Description Available"
       }
 
-      description = (
-        <div className="show-box">
-          <label>Description</label>
-          { description }
-        </div>
-      )
+      description = <ShowBox label="Description" text={ description } />
     }
-    
+
+    if(data.media_type){
+      mediaType = <ShowBox label="Media Type" text={ data.media_type } />
+    }
 
     // orgs
     if(data.producing_org){
-      producingOrg = (
-        <div className="show-box">
-          <label>Producing Organization</label>
-          { data.producing_org }
-        </div>
-      )
+      producingOrg = <ShowBox label="Producing Organization" text={ data.producing_org } />
     }
 
     if(producingOrg){
@@ -64,12 +56,7 @@ export default function ShowRecord() {
     if(data.pbcoreDescriptionDocument.pbcoreCreator && data.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
       creators = data.pbcoreDescriptionDocument.pbcoreCreator.map((pbc) => {
         if(pbc.creator && pbc.creatorRole && pbc.creatorRole.text && pbc.creatorRole.text != "Producing Organization"){
-          return (
-            <div className="show-box">
-              <label>{ pbc.creatorRole.text }</label>
-              { pbc.creator.text }
-            </div>
-          )
+          return <ShowBox label={ pbc.creatorRole.text } text={ pbc.creator.text } />
         }
       })
 
@@ -94,10 +81,7 @@ export default function ShowRecord() {
           return (
             <>
               <div className="show-metadata-header">Locations</div>
-              <div className="show-box">
-                <label>{ pbc.coverageType.text }</label>
-                { pbc.coverage.text }
-              </div>
+              <ShowBox label={ pbc.coverageType.text } text={ pbc.coverage.text } />
             </>
           )  
         }
@@ -105,28 +89,28 @@ export default function ShowRecord() {
     }
 
     if(data.pbcoreDescriptionDocument.pbcoreIdentifier && data.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
-      identifiers = data.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi) => {
-        return (
-          <>
-            <div className="show-metadata-header">Identifiers</div>
-            <div className="show-box">
-              <label>{ pbi.source || "Unknown ID" }</label>
-              { pbi.text }
-            </div>
-          </>
-        )
+      eachId = data.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi) => {
+        return <ShowBox label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
     }
 
+    if(eachId.length > 0){
+      identifiers = (
+        <>
+          <div className="show-metadata-header">Identifiers</div>
+          { eachId }
+        </>
+      )
+      
+    }
   }
-
 
   return (
     <>
       <div className="skinny-body-container">
         <HeaderBar title={ title} />
 
-        <pre style={{ fontSize: "10px", display: "block" }}>
+        <pre style={{ fontSize: "10px", display: "none" }}>
           {JSON.stringify(data, null, 20)}
         </pre>
 
@@ -136,9 +120,9 @@ export default function ShowRecord() {
           </div>
         </div>
 
-
         <div className="show-metadata-container">
           <div className="show-metadata-header">Info</div>
+          { mediaType }
           { description }
 
           { orgs }

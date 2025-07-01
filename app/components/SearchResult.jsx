@@ -55,9 +55,9 @@ export default function SearchResult({hit}){
 
       <div className="hit-info-container">
         {/*<h3 className="hit-title">{ niceTitle(hit.pbcoreDescriptionDocument.pbcoreTitle) }</h3>*/}
-        <a href={`/search/${guid}`} >
-          <h3 className="hit-title">{ hit.title }</h3>
-        </a>
+        
+          <h3 className="hit-title"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+        
       </div>
 
       <div className="hit-details marbot">
