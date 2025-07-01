@@ -2555,7 +2555,7 @@ async function randomRecords(num) {
     method: "POST",
     headers: { "Content-Type": "application/json", "Authorization": `ApiKey ${process.env.ES_API_KEY}` },
     // body: JSON.stringify({ "size": num, "query": {"function_score": { "functions": [{ "random_score": { "seed": Date.now() } }], "score_mode": "sum" } } }) 
-    body: JSON.stringify({ "query": { "function_score": { "query": { "match_all": {} }, "functions": [{ "random_score": {} }] } } })
+    body: JSON.stringify({ "size": num, "query": { "function_score": { "query": { "match_all": {} }, "functions": [{ "random_score": {} }] } } })
   });
   var data = await response.json();
   if (data && data.hits && data.hits.hits && data.hits.hits) {
@@ -2573,7 +2573,6 @@ function recordToTVProgram(record) {
     subtitle = record.pbcoreDescriptionDocument.pbcoreDescription[0].text.slice(0, 128);
   }
   thumbnail = thumbnailURL(record.guid);
-  console.log("thumby", thumbnail);
   url = `/search/${record.guid}`;
   return {
     key: record.guid,
@@ -2584,8 +2583,11 @@ function recordToTVProgram(record) {
   };
 }
 const loader = async () => {
-  let records = await randomRecords();
-  let programs = records.map((record) => recordToTVProgram(record));
+  let records = await randomRecords(10);
+  let programs = [];
+  if (records) {
+    programs = records.map((record) => recordToTVProgram(record));
+  }
   let data = {
     featured_collections: [
       {

@@ -7,7 +7,7 @@ export default async function randomRecords(num){
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `ApiKey ${ process.env.ES_API_KEY }` },
       // body: JSON.stringify({ "size": num, "query": {"function_score": { "functions": [{ "random_score": { "seed": Date.now() } }], "score_mode": "sum" } } }) 
-      body: JSON.stringify({ "query": { "function_score": { "query": { "match_all": {} }, "functions": [ { "random_score": {} } ] } } }) 
+      body: JSON.stringify({ "size": num, "query": { "function_score": { "query": { "match_all": {} }, "functions": [ { "random_score": {} } ] } } }) 
     })
 
   var data = await response.json()

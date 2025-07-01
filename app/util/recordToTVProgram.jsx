@@ -14,7 +14,6 @@ export default function recordToTVProgram(record){
   }
 
   thumbnail = thumbnailURL(record.guid)
-  console.log( 'thumby', thumbnail )
   url = `/search/${record.guid}`
 
   return {

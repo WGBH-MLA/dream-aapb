@@ -10,8 +10,11 @@ import recordToTVProgram from "../util/recordToTVProgram"
 
 export const loader = async () => {
 
-  let records = await randomRecords(1)
-  let programs = records.map((record) => recordToTVProgram(record) )
+  let records = await randomRecords(10)
+  let programs = []
+  if(records){
+    programs = records.map((record) => recordToTVProgram(record) )
+  }
 
   let data = {
     featured_collections: [
