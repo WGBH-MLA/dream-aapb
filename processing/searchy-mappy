@@ -44,7 +44,16 @@ curl -v -X PUT "localhost:9200/aapb_augmented_biggram/" \
       "topics": { "type": "keyword" },
       "broadcast_date": { "type": "date" },
       "guid": { "type": "text" },
+      
       "title": { "type": "text" },
+      "series_titles": { "type": "keyword" },
+      "program_titles": { "type": "keyword" },
+      "episode_titles": { "type": "keyword" },
+      "episode_number_titles": { "type": "keyword" },
+      "segment_titles": { "type": "keyword" },
+      "raw_footage_titles": { "type": "keyword" },
+      "promo_titles": { "type": "keyword" },
+      "clip_titles": { "type": "keyword" },
 
       "title_keyword": { "type": "keyword" },
 

@@ -270,3 +270,40 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
     }
   }
 }
+
+
+
+
+
+// pull out titles by type
+ctx.series_titles = new ArrayList();
+ctx.program_titles = new ArrayList();
+ctx.episode_titles = new ArrayList();
+ctx.episode_number_titles = new ArrayList();
+ctx.segment_titles = new ArrayList();
+ctx.raw_footage_titles = new ArrayList();
+ctx.promo_titles = new ArrayList();
+ctx.clip_titles = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle.length > 0){
+  for(int m=0; m < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; m++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "series"){
+      ctx.series_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "program"){
+      ctx.program_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "episode"){
+      ctx.episode_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "episode"){
+      ctx.episode_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "segment"){
+      ctx.segment_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "raw"){
+      ctx.raw_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "promo"){
+      ctx.promo_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    } else if(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].titleType == "clip"){
+      ctx.clip_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[m].text);
+    }
+  }
+}
+
+

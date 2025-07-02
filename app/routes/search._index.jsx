@@ -373,6 +373,11 @@ export default function Search() {
           attribute: "broadcast_date",
           field: "broadcast_date",
           type: "string",
+        },
+        {
+          attribute: "series_titles",
+          field: "series_titles",
+          type: "string"
         }
       ],
 
