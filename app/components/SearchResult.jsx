@@ -14,7 +14,7 @@ function aapbGuid(descdoc){
 
 function resultDescription(descriptions){
   if(descriptions.length > 0 && descriptions[0].text && descriptions[0].text.toLowerCase() !== "no description available"){
-    return (<><b>Description:</b> {`${descriptions[0].text.substring(0, 500)}`} </>)
+    return `${descriptions[0].text.substring(0, 500)}`
   } else {
     return ""
   }
@@ -36,11 +36,8 @@ export default function SearchResult({hit}){
     date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
   }
 
-  if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-    // this needs to be changed to a field producing_org that will be at the top level
-    if(hit.producing_org){
-      producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
-    }
+  if(hit.producing_org){
+    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
   }
 
   return (
@@ -56,14 +53,19 @@ export default function SearchResult({hit}){
       </a>
 
       <div className="hit-info-container">
-        <h3 className="hit-title"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
-      </div>
+        <div className="smarbot">
+          <h3 className="hit-title"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+        </div>
 
-      <div className="hit-details marbot">
-        <ScoreLight score={ hit._score } />
-        { date }
-        { producingOrg }
-        { description }
+        <div className="smarbot">
+          <ScoreLight score={ hit._score } />
+          { date }
+          { producingOrg }
+        </div>
+
+        <div className="marleft marbot">
+          { description }
+        </div>
       </div>
 
       <hr />

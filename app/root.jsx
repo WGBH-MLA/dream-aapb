@@ -5,7 +5,10 @@ import {
   Scripts,
 } from "@remix-run/react"
 
-import "@fontsource/inter"
+// standard
+import "@fontsource/inter/400.css";
+// bold
+import "@fontsource/inter/600.css";
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import "./styles/styles.css"

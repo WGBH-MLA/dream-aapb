@@ -299,7 +299,7 @@ export default function Search() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type"],
+      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
 
       facet_attributes: [
         // { 
@@ -598,10 +598,11 @@ export default function Search() {
         searchClient={ searchClient }
       >
 
-        <div className="top-search-bar marleft marbot">
-          <h2 className="">Search Results</h2>
+        <div className="top-search-bar marleft smarbot">
 
           <div className="options-container">
+            <h2 className="">Search Results</h2>
+            
             <div className="header-spacer" />
 
             <div>
@@ -654,7 +655,7 @@ export default function Search() {
 
 
         <div className="page-sidebar">
-          <h3>Refine Search</h3>
+          <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
           <SearchAccordion title="Keywords" content={

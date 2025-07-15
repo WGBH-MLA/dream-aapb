@@ -25,6 +25,7 @@ div.ais-SortBy select {
 body {
   margin: 0;
   font-family: Inter, helvetica;
+  font-size: 16px;
 }
 
 /*universal*/
@@ -571,7 +572,7 @@ div.drawermenu-container {
 div.drawermenu-container svg.lucide-chevron-down {
   position: absolute;
   margin-left: 0.2em;
-  top: 1.8em;
+  top: 2.2em;
 }
 
 
@@ -656,6 +657,10 @@ div.page-sidebar {
   margin-left: 2em;
   max-width: 20vw;
   overflow: hidden;
+}
+
+div.page-sidebar h3.sidebar-title {
+  font-weight: 800;
 }
 
 div.page-maincolumn {
@@ -776,6 +781,16 @@ div.hit-thumbnail-container {
 
 div.hit-info-container {
   width: 80%;
+  max-width: 80%;
+}
+
+div.hit-info-container h3.hit-title {
+  width: 92%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
 }
 
 div.hit-thumbnail {
@@ -803,11 +818,10 @@ div.hit-thumbnail img.thumbnail-bar {
 h3.hit-title {
   margin-left: 2rem;
   margin-top: 2rem;
-  min-height: 8rem;
 }
 
 div.hit-details {
-  font-size: 0.8em;
+  display: block;
 }
 
 div.top-search-bar {
@@ -816,8 +830,8 @@ div.top-search-bar {
 
 div.top-refinements-bar {
   min-height: 4em;
+  line-height: 2.2em;
   font-size: 0.8em;
-  padding-top: 0.1em;
   background-color: rgba(238, 230, 240);
 }
 
@@ -829,6 +843,11 @@ div.stats-container, div.options-container {
   margin-top: 2em;
   margin-left: 2em;
 }
+
+div.options-container h2 {
+  font-size: 2em;
+}
+
 
 div.stats-container {
   flex-grow: 1;
@@ -842,18 +861,22 @@ div.options-container {
 
 div.options-container div {
   display: inline-flex;
+  vertical-align: middle;
   width: 12%;
   height: 2rem;
   margin-left: 2em;
+  font-weight: bold;
+  line-height: 2.4em;
 }
 
 div.options-container div * {
+  color: #3C439B;
   margin-left: 1em;
 }
 
 div.current-refinements-container {
   display: inline-flex;
-  width: 77%;
+  width: 70%;
 }
 
 div.current-refinements-container.closed {
@@ -922,6 +945,10 @@ span.ais-CurrentRefinements-category button {
   border: none;
 }
 
+span.ais-RefinementList-labelText {
+  margin-left: 0.5em;
+}
+
 /*search accordion*/
 div.search-accordion-container {
   margin-bottom: 2em;
@@ -962,6 +989,7 @@ input.sidebar-search  {
 }
 
 div.score-light {
+  margin-left: 2em;
   margin-right: 1em;
   display: inline-block;
   border: 1px solid #ddd;
@@ -969,6 +997,5 @@ div.score-light {
   min-width: 1em;
   height: 1em;
   width: 1em;
-  margin-top: 2rem;
 }
 

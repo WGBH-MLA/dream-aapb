@@ -26,7 +26,7 @@ export default function DrawerMenu(props) {
     <div className={drawerClasses}>
       <span className='drawermenu-label'>
         {props.label}
-        <ChevronDown />
+        <ChevronDown size={16} />
       </span>
 
       <div className='drawermenu-items'>{items}</div>
