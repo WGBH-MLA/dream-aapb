@@ -19,12 +19,15 @@ import {
           ClearRefinements,
           ToggleRefinement,
           Pagination,
+          HitsPerPage,
           RangeInput,
           Stats
       } from 'react-instantsearch';
 
 import SearchResult from "../components/SearchResult"
+import ListResult from "../components/ListResult"
 import SearchAccordion from "../components/SearchAccordion"
+import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
   return {
@@ -41,6 +44,8 @@ export default function Search() {
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || ""
   })
+
+  const [viewSelect, setViewSelect] = useState("standard")
 
   // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
   const [showingRefinements, setShowingRefinements] = useState(false)
@@ -294,7 +299,7 @@ export default function Search() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument"],
+      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type"],
 
       facet_attributes: [
         // { 
@@ -577,6 +582,13 @@ export default function Search() {
     }
   })
 
+  let searchResultComponent
+  if(viewSelect == "standard"){
+    searchResultComponent = SearchResult
+  } else if(viewSelect == "list"){
+    searchResultComponent = ListResult
+  }
+
   return (
     <div className="body-container">
 
@@ -588,19 +600,43 @@ export default function Search() {
 
         <div className="top-search-bar marleft marbot">
           <h2 className="">Search Results</h2>
-          <Stats />
+
+          <div className="options-container">
+            <div className="header-spacer" />
+
+            <div>
+              Sort
+              <SortBy
+                items={[
+                  { key: "sort1", label: "Relevance", value: "aapb_augmented_biggram_default" },
+                  { key: "sort2", label: "Title", value: "aapb_augmented_biggram_title_keyword_asc" },
+                  { key: "sort3", label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
+                ]}
+              />
+            </div>
+            
+            <div>
+              Items per page
+              <HitsPerPage
+                items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
+              />
+            </div>
+
+            <div>
+              <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
+              <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
+              <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            </div>
+          </div>
+          
+
         </div>
 
         <div className="top-refinements-bar marbot marleft marright">
-          <div className="sort-container">
-            <SortBy
-              items={[
-                { key: "sort1", label: "Relevance", value: "aapb_augmented_biggram_default" },
-                { key: "sort2", label: "Title", value: "aapb_augmented_biggram_title_keyword_asc" },
-                { key: "sort3", label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
-              ]}
-            />
+          <div className="stats-container">
+            <Stats />
           </div>
+ 
 
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
@@ -725,7 +761,7 @@ export default function Search() {
         </div>
 
         <div className="page-maincolumn">
-          <Hits hitComponent={ SearchResult } />
+          <Hits hitComponent={ searchResultComponent } />
           <Pagination />
         </div>
       </InstantSearch>

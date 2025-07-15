@@ -11,10 +11,9 @@ function aapbGuid(descdoc){
   }
 }
 
-
 function resultDescription(descriptions){
   if(descriptions.length > 0 && descriptions[0].text && descriptions[0].text.toLowerCase() !== "no description available"){
-    return (<><b>Description:</b> {`${descriptions[0].text.substring(0, 500)}`} </>)
+    return `${descriptions[0].text.substring(0, 500)}`
   } else {
     return ""
   }
@@ -24,7 +23,7 @@ function producingOrganization(creators){
   return creators ? creators.find(creator => creator.creatorRole?.[0] == "Producing Organization").creator : null 
 }
 
-export default function SearchResult({hit}){
+export default function ListResult({hit}){
   let guid = aapbGuid(hit.pbcoreDescriptionDocument)
   let description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
   // let producingOrg = producingOrganization(hit.pbcoreDescriptionDocument.pbcoreCreator)
@@ -38,20 +37,14 @@ export default function SearchResult({hit}){
 
   if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
     // this needs to be changed to a field producing_org that will be at the top level
-    if(hit.producing_org){
-      producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
-    }
+    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
   }
 
   return (
-    <div className="search-result standard">
-      <pre>
-        { "" || JSON.stringify(hit) }
-      </pre>
-
+    <div className="search-result list">
       <a href={`/search/${guid}`} >
         <div className="hit-thumbnail-container">
-          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } data={hit} />
+          <Thumbnail guid={ guid } searchResult={true} />
         </div>
       </a>
 
@@ -63,9 +56,8 @@ export default function SearchResult({hit}){
         <ScoreLight score={ hit._score } />
         { date }
         { producingOrg }
-        { description }
       </div>
-
+      
       <hr />
     </div>
   )

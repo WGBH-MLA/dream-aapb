@@ -86,7 +86,7 @@ div.header-bar img.header-logo {
 
 }
 
-div.header-bar div.header-spacer {
+div.header-bar div.header-spacer, div.options-container div.header-spacer {
   flex-grow: 8;
 }
 
@@ -188,6 +188,8 @@ div.social-icon img {
   background-size: contain;
 }
 
+
+
 div.welcome-video-container {
   width: 100%;
   margin-left: 20%;
@@ -240,6 +242,19 @@ div.biglink h3 {
 div.biglink a {
   text-decoration: none;
   display: block;
+}
+
+/* compononents  */
+div.view-select-button {
+  margin-left: 1em;
+}
+
+div.view-select-button img {
+  padding: 0.5em;
+}
+
+div.view-select-button.selected img {
+  background-color: #aaa;
 }
 
 
@@ -745,6 +760,10 @@ div.search-result pre {
   display: none;
 }
 
+div.search-result.list {
+
+}
+
 div.hit-thumbnail-container, div.hit-info-container {
   vertical-align: top;
   display: inline-block;
@@ -759,13 +778,30 @@ div.hit-info-container {
   width: 80%;
 }
 
-div.hit-thumbnail img {
-  object-fit: cover;
+div.hit-thumbnail {
+  position: relative;
   width: 12rem;
-  height: 9rem;
+  height: 12rem;
+}
+
+div.hit-thumbnail img {
+  width: 12rem;
+}
+
+div.hit-thumbnail img.thumbnail {
+  position: absolute;
+  object-fit: cover;
+  height: 12rem;
+}
+
+div.hit-thumbnail img.thumbnail-bar {
+  position: absolute;
+  bottom: 0;
+  min-height: 2em;
 }
 
 h3.hit-title {
+  margin-left: 2rem;
   margin-top: 2rem;
   min-height: 8rem;
 }
@@ -786,12 +822,33 @@ div.top-refinements-bar {
 }
 
 
-div.sort-container {
+div.stats-container, div.options-container {
+  font-size: 1.2em;
   text-align: top;
   display: inline-flex;
-  width: 10%;
   margin-top: 2em;
   margin-left: 2em;
+}
+
+div.stats-container {
+  flex-grow: 1;
+}
+
+div.options-container {
+  vertical-align: middle;
+  font-size: 0.8em;
+  width: 100%;
+}
+
+div.options-container div {
+  display: inline-flex;
+  width: 12%;
+  height: 2rem;
+  margin-left: 2em;
+}
+
+div.options-container div * {
+  margin-left: 1em;
 }
 
 div.current-refinements-container {
@@ -905,11 +962,13 @@ input.sidebar-search  {
 }
 
 div.score-light {
-  display: inline-block; margin-right: 1em;
+  margin-right: 1em;
+  display: inline-block;
   border: 1px solid #ddd;
   min-height: 1em;
   min-width: 1em;
   height: 1em;
   width: 1em;
+  margin-top: 2rem;
 }
 
