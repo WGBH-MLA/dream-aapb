@@ -26,6 +26,7 @@ import {
 
 import SearchResult from "../components/SearchResult"
 import ListResult from "../components/ListResult"
+import GalleryResult from "../components/GalleryResult"
 import SearchAccordion from "../components/SearchAccordion"
 import ViewSelect from "../components/ViewSelect"
 
@@ -45,7 +46,8 @@ export default function Search() {
     none: searchParams.get("none") || ""
   })
 
-  const [viewSelect, setViewSelect] = useState("standard")
+  let view = searchParams.get("view") || "standard"
+  const [viewSelect, setViewSelect] = useState(view)
 
   // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
   const [showingRefinements, setShowingRefinements] = useState(false)
@@ -587,6 +589,8 @@ export default function Search() {
     searchResultComponent = SearchResult
   } else if(viewSelect == "list"){
     searchResultComponent = ListResult
+  } else if(viewSelect == "gallery"){
+    searchResultComponent = GalleryResult
   }
 
   return (
@@ -598,9 +602,9 @@ export default function Search() {
         searchClient={ searchClient }
       >
 
-        <div className="top-search-bar marleft smarbot">
+        <div className="top-search-bar bmarleft smarbot smarright">
 
-          <div className="options-container">
+          <div className="options-container martop">
             <h2 className="">Search Results</h2>
             
             <div className="header-spacer" />
@@ -633,7 +637,7 @@ export default function Search() {
 
         </div>
 
-        <div className="top-refinements-bar marbot marleft marright">
+        <div className="top-refinements-bar marbot bmarleft bmarright">
           <div className="stats-container">
             <Stats />
           </div>
@@ -654,7 +658,7 @@ export default function Search() {
         </div>
 
 
-        <div className="page-sidebar">
+        <div className="page-sidebar bmarleft">
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
@@ -668,6 +672,9 @@ export default function Search() {
               <input value={ customQuery.title } className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, title: e.target.value}) } />
               <h4>None of these words</h4>
               <input value={ customQuery.none } className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, none: e.target.value}) } />
+              <div>
+                <button className="sidebar-search-button">Update</button>
+              </div>
             </>
           }/>
 
@@ -761,7 +768,7 @@ export default function Search() {
           <hr />
         </div>
 
-        <div className="page-maincolumn">
+        <div className="page-maincolumn bmarright">
           <Hits hitComponent={ searchResultComponent } />
           <Pagination />
         </div>

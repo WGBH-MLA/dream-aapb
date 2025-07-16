@@ -41,23 +41,23 @@ export default function SearchResult({hit}){
   }
 
   return (
-    <div className="search-result standard">
+    <div className="search-result standard marbot">
       <pre>
         { "" || JSON.stringify(hit) }
       </pre>
 
       <a href={`/search/${guid}`} >
-        <div className="hit-thumbnail-container">
+        <div className="hit-thumbnail-container smarbot">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } data={hit} />
         </div>
       </a>
 
       <div className="hit-info-container">
-        <div className="smarbot">
-          <h3 className="hit-title"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+        <div className="smarbot martop">
+          <h3 className="hit-title martop marleft"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
         </div>
 
-        <div className="smarbot">
+        <div className="smarbot marleft">
           <ScoreLight score={ hit._score } />
           { date }
           { producingOrg }

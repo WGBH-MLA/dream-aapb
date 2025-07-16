@@ -73,7 +73,7 @@ const drawerItems = {
 
 export default function Header(props) {
   return (
-    <div className="header-bar">
+    <div className="header-bar marbot">
       <a href="/">
         <img src="/aapb.png" className="header-logo" />
       </a>

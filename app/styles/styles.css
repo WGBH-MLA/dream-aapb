@@ -36,6 +36,10 @@ div, h1, h2, h3, h4, h5, a{
   font-weight: normal;
 }
 
+hr {
+  border: 1px solid #f1f1f1;
+}
+
 a:visited {
   color: black;
 }
@@ -53,9 +57,32 @@ a:visited {
 .marbot {
   margin-bottom: 2em;
 }
+.smartop {
+  margin-top: 1em;
+}
 
 .smarbot {
   margin-bottom: 1em;
+}
+
+.smarright {
+  margin-right: 1em;
+}
+
+.ssmarbot {
+  margin-bottom: 0.5em;
+}
+
+.ssmartop {
+  margin-top: 0.5em;
+}
+
+.bmarleft {
+  margin-left: 4em;
+}
+
+.bmarright {
+  margin-right: 4em;
 }
 
 /*general page layout*/
@@ -73,22 +100,21 @@ div.skinny-body-container {
 
 div.header-bar {
   display: flex;
-  margin-bottom: 8em;
 }
 
 div.header-bar img.header-logo {
-  height: 3em;
-  min-height: 3em;
+  height: 4em;
+  min-height: 4em;
   margin-top: 2em;
   margin-left: 6em;
   object-fit: contain;
   flex-grow: 2;
-  max-width: 12rem;
+  max-width: 16rem;
 
 }
 
 div.header-bar div.header-spacer, div.options-container div.header-spacer {
-  flex-grow: 8;
+  flex-grow: 4;
 }
 
 div.header-bar div.header-link {
@@ -344,9 +370,8 @@ div.layout-search button {
   color: #fff;
   height: 2.8rem;
   width: 3.6rem;
-  background-color: #808;
-  border: none
-
+  background-color: #3C439B;
+  border: none;
 }
 
 
@@ -355,8 +380,8 @@ div.tv-menu-container {
   margin-left: 2em;
   display: block;
   width: 96%;
-  max-height: 20em;
-  height: 20em;
+  max-height: 30rem;
+  height: 30rem;
   overflow-x: scroll;
   overflow-y: hidden;
   margin-bottom: 4em;
@@ -364,11 +389,12 @@ div.tv-menu-container {
 
 div.tv-menu-container a {
   text-decoration: none;
+  display: block;
 }
 
 div.tv-menu-container.three {
-  max-height: 20em;
-  height: 20em;
+  max-height: 30rem;
+  height: 30rem;
   overflow-x: hidden;
 }
 
@@ -377,8 +403,8 @@ div.tv-menu-container.three img {
 }
 
 div.tv-menu-container.three div.tv-menu-body {
-  max-height: 20em;
-  height: 20em;
+  max-height: 30rem;
+  height: 30rem;
 }
 
 div.tv-menu-container h2 {
@@ -388,42 +414,41 @@ div.tv-menu-container h2 {
 
 div.tv-menu-container div.tv-menu-program {
 /*  background-color: #ff0;*/
-  margin-left: 1.2em;
-  margin-right: 1.2em;
+  margin-left: 4em;
+  margin-right: 4em;
   margin-bottom: 2em;
-  display: inline-block;
-  width: 18.25em;
-  min-width: 18.25em;
-  height: 18em;
-  max-height: 18em;
+  display: inline-flex;
+  flex-grow: 1;
+  width: 20rem;
+  min-width: 20rem;
+  
   overflow: hidden;
   position: relative;
 }
 
 div.tv-menu-container div.tv-menu-program.three {
-  min-width: 25em;
-  width: 25em;
-  height: 20em;
-  max-height: 20em;
+  min-width: 25rem;
+  width: 25rem;
+  height: 30rem;
+  max-height: 30rem;
 }
 
 div.tv-menu-container div.tv-menu-body {
   width: max-content;
 /*  max-width: 500%;*/
-  height: 20em;
 }
 
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
-  width: 20em;
-  height: 11.25em;
-  max-height: 11.25em;
+  width: 25rem;
+  height: 18.75rem;
+  max-height: 18.75rem;
 }
 
-div.tv-menu-container div.tv-menu-program.three img {
-  width: 25em;
-  height: 15.75em;
+div.tv-menu-container div.tv-menu-program.three img, div.tv-menu-container div.tv-menu-program.three div {
+  width: 25rem;
+  height: 18.75rem;
 }
 
 div.tv-menu-container div.tv-menu-program h4 {
@@ -654,7 +679,6 @@ div.page-sidebar {
   display: inline-block;
   min-width: 12em;
   width: 20vw;
-  margin-left: 2em;
   max-width: 20vw;
   overflow: hidden;
 }
@@ -665,7 +689,7 @@ div.page-sidebar h3.sidebar-title {
 
 div.page-maincolumn {
   display: inline-block;
-  width: 70vw;
+  width: 69.5%;
 }
 
 div.clear-refinements-container div.ais-ClearRefinements {
@@ -754,7 +778,6 @@ div.video-player-container video {
 
 div.search-result {
   min-height: 8rem;
-  margin-bottom: 2em;
 }
 
 div.search-result a {
@@ -765,7 +788,13 @@ div.search-result pre {
   display: none;
 }
 
-div.search-result.list {
+button.sidebar-search-button {
+  border: 0;
+  border-radius: 4px;
+  font-size: 1em;
+  padding: 0.5em;
+  color: #fff;
+  background-color: #3C439B;
 
 }
 
@@ -778,6 +807,64 @@ div.hit-thumbnail-container, div.hit-info-container {
 div.hit-thumbnail-container {
   width: 20%;
 }
+
+/*ListResult*/
+div.search-result.list {
+  height: 6rem;
+  min-height: 6rem;
+}
+
+div.search-result.list div.hit-thumbnail-container {
+  width: 20%;
+}
+
+div.search-result.list div.hit-thumbnail-container div.hit-thumbnail, div.search-result.list div.hit-thumbnail-container div.hit-thumbnail img { 
+  width: 4rem;
+  height: 4rem;
+}
+
+div.search-result.list hr {
+  position: relative;
+  top: -4em;
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+div.search-result.list div.hit-info-container {
+  min-height: 4rem;
+}
+
+/*GalleryResult*/
+ol li.ais-Hits-item:has(div.search-result.gallery) {
+  display: inline-flex;
+  width: 25%;
+}
+
+div.search-result.gallery {
+  overflow: hidden;
+  display: inline-flex;
+}
+
+div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail, div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img {
+  min-width: 12rem;
+  width: 12rem;
+  min-height: 12rem;
+  height: 12rem;
+}
+div.search-result.gallery div.hit-thumbnail-container {
+  width: 100%;
+}
+
+div.search-result.gallery h3.hit-title {
+  font-size: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 12rem;
+  height: 2em;
+}
+
 
 div.hit-info-container {
   width: 80%;
@@ -813,11 +900,14 @@ div.hit-thumbnail img.thumbnail-bar {
   position: absolute;
   bottom: 0;
   min-height: 2em;
+  height: 2em;
 }
 
-h3.hit-title {
-  margin-left: 2rem;
-  margin-top: 2rem;
+div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img.thumbnail-bar {
+  min-width: 12rem;
+  width: 12rem;
+  min-height: 3rem;
+  height: 3rem;
 }
 
 div.hit-details {
@@ -835,8 +925,13 @@ div.top-refinements-bar {
   background-color: rgba(238, 230, 240);
 }
 
+div.options-container {
+  font-size: 1.2em;
+  text-align: top;
+  display: inline-flex;
+}
 
-div.stats-container, div.options-container {
+div.stats-container {
   font-size: 1.2em;
   text-align: top;
   display: inline-flex;
@@ -845,7 +940,7 @@ div.stats-container, div.options-container {
 }
 
 div.options-container h2 {
-  font-size: 2em;
+  font-size: 3em;
 }
 
 
@@ -876,7 +971,7 @@ div.options-container div * {
 
 div.current-refinements-container {
   display: inline-flex;
-  width: 70%;
+  width: 66%;
 }
 
 div.current-refinements-container.closed {
@@ -989,7 +1084,6 @@ input.sidebar-search  {
 }
 
 div.score-light {
-  margin-left: 2em;
   margin-right: 1em;
   display: inline-block;
   border: 1px solid #ddd;

@@ -3,6 +3,7 @@ import {
   Meta,
   Outlet,
   Scripts,
+  ScrollRestoration,
 } from "@remix-run/react"
 
 // standard
@@ -29,6 +30,7 @@ export default function App() {
         <Outlet />
         <Footer />
 
+        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

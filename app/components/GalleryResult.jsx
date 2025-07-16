@@ -23,12 +23,8 @@ function producingOrganization(creators){
   return creators ? creators.find(creator => creator.creatorRole?.[0] == "Producing Organization").creator : null 
 }
 
-export default function ListResult({hit}){
+export default function GalleryResult({hit}){
   let guid = aapbGuid(hit.pbcoreDescriptionDocument)
-  let description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
-  // let producingOrg = producingOrganization(hit.pbcoreDescriptionDocument.pbcoreCreator)
-  let recordDate
-
   let date, producingOrg
   if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
     // aapb convention is just first stored assetDate
@@ -41,23 +37,13 @@ export default function ListResult({hit}){
   }
 
   return (
-    <div className="search-result list">
+    <div className="search-result gallery">
       <a href={`/search/${guid}`} >
         <div className="hit-thumbnail-container">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } data={hit} />
+          <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
         </div>
       </a>
-
-      <div className="hit-info-container">
-        <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
-
-        <div className="hit-details">
-          <ScoreLight score={ hit._score } />
-          { date }
-          { producingOrg }
-        </div>
-      </div>
-      <hr />
     </div>
   )
 }

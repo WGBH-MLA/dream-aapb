@@ -2,7 +2,8 @@ export default class Record{
   constructor(props){
     this.data = props
     if(!this.data || !this.data.guid){
-      throw "Input data invalid for Record!!"
+      console.log( 'problemsss', props )
+      // throw "Input data invalid for Record!!"
     }
   }
 

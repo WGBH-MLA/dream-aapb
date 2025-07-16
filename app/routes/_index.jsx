@@ -43,7 +43,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    indexName: process.env.ES_INDEX_Name
+    indexName: process.env.ES_INDEX_NAME
   }
 
 
