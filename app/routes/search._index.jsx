@@ -3,6 +3,7 @@ import { useLoaderData, useSearchParams } from '@remix-run/react'
 import Searchkit from "searchkit"
 import { SortBy } from "react-instantsearch"
 import Client from '@searchkit/instantsearch-client'
+import { ChevronDown } from 'lucide-react'
 
 const OR_FIELDS = [
   "producing_org",
@@ -609,7 +610,7 @@ export default function Search() {
             
             <div className="header-spacer" />
 
-            <div>
+            <div className="sort-container marleft marright">
               Sort
               <SortBy
                 items={[
@@ -618,16 +619,18 @@ export default function Search() {
                   { key: "sort3", label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
                 ]}
               />
+              <ChevronDown />
             </div>
             
-            <div>
+            <div className="sort-container marleft marright">
               Items per page
               <HitsPerPage
                 items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
               />
+              <ChevronDown style={{ right: "-0.5em"}} />
             </div>
 
-            <div>
+            <div className="marleft marright">
               <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
               <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
               <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />

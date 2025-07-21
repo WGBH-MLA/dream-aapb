@@ -12,11 +12,10 @@ export default function ToeNail(props){
       </div>
 
       <div className="toenail-socials">
-        <SocialIcon icon="/silly.png" />
-        <SocialIcon icon="/silly.png" />
-        <SocialIcon icon="/silly.png" />
-        <SocialIcon icon="/silly.png" />
-        <SocialIcon icon="/silly.png" />
+        <SocialIcon url="https://www.youtube.com/channel/UCni4awAToTQjg9d1vW9w-8w" icon="/yt.png" />
+        <SocialIcon url="https://www.instagram.com/amarchivepub/" icon="/ig.png" />
+        <SocialIcon url="https://www.facebook.com/amarchivepub" icon="/fb.png" />
+        <SocialIcon url="https://twitter.com/amarchivepub" icon="/tw.png" />
       </div>
     </div>
   )

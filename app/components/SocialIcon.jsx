@@ -1,7 +1,9 @@
 export default function SocialIcon(props){
   return (
-    <div className="social-icon">
-      <img src={ props.icon } />
-    </div>
+    <a href={props.url}>
+      <div className="social-icon">
+        <img src={ props.icon } />
+      </div>
+    </a>
   )
 }

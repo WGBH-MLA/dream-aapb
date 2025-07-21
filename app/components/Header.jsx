@@ -30,12 +30,6 @@ const drawerItems = {
                 
       },
       {
-        label: "Volunteer",
-        url: "/volunteer",
-        external: false,
-                
-      },
-      {
         label: "Fix Transcripts",
         url: "/fixitplus",
         external: false,

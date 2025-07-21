@@ -209,10 +209,11 @@ div.social-icon img {
   margin: 0;
   z-index: 200;
   position: relative;
-  width: 3em;
-  height: 3em;
+  width: 2em;
+  height: 2em;
+  margin-top: 0.5em;
+  margin-left: 0.5em;
   background-position: center;
-  background-size: contain;
 }
 
 
@@ -317,7 +318,18 @@ div.newsletter-bar input[type="submit"] {
   background-color: rgba(228, 230, 240);
 }
 
+div.newsletter-signup input {
+  height: 2em;
+}
+ 
+div.newsletter-signup input[type="text"] {
+  width: 10em;
+}
 
+div.newsletter-signup input[type="button"] {
+  border: 0;
+  width: 4em;
+}
 
 div.homepage-search {
   text-align: justify;
@@ -344,6 +356,12 @@ div.homepage-search div.layout-search input {
 div.homepage-search div.layout-search button {
   height: 3.6em;
   width: 6em;
+}
+
+div.feature-video-container iframe{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 div.layout-search {
@@ -414,13 +432,10 @@ div.tv-menu-container h2 {
 
 div.tv-menu-container div.tv-menu-program {
 /*  background-color: #ff0;*/
-  margin-left: 4em;
-  margin-right: 4em;
-  margin-bottom: 2em;
   display: inline-flex;
   flex-grow: 1;
-  width: 20rem;
-  min-width: 20rem;
+  width: 25rem;
+  min-width: 25rem;
   
   overflow: hidden;
   position: relative;
@@ -446,7 +461,7 @@ div.tv-menu-container div.tv-menu-program img {
   max-height: 18.75rem;
 }
 
-div.tv-menu-container div.tv-menu-program.three img, div.tv-menu-container div.tv-menu-program.three div {
+div.tv-menu-container div.tv-menu-program img, div.tv-menu-container div.tv-menu-program.three div {
   width: 25rem;
   height: 18.75rem;
 }
@@ -689,7 +704,7 @@ div.page-sidebar h3.sidebar-title {
 
 div.page-maincolumn {
   display: inline-block;
-  width: 69.5%;
+  width: 69%;
 }
 
 div.clear-refinements-container div.ais-ClearRefinements {
@@ -959,7 +974,6 @@ div.options-container div {
   vertical-align: middle;
   width: 12%;
   height: 2rem;
-  margin-left: 2em;
   font-weight: bold;
   line-height: 2.4em;
 }
@@ -967,6 +981,24 @@ div.options-container div {
 div.options-container div * {
   color: #3C439B;
   margin-left: 1em;
+}
+
+div.options-container select {
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+div.sort-container {
+  max-width: 12em;
+  position: relative;
+}
+
+div.sort-container svg {
+  position: absolute;
+  right: 0;
+  top: 0.4em;
 }
 
 div.current-refinements-container {
@@ -1066,16 +1098,15 @@ div.search-accordion-container svg {
   vertical-align: middle;
 }
 
-div.ais-SearchBox {
-/*  background-color: #f00;*/
- }
+div.ais-SearchBox form button.ais-SearchBox-submit, div.ais-SearchBox form button.ais-SearchBox-reset,  {
+}
 
 div.ais-SearchBox form, div.ais-SearchBox form input {
   width: 76%;
   padding: 0.25em;
  }
  div.ais-SearchBox form button {
-  display: inline;
+  display: none;
  }
 
 input.sidebar-search  {

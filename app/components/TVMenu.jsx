@@ -33,7 +33,7 @@ export default function TVMenu(props){
 
 function TVProgram(props){
   return (
-    <div key={props.key} className={"tv-menu-program" + (props.classes ? props.classes : "")} >
+    <div key={props.key} className={"tv-menu-program marleft marbot" + (props.classes ? props.classes : "")} >
       <a href={props.url} >
         <Thumbnail url={props.thumbnail} />
         <h4>{ props.title }</h4>
