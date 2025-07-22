@@ -331,6 +331,14 @@ div.newsletter-signup input[type="button"] {
   width: 4em;
 }
 
+div.mappy-container {
+  display: block;
+  z-index: 100;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
 div.homepage-search {
   text-align: justify;
   background-image: url(/draft-bg.png);

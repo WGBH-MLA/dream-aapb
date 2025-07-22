@@ -1,13 +1,25 @@
-import { MapContainer, TileLayer } from 'react-leaflet'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from "react"
 
-export default function Mappy(props){
+// because it looooooooooooooooooooooves window and therefore will only load on the client
+let ClientMap = lazy(() => import("./ClientMap"));
+
+export function ClientOnly({children}){
+  let [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  return mounted ? <>{children}</> : null
+}
+
+export default function Map(props){
   return (
-    <div>
-      <MapContainer center={[37.8, -130]} zoom={2.5}>
-        <TileLayer attribution={`Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors`} url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      </MapContainer>
-    </div>
+    <>
+      <h3> its your FUCKING map oh boy! </h3>
+      <ClientOnly>
+        <Suspense fallback="FAILUER">
+          <ClientMap />
+        </Suspense>
+      </ClientOnly>
+    </>
   )
-  
 }

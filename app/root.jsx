@@ -4,7 +4,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react"
+} from "react-router"
 
 // standard
 import "@fontsource/inter/400.css";

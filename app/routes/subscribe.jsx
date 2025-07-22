@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
