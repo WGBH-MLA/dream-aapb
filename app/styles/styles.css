@@ -4,8 +4,20 @@ ul.ais-Pagination-list {
 }
 
 ul.ais-Pagination-list li {
- display: inline; 
+ display: inline-flex;
+ min-width: 1em;
+ width: 1em;
  padding: 1em;
+}
+
+ul.ais-Pagination-list li.ais-Pagination-item a.ais-Pagination-link {
+  color: #ddd;
+  text-decoration: none;
+}
+
+ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--page.ais-Pagination-item--selected a, ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--firstPage a, ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--lastPage a, ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--previousPage a, ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--nextPage a  {
+  color: #3C439B;
+  font-weight: 800;
 }
 
 ol.ais-Hits-list {
@@ -720,6 +732,7 @@ div.page-sidebar {
 }
 
 div.page-sidebar h3.sidebar-title {
+  margin-bottom: 2em;
   font-weight: 800;
 }
 
@@ -952,6 +965,26 @@ div.hit-details {
 
 div.top-search-bar {
 
+}
+
+hr.top-bar-divider {
+  width: 90%;
+}
+
+div.pagination-bar {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.pagination-bar ul {
+  padding-inline-start: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+div.pagination-bar hr {
+  width: 100%;
 }
 
 div.top-refinements-bar {

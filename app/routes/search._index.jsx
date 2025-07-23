@@ -657,7 +657,6 @@ export default function Search() {
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
           </div>
-          
         </div>
 
 
@@ -746,8 +745,6 @@ export default function Search() {
             </>
           }/>
 
-          <hr />
-
           <SearchAccordion title="Contributing Organization" startClosed={true} content={
             <>
               <RefinementList
@@ -772,8 +769,17 @@ export default function Search() {
         </div>
 
         <div className="page-maincolumn bmarright">
+
+          <div className="pagination-bar">
+            <Pagination />
+          </div>
+
+          <hr/>
+
           <Hits hitComponent={ searchResultComponent } />
-          <Pagination />
+          <div className="pagination-bar marbot">
+            <Pagination />
+            </div>  
         </div>
       </InstantSearch>
     </div>
