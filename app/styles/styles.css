@@ -331,6 +331,27 @@ div.newsletter-signup input[type="button"] {
   width: 4em;
 }
 
+div.mappy-container {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  height: 30rem;
+  min-height: 30rem;
+}
+
+div.mappy-container div.leaflet-container {
+  height: 30rem;
+}
+
+img.mappy-logo {
+  object-fit: contain;
+  display: block;
+  height: auto;
+  min-height: 4em;
+  width: 6em;
+}
+
 div.homepage-search {
   text-align: justify;
   background-image: url(/draft-bg.png);

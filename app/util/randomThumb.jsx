@@ -1,4 +1,5 @@
 export default function randomThumb(){
+  return "/VIDEO.png"
   return `/thumbs/${filenames[Math.floor(Math.random() * filenames.length)]}`
 }
 

@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
-import Mappy from "../components/Map"
+import Mappy from "../components/Mappy"
 
 import randomThumb from "../util/randomThumb"
 import randomRecords from "../util/randomRecords"
@@ -62,11 +62,11 @@ export default function Index() {
         <LayoutSearch indexName={ data.indexName } />
       </div>
 
-      <div className="feature-video-container">
+      <div className="feature-video-container marbot">
         <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="500" height="281"></iframe>
       </div>
 
-      <div className="mappy-container">
+      <div className="mappy-container marbot">
         <Mappy />
       </div>
 
