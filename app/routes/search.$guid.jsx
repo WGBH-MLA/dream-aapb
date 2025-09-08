@@ -54,7 +54,7 @@ export default function ShowRecord() {
 
     // people
     if(data.pbcoreDescriptionDocument.pbcoreCreator && data.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-      creators = data.pbcoreDescriptionDocument.pbcoreCreator.map((pbc) => {
+      creators = data.pbcoreDescriptionDocument.pbcoreCreator.map((pbc, i) => {
         if(pbc.creator && pbc.creatorRole && pbc.creatorRole.text && pbc.creatorRole.text != "Producing Organization"){
           return <ShowBox label={ pbc.creatorRole.text } text={ pbc.creator.text } />
         }
@@ -76,7 +76,7 @@ export default function ShowRecord() {
 
 
     if(data.pbcoreDescriptionDocument.pbcoreCoverage && data.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
-      coverages = data.pbcoreDescriptionDocument.pbcoreCoverage.map((pbc) => {
+      coverages = data.pbcoreDescriptionDocument.pbcoreCoverage.map((pbc, i) => {
         if(pbc.creatorRole && pbc.creatorRole.text != "Producing Organization"){
           return (
             <>

@@ -13,6 +13,14 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/organizations/:orgId": {
+    params: {
+      "orgId": string;
+    };
+  };
+  "/organizations": {
+    params: {};
+  };
   "/search": {
     params: {};
   };
@@ -41,7 +49,15 @@ type Pages = {
 type RouteFiles = {
   "root.jsx": {
     id: "root";
-    page: "/" | "/search" | "/search/:guid" | "/collections" | "/contribute" | "/our-story" | "/subscribe" | "/about";
+    page: "/" | "/organizations/:orgId" | "/organizations" | "/search" | "/search/:guid" | "/collections" | "/contribute" | "/our-story" | "/subscribe" | "/about";
+  };
+  "routes/organizations.$orgId.jsx": {
+    id: "routes/organizations.$orgId";
+    page: "/organizations/:orgId";
+  };
+  "routes/organizations._index.jsx": {
+    id: "routes/organizations._index";
+    page: "/organizations";
   };
   "routes/search._index.jsx": {
     id: "routes/search._index";

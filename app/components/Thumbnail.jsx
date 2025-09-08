@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import thumbnailURL from "../util/thumbnailURL"
 
-import Record from "../util/Record"
-
 export default function Thumbnail(props) {
   var img, bottomBar
   if(props.url){
@@ -12,15 +10,13 @@ export default function Thumbnail(props) {
     var url = thumbnailURL(props.guid)
     var classes = props.searchResult ? "hit-thumbnail" : "show-thumbnail"
 
-    var record = new Record(props.data)
-
     if(exists){
       img = <img crossOrigin="anonymous" className="thumbnail" src={ url } />
       bottomBar = <img src="/video-slice.png" className="thumbnail-bar" />
     } else {
-      if(record.isVideo()){
+      if(props.mediaType == "Moving Image"){
         img = <img src="/VIDEO.png" className="thumbnail" />
-      } else if(record.isAudio()) {
+      } else if(props.mediaType == "Sound") {
         img = <img src="/AUDIO.png" className="thumbnail" />
       } else {
         img = <img src="/NONE.png" className="thumbnail" />
@@ -28,10 +24,12 @@ export default function Thumbnail(props) {
     }
 
     useEffect(() => {
-      fetch(url, {method: "HEAD", headers: {"Referer": "http://18.235.155.36:4000"}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
+      // todo need to get the hostname into here, but with Hits -> hitComponent pattern not clear how to bring in addl props
+      var hostname = "http://18.235.155.36:4000"
+      hostname = "http://localhost:4000"
+      fetch(url, {method: "HEAD", headers: {"Referer": hostname}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
     })
   }
-  
 
   return (
     <div className={ classes }>

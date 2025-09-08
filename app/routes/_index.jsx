@@ -3,7 +3,7 @@ import { useLoaderData } from 'react-router'
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
-import Mappy from "../components/Map"
+import Mappy from "../components/Mappy"
 
 import randomThumb from "../util/randomThumb"
 import randomRecords from "../util/randomRecords"
@@ -21,23 +21,23 @@ export const loader = async () => {
     featured_collections: [
       {
         key: "coll1",
-        title: "first things first",
-        subtitle: "giuseppe open toe",
-        thumbnail: randomThumb(),
+        title: "Televising Black Politics in the Black Power Era: Black Journal and Soul!",
+        subtitle: "",
+        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/black_power/b_greaves_and_house_option_2_cropped.png",
         url: "google.com"
       },
       {
         key: "coll2",
-        title: "go back for seconds",
-        subtitle: "round too",
-        thumbnail: randomThumb(),
+        title: "ZOOM (1972-1978): Children’s Community and Public Television in the 1970s",
+        subtitle: "",
+        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/zoom/Zoom_mainimage.png",
         url: "google.com"
       },
       {
         key: "coll3",
-        title: "third wheels motor club",
-        subtitle: "vroom vroom",
-        thumbnail: randomThumb(),
+        title: "Protecting Places: Historic Preservation and Public Broadcasting",
+        subtitle: "",
+        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/pennstationcrop.jpg",
         url: "google.com"
       },
     ],
@@ -62,11 +62,11 @@ export default function Index() {
         <LayoutSearch indexName={ data.indexName } />
       </div>
 
-      <div className="feature-video-container">
-        <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="500" height="281"></iframe>
+      <div className="feature-video-container marbot">
+        <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
       </div>
 
-      <div className="mappy-container">
+      <div className="mappy-container marbot">
         <Mappy />
       </div>
 

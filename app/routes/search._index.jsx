@@ -39,6 +39,7 @@ export const loader = async ({params, request}) => {
     esURL: process.env.ES_URL
   }
 }
+
 export default function Search() {
   const data = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,6 +48,7 @@ export default function Search() {
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || ""
   })
+  const [allowSearch, setAllowSearch] = useState(true)
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -61,6 +63,33 @@ export default function Search() {
   } else {
     currentRefinementsClasses = "current-refinements-container"
     showRefinementButtonText = "Show Less"
+  }
+
+  function handleCustomQuery(type, value){
+    setCustomQuery({...customQuery, [type]: value})
+    // searchParams.set("all", customQuery.all)
+    // searchParams.set("title", customQuery.title)
+    // searchParams.set("none", customQuery.none)
+    // searchParams.set("view", viewSelect)
+    // setSearchParams(searchParams)
+    console.log( 'lets custom girls...', value )
+  }
+
+  function handleSearchBox(query, search) {
+    if(allowSearch){
+      // flag off
+      setAllowSearch(false)
+      // search
+      console.log( 'lets search girls...', query )
+      search(query)
+
+      // wait
+      let timeoutId = setTimeout(() => {
+        clearTimeout(timeoutId)
+        // flag on
+        setAllowSearch(true)
+      }, 300)
+    }
   }
 
   function titleQuery(tQuery){
@@ -305,6 +334,11 @@ export default function Search() {
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
       result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
 
+      // // maybe used in concert with filter range frontend
+      // filter_attributes: [
+      //   { attribute: "broadcast_date", field: "broadcast_date", type: "date" },
+      // ],
+
       facet_attributes: [
         // { 
         //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text", 
@@ -378,11 +412,11 @@ export default function Search() {
           field: "topics",
           type: "string",
         },
-        { 
-          attribute: "broadcast_date",
-          field: "broadcast_date",
-          type: "string",
-        },
+        // { 
+        //   attribute: "broadcast_date",
+        //   field: "broadcast_date",
+        //   type: "date",
+        // },
         {
           attribute: "series_titles",
           field: "series_titles",
@@ -426,6 +460,13 @@ export default function Search() {
       }
 
       return item
+    }).sort((a,b) => {
+      // sort availabilty options a-z so they dont jump around ui based on num results
+      if(a < b){
+        return 1
+      } else {
+        return -1
+      }
     })
   }
 
@@ -525,18 +566,19 @@ export default function Search() {
         }
 
       } else {
-        // no quotes -> just match these fields, plus other field bee ess
 
         
         var mainAllFieldsArray
-        // creepy quote handling
+        // broken creepy quote handling
         if(false && query && query.includes('\"')){
           var quoted = query.match(/"(\\.|[^"\\])*"/g)
           var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
           if(quoted.length > 0){
+            console.log( 'dummbo', quoted, unquoted )
             // make a one-hit-required term array for each distinct quoted term
-            queryHash.bool.filter = quoted.map( (quoterm) => allFieldsArray(quoterm) ).flat()
+            queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
           }
+
         } else {
           mainAllFieldsArray = allFieldsArray(query)
         }
@@ -580,7 +622,6 @@ export default function Search() {
         // set num of refinments for show more refinements UI
         // not working
         // setNumberOfRefinements( document.getElementsByClassName("span.ais-CurrentRefinements-category").length )
-
         return queryHash
       }
     }
@@ -595,13 +636,14 @@ export default function Search() {
     searchResultComponent = GalleryResult
   }
 
+  // <SearchBox queryHook={ handleSearchBox } />
   return (
     <div className="body-container">
       ’
       <InstantSearch
-        routing={true}
         indexName={data.indexName}
         searchClient={ searchClient }
+        routing={true}
       >
 
         <div className="top-search-bar bmarleft smarbot smarright">
@@ -611,24 +653,24 @@ export default function Search() {
             
             <div className="header-spacer" />
 
-            <div className="sort-container marleft marright">
+            <div className="sort-container sort marleft marright">
               Sort
               <SortBy
                 items={[
-                  { key: "sort1", label: "Relevance", value: "aapb_augmented_biggram_default" },
-                  { key: "sort2", label: "Title", value: "aapb_augmented_biggram_title_keyword_asc" },
-                  { key: "sort3", label: "Broadcast Date", value: "aapb_augmented_biggram_broadcast_date_desc" },
+                  { key: "sort1", label: "Relevance", value: `${data.indexName}_default` },
+                  { key: "sort2", label: "Title", value: `${data.indexName}_title_keyword_asc` },
+                  { key: "sort3", label: "Broadcast Date", value: `${data.indexName}_broadcast_date_desc` },
                 ]}
               />
-              <ChevronDown />
+              <ChevronDown style={{ right: "18px"}} />
             </div>
             
-            <div className="sort-container marleft marright">
+            <div className="sort-container per-page marleft marright">
               Items per page
               <HitsPerPage
                 items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
               />
-              <ChevronDown style={{ right: "-0.5em"}} />
+              <ChevronDown />
             </div>
 
             <div className="marleft marright">
@@ -658,7 +700,6 @@ export default function Search() {
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
           </div>
-          
         </div>
 
 
@@ -669,13 +710,14 @@ export default function Search() {
           <SearchAccordion title="Keywords" content={
             <>
               <h4>Search for</h4>
-              <SearchBox className="sidebar-search smarbot" />
-              <h4>Contains all these words</h4>
-              <input value={ customQuery.all } className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, all: e.target.value}) } />
+
+              <SearchBox  className="sidebar-search smarbot" />
+              <h4>Contains all of these words</h4>
+              <input id="all"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
               <h4>This title</h4>
-              <input value={ customQuery.title } className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, title: e.target.value}) } />
+              <input id="title"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
               <h4>None of these words</h4>
-              <input value={ customQuery.none } className="sidebar-search smarbot" type="text" onChange={ (e) => setCustomQuery({...customQuery, none: e.target.value}) } />
+              <input id="none"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
               <div>
                 <button className="sidebar-search-button">Update</button>
               </div>
@@ -705,10 +747,10 @@ export default function Search() {
 
           <hr />
 
-          <SearchAccordion title="Asset Type" startClosed={true} content={
+          <SearchAccordion title="Producing Organization" content={
             <>
               <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
+                attribute="producing_org"
                 // transformItems={ producingOrganization }
               />
             </>
@@ -716,10 +758,10 @@ export default function Search() {
 
           <hr />
 
-          <SearchAccordion title="Producing Organization" content={
+          <SearchAccordion title="Asset Type" startClosed={true} content={
             <>
               <RefinementList
-                attribute="producing_org"
+                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
                 // transformItems={ producingOrganization }
               />
             </>
@@ -747,8 +789,6 @@ export default function Search() {
             </>
           }/>
 
-          <hr />
-
           <SearchAccordion title="Contributing Organization" startClosed={true} content={
             <>
               <RefinementList
@@ -770,11 +810,33 @@ export default function Search() {
           }/>
 
           <hr />
+
+          <SearchAccordion title="Series Title" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="series_titles"
+                searchable={true}
+
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />          
         </div>
 
         <div className="page-maincolumn bmarright">
+
+          <div className="pagination-bar">
+            <Pagination />
+          </div>
+
+          <hr/>
+
           <Hits hitComponent={ searchResultComponent } />
-          <Pagination />
+          <div className="pagination-bar marbot">
+            <Pagination />
+          </div>
         </div>
       </InstantSearch>
     </div>
