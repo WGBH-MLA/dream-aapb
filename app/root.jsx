@@ -1,4 +1,11 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData}from "@remix-run/react"
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLoaderData
+} from "react-router"
 
 export const loader = () => {
   return {indexName: process.env.ES_INDEX_NAME}

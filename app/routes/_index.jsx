@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 // import shuffle from '~/utils/shuffle'
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
