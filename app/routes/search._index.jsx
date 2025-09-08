@@ -639,7 +639,6 @@ export default function Search() {
   // <SearchBox queryHook={ handleSearchBox } />
   return (
     <div className="body-container">
-      ’
       <InstantSearch
         indexName={data.indexName}
         searchClient={ searchClient }
