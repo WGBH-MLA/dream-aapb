@@ -44,7 +44,7 @@ export default function ListResult({hit}){
     <div className="search-result list">
       <a href={`/search/${guid}`} >
         <div className="hit-thumbnail-container">
-          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } data={hit} />
+          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
         </div>
       </a>
 

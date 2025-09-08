@@ -8,7 +8,7 @@ export default function About() {
       
       <div className="welcome-video-container">
         <caption>
-          <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+          <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="500" height="281" frameborder="0"></iframe>
             
             Watch a five minute introduction to the treasures of public broadcasting, written and produced by Elizabeth Deane.
           </caption>

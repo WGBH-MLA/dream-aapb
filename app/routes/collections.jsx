@@ -3,93 +3,39 @@ import { useLoaderData } from '@remix-run/react'
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import randomThumb from "../util/randomThumb"
+import randomRecords from "../util/randomRecords"
+import recordToTVProgram from "../util/recordToTVProgram"
 
 export const loader = async () => {
+  let records = await randomRecords(10)
+  let programs = []
+  if(records){
+    programs = records.map((record) => recordToTVProgram(record) )
+  }
+
   let data = {
     featured_collections: [
       {
         title: "first things first",
         subtitle: "giuseppe open toe",
-        thumbnail: randomThumb(),
+        thumbnailURL: randomThumb(),
         url: "google.com"
       },
       {
         title: "go back for seconds",
         subtitle: "round too",
-        thumbnail: randomThumb(),
+        thumbnailURL: randomThumb(),
         url: "google.com"
       },
       {
         title: "third wheels motor club",
         subtitle: "vroom vroom",
-        thumbnail: randomThumb(),
+        thumbnailURL: randomThumb(),
         url: "google.com"
       },
     ],
 
-    radio_and_tv: [
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-      {
-        title: "Ooh ooh I likea this",
-        subtitle: "no joke",
-        thumbnail: randomThumb(),
-        url: "/search"
-      },
-
-    ],
+    radio_and_tv: programs
 
   }
 

@@ -1,10 +1,8 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react"
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useLoaderData}from "@remix-run/react"
+
+export const loader = () => {
+  return {indexName: process.env.ES_INDEX_NAME}
+}
 
 // standard
 import "@fontsource/inter/400.css";
@@ -15,6 +13,7 @@ import Footer from "./components/Footer"
 import "./styles/styles.css"
 
 export default function App() {
+  const data = useLoaderData()
   return (
     <html>
       <head>
@@ -26,7 +25,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header />
+        <Header indexName={ data.indexName } />
         <Outlet />
         <Footer />
 
