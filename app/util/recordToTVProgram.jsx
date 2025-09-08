@@ -3,7 +3,7 @@ import thumbnailURL from "./thumbnailURL"
 export default function recordToTVProgram(record){
   let title,subtitle,thumbnail,url
 
-  if(title && title.length > 0){
+  if(record.title && record.title.length > 0){
     title = record.title
   } else {
     title = "Untitled Record"
@@ -18,9 +18,11 @@ export default function recordToTVProgram(record){
 
   return {
     key: record.guid,
+    guid: record.guid,
     title: title,
     subtitle: subtitle,
     thumbnail: thumbnail,
+    mediaType: record.media_type,
     url: url
   }
 }

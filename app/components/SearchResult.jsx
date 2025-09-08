@@ -48,7 +48,7 @@ export default function SearchResult({hit}){
 
       <a href={`/search/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
-          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } data={hit} />
+          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
         </div>
       </a>
 

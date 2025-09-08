@@ -32,10 +32,18 @@ export default function TVMenu(props){
 }
 
 function TVProgram(props){
+  let thumb
+  if(props.guid){
+    // it's a record
+    thumb = <Thumbnail guid={props.guid} mediaType={props.mediaType} />
+  } else {
+    // it's just an image
+    thumb = <Thumbnail url={props.thumbnailURL} />
+  }
   return (
     <div key={props.key} className={"tv-menu-program marleft marbot" + (props.classes ? props.classes : "")} >
       <a href={props.url} >
-        <Thumbnail url={props.thumbnail} />
+        { thumb }
         <h4>{ props.title }</h4>
         <h5>{ props.subtitle }</h5>
       </a>
