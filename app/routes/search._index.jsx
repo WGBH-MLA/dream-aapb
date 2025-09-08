@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData, useSearchParams } from '@remix-run/react'
+import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import { SortBy } from "react-instantsearch"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
+
 
 const OR_FIELDS = [
   "producing_org",
@@ -638,7 +639,6 @@ export default function Search() {
   // <SearchBox queryHook={ handleSearchBox } />
   return (
     <div className="body-container">
-
       <InstantSearch
         indexName={data.indexName}
         searchClient={ searchClient }

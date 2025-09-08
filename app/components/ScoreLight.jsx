@@ -1,5 +1,3 @@
-// import { useLocation } from '@remix-run/react'
-
 export default function ScoreLight(props) {
   let color = "#ddd"
   let score = parseFloat(props.score)

@@ -6,3 +6,5 @@ public/*.mp4
 prod
 
 build/*
+
+.cache/*

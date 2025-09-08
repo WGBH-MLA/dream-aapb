@@ -1,4 +1,4 @@
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData } from 'react-router'
 // import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 // import ShowBox from "../components/ShowBox"
