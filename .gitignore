@@ -1,10 +1,12 @@
+.env
+
 notes
 **/.DS_Store
 public/thumbs/*
-node_modules/*
 public/*.mp4
 prod
 
+node_modules/*
 build/*
-
 .cache/*
+.react-router/*

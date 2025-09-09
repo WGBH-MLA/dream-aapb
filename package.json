@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && vite build --ssr",
-    "start": "react-router-serve ./build/server/index.js"
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "react-router typegen && tsc"
   },
   "keywords": [],
   "author": "",
