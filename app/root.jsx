@@ -7,6 +7,12 @@ import {
   useLoaderData
 } from "react-router"
 
+export const meta = () => {
+  return [
+    {charset: "utf-8"}
+  ]
+}
+
 export const loader = () => {
   return {indexName: process.env.ES_INDEX_NAME}
 }
