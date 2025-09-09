@@ -1,42 +1,77 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData, useSearchParams } from 'react-router'
-import Searchkit from "searchkit"
-import { SortBy } from "react-instantsearch"
+import { useLoaderData, useSearchParams, useRouteError } from 'react-router'
+import Searchkit from 'searchkit'
+import { SortBy } from 'react-instantsearch'
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
-
+import { ESTransporter } from 'searchkit'
 
 const OR_FIELDS = [
-  "producing_org",
-  "pbcoreDescriptionDocument.pbcoreCreator.creator"
+  'producing_org',
+  'pbcoreDescriptionDocument.pbcoreCreator.creator',
 ]
+
+class ErrorTransporter extends ESTransporter {
+  constructor(esURL, esApiKey) {
+    super()
+    this.esURL = esURL
+    this.esApiKey = esApiKey
+  }
+
+  async performNetworkRequest(requests) {
+    let url = 'https://elastic.wgbh-mla.org/_msearch'
+    console.log(
+      'ErrorTransporter requests',
+      requests,
+      this.esURL,
+      this.esApiKey,
+      url
+    )
+    let response = fetch(url, {
+      headers: {
+        Authorization: `Bearer ${this.esApiKey}`,
+      },
+      body: this.createElasticsearchQueryFromRequest(requests),
+      method: 'POST',
+    })
+      .then(res => res)
+      .catch(err => {
+        console.error('Elastic fetch error', err)
+        throw new Response(`Elastic fetch error: ${err.message}`, {
+          status: 500,
+          statusText: 'Internal Elastic Error',
+        })
+      })
+    return response
+  }
+}
 
 // import your InstantSearch components
 import {
-          InstantSearch,
-          SearchBox,
-          Hits,
-          RefinementList,
-          CurrentRefinements,
-          ClearRefinements,
-          ToggleRefinement,
-          Pagination,
-          HitsPerPage,
-          RangeInput,
-          Stats
-      } from 'react-instantsearch';
+  InstantSearch,
+  SearchBox,
+  Hits,
+  RefinementList,
+  CurrentRefinements,
+  ClearRefinements,
+  ToggleRefinement,
+  Pagination,
+  HitsPerPage,
+  RangeInput,
+  Stats,
+} from 'react-instantsearch'
 
-import SearchResult from "../components/SearchResult"
-import ListResult from "../components/ListResult"
-import GalleryResult from "../components/GalleryResult"
-import SearchAccordion from "../components/SearchAccordion"
-import ViewSelect from "../components/ViewSelect"
+import SearchResult from '../components/SearchResult'
+import ListResult from '../components/ListResult'
+import GalleryResult from '../components/GalleryResult'
+import SearchAccordion from '../components/SearchAccordion'
+import ViewSelect from '../components/ViewSelect'
 
-export const loader = async ({params, request}) => {
+export const loader = async ({ params, request }) => {
   return {
-    indexName: process.env.ES_INDEX_NAME || "aapb_augmented_biggram",
-    apiKey: process.env.ES_API_KEY,
-    esURL: process.env.ES_URL
+    indexName: process.env.ES_INDEX_NAME || 'aapb_augmented_biggram',
+    esURL: process.env.ES_URL || 'https://elastic.wgbh-mla.org',
+    esApiKey: process.env.ES_API_KEY || '123',
   }
 }
 
@@ -44,43 +79,43 @@ export default function Search() {
   const data = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
-    all: searchParams.get("all") || "",
-    title: searchParams.get("title") || "",
-    none: searchParams.get("none") || ""
+    all: searchParams.get('all') || '',
+    title: searchParams.get('title') || '',
+    none: searchParams.get('none') || '',
   })
   const [allowSearch, setAllowSearch] = useState(true)
 
-  let view = searchParams.get("view") || "standard"
+  let view = searchParams.get('view') || 'standard'
   const [viewSelect, setViewSelect] = useState(view)
 
   // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
   const [showingRefinements, setShowingRefinements] = useState(false)
   let currentRefinementsClasses, showRefinementButtonText
-    // if(!showMoreRefinements && numberOfRefinements > 3){
-  if(!showingRefinements){
-    currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show More"
+  // if(!showMoreRefinements && numberOfRefinements > 3){
+  if (!showingRefinements) {
+    currentRefinementsClasses = 'current-refinements-container closed'
+    showRefinementButtonText = 'Show More'
   } else {
-    currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
+    currentRefinementsClasses = 'current-refinements-container'
+    showRefinementButtonText = 'Show Less'
   }
 
-  function handleCustomQuery(type, value){
-    setCustomQuery({...customQuery, [type]: value})
+  function handleCustomQuery(type, value) {
+    setCustomQuery({ ...customQuery, [type]: value })
     // searchParams.set("all", customQuery.all)
     // searchParams.set("title", customQuery.title)
     // searchParams.set("none", customQuery.none)
     // searchParams.set("view", viewSelect)
     // setSearchParams(searchParams)
-    console.log( 'lets custom girls...', value )
+    console.log('lets custom girls...', value)
   }
 
   function handleSearchBox(query, search) {
-    if(allowSearch){
+    if (allowSearch) {
       // flag off
       setAllowSearch(false)
       // search
-      console.log( 'lets search girls...', query )
+      console.log('lets search girls...', query)
       search(query)
 
       // wait
@@ -92,232 +127,236 @@ export default function Search() {
     }
   }
 
-  function titleQuery(tQuery){
+  function titleQuery(tQuery) {
     // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
     return {
       bool: {
         should: [
           {
             match: {
-              "title": tQuery
-            }
+              title: tQuery,
+            },
           },
           {
             nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
+              path: 'pbcoreDescriptionDocument.pbcoreTitle',
               query: {
                 match: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                  'pbcoreDescriptionDocument.pbcoreTitle.text': {
                     query: tQuery,
-                  }
-                }
-              }
-            } 
+                  },
+                },
+              },
+            },
           },
         ],
-        minimum_should_match: 1
-      }
+        minimum_should_match: 1,
+      },
     }
   }
 
-  function allFieldsArray(query){
+  function allFieldsArray(query) {
     return [
       // simplified syntax that works but omits options
       {
         match: {
-          "guid": query
-        }
+          guid: query,
+        },
       },
       {
         match: {
-          "genres": query,
-        }
+          genres: query,
+        },
       },
       {
         match: {
-          "topics": query,
-        }
+          topics: query,
+        },
       },
-      
+
       //full syntax w options
       {
         match: {
           title: {
             query: query,
-            analyzer: "standard",
-            boost: 4
-          }
-        }
-      },
-
-
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                query: query,
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                query: query,
-                analyzer: "standard",
-                boost: 3
-              }
-            }
+            analyzer: 'standard',
+            boost: 4,
           },
-        } 
+        },
       },
+
       {
         nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          path: 'pbcoreDescriptionDocument.pbcoreDescription',
           query: {
             match: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                query: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              'pbcoreDescriptionDocument.pbcoreDescription.text': {
                 query: query,
-                boost: 1
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreTitle',
+          query: {
+            match: {
+              'pbcoreDescriptionDocument.pbcoreTitle.text': {
+                query: query,
+                analyzer: 'standard',
+                boost: 3,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreAssetDate',
+          query: {
+            match: {
+              'pbcoreDescriptionDocument.pbcoreAssetDate.text': {
+                query: query,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreCreator.creator',
+          query: {
+            match: {
+              'pbcoreDescriptionDocument.pbcoreCreator.creator.text': {
+                query: query,
+                boost: 1,
+              },
+            },
+          },
+        },
+      },
     ]
   }
 
-  function allFieldsTermArray(query){
-
-    return [ 
+  function allFieldsTermArray(query) {
+    return [
       {
         term: {
           guid: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           genres: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           topics: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           title: {
             value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
+            case_insensitive: true,
           },
-        } 
+        },
       },
       {
         nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          path: 'pbcoreDescriptionDocument.pbcoreDescription',
           query: {
             term: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                value: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              'pbcoreDescriptionDocument.pbcoreDescription.text': {
                 value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        }
-      }
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreTitle',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreTitle.text': {
+                value: query,
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreAssetDate',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreAssetDate.text': {
+                value: query,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreCreator.creator',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreCreator.creator.text': {
+                value: query,
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
     ]
   }
 
-  function allFieldsTermQuery(query){
+  function allFieldsTermQuery(query) {
     // should with a term match for each field, min match 1
     // if one of these hits, the must_not clause in the big bool will remove it
 
-    var nested_clauses = query.split(" ").map((q) => allFieldsTermArray(q)).flat()
+    var nested_clauses = query
+      .split(' ')
+      .map(q => allFieldsTermArray(q))
+      .flat()
     return {
       bool: {
         // this is admittedly just crazy
         should: nested_clauses,
         // this is for must_not, any match fails!
-        minimum_should_match: 1
-      }
+        minimum_should_match: 1,
+      },
     }
   }
-
-
   const sk = new Searchkit({
-    connection: {
-      host: data.esURL,
-      apiKey: data.apiKey
-    },
+    // connection: {
+    //   host: data.esURL,
+    //   index: data.indexName,
+    //   ...(data.esApiKey ? { apiKey: data.esApiKey } : {}),
+    // },
+    connection: new ErrorTransporter({
+      esURL: data.esURL,
+      esApiKey: data.esApiKey,
+    }),
 
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
+      highlight_attributes: ['pbcoreDescriptionDocument.pbcoreTitle.text'],
 
       search_attributes: [
         // "guid",
@@ -328,11 +367,17 @@ export default function Search() {
         // { field: "pbcoreDescriptionDocument.pbcoreCreator", weight: 2 }
         // "pbcoreDescriptionDocument.pbcoreAnnotation.first.text",
         // "pbcoreDescriptionDocument.pbcoreIdentifier",
-        
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
+      result_attributes: [
+        'guid',
+        'title',
+        'broadcast_date',
+        'pbcoreDescriptionDocument',
+        'media_type',
+        'producing_org',
+      ],
 
       // // maybe used in concert with filter range frontend
       // filter_attributes: [
@@ -340,181 +385,181 @@ export default function Search() {
       // ],
 
       facet_attributes: [
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text", 
-        //   field: "text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text",
+        //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         // },
-        // { 
+        // {
         //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType.text",
-        //   field: "text", 
+        //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         // },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreAssetDate.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreAssetDate.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreAssetDate"
         // },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreGenre.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreGenre.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreGenre"
         // },
-        { 
-          attribute: "pbcoreDescriptionDocument.pbcoreAssetType.text", 
-          field: "text",
-          type: "string",
-          nestedPath: "pbcoreDescriptionDocument.pbcoreAssetType"
+        {
+          attribute: 'pbcoreDescriptionDocument.pbcoreAssetType.text',
+          field: 'text',
+          type: 'string',
+          nestedPath: 'pbcoreDescriptionDocument.pbcoreAssetType',
         },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreDescription.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreDescription.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreDescription"
-        // },        
+        // },
         // derived
-        { 
-          attribute: "producing_org", 
-          field: "producing_org",
-          type: "string"
+        {
+          attribute: 'producing_org',
+          field: 'producing_org',
+          type: 'string',
         },
-        { 
-          attribute: "media_type", 
-          field: "media_type",
-          type: "string"
+        {
+          attribute: 'media_type',
+          field: 'media_type',
+          type: 'string',
         },
-        { 
-          attribute: "access_level", 
-          field: "access_level",
-          type: "string"
+        {
+          attribute: 'access_level',
+          field: 'access_level',
+          type: 'string',
         },
-        { 
-          attribute: "genres", 
-          field: "genres",
-          type: "string",
+        {
+          attribute: 'genres',
+          field: 'genres',
+          type: 'string',
         },
-        { 
-          attribute: "contributing_orgs", 
-          field: "contributing_orgs",
-          type: "string",
+        {
+          attribute: 'contributing_orgs',
+          field: 'contributing_orgs',
+          type: 'string',
         },
-        { 
-          attribute: "special_collections", 
-          field: "special_collections",
-          type: "string",
+        {
+          attribute: 'special_collections',
+          field: 'special_collections',
+          type: 'string',
         },
-        { 
-          attribute: "topics", 
-          field: "topics",
-          type: "string",
+        {
+          attribute: 'topics',
+          field: 'topics',
+          type: 'string',
         },
-        // { 
+        // {
         //   attribute: "broadcast_date",
         //   field: "broadcast_date",
         //   type: "date",
         // },
         {
-          attribute: "series_titles",
-          field: "series_titles",
-          type: "string"
-        }
+          attribute: 'series_titles',
+          field: 'series_titles',
+          type: 'string',
+        },
       ],
 
       sorting: {
         _default: {
-          field: "_score",
-          order: "desc"
+          field: '_score',
+          order: 'desc',
         },
         _title_keyword_asc: {
-          field: "title_keyword",
-          order: "asc"
+          field: 'title_keyword',
+          order: 'asc',
         },
         _broadcast_date_desc: {
-          field: "broadcast_date",
-          order: "desc"
+          field: 'broadcast_date',
+          order: 'desc',
         },
-      }
-    }
+      },
+    },
   })
 
-  const dateToYear = (items) => {
-    return items.map((item) => {
-      if(item.value){
+  const dateToYear = items => {
+    return items.map(item => {
+      if (item.value) {
         var notYear = item.value.match(/^\d{4}(.*)/)[1]
-        item.value = item.value.replace( notYear, "")
-        item.label = item.label.replace( notYear, "")
+        item.value = item.value.replace(notYear, '')
+        item.label = item.label.replace(notYear, '')
       }
-      
+
       return item
     })
   }
 
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(!item.label){
-        item.label = "Private"
-      }
+  const accessLevel = items => {
+    return items
+      .map(item => {
+        if (!item.label) {
+          item.label = 'Private'
+        }
 
-      return item
-    }).sort((a,b) => {
-      // sort availabilty options a-z so they dont jump around ui based on num results
-      if(a < b){
-        return 1
-      } else {
-        return -1
-      }
-    })
+        return item
+      })
+      .sort((a, b) => {
+        // sort availabilty options a-z so they dont jump around ui based on num results
+        if (a < b) {
+          return 1
+        } else {
+          return -1
+        }
+      })
   }
 
-
-  const isOrField = (fieldName) => {  
+  const isOrField = fieldName => {
     return OR_FIELDS.includes(fieldName)
   }
 
-  const prettyFieldNames = (fieldName) => {
-    switch(fieldName){
-      case "producing_org":
-        return "Producing Organization"
+  const prettyFieldNames = fieldName => {
+    switch (fieldName) {
+      case 'producing_org':
+        return 'Producing Organization'
         break
-      case "contributing_orgs":
-        return "Contributing Organization"
-        break        
-      case "media_type":
-        return "Media Type"
+      case 'contributing_orgs':
+        return 'Contributing Organization'
         break
-      case "access_level":
-        return "Availability"
+      case 'media_type':
+        return 'Media Type'
         break
-      case "genres":
-        return "Genre"
+      case 'access_level':
+        return 'Availability'
         break
-      case "topics":
-        return "Topic"
-        break        
-      case "pbcoreDescriptionDocument.pbcoreAssetType.text":
-        return "Asset Type"
+      case 'genres':
+        return 'Genre'
         break
-      case "collections":
-        return "Collection"
-        break        
+      case 'topics':
+        return 'Topic'
+        break
+      case 'pbcoreDescriptionDocument.pbcoreAssetType.text':
+        return 'Asset Type'
+        break
+      case 'collections':
+        return 'Collection'
+        break
     }
   }
 
-  const prettyCurrentRefinements = (attributes) => {
-    attributes.map((attribute) => {
-
-      let refs = attribute.refinements.map((ref) => {
+  const prettyCurrentRefinements = attributes => {
+    attributes.map(attribute => {
+      let refs = attribute.refinements.map(ref => {
         // label is the actual facet field value which seems slightly weird
-        ref.label = `${ prettyFieldNames(attribute.label) }: ${ref.label}`
+        ref.label = `${prettyFieldNames(attribute.label)}: ${ref.label}`
         return ref
       })
 
       // name of field (dont show in top bar)
-      attribute.label = ""
+      attribute.label = ''
       attribute.refinements = refs
       return attribute
     })
@@ -523,62 +568,60 @@ export default function Search() {
   }
 
   function onlyUnique(value, index, array) {
-    return array.indexOf(value) === index;
+    return array.indexOf(value) === index
   }
-
   // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
       var queryHash
 
       var title_if_present
-      if(customQuery.title && customQuery.title.length > 0){
+      if (customQuery.title && customQuery.title.length > 0) {
         title_if_present = customQuery.title
       }
 
       // look for quoted phrases in the main search box
-      if(false && query && query.includes('\"')){
+      if (false && query && query.includes('\"')) {
         var quoted = query.match(/"(\\.|[^"\\])*"/g)
-        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, '')
 
         var full_query
-        if(quoted && quoted.length > 0){
+        if (quoted && quoted.length > 0) {
           // require one of quoted strings, or optional everything else unquoted
-          full_query = `+${quoted.join(" | +")}`
+          full_query = `+${quoted.join(' | +')}`
 
-          if(unquoted.length > 0 && unquoted.trim().length > 0){
+          if (unquoted.length > 0 && unquoted.trim().length > 0) {
             full_query = full_query + ` OR (${unquoted})`
           }
         } else {
           full_query = unquoted
         }
 
-        if(customQuery.none && customQuery.none.length > 0){
-          var none_terms = customQuery.none.split(" ")
-          full_query += ` -(${none_terms.join(" OR ")})`
+        if (customQuery.none && customQuery.none.length > 0) {
+          var none_terms = customQuery.none.split(' ')
+          full_query += ` -(${none_terms.join(' OR ')})`
         }
 
         queryHash = {
           simple_query_string: {
             query: full_query,
             // default_operator: "and"
-          }
+          },
         }
-
       } else {
-
-        
         var mainAllFieldsArray
         // broken creepy quote handling
-        if(false && query && query.includes('\"')){
+        if (false && query && query.includes('\"')) {
           var quoted = query.match(/"(\\.|[^"\\])*"/g)
-          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
-          if(quoted.length > 0){
-            console.log( 'dummbo', quoted, unquoted )
+          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, '')
+          if (quoted.length > 0) {
+            console.log('dummbo', quoted, unquoted)
             // make a one-hit-required term array for each distinct quoted term
-            queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
+            queryHash.bool.filter = quoted
+              .reduce()
+              .map(quoterm => allFieldsArray(quoterm.replace(/['"]+/g, '')))
+              .flat()
           }
-
         } else {
           mainAllFieldsArray = allFieldsArray(query)
         }
@@ -591,253 +634,338 @@ export default function Search() {
               {
                 bool: {
                   should: mainAllFieldsArray,
-                  minimum_should_match: 1
-                }
-              }
-            ]
-          }
+                  minimum_should_match: 1,
+                },
+              },
+            ],
+          },
         }
 
-        if(customQuery.all && customQuery.all.length > 0){
+        if (customQuery.all && customQuery.all.length > 0) {
           // add second big should clause to outer bool query
-          var allQuery =  {
+          var allQuery = {
             bool: {
-              should: allFieldsArray( customQuery.all )
-            }
+              should: allFieldsArray(customQuery.all),
+            },
           }
           queryHash.bool.should.push(allQuery)
           queryHash.bool.minimum_should_match = 2
         }
 
-        if(customQuery.none && customQuery.none.length > 0){
+        if (customQuery.none && customQuery.none.length > 0) {
           // add must_not clause to big bool
-          queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
+          queryHash.bool.must_not = [allFieldsTermQuery(customQuery.none)]
         }
 
-        if(customQuery.title && customQuery.title.length > 0){
-          queryHash.bool.must = [ titleQuery( customQuery.title ) ]
+        if (customQuery.title && customQuery.title.length > 0) {
+          queryHash.bool.must = [titleQuery(customQuery.title)]
         }
-
 
         // set num of refinments for show more refinements UI
         // not working
         // setNumberOfRefinements( document.getElementsByClassName("span.ais-CurrentRefinements-category").length )
         return queryHash
       }
-    }
+    },
   })
+  console.log('searchClient', searchClient)
 
   let searchResultComponent
-  if(viewSelect == "standard"){
+  if (viewSelect == 'standard') {
     searchResultComponent = SearchResult
-  } else if(viewSelect == "list"){
+  } else if (viewSelect == 'list') {
     searchResultComponent = ListResult
-  } else if(viewSelect == "gallery"){
+  } else if (viewSelect == 'gallery') {
     searchResultComponent = GalleryResult
   }
 
   // <SearchBox queryHook={ handleSearchBox } />
   return (
-    <div className="body-container">
+    <div className='body-container'>
       <InstantSearch
         indexName={data.indexName}
-        searchClient={ searchClient }
-        routing={true}
-      >
+        searchClient={searchClient}
+        routing={true}>
+        <div className='top-search-bar bmarleft smarbot smarright'>
+          <div className='options-container martop'>
+            <h2 className=''>Search Results</h2>
 
-        <div className="top-search-bar bmarleft smarbot smarright">
+            <div className='header-spacer' />
 
-          <div className="options-container martop">
-            <h2 className="">Search Results</h2>
-            
-            <div className="header-spacer" />
-
-            <div className="sort-container sort marleft marright">
+            <div className='sort-container sort marleft marright'>
               Sort
               <SortBy
                 items={[
-                  { key: "sort1", label: "Relevance", value: `${data.indexName}_default` },
-                  { key: "sort2", label: "Title", value: `${data.indexName}_title_keyword_asc` },
-                  { key: "sort3", label: "Broadcast Date", value: `${data.indexName}_broadcast_date_desc` },
+                  {
+                    key: 'sort1',
+                    label: 'Relevance',
+                    value: `${data.indexName}_default`,
+                  },
+                  {
+                    key: 'sort2',
+                    label: 'Title',
+                    value: `${data.indexName}_title_keyword_asc`,
+                  },
+                  {
+                    key: 'sort3',
+                    label: 'Broadcast Date',
+                    value: `${data.indexName}_broadcast_date_desc`,
+                  },
                 ]}
               />
-              <ChevronDown style={{ right: "18px"}} />
+              <ChevronDown style={{ right: '18px' }} />
             </div>
-            
-            <div className="sort-container per-page marleft marright">
+
+            <div className='sort-container per-page marleft marright'>
               Items per page
               <HitsPerPage
-                items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
+                items={[
+                  { label: '10', value: 10 },
+                  { label: '20', value: 20, default: true },
+                  { label: '50', value: 50 },
+                  { label: '100', value: 100 },
+                ]}
               />
               <ChevronDown />
             </div>
 
-            <div className="marleft marright">
-              <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
-              <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
-              <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            <div className='marleft marright'>
+              <ViewSelect
+                selected={viewSelect == 'standard'}
+                viewType='standard'
+                viewSelect={() => setViewSelect('standard')}
+              />
+              <ViewSelect
+                selected={viewSelect == 'gallery'}
+                viewType='gallery'
+                viewSelect={() => setViewSelect('gallery')}
+              />
+              <ViewSelect
+                selected={viewSelect == 'list'}
+                viewType='list'
+                viewSelect={() => setViewSelect('list')}
+              />
             </div>
           </div>
-          
-
         </div>
 
-        <div className="top-refinements-bar marbot bmarleft bmarright">
-          <div className="stats-container">
+        <div className='top-refinements-bar marbot bmarleft bmarright'>
+          <div className='stats-container'>
             <Stats />
           </div>
- 
 
-          <div className={ currentRefinementsClasses }>
-            <CurrentRefinements
-              transformItems={prettyCurrentRefinements}
-            />
+          <div className={currentRefinementsClasses}>
+            <CurrentRefinements transformItems={prettyCurrentRefinements} />
           </div>
-          <div className="clear-refinements-container">
+          <div className='clear-refinements-container'>
             <ClearRefinements />
-            <div className="more-refinements">
-              <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
+            <div className='more-refinements'>
+              <button
+                onClick={() => {
+                  setShowingRefinements(!showingRefinements)
+                }}>
+                {showRefinementButtonText}
+              </button>
             </div>
           </div>
         </div>
 
-
-        <div className="page-sidebar bmarleft">
-          <h3 className="sidebar-title">Refine Search</h3>
-          <hr />
-          
-          <SearchAccordion title="Keywords" content={
-            <>
-              <h4>Search for</h4>
-
-              <SearchBox  className="sidebar-search smarbot" />
-              <h4>Contains all of these words</h4>
-              <input id="all"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>This title</h4>
-              <input id="title"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>None of these words</h4>
-              <input id="none"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <div>
-                <button className="sidebar-search-button">Update</button>
-              </div>
-            </>
-          }/>
-
-          <hr />
-          
-          <SearchAccordion title="Availability" content={
-            <>
-              <RefinementList
-                attribute="access_level"
-                transformItems={ accessLevel }
-              />
-            </>
-          }/>
-
+        <div className='page-sidebar bmarleft'>
+          <h3 className='sidebar-title'>Refine Search</h3>
           <hr />
 
-          <SearchAccordion title="Media Type" content={
-            <>
-              <RefinementList
-                attribute="media_type"
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Keywords'
+            content={
+              <>
+                <h4>Search for</h4>
+
+                <SearchBox className='sidebar-search smarbot' />
+                <h4>Contains all of these words</h4>
+                <input
+                  id='all'
+                  className='sidebar-search smarbot'
+                  type='text'
+                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
+                />
+                <h4>This title</h4>
+                <input
+                  id='title'
+                  className='sidebar-search smarbot'
+                  type='text'
+                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
+                />
+                <h4>None of these words</h4>
+                <input
+                  id='none'
+                  className='sidebar-search smarbot'
+                  type='text'
+                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
+                />
+                <div>
+                  <button className='sidebar-search-button'>Update</button>
+                </div>
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Producing Organization" content={
-            <>
-              <RefinementList
-                attribute="producing_org"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Availability'
+            content={
+              <>
+                <RefinementList
+                  attribute='access_level'
+                  transformItems={accessLevel}
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Asset Type" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Media Type'
+            content={
+              <>
+                <RefinementList attribute='media_type' />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Genre" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="genres"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Producing Organization'
+            content={
+              <>
+                <RefinementList
+                  attribute='producing_org'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Topic" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="topics"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
-
-          <SearchAccordion title="Contributing Organization" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="contributing_orgs"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Asset Type'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='pbcoreDescriptionDocument.pbcoreAssetType.text'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Collection" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="special_collections"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Genre'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='genres'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Series Title" startClosed={false} content={
-            <>
-              <RefinementList
-                attribute="series_titles"
-                searchable={true}
+          <SearchAccordion
+            title='Topic'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='topics'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Contributing Organization'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='contributing_orgs'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
-          <hr />          
+          <hr />
+
+          <SearchAccordion
+            title='Collection'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='special_collections'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
+
+          <hr />
+
+          <SearchAccordion
+            title='Series Title'
+            startClosed={false}
+            content={
+              <>
+                <RefinementList
+                  attribute='series_titles'
+                  searchable={true}
+
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
+
+          <hr />
         </div>
 
-        <div className="page-maincolumn bmarright">
-
-          <div className="pagination-bar">
+        <div className='page-maincolumn bmarright'>
+          <div className='pagination-bar'>
             <Pagination />
           </div>
 
-          <hr/>
+          <hr />
 
-          <Hits hitComponent={ searchResultComponent } />
-          <div className="pagination-bar marbot">
+          <Hits hitComponent={searchResultComponent} />
+          <div className='pagination-bar marbot'>
             <Pagination />
           </div>
         </div>
       </InstantSearch>
+    </div>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  console.log('search page error', error)
+  return (
+    <div className='page-body-container'>
+      <h1>Search Error</h1>
+      <h4>We're sorry! Search appears to be broken!</h4>
+      <pre>{error.message}</pre>
     </div>
   )
 }
