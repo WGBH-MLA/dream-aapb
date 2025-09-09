@@ -9,4 +9,4 @@ prod
 node_modules/*
 build/*
 .cache/*
-.react-router/
+.react-router/*
