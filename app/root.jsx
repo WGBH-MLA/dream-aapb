@@ -5,6 +5,8 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
+  isRouteErrorResponse,
 } from 'react-router'
 
 export const meta = () => {
@@ -57,7 +59,9 @@ export function ErrorBoundary() {
         <title>Oh no!</title>
       </head>
       <body>
-        <div className='page-body-container'>
+        <Header />
+
+        <div className='body-container'>
           {isRouteErrorResponse(error) ?
             <>
               <h1>{error.status} error</h1>

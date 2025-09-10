@@ -5,7 +5,7 @@ import { SortBy } from 'react-instantsearch'
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
 import { ESTransporter } from 'searchkit'
-
+import { Error } from '../components/search/Error'
 const OR_FIELDS = [
   'producing_org',
   'pbcoreDescriptionDocument.pbcoreCreator.creator',
@@ -947,7 +947,7 @@ export default function Search() {
           </div>
 
           <hr />
-
+          <Error />
           <Hits hitComponent={searchResultComponent} />
           <div className='pagination-bar marbot'>
             <Pagination />
@@ -962,7 +962,7 @@ export function ErrorBoundary() {
   const error = useRouteError()
   console.log('search page error', error)
   return (
-    <div className='page-body-container'>
+    <div className='body-container'>
       <h1>Search Error</h1>
       <h4>We're sorry! Search appears to be broken!</h4>
       <pre>{error.message}</pre>
