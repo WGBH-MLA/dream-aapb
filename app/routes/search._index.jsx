@@ -49,6 +49,7 @@ export default function Search() {
     none: searchParams.get("none") || ""
   })
   const [allowSearch, setAllowSearch] = useState(true)
+  const [searchSet, setSearchSet] = useState("both")
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -687,7 +688,6 @@ export default function Search() {
             <Stats />
           </div>
  
-
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
               transformItems={prettyCurrentRefinements}
@@ -700,7 +700,6 @@ export default function Search() {
             </div>
           </div>
         </div>
-
 
         <div className="page-sidebar bmarleft">
           <h3 className="sidebar-title">Refine Search</h3>
@@ -724,7 +723,16 @@ export default function Search() {
           }/>
 
           <hr />
-          
+
+          <SearchAccordion title="Options" content ={
+            <>
+              <div>Search:</div>
+              <div><label>Records & Transcripts<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            </>
+          }/>
+
           <SearchAccordion title="Availability" content={
             <>
               <RefinementList
