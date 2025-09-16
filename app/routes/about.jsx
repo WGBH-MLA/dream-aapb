@@ -15,7 +15,7 @@ export default function About() {
       <div className="link-bank">
         <a href="/our-story">Our Story</a>
         <hr />
-        <a href="/mission">Vision and Mission</a>
+        <a href="/vision-and-mission">Vision and Mission</a>
         <hr />
         <a href="/history">History</a>
         <hr />
