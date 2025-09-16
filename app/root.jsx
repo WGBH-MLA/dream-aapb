@@ -14,7 +14,7 @@ export const meta = () => {
 }
 
 export const loader = () => {
-  return {indexName: process.env.ES_INDEX_NAME}
+  return {indexName: process.env.ES_INDEX}
 }
 
 // standard

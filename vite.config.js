@@ -6,10 +6,6 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [reactRouter()],
   server: {
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    },
-    cors: true,
     port: 4000,
     host: '0.0.0.0',
     fs: {

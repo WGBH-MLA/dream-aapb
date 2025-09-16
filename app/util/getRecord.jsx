@@ -1,5 +1,5 @@
 export async function getRecord(guid){
-  var url = `${process.env.ES_URL}/${process.env.ES_INDEX_NAME}/_search`
+  var url = `${process.env.ES_URL}/${process.env.ES_INDEX}/_search`
   var response = await fetch(url, { 
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `ApiKey ${ process.env.ES_API_KEY }` },

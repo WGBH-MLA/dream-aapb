@@ -2,7 +2,7 @@ export default async function randomRecords(num){
   if(!num || num < 1){
     throw "that is just not an appropriate number okayyyyy??"
   }
-  var url = `${process.env.ES_URL}/${process.env.ES_INDEX_NAME}/_search`
+  var url = `${process.env.ES_URL}/${process.env.ES_INDEX}/_search`
   var response = await fetch(url, { 
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": `ApiKey ${ process.env.ES_API_KEY }` },

@@ -34,7 +34,7 @@ import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
   return {
-    indexName: process.env.ES_INDEX_NAME || "aapb_augmented_biggram",
+    indexName: process.env.ES_INDEX || "dream-aapb-temporary",
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
