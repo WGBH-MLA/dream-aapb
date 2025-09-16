@@ -60,7 +60,7 @@ export default function Search() {
     // if(!showMoreRefinements && numberOfRefinements > 3){
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show More"
+    showRefinementButtonText = "Show All Refinements"
   } else {
     currentRefinementsClasses = "current-refinements-container"
     showRefinementButtonText = "Show Less"
@@ -68,12 +68,6 @@ export default function Search() {
 
   function handleCustomQuery(type, value){
     setCustomQuery({...customQuery, [type]: value})
-    // searchParams.set("all", customQuery.all)
-    // searchParams.set("title", customQuery.title)
-    // searchParams.set("none", customQuery.none)
-    // searchParams.set("view", viewSelect)
-    // setSearchParams(searchParams)
-    console.log( 'lets custom girls...', value )
   }
 
   function handleSearchBox(query, search) {
@@ -81,7 +75,6 @@ export default function Search() {
       // flag off
       setAllowSearch(false)
       // search
-      console.log( 'lets search girls...', query )
       search(query)
 
       // wait
@@ -456,8 +449,13 @@ export default function Search() {
 
   const accessLevel = (items) => {
     return items.map( (item) => {
-      if(!item.label){
-        item.label = "Private"
+      if(item.label == "Online Reading Room"){
+        item.label = "Available Online"
+      } else if(item.label == "On Location"){
+        item.label = "All Digitized"
+      } else {
+        // private or nothing
+        item.label = "All Records"
       }
 
       return item
@@ -470,7 +468,6 @@ export default function Search() {
       }
     })
   }
-
 
   const isOrField = (fieldName) => {  
     return OR_FIELDS.includes(fieldName)
@@ -726,8 +723,8 @@ export default function Search() {
 
           <SearchAccordion title="Options" content ={
             <>
-              <div>Search:</div>
-              <div><label>Records & Transcripts<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div>Include</div>
+              <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
               <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
               <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
             </>
