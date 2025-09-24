@@ -84,6 +84,7 @@ export default function Search() {
     none: searchParams.get('none') || '',
   })
   const [allowSearch, setAllowSearch] = useState(true)
+  const [searchSet, setSearchSet] = useState("both")
 
   let view = searchParams.get('view') || 'standard'
   const [viewSelect, setViewSelect] = useState(view)
@@ -91,23 +92,17 @@ export default function Search() {
   // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
   const [showingRefinements, setShowingRefinements] = useState(false)
   let currentRefinementsClasses, showRefinementButtonText
-  // if(!showMoreRefinements && numberOfRefinements > 3){
-  if (!showingRefinements) {
-    currentRefinementsClasses = 'current-refinements-container closed'
-    showRefinementButtonText = 'Show More'
+    // if(!showMoreRefinements && numberOfRefinements > 3){
+  if(!showingRefinements){
+    currentRefinementsClasses = "current-refinements-container closed"
+    showRefinementButtonText = "Show All Refinements"
   } else {
     currentRefinementsClasses = 'current-refinements-container'
     showRefinementButtonText = 'Show Less'
   }
 
-  function handleCustomQuery(type, value) {
-    setCustomQuery({ ...customQuery, [type]: value })
-    // searchParams.set("all", customQuery.all)
-    // searchParams.set("title", customQuery.title)
-    // searchParams.set("none", customQuery.none)
-    // searchParams.set("view", viewSelect)
-    // setSearchParams(searchParams)
-    console.log('lets custom girls...', value)
+  function handleCustomQuery(type, value){
+    setCustomQuery({...customQuery, [type]: value})
   }
 
   function handleSearchBox(query, search) {
@@ -115,7 +110,6 @@ export default function Search() {
       // flag off
       setAllowSearch(false)
       // search
-      console.log('lets search girls...', query)
       search(query)
 
       // wait
@@ -498,12 +492,16 @@ export default function Search() {
     })
   }
 
-  const accessLevel = items => {
-    return items
-      .map(item => {
-        if (!item.label) {
-          item.label = 'Private'
-        }
+  const accessLevel = (items) => {
+    return items.map( (item) => {
+      if(item.label == "Online Reading Room"){
+        item.label = "Available Online"
+      } else if(item.label == "On Location"){
+        item.label = "All Digitized"
+      } else {
+        // private or nothing
+        item.label = "All Records"
+      }
 
         return item
       })
@@ -770,8 +768,8 @@ export default function Search() {
           </div>
         </div>
 
-        <div className='page-sidebar bmarleft'>
-          <h3 className='sidebar-title'>Refine Search</h3>
+        <div className="page-sidebar bmarleft">
+          <h3 className="sidebar-title">Refine Search</h3>
           <hr />
 
           <SearchAccordion
@@ -779,35 +777,38 @@ export default function Search() {
             content={
               <>
                 <h4>Search for</h4>
+              <SearchBox  className="sidebar-search smarbot" />
+              <h4>Contains all of these words</h4>
+              <input id="all"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
+              <h4>This title</h4>
+              <input id="title"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
+              <h4>None of these words</h4>
+              <input id="none"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
+              <div>
+                <button className="sidebar-search-button">Update</button>
+              </div>
+            </>
+          }/>
 
-                <SearchBox className='sidebar-search smarbot' />
-                <h4>Contains all of these words</h4>
-                <input
-                  id='all'
-                  className='sidebar-search smarbot'
-                  type='text'
-                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
-                />
-                <h4>This title</h4>
-                <input
-                  id='title'
-                  className='sidebar-search smarbot'
-                  type='text'
-                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
-                />
-                <h4>None of these words</h4>
-                <input
-                  id='none'
-                  className='sidebar-search smarbot'
-                  type='text'
-                  onChange={e => handleCustomQuery(e.target.id, e.target.value)}
-                />
-                <div>
-                  <button className='sidebar-search-button'>Update</button>
-                </div>
-              </>
-            }
-          />
+          <hr />
+
+          <SearchAccordion title="Options" content ={
+            <>
+              <div>Include</div>
+              <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            </>
+          }/>
+
+          <SearchAccordion title="Availability" content={
+            <>
+              <RefinementList
+                attribute="access_level"
+                transformItems={ accessLevel }
+              />
+            </>
+          }/>
 
           <hr />
 

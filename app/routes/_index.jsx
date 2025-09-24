@@ -53,7 +53,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    indexName: process.env.ES_INDEX_NAME,
+    indexName: process.env.ES_INDEX,
     esURL: process.env.ES_URL || 'https://elastic.wgbh-mla.org',
     esApiKey: process.env.ES_API_KEY,
   }

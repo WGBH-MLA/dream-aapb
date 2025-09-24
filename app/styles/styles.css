@@ -1116,8 +1116,6 @@ div.current-refinements-container {
 div.current-refinements-container.closed {
   height: 4em;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(#f00, transparent);
-  mask-image: linear-gradient(#f00, transparent);
 }
 
 

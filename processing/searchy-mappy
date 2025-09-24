@@ -1,5 +1,5 @@
-curl -v -X PUT "localhost:9200/aapb_augmented_withtitles/" \
--H "Authorization: ApiKey "Z1pqdVE1VUJlMTdpbU5oSXNoby06SGtSZERqY0dSaHVpS2hvbVJnMEJwdw=="" \
+curl -v -X PUT "localhost:9200/dream-aapb-temporary/" \
+-H "Authorization: ApiKey "wouldntthatbenice"" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {
