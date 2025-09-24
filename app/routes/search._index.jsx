@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
-import { SortBy } from "react-instantsearch"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
 
@@ -23,7 +22,8 @@ import {
           Pagination,
           HitsPerPage,
           RangeInput,
-          Stats
+          Stats,
+          SortBy
       } from 'react-instantsearch';
 
 import SearchResult from "../components/SearchResult"
@@ -392,7 +392,7 @@ export default function Search() {
           type: "string",
         },
         { 
-          attribute: "contributing_orgs", 
+          attribute: "contributing_orgs",
           field: "contributing_orgs",
           type: "string",
         },
@@ -406,11 +406,16 @@ export default function Search() {
           field: "topics",
           type: "string",
         },
-        // { 
-        //   attribute: "broadcast_date",
-        //   field: "broadcast_date",
-        //   type: "date",
-        // },
+        { 
+          attribute: "broadcast_date",
+          field: "broadcast_date",
+          type: "date",
+        },
+        { 
+          attribute: "broadcast_date_numeric",
+          field: "broadcast_date_numeric",
+          type: "numeric",
+        },        
         {
           attribute: "series_titles",
           field: "series_titles",
@@ -729,6 +734,12 @@ export default function Search() {
               <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
+
+          <div>
+            <h2>oh boy!</h2>
+            <RangeInput attribute="broadcast_date" header="Broadcast Date" />
+            <RangeInput attribute="broadcast_date_numeric" header="Broadcast Date" />
+          </div>
 
           <SearchAccordion title="Availability" content={
             <>

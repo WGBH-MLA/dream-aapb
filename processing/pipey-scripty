@@ -247,6 +247,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDoc
 
 // parse date to date field if valid
 ctx.broadcast_date = null;
+ctx.broadcast_date_numeric = 0;
 if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
   for(int l=0; l < ctx.pbcoreDescriptionDocument.pbcoreAssetDate.length; l++){
     if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l] != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType != null && ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].dateType.toLowerCase() == "broadcast"){
@@ -262,6 +263,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
         try {
           zdt = ZonedDateTime.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text);
           ctx.broadcast_date = zdt;
+          ctx.broadcast_date_numeric = zdt.toInstant().toEpochMilli();
         } catch(Exception e) {
           // Debug.explain("Great!");
         }
