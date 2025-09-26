@@ -584,6 +584,8 @@ export default function Search() {
           if(quoted.length > 0){
             console.log( 'dummbo', quoted, unquoted )
             // make a one-hit-required term array for each distinct quoted term
+
+            // todo fix this!! dates use filtering now
             queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
           }
 
@@ -626,6 +628,21 @@ export default function Search() {
           queryHash.bool.must = [ titleQuery( customQuery.title ) ]
         }
 
+        if(customQuery.startDate || customQuery.endDate){
+          queryHash.bool.filter = {
+            range: {
+              broadcast_date: {}
+            }
+          }
+
+          if(customQuery.startDate){
+            queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
+          }
+
+          if(customQuery.endDate){
+            queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
+          }          
+        }
 
         // set num of refinments for show more refinements UI
         // not working
