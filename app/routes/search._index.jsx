@@ -46,7 +46,9 @@ export default function Search() {
   const [customQuery, setCustomQuery] = useState({
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
-    none: searchParams.get("none") || ""
+    none: searchParams.get("none") || "",
+    startDate: searchParams.get("startDate") || "",
+    endDate: searchParams.get("endDate") || "",
   })
   const [allowSearch, setAllowSearch] = useState(true)
   const [searchSet, setSearchSet] = useState("both")
@@ -67,6 +69,7 @@ export default function Search() {
   }
 
   function handleCustomQuery(type, value){
+    // ohh la la
     setCustomQuery({...customQuery, [type]: value})
   }
 
@@ -539,6 +542,8 @@ export default function Search() {
         title_if_present = customQuery.title
       }
 
+
+      console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
       // look for quoted phrases in the main search box
       if(false && query && query.includes('\"')){
         var quoted = query.match(/"(\\.|[^"\\])*"/g)
@@ -735,8 +740,16 @@ export default function Search() {
             </>
           }/>
 
+
+          <SearchAccordion title="Broadcast Date" content ={
+            <>
+              <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
+              <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
+            </>
+          }/>
+
           <div>
-            <h2>oh boy!</h2>
+            <h2>worthless!</h2>
             <RangeInput attribute="broadcast_date" header="Broadcast Date" />
             <RangeInput attribute="broadcast_date_numeric" header="Broadcast Date" />
           </div>
