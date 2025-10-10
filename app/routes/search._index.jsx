@@ -21,7 +21,6 @@ import {
           ToggleRefinement,
           Pagination,
           HitsPerPage,
-          RangeInput,
           Stats,
           SortBy
       } from 'react-instantsearch';
@@ -409,16 +408,6 @@ export default function Search() {
           field: "topics",
           type: "string",
         },
-        { 
-          attribute: "broadcast_date",
-          field: "broadcast_date",
-          type: "date",
-        },
-        { 
-          attribute: "broadcast_date_numeric",
-          field: "broadcast_date_numeric",
-          type: "numeric",
-        },        
         {
           attribute: "series_titles",
           field: "series_titles",
@@ -764,12 +753,6 @@ export default function Search() {
               <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
             </>
           }/>
-
-          <div>
-            <h2>worthless!</h2>
-            <RangeInput attribute="broadcast_date" header="Broadcast Date" />
-            <RangeInput attribute="broadcast_date_numeric" header="Broadcast Date" />
-          </div>
 
           <SearchAccordion title="Availability" content={
             <>
