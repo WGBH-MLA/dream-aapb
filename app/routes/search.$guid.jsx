@@ -2,8 +2,8 @@ import { useLoaderData } from 'react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
-import { getRecord } from '../util/getRecord'
-import { niceTitle } from '../util/niceTitle'
+import { getRecord } from '../utils/getRecord'
+import { niceTitle } from '../utils/niceTitle'
 
 export const loader = async ({params, request}) => {
   let data = await getRecord(params.guid)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import thumbnailURL from "../util/thumbnailURL"
+import thumbnailURL from "../utils/thumbnailURL"
 
 export default function Thumbnail(props) {
   var img, bottomBar

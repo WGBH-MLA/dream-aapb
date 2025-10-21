@@ -1,5 +1,5 @@
 import Thumbnail from "../components/Thumbnail"
-import thumbnailURL from "../util/thumbnailURL"
+import thumbnailURL from "../utils/thumbnailURL"
 
 export default function VideoPlayer(props){
   if(true || videoRetrieved){

@@ -21,6 +21,7 @@
     "@searchkit/api": "^4.13.0",
     "@searchkit/instantsearch-client": "^4.14.1",
     "algoliasearch": "^5.15.0",
+    "html-entities": "^2.6.0",
     "instantsearch.js": "^4.75.5",
     "isbot": "^5",
     "lucide-react": "^0.542.0",

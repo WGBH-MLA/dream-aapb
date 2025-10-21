@@ -2,9 +2,9 @@ import { useLoaderData } from 'react-router'
 // import shuffle from '~/utils/shuffle'
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
-import randomThumb from "../util/randomThumb"
-import randomRecords from "../util/randomRecords"
-import recordToTVProgram from "../util/recordToTVProgram"
+import randomThumb from "../utils/randomThumb"
+import randomRecords from "../utils/randomRecords"
+import recordToTVProgram from "../utils/recordToTVProgram"
 
 export const loader = async () => {
   let records = await randomRecords(10)

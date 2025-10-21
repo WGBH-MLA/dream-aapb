@@ -1234,6 +1234,60 @@ div.score-light {
 }
 
 
+/* pages  */
+div.page-container {
+  width: 90%;
+  margin-left: 4em;
+  margin-right: 4em;
+  
+}
+
+/*title of whole page*/
+div.page-container h2 {
+  background-color: #d2d5e2;
+  padding: 1em;
+  margin-bottom: 4em;
+}
+
+div.page-container h2 a, div.page-container h2 a:visited {
+  color: rgba(74, 78, 156);
+  margin-left: 2em;
+  text-decoration: none;
+  font-size: 0.5em;
+}
+
+div.page-container h2 a:hover {
+  font-weight: bold;
+  color: rgba(37, 39, 78);
+}
+
+div.page-body-container {
+  
+}
+
+/*title of content block*/
+div.skinny-body-container h2 {
+  background-color: #d2d5e2;
+}
+
+div.page-body div.basic-block {
+  overflow: hidden;
+  background-color: #f00;
+  font-size: 0.8em;
+  padding: 1em;
+  padding-top: 2em;
+  padding-bottom: 3em;
+  margin-bottom: 2em;
+}
+
+div.page-body div.basic-block img {
+  display: inline-flex;
+  object-fit: contain;
+  width: 50%;
+  float: right;
+}
+
+
 
 /*leetle*/
 @media only screen and (max-width: 992px) {

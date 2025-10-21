@@ -1,0 +1,63 @@
+import { useLoaderData } from 'react-router'
+import { getPageBySlug } from '../utils/fetch'
+import { renderExhibit } from '../classes/exhibitPresenter'
+import { extractMeta } from '../utils/meta'
+
+export const loader = async ({
+  params,
+  request,
+}) => {
+
+  let server_url = process.env.WAGTAIL_HOST
+  let exhibit
+  // exhibit = await getPageBySlug('exhibits', params.exhibitSlug)
+  exhibit = {
+    title: "Fake Exhibit",
+    content: [
+      {
+        id: "zvb9db7",
+        type: "text",
+        value: "it's a <b>BODY</b> thang...",
+      },
+      {
+        id: "sdfjdb7",
+        type: "text",
+        value: "it'soh damnnnng! <img src='/silly.png' />",
+      },      
+      {
+        id: "xxxdedf3",
+        type: "credits",
+        value: "and thats why we're giving YOU the <i>credit</i>",
+      },
+
+    ]
+  }
+  return { exhibit, server_url }
+}
+
+export const meta = ({ data }) => {
+  let exhibit = data?.exhibit
+  if (!exhibit) {
+    return [
+      { title: 'American Archive of Public Broadcasting' },
+      {
+        name: 'description',
+        content: 'Exhibit from AAPB',
+      },
+    ]
+  }
+  return [
+    { title: `${exhibit.title} | American Archive of Public Broadcasting` },
+    {
+      name: 'description',
+      content:
+        exhibit?.meta?.search_description || 'AAPB Exhibit',
+    },
+    ...extractMeta(data.server_url, exhibit),
+  ]
+}
+
+export default function Exhibit() {
+  const data = useLoaderData()
+  return renderExhibit(data.exhibit)
+}

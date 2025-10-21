@@ -5,9 +5,9 @@ import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import Mappy from "../components/Mappy"
 
-import randomThumb from "../util/randomThumb"
-import randomRecords from "../util/randomRecords"
-import recordToTVProgram from "../util/recordToTVProgram"
+import randomThumb from "../utils/randomThumb"
+import randomRecords from "../utils/randomRecords"
+import recordToTVProgram from "../utils/recordToTVProgram"
 
 export const loader = async () => {
 

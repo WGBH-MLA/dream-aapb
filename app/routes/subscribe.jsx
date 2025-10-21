@@ -4,7 +4,7 @@ import { useLoaderData } from 'react-router'
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
-import randomThumb from "../util/randomThumb"
+import randomThumb from "../utils/randomThumb"
 
 export const loader = async () => {
   return null

@@ -1,9 +1,5 @@
 import { useLoaderData } from 'react-router'
-// import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
-// import ShowBox from "../components/ShowBox"
-// import { getRecord } from '../util/getRecord'
-// import { niceTitle } from '../util/niceTitle'
 import orgs from "../data/orgs.json"
 
 export const loader = async ({params, request}) => {
