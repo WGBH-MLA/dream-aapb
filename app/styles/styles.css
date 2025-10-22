@@ -58,6 +58,10 @@ a:visited {
   margin-left: 2em;
 }
 
+.martop {
+  margin-top: 2em;
+}
+
 .marright {
   margin-right: 2em;
 }
@@ -1239,14 +1243,69 @@ div.page-container {
   width: 90%;
   margin-left: 4em;
   margin-right: 4em;
-  
+}
+
+
+
+/*nice item*/
+div.nice-item {
+  position: relative;
+  display: inline-flex;
+  margin-left: 2em;
+}
+
+div.nice-item h2 {
+  font-size: 1.2em;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+div.nice-item, div.nice-item img {
+  width: 13em;
+  min-height: 13em;
+  height: 13em;
+}
+
+div.nice-item img {
+  background-position: center;
+  object-fit: cover;
+}
+
+div.items-search input {
+  height: 2em;
+  width: 33%;
 }
 
 /*title of whole page*/
-div.page-container h2 {
+/*div.skinny-body-container.title h2 {
   background-color: #d2d5e2;
   padding: 1em;
-  margin-bottom: 4em;
+  margin-bottom: 2em;
+}
+*/
+
+
+div.skinny-body-container h2 {
+  font-size: 1.2em;
+}
+
+div.collection-title-container h2 {
+  width: 100%;
+  display: block;
+  font-size: 1.5em;
+}
+div.skinny-body-container.title {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+div.collection-image-container, div.collection-title-container {
+  width: 50%;
+  text-align: center;
+  vertical-align: middle;
 }
 
 div.page-container h2 a, div.page-container h2 a:visited {
@@ -1267,24 +1326,45 @@ div.page-body-container {
 
 /*title of content block*/
 div.skinny-body-container h2 {
-  background-color: #d2d5e2;
+
 }
+
+
 
 div.page-body div.basic-block {
   overflow: hidden;
-  background-color: #f00;
+  background-color: #f2f2f2;
   font-size: 0.8em;
-  padding: 1em;
-  padding-top: 2em;
-  padding-bottom: 3em;
+  padding: 2em;
+  padding-top: 3em;
+  padding-bottom: 4em;
+  margin-bottom: 2em;
+}
+
+div.page-body div.basic-block p {
+  width: 100%;
+  display: block;
   margin-bottom: 2em;
 }
 
 div.page-body div.basic-block img {
+  overflow: hidden;
+}
+
+div.page-body div.basic-block img.left {
   display: inline-flex;
   object-fit: contain;
   width: 50%;
   float: right;
+  max-height: 20em;
+}
+
+div.page-body div.basic-block img.right {
+  display: inline-flex;
+  object-fit: contain;
+  width: 50%;
+  float: right;
+  max-height: 20em;
 }
 
 

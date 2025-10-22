@@ -1,7 +1,7 @@
-import { useLoaderData } from 'react-router'
-import { getPageBySlug } from '../utils/fetch'
-import { renderExhibit } from '../classes/exhibitPresenter'
-import { extractMeta } from '../utils/meta'
+import { useLoaderData } from "react-router"
+import { getPageBySlug } from "../utils/fetch"
+import { renderExhibit } from "../classes/exhibitPresenter"
+import { extractMeta } from "../utils/meta"
 
 export const loader = async ({
   params,
@@ -22,7 +22,7 @@ export const loader = async ({
       {
         id: "sdfjdb7",
         type: "text",
-        value: "it'soh damnnnng! <img src='/silly.png' />",
+        value: "<p>it'soh wownnng! <img class='right' src='/silly.png' /></p><p>wowie!<img class='left' src='/silly.png' /></p>",
       },      
       {
         id: "xxxdedf3",

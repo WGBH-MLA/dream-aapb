@@ -12,24 +12,29 @@ export const loader = async ({
   let collection
   // collection = await getPageBySlug('collections', params.collectionSlug)
   collection = {
-    title: "Fake Collection",
-    content: [
+    title: "Regular Collection",
+    summary: "Summarily wow wow wow!",
+    background: "it's a <b>BODY</b> thang...",
+    resources: "-what the heck<br>-what the heck<br>-what the heck<br>-what the heck<br>",
+    thumbnail: {
+      url: "/silly.png"
+    },
+    featured_items: [
       {
-        id: "zvb9db7",
-        type: "text",
-        value: "it's a <b>BODY</b> thang...",
+        title: "Great Item",
+        img_url: "/silly.png",
+        item_url: "www.google.com",
       },
       {
-        id: "sdfjdb7",
-        type: "text",
-        value: "it'soh damnnnng! <img src='/silly.png' />",
-      },      
-      {
-        id: "xxxdedf3",
-        type: "credits",
-        value: "and thats why we're giving YOU the <i>credit</i>",
+        title: "Good Item",
+        img_url: "/silly.png",
+        item_url: "www.google.com",
       },
-
+      {
+        title: "Eh Item",
+        img_url: "/silly.png",
+        item_url: "www.google.com",
+      },
     ]
   }
   return { collection, server_url }

@@ -9,7 +9,7 @@ export function renderExhibit(exhibit) {
   return (
     <div>
       <div className='page-container'>
-        <div className="skinny-body-container">
+        <div className="skinny-body-container title">
           <h2>
             { exhibit.title }
             <a href="/exhibits">Back To Exhibits</a>

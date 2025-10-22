@@ -25,7 +25,7 @@ function renderBlockCredits(block){
   )
 }
 
-function dangerousDiv(content){
+export function dangerousDiv(content){
   return (
     <div className="basic-block" dangerouslySetInnerHTML={{ __html: decode(content) }} />
   )
