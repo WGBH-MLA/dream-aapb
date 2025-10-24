@@ -31,10 +31,16 @@ export default function Thumbnail(props) {
     })
   }
 
+  let babyTitle
+  if(props.babyTitle){
+    babyTitle = <div className="baby-title">{ props.babyTitle }</div>
+  }
+
   return (
     <div className={ classes }>
       { img }
       { bottomBar }
+      { babyTitle }
     </div>
   )
 }

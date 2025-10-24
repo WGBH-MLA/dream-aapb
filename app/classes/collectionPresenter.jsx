@@ -2,10 +2,12 @@ import { decode } from "html-entities"
 // import { renderSidebar, renderPageTitleBar } from "./pageHelpers"
 import { dangerousDiv } from "./contentHelpers"
 import NiceItem from "../components/NiceItem"
+import BabySearch from "../components/BabySearch"
 
-export function renderCollection(collection) {
+export function renderCollection(collection, esConfig) {
   console.log("rendering collection", collection)
   // let blocks = renderBlocks(collection.content)
+  let specialCollectionTag = collection.tag
 
   let niceItems = collection.featured_items.map((item) => <NiceItem title={item.title} img_url={item.img_url} item_url={item.item_url} />)
   return (
@@ -41,7 +43,7 @@ export function renderCollection(collection) {
           <h2 className="smarbot">Featured Items</h2>
           <div className="page-body marbot">
             <div className="items-search smarbot">
-              <input type="text" placeholder="Search the Collection..." />
+              <BabySearch indexName={ esConfig.indexName } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
             </div>
             
             <div>

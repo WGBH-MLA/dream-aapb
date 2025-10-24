@@ -9,6 +9,10 @@ export const loader = async ({
 }) => {
 
   let server_url = process.env.WAGTAIL_HOST
+  let indexName = process.env.ES_INDEX
+  let esURL = process.env.ES_URL
+  let apiKey = process.env.ES_API_KEY
+
   let collection
   // collection = await getPageBySlug('collections', params.collectionSlug)
   collection = {
@@ -19,6 +23,7 @@ export const loader = async ({
     thumbnail: {
       url: "/silly.png"
     },
+    tag: "fridaynightjazz",
     featured_items: [
       {
         title: "Great Item",
@@ -35,9 +40,9 @@ export const loader = async ({
         img_url: "/silly.png",
         item_url: "www.google.com",
       },
-    ]
+    ],
   }
-  return { collection, server_url }
+  return { collection, server_url, indexName, esURL, apiKey }
 }
 
 export const meta = ({ data }) => {
@@ -64,5 +69,10 @@ export const meta = ({ data }) => {
 
 export default function Collection() {
   const data = useLoaderData()
-  return renderCollection(data.collection)
+  const esConfig = {
+    esURL: data.esURL,
+    indexName: data.indexName,
+    apiKey: data.apiKey,
+  }
+  return renderCollection(data.collection, esConfig)
 }
