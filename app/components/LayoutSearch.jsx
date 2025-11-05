@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ExternalLink, Search, X } from 'lucide-react'
 
 export default function LayoutSearch(props){
-  const [search, setSearch] = useState(null)
+  const [search, setSearch] = useState("")
   function goToSearch(){
     window.location.href = `/search?${ props.indexName }[query]=${search}`
   }
@@ -12,6 +12,7 @@ export default function LayoutSearch(props){
       goToSearch()
     }
   }
+
  
   return (
     <div className="layout-search">

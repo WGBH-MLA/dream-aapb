@@ -19,7 +19,7 @@ export default function ShowRecord() {
   const data = useLoaderData()
 
   let people, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages
+  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates
   if(data){
     title = niceTitle(data.pbcoreDescriptionDocument.pbcoreTitle)
 
@@ -101,8 +101,18 @@ export default function ShowRecord() {
           { eachId }
         </>
       )
-      
     }
+
+
+    if(data.pbcoreDescriptionDocument.pbcoreAssetDate && data.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
+      dates = (
+        <>
+          <div className="show-metadata-header">Dates</div>
+          { data.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ pbad.dateType } text={ pbad.text } />) }
+        </>
+      )
+    }
+
   }
 
   return (
@@ -132,9 +142,35 @@ export default function ShowRecord() {
           { people }
 
           { coverages }
+
+          { dates }
         </div>
       </div>
     </>
   )
 }
 
+function dateTypeName(type){
+  switch(type){
+    case "broadcast":
+      return "Broadcast"
+    case "air":
+      return "Broadcast"
+    case "issue":
+      return "Broadcast"
+    case "published":
+      return "Broadcast"
+    case "release":
+      return "Broadcast"
+    case "created":
+      return "Created"
+    case "recorded":
+      return "Created"
+    case "performance":
+      return "Created"
+    case "revised":
+      return "Revised"
+    case "copyright":
+      return "Copyright Date"
+  }
+}

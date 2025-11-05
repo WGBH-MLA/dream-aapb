@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useState, useRef } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
-import { SortBy } from "react-instantsearch"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
-
 
 const OR_FIELDS = [
   "producing_org",
@@ -22,8 +20,10 @@ import {
           ToggleRefinement,
           Pagination,
           HitsPerPage,
-          RangeInput,
-          Stats
+          Stats,
+          SortBy,
+          useSearchBox,
+          useInstantSearch,
       } from 'react-instantsearch';
 
 import SearchResult from "../components/SearchResult"
@@ -40,13 +40,56 @@ export const loader = async ({params, request}) => {
   }
 }
 
+function CustomSearchBox(props) {
+  const { status } = useInstantSearch()
+  const { _query, refine } = useSearchBox()
+  const inputRef = useRef(null)
+
+  const isSearchStalled = status === "stalled";
+
+  return (
+    <>
+      <div className="">
+        <h4>Search for</h4>
+        <input
+          className="sidebar-search smarbot"
+          ref={inputRef}
+          onKeyUp={(event) => {
+            props.handleCustomQuery("query", event.currentTarget.value, refine)
+          }}
+        />
+
+        <button onClick={ () => refine("lobster") } >boing</button>
+
+        <div hidden={!isSearchStalled}>Searching…</div>
+        <h4>Contains all of these words</h4>
+        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>This title</h4>
+        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>None of these words</h4>
+        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <div>
+          <button className="sidebar-search-button">Update</button>
+        </div>
+
+      </div>
+    </>
+  )  
+}
+
+
 export default function Search() {
   const data = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
+
+  // custom query from url params
   const [customQuery, setCustomQuery] = useState({
+    query: searchParams.get(`${data.indexName}[query]`) || "",
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
-    none: searchParams.get("none") || ""
+    none: searchParams.get("none") || "",
+    startDate: searchParams.get("startDate") || "",
+    endDate: searchParams.get("endDate") || "",
   })
   const [allowSearch, setAllowSearch] = useState(true)
   const [searchSet, setSearchSet] = useState("both")
@@ -54,10 +97,9 @@ export default function Search() {
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
 
-  // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
+  // config viewed refinements
   const [showingRefinements, setShowingRefinements] = useState(false)
   let currentRefinementsClasses, showRefinementButtonText
-    // if(!showMoreRefinements && numberOfRefinements > 3){
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
     showRefinementButtonText = "Show All Refinements"
@@ -66,24 +108,13 @@ export default function Search() {
     showRefinementButtonText = "Show Less"
   }
 
-  function handleCustomQuery(type, value){
+  function handleCustomQuery(type, value, refine){
+    // ohh la la
     setCustomQuery({...customQuery, [type]: value})
-  }
+    // console.log( 'the current complete value of customQuery is ', customQuery )
 
-  function handleSearchBox(query, search) {
-    if(allowSearch){
-      // flag off
-      setAllowSearch(false)
-      // search
-      search(query)
-
-      // wait
-      let timeoutId = setTimeout(() => {
-        clearTimeout(timeoutId)
-        // flag on
-        setAllowSearch(true)
-      }, 300)
-    }
+    // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
+    refine(customQuery.query === "" ? " " : customQuery.query)
   }
 
   function titleQuery(tQuery){
@@ -143,7 +174,6 @@ export default function Search() {
           }
         }
       },
-
 
       {
         nested: {
@@ -392,7 +422,7 @@ export default function Search() {
           type: "string",
         },
         { 
-          attribute: "contributing_orgs", 
+          attribute: "contributing_orgs",
           field: "contributing_orgs",
           type: "string",
         },
@@ -406,11 +436,6 @@ export default function Search() {
           field: "topics",
           type: "string",
         },
-        // { 
-        //   attribute: "broadcast_date",
-        //   field: "broadcast_date",
-        //   type: "date",
-        // },
         {
           attribute: "series_titles",
           field: "series_titles",
@@ -527,13 +552,16 @@ export default function Search() {
   // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
+      let emptyQuery = query === "" || query.match(/^\s+$/)
       var queryHash
 
+      // console.log( 'Search was triggered with custom', customQuery )
       var title_if_present
       if(customQuery.title && customQuery.title.length > 0){
         title_if_present = customQuery.title
       }
 
+      // console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
       // look for quoted phrases in the main search box
       if(false && query && query.includes('\"')){
         var quoted = query.match(/"(\\.|[^"\\])*"/g)
@@ -564,7 +592,6 @@ export default function Search() {
         }
 
       } else {
-
         
         var mainAllFieldsArray
         // broken creepy quote handling
@@ -574,28 +601,45 @@ export default function Search() {
           if(quoted.length > 0){
             console.log( 'dummbo', quoted, unquoted )
             // make a one-hit-required term array for each distinct quoted term
+
+            // todo fix this!! dates use filtering now
             queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
           }
 
         } else {
+          // big main compound query...
           mainAllFieldsArray = allFieldsArray(query)
+
         }
 
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            should: [
-              {
-                bool: {
-                  should: mainAllFieldsArray,
-                  minimum_should_match: 1
+        if(emptyQuery){
+          // there *is not* a main box query
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: []
+            }
+          }
+        } else {
+          // there *is* a main box query
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  bool: {
+                    should: mainAllFieldsArray,
+                    minimum_should_match: 1
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
 
+        // add in clauses for each of 3 secondary searchbox fields
         if(customQuery.all && customQuery.all.length > 0){
           // add second big should clause to outer bool query
           var allQuery =  {
@@ -604,7 +648,14 @@ export default function Search() {
             }
           }
           queryHash.bool.should.push(allQuery)
-          queryHash.bool.minimum_should_match = 2
+          if(emptyQuery){
+            // no quer present
+            queryHash.bool.minimum_should_match = 1
+          } else {
+            // normal 
+            // require a hit on the main clause, and also this 'all terms' one
+            queryHash.bool.minimum_should_match = 2
+          }
         }
 
         if(customQuery.none && customQuery.none.length > 0){
@@ -616,10 +667,23 @@ export default function Search() {
           queryHash.bool.must = [ titleQuery( customQuery.title ) ]
         }
 
+        if(customQuery.startDate || customQuery.endDate){
+          queryHash.bool.filter = {
+            range: {
+              broadcast_date: {}
+            }
+          }
 
-        // set num of refinments for show more refinements UI
-        // not working
-        // setNumberOfRefinements( document.getElementsByClassName("span.ais-CurrentRefinements-category").length )
+          if(customQuery.startDate){
+            queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
+          }
+
+          if(customQuery.endDate){
+            queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
+          }
+        }
+
+        // console.log( 'finishing with qh', queryHash )
         return queryHash
       }
     }
@@ -634,7 +698,6 @@ export default function Search() {
     searchResultComponent = GalleryResult
   }
 
-  // <SearchBox queryHook={ handleSearchBox } />
   return (
     <div className="body-container">
       <InstantSearch
@@ -644,7 +707,6 @@ export default function Search() {
       >
 
         <div className="top-search-bar bmarleft smarbot smarright">
-
           <div className="options-container martop">
             <h2 className="">Search Results</h2>
             
@@ -703,20 +765,7 @@ export default function Search() {
           <hr />
           
           <SearchAccordion title="Keywords" content={
-            <>
-              <h4>Search for</h4>
-
-              <SearchBox  className="sidebar-search smarbot" />
-              <h4>Contains all of these words</h4>
-              <input id="all"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>This title</h4>
-              <input id="title"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>None of these words</h4>
-              <input id="none"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <div>
-                <button className="sidebar-search-button">Update</button>
-              </div>
-            </>
+            <CustomSearchBox handleCustomQuery={ handleCustomQuery } />
           }/>
 
           <hr />
@@ -727,6 +776,14 @@ export default function Search() {
               <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
               <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
               <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            </>
+          }/>
+
+
+          <SearchAccordion title="Broadcast Date" content ={
+            <>
+              <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
+              <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
             </>
           }/>
 
