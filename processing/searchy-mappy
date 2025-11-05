@@ -1,5 +1,5 @@
-curl -v -X PUT "localhost:9200/dream-aapb-temporary/" \
--H "Authorization: ApiKey "wouldntthatbenice"" \
+curl -v -X PUT "localhost:9200/aapb-sweetie/" \
+-H "Authorization: ApiKey "R1hxQWQ1a0J5LU1iaVpUWDhYTVg6WmVIUmlPS3lTVHVUb291bm5iSDNPdw=="" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {
@@ -43,6 +43,7 @@ curl -v -X PUT "localhost:9200/dream-aapb-temporary/" \
       "special_collections": { "type": "keyword" },
       "topics": { "type": "keyword" },
       "broadcast_date": { "type": "date" },
+      "broadcast_date_numeric": { "type": "long" },
       "guid": { "type": "text" },
       
       "title": { "type": "text" },

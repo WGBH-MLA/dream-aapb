@@ -14,7 +14,6 @@ export function ClientOnly({children}){
 export default function Map(props){
   return (
     <>
-      <h3> its your FUCKING map oh boy! </h3>
       <ClientOnly>
         <Suspense fallback="FAILUER">
           <ClientMap />
