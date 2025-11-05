@@ -17,19 +17,19 @@ export const loader = async () => {
     featured_collections: [
       {
         title: "first things first",
-        subtitle: "giuseppe open toe",
+        // subtitle: "giuseppe open toe",
         thumbnailURL: randomThumb(),
         url: "google.com"
       },
       {
         title: "go back for seconds",
-        subtitle: "round too",
+        // subtitle: "round too",
         thumbnailURL: randomThumb(),
         url: "google.com"
       },
       {
         title: "third wheels motor club",
-        subtitle: "vroom vroom",
+        // subtitle: "vroom vroom",
         thumbnailURL: randomThumb(),
         url: "google.com"
       },
@@ -42,7 +42,7 @@ export const loader = async () => {
   return data
 }
 
-export default function Index() {
+export default function Collections() {
   let data = useLoaderData()
   return (
     <div className='body-container'>

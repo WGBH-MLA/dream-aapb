@@ -1,24 +1,28 @@
 import { decode } from "html-entities"
 export function renderBlocks(blocks){
-  return blocks.map((block) => renderBlock(block))
+  return blocks.map((block, i) => renderBlock(block, i))
 }
 
-function renderBlock(block){
+function renderBlock(block, key){
   switch(block.type) {
     case "text":
-      return renderBlockText(block)
+      return renderBlockText(block, key)
     case "credits":
-      return renderBlockCredits(block)  
+      return renderBlockCredits(block, key)
   }
 }
 
-function renderBlockText(block){
-  return dangerousDiv(block.value)
+function renderBlockText(block, key){
+  return (
+      <div key={ key }>
+        { dangerousDiv(block.value) } 
+      </div>
+   )
 }
 
-function renderBlockCredits(block){
+function renderBlockCredits(block, key){
   return (
-    <div>
+    <div key={key}>
       Credits:
       { dangerousDiv(block.value) }
     </div>

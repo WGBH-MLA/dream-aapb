@@ -20,7 +20,7 @@ export default function recordToTVProgram(record){
     key: record.guid,
     guid: record.guid,
     title: title,
-    subtitle: subtitle,
+    // subtitle: subtitle,
     thumbnail: thumbnail,
     mediaType: record.media_type,
     url: url

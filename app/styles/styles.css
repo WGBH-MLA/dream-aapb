@@ -97,6 +97,10 @@ a:visited {
   margin-right: 4em;
 }
 
+.bmarbot {
+  margin-bottom: 4em;
+}
+
 /*general page layout*/
 div.body-container {
   width: 96%;
@@ -435,10 +439,6 @@ div.tv-menu-container {
   margin-left: 2em;
   display: block;
   width: 96%;
-  max-height: 30rem;
-  height: 30rem;
-  overflow-x: scroll;
-  overflow-y: hidden;
   margin-bottom: 4em;
 }
 
@@ -448,9 +448,8 @@ div.tv-menu-container a {
 }
 
 div.tv-menu-container.three {
-  max-height: 30rem;
-  height: 30rem;
-  overflow-x: hidden;
+/*  max-height: 30rem;
+  height: 30rem;*/
 }
 
 div.tv-menu-container.three img {
@@ -458,8 +457,6 @@ div.tv-menu-container.three img {
 }
 
 div.tv-menu-container.three div.tv-menu-body {
-  max-height: 30rem;
-  height: 30rem;
 }
 
 div.tv-menu-container h2 {
@@ -467,12 +464,20 @@ div.tv-menu-container h2 {
   margin-bottom: 1em;
 }
 
+
+div.tv-menu-container div.tv-menu-program.three img, div.tv-menu-container div.tv-menu-program.three div {
+  width: 24.4rem;
+  max-height: 18.75rem;
+  height: 18.75rem;
+}
+
 div.tv-menu-container div.tv-menu-program {
 /*  background-color: #ff0;*/
   display: inline-flex;
   flex-grow: 1;
-  width: 23.5rem;
-  min-width: 23.5rem;  
+  width: 18.73rem;
+  min-width: 18rem;
+  height: 20rem;
   overflow: hidden;
   position: relative;
 }
@@ -480,26 +485,21 @@ div.tv-menu-container div.tv-menu-program {
 div.tv-menu-container div.tv-menu-program.three {
   min-width: 26rem;
   width: 26rem;
-  height: 30rem;
-  max-height: 30rem;
+  height: 22rem;
+  max-height: 22rem;
 }
 
-div.tv-menu-container div.tv-menu-body {
+div.tv-menu-container.three div.tv-menu-body {
+  /* this allows the div to be as wide as the content, making it NOT overflow at the end of the line */
   width: max-content;
-/*  max-width: 500%;*/
 }
 
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
-  width: 23.5rem;
-  height: 18.75rem;
-  max-height: 18.75rem;
-}
-
-div.tv-menu-container div.tv-menu-program img, div.tv-menu-container div.tv-menu-program.three div {
-  width: 23.5rem;
-  height: 18.75rem;
+  width: 18rem;
+  height: 13.5rem;
+  max-height: 13.5rem;
 }
 
 div.tv-menu-container div.tv-menu-program h4 {
@@ -508,23 +508,22 @@ div.tv-menu-container div.tv-menu-program h4 {
   font-size: 1.2em;
   position: relative;
   z-index: 10;
-  min-height: 1.2em;
-  height: 1.2em;
   margin-top: 1em;
 
-  position: relative;
   width: 75%;
-  display: block;
-  overflow-x: hidden;
+  max-width: 75%;
+  position: relative;
   white-space: nowrap;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 div.tv-menu-container div.tv-menu-program h5 {
   font-size: 1em;
   position: relative;
+  width: 75%;
+  max-width: 75%;
   z-index: 10;
-  height: 1em;
   margin-top: 0.5em;
 }
 
@@ -542,6 +541,7 @@ div.summary-box-container {
   text-align: left;
   margin-left: 4em;
   margin-bottom: 2em;
+  margin-right: 4em;
   display: block;
 }
 
@@ -982,7 +982,7 @@ div.hit-thumbnail img.thumbnail {
 
 div.tv-menu-program div.show-thumbnail img.thumbnail-bar {
   position: absolute;
-  bottom: 4em;
+  bottom: 6.5em;
   min-height: 2em;
   height: 2em;
 }
@@ -1391,6 +1391,27 @@ div.page-body div.basic-block img.right {
   max-height: 20em;
 }
 
+/*cms author*/
+div.author h2 {
+  display: block;
+  font-size: 1em;
+}
+
+div.author img {
+  overflow: hidden;
+  width: 8em;
+  height: 8em;
+  border-radius: 128px;
+}
+
+div.author img {
+  display: inline-flex;
+}
+div.author span {
+  display: block;
+  font-size: 0.8em;
+}
+
 
 
 /*leetle*/
@@ -1400,6 +1421,20 @@ div.page-body div.basic-block img.right {
 
 /*beeg*/
 @media only screen and (min-width: 1600px) {
+  /*tv menu*/
+
+  div.tv-menu-container div.tv-menu-program {
+    width: 25.75rem;
+    min-width: 25.75rem;
+  }
+
+  div.tv-menu-container div.tv-menu-program.three {
+    min-width: 39.5rem;
+    width: 39.5rem;
+    max-width: 39.5rem;
+  }
+
+
   div.current-refinements-container {
     width: 75%;
   }

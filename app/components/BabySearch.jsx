@@ -29,29 +29,13 @@ export default function BabySearch(props){
     },
 
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
-
-      search_attributes: [
-        // "guid",
-        // "genres"
-        // "pbcoreDescriptionDocument.pbcoreDescription",
-        // "pbcoreDescriptionDocument.pbcoreTitle.text",
-        // { field: "pbcoreDescriptionDocument.pbcoreTitle.text", weight: 5 },
-        // { field: "pbcoreDescriptionDocument.pbcoreCreator", weight: 2 }
-        // "pbcoreDescriptionDocument.pbcoreAnnotation.first.text",
-        // "pbcoreDescriptionDocument.pbcoreIdentifier",
-        
-      ],
-
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
       result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
-
     }
   })
 
   function allFieldsArray(query){
     return [
-      // simplified syntax that works but omits options
       {
         match: {
           "guid": query
@@ -133,35 +117,36 @@ export default function BabySearch(props){
     ]
   }
 
-
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
-      console.log( 'query dumbo', query )
+      console.log( 'query is', query )
       var queryHash
 
       var mainAllFieldsArray
       mainAllFieldsArray = allFieldsArray(query)
       queryHash = {
         // top bool
+
         bool: {
-          // big should
-          should: [
+          filter: [
             {
-              bool: {
-                should: mainAllFieldsArray,
-                filter: [
-                  {
-                    term: {
-                      special_collections: props.specialCollectionTag
-                    }
-                  },
-                ],
-                minimum_should_match: 1
+              term: {
+                special_collections: props.specialCollectionTag
               }
-            }
+            },
           ]
         }
       }
+
+      // if(query && query.length > 0){
+        queryHash.bool.should = allFieldsArray
+      // } else {
+      //   queryHash.bool.should = [{
+      //     term: "*"
+      //   }]
+
+        queryHash.bool.minimum_should_match = 1
+      // }
 
       return queryHash
     }
@@ -169,7 +154,7 @@ export default function BabySearch(props){
 
   function handleBabyQuery(value, refine){
     setBabyQuery(value)
-    refine(value === "" ? " " : value)
+    refine(babyQuery === "" ? "*:*" : babyQuery)
   }
 
   function CustomSearchBox(props) {
@@ -177,16 +162,17 @@ export default function BabySearch(props){
     const { _query, refine } = useSearchBox()
     const inputRef = useRef(null)
 
-
     const isSearchStalled = status === "stalled";
     return (
       <>
         <div>
           <h4>Search for</h4>
+          <div hidden={!isSearchStalled}>Searching…</div>
           <input
+            autoFocus={ true }
             className="sidebar-search smarbot"
-            ref={inputRef}
-            onChange={(event) => {
+            ref={ inputRef }
+            onKeyUp={(event) => {
               props.handleBabyQuery(event.currentTarget.value, refine)
             }}
           />
@@ -195,7 +181,12 @@ export default function BabySearch(props){
     )  
   }
 
-//        <CustomSearchBox handleBabyQuery={ handleBabyQuery } />
+
+// <CustomSearchBox handleBabyQuery={ handleBabyQuery } />
+
+  useEffect(() => {
+
+  })
 
   return (
     <div className="baby-search">

@@ -41,7 +41,7 @@ function TVProgram(props){
     thumb = <Thumbnail url={props.thumbnailURL} />
   }
   return (
-    <div key={props.key} className={"tv-menu-program marleft marbot" + (props.classes ? props.classes : "")} >
+    <div key={props.key} className={"tv-menu-program marleft " + (props.classes ? props.classes : "")} >
       <a href={props.url} >
         { thumb }
         <h4>{ props.title }</h4>

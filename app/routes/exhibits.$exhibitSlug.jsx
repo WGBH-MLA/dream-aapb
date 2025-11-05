@@ -13,6 +13,18 @@ export const loader = async ({
   // exhibit = await getPageBySlug('exhibits', params.exhibitSlug)
   exhibit = {
     title: "Fake Exhibit",
+    authors: [
+      {
+        name: "Johnny Juice",
+        img_url: "/johnny.png",
+        bio: "The first author that ever existed in the world."
+      },
+      {
+        name: "Jenny Jam",
+        img_url: "/jenny.png",
+        bio: "And lo another author was born, torn from the cloth of the first."
+      },
+    ],
     content: [
       {
         id: "zvb9db7",
@@ -29,7 +41,6 @@ export const loader = async ({
         type: "credits",
         value: "and thats why we're giving YOU the <i>credit</i>",
       },
-
     ]
   }
   return { exhibit, server_url }
