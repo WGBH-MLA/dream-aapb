@@ -49,7 +49,7 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
-          url: "/visit",
+          url: "/on-location",
           text: "Visit"
         },
         {
@@ -67,7 +67,7 @@ export default function Footer(props) {
       titleURL: null,
       links: [
         {
-          url: "/blog",
+          url: "https://blog.americanarchive.org/",
           text: "Blog"
         },
         {
@@ -75,7 +75,7 @@ export default function Footer(props) {
           text: "Feedback"
         },
         {
-          url: "/content",
+          url: "/content-statement",
           text: "Content Statement"
         },
         {

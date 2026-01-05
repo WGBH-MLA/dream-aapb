@@ -4,7 +4,7 @@ import { ExternalLink, Search, X } from 'lucide-react'
 export default function LayoutSearch(props){
   const [search, setSearch] = useState("")
   function goToSearch(){
-    window.location.href = `/search?${ props.indexName }[query]=${search}`
+    window.location.href = `/search?${ props.esIndex }[query]=${search}`
   }
 
   function handleEnter(e){

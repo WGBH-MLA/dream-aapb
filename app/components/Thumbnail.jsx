@@ -1,14 +1,24 @@
 import { useState, useEffect } from 'react'
 import thumbnailURL from "../utils/thumbnailURL"
+import { getRecord } from "../utils/getRecord"
 
 export default function Thumbnail(props) {
   var img, bottomBar
   if(props.url){
     img = <img src={ props.url } />
   } else {
+
     const [exists, setExists] = useState(false)
     var url = thumbnailURL(props.guid)
-    var classes = props.searchResult ? "hit-thumbnail" : "show-thumbnail"
+
+    var classes
+    if(props.searchResult){
+      classes = "hit-thumbnail"
+    } else if(props.cmsPlayer){
+      classes = "cms-thumbnail"
+    } else {
+      classes = "show-thumbnail"
+    }
 
     if(exists){
       img = <img crossOrigin="anonymous" className="thumbnail" src={ url } />
@@ -27,7 +37,7 @@ export default function Thumbnail(props) {
       // todo need to get the hostname into here, but with Hits -> hitComponent pattern not clear how to bring in addl props
       var hostname = "http://18.235.155.36:4000"
       hostname = "http://localhost:4000"
-      fetch(url, {method: "HEAD", headers: {"Referer": hostname}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
+      fetch(url, {method: "HEAD"}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
     })
   }
 

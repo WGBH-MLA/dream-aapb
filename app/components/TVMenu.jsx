@@ -16,7 +16,7 @@ export default function TVMenu(props){
   if(props.seeAllURL){
     seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
   }
-  let classes = "tv-menu-container"
+  let classes = "tv-menu-container bmarbot bmartop"
   if(programs.length == 3){
     classes += " three"
   }

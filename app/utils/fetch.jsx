@@ -1,59 +1,81 @@
 import { redirect } from 'react-router';
 
 export async function getExhibits() {
-  return await fetch(
-    process.env.WAGTAIL_HOST + '/api/v2/exhibits/?limit=999999',
+  let resp = await fetch(
+    process.env.WAGTAIL_HOST + '/api/v2/pages/?type=aapb_exhibits.AAPBExhibit&limit=999999',
+    {
+      headers: {"Host": "aapb-api"},
+    },  
     res => {
       console.log('exs', res)
     }
   )
+
+  let body = await resp.json()
+
+  // TODO REMOVE ->> real top level exhibits via top_exhibit field
+  // return body.items.filter((ex) => (ex.meta.html_url.match(/\//g) || []).length == 4 )
+  return body.items
 }
 
 export async function getCollections() {
-  return await fetch(
-    process.env.WAGTAIL_HOST + '/api/v2/collections/?limit=999999'
+  let resp =  await fetch(
+    process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=999999`,
+    {
+      headers: {Host: "aapb-api"},
+    },
   )
+  let body = await resp.json()
+  return body.items
+
+  // return collections.items
+}
+
+export async function getFeatured() {
+  let resp =  await fetch(
+    // process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection?featured=true&limit=3`,
+    process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=3`,
+    {
+      headers: {Host: "aapb-api"},
+    },
+  )
+  let body = await resp.json()
+  return body.items
+
+  // return collections.items
 }
 
 export async function getPageBySlug(type, slug) {
-  const body = await fetch(
-    `${process.env.WAGTAIL_HOST}/api/v2/pages/?slug=${slug}`
-  )
-    .then(res => res.json())
-    .catch(err => {
-      console.log('fetch error', err)
-      throw new Response(`Error fetching ${type}`, {
-        status: 500,
-        statusText: 'Something went wrong. Try again later.',
-      })
-    })
-  if (body.meta?.total_count === 0) {
+  var resp = await fetch(`${process.env.WAGTAIL_HOST}/api/v2/pages?type=${type}&slug=${slug}`, {headers: {"Host": "aapb-api"}} )
+  var body
+  try {
+    body = await resp.json()
+  } catch(error){
+    console.log( 'Invalid JSON...', body, error )
+  }
+
+  if (!body || body?.meta?.total_count === 0) {
 
     console.log(`Page not found by slug`)
-
-    // 
-    // Maybe it's an old slug?
-    // let slug_route = slug.split('/')[0]
-    // if (type === 'exhibits') {
-    //   const newSlug = exhibitLinks[slug]
-    //   if (newSlug) {
-    //     console.log(`Redirecting to new slug: ${newSlug}`)
-    //     throw redirect(`/exhibits/${newSlug}`)
-    //   }
-    // } else if (type === 'collections') {
-
-    //   const newSlug = collectionLinks[slug]
-    //   if (newSlug) {
-    //     console.log(`Redirecting to new slug: ${newSlug}`)
-    //     throw redirect(`/collections/${newSlug}`)
-    //   }
-    // }
-    // throw new Response('Page not found', {
-    //   status: 404,
-    //   statusText: `No ${type} called: ${slug}`,
-    // })
+    throw new Response('Page not found', {
+      status: 404,
+      statusText: `Not found: ${slug}`,
+    })
   }
-  return await fetch(
-    `${process.env.WAGTAIL_HOST}/api/v2/${type}/${body.items[0].id}`
-  ).then(res => res.json())
+
+  var fetchResp = await fetch(`${process.env.WAGTAIL_HOST}/api/v2/pages/${body.items[0].id}`)
+  return await fetchResp.json()
+
+  // // return ex or coll from json
+  // let lecty
+  // if(type === "aapb_collections.AAPBCollection"){
+  //   lecty = collections.items.find((collection) => collection.meta.slug === slug)
+  // } else {
+  //   lecty = collections.items.find((collection) => collection.meta.slug === slug)
+  // }
+  // if(lecty){
+  //   return lecty
+  // } else {
+  //   throw new Response("page sucks", {status: 404, statusText: "who cares"})
+  // }
 }

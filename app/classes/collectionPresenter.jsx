@@ -1,41 +1,44 @@
 import { decode } from "html-entities"
-// import { renderSidebar, renderPageTitleBar } from "./pageHelpers"
-import { dangerousDiv } from "./contentHelpers"
+import { renderBlocks, dangerousDiv } from "./contentHelpers"
 import NiceItem from "../components/NiceItem"
+import thumbnailURL from "../utils/thumbnailURL"
 import BabySearch from "../components/BabySearch"
+
+//<BabySearch indexName={ esConfig.esIndex } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
+
 
 export function renderCollection(collection, esConfig) {
   console.log("rendering collection", collection)
-  // let blocks = renderBlocks(collection.content)
-  let specialCollectionTag = collection.tag
-
-  let niceItems = collection.featured_items.map((item) => <NiceItem title={item.title} img_url={item.img_url} item_url={item.item_url} />)
+  let specialCollectionTag = collection.tag || "peabody"
+  
+  let niceItems
+  niceItems = collection.featured_items.map((item) => <NiceItem title={item.value.title} guid={item.value.guids[0]} mediaType={ collection.featuredRecords[item.value.guids[0]]?.media_type } itemURL={ `/search/${item.value.guids[0]}` } />)
+  let blocks = renderBlocks(collection.content)
   return (
     <div>
       <div className="page-container">
 
-        <div className="skinny-body-container title">
-
+        <div className="skinny-body-container collection-title smarbot">
           <div className="collection-image-container">
-            <img src={ collection.thumbnail.url } />
+            <img src={ collection.hero_image.full_url } />
           </div>
           
           <div className="collection-title-container">
-            <h2>{ dangerousDiv(collection.title) }</h2>
-            <h2>
-              <a href="/collections">Back To Collections</a>
-            </h2>
+            <h2>{ dangerousDiv(collection.title, false) }</h2>
+            <a className="top-back-link martop" href="/collections">&lt; Back To Collections</a>
           </div>
         </div>
   
         <div className="skinny-body-container">
- 
+          <h2 className="smarbot">Introduction</h2>
+          <div className="page-body">
+            { dangerousDiv(collection.introduction) }
+          </div>
         </div>
 
         <div className="skinny-body-container">
-          <h2 className="smarbot">Summary</h2>
           <div className="page-body">
-            { dangerousDiv(collection.summary) }
+            { blocks }
           </div>
         </div>
 
@@ -43,43 +46,20 @@ export function renderCollection(collection, esConfig) {
           <h2 className="smarbot">Featured Items</h2>
           <div className="page-body marbot">
             <div className="items-search smarbot">
-              <BabySearch indexName={ esConfig.indexName } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
+              
             </div>
             
-            <div>
-              { niceItems }
+            <div className="nice-items-container marbot">
+              <div className="nice-items-wrapper">
+                { niceItems }
+              </div>
             </div>
           </div>
         </div>
-
         <div className="skinny-body-container">
-          <h2 className="smarbot">Background</h2>
-          <div className="page-body">
-            { dangerousDiv(collection.background) }
-          </div>
-        </div>
-
-        <div className="skinny-body-container">
-          <h2 className="smarbot">Resources</h2>
-          <div className="page-body">
-            { dangerousDiv(collection.resources) }
-          </div>
-        </div>
-        
-        <div className="skinny-body-container">
-          <div className="collection-title-container">
-            <h2>{ dangerousDiv(collection.title) }</h2>
-            <h2>
-              <a href="/collections">Back To Collections</a>
-            </h2>
-          </div>
+          <a className="back-link martop marbot" href="/collections">&lt; Back To Collections</a>
         </div>
       </div>
     </div>
   )
 }
-
-
-
-
-

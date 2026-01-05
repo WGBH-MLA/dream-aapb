@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
+import { useLoaderData, useSearchParams } from 'react-router'
 import {
   InstantSearch,
   SearchBox,
@@ -21,6 +22,21 @@ import BabyResult from "./BabyResult"
 
 export default function BabySearch(props){
   const [babyQuery, setBabyQuery] = useState("")
+
+
+  // get parent loader's data
+  const data = useLoaderData()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+
+
+  // useEffect(() => {
+  //   // wow this is just ridiculous
+  //   if(!window.location.href.includes("?")){
+  //     console.log( 'MOVE ME' )
+  //     window.location.href = `${window.location.href}?aapb-cold-steel[query]=""`
+  //   }
+  // })
 
   const sk = new Searchkit({
     connection: {
@@ -119,7 +135,6 @@ export default function BabySearch(props){
 
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
-      console.log( 'query is', query )
       var queryHash
 
       var mainAllFieldsArray
@@ -128,39 +143,40 @@ export default function BabySearch(props){
         // top bool
 
         bool: {
-          filter: [
-            {
-              term: {
-                special_collections: props.specialCollectionTag
-              }
-            },
-          ]
+          filter: [{
+            term: {
+              special_collections: props.specialCollectionTag
+            }
+          }],         
         }
       }
 
-      // if(query && query.length > 0){
-        queryHash.bool.should = allFieldsArray
-      // } else {
-      //   queryHash.bool.should = [{
-      //     term: "*"
-      //   }]
+      if(query && query.length > 0){
+        queryHash.bool.should = mainAllFieldsArray
+      } else {
+        queryHash.bool.should = [{
+          // this does not ever happen ever
+          term: "*"
+        }]
+          console.log( 'SEE?????' )
 
-        queryHash.bool.minimum_should_match = 1
-      // }
+        // queryHash.bool.minimum_should_match = 1
+      }
+      // console.log( 'query is', queryHash )
 
       return queryHash
     }
   })
 
   function handleBabyQuery(value, refine){
-    setBabyQuery(value)
-    refine(babyQuery === "" ? "*:*" : babyQuery)
+    refine(value)
+    // refine(value === "initial" ? "*:*" : value)
   }
 
   function CustomSearchBox(props) {
     const { status } = useInstantSearch()
     const { _query, refine } = useSearchBox()
-    const inputRef = useRef(null)
+    // const inputRef = useRef(null)
 
     const isSearchStalled = status === "stalled";
     return (
@@ -169,12 +185,15 @@ export default function BabySearch(props){
           <h4>Search for</h4>
           <div hidden={!isSearchStalled}>Searching…</div>
           <input
-            autoFocus={ true }
+            autoFocus={true}
             className="sidebar-search smarbot"
-            ref={ inputRef }
-            onKeyUp={(event) => {
+            // ref={ inputRef }
+            onChange={(event) => {
+              // console.log( 'I DID IT NOW' )
+              setBabyQuery(event.currentTarget.value)
               props.handleBabyQuery(event.currentTarget.value, refine)
             }}
+
           />
         </div>
       </>
@@ -182,22 +201,21 @@ export default function BabySearch(props){
   }
 
 
-// <CustomSearchBox handleBabyQuery={ handleBabyQuery } />
 
-  useEffect(() => {
-
-  })
+        // <CustomSearchBox handleBabyQuery={ handleBabyQuery } />
 
   return (
     <div className="baby-search">
 
       <InstantSearch
-        indexName={props.indexName}
+        indexName={props.esIndex}
         searchClient={ searchClient }
-        routing={true}
+        // routing={true}
       >
-        <SearchBox />
-        { babyQuery }
+
+        <SearchBox
+        />
+
         <Hits hitComponent={ BabyResult } />
         <div className="pagination-bar marbot">
           <Pagination />

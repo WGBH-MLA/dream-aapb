@@ -1,42 +1,30 @@
 import { useLoaderData } from 'react-router'
-// import shuffle from '~/utils/shuffle'
+import shuffle from '../utils/shuffle'
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
-import recordToTVProgram from "../utils/recordToTVProgram"
+import { collectionToTVProgram } from "../utils/toTVProgram"
+import { getCollections, getFeatured } from "../utils/fetch"
 
 export const loader = async () => {
-  let records = await randomRecords(10)
+  let collections = await getCollections()
+  let featured = await getFeatured()
   let programs = []
-  if(records){
-    programs = records.map((record) => recordToTVProgram(record) )
+  let proggys = []
+  console.log( 'lecto', collections )
+  if(collections){
+    programs = collections.map((collection) => collectionToTVProgram(collection) )
+  }
+  if(featured){
+    featured = featured.map((collection) => collectionToTVProgram(collection) )
   }
 
-  let data = {
-    featured_collections: [
-      {
-        title: "first things first",
-        // subtitle: "giuseppe open toe",
-        thumbnailURL: randomThumb(),
-        url: "google.com"
-      },
-      {
-        title: "go back for seconds",
-        // subtitle: "round too",
-        thumbnailURL: randomThumb(),
-        url: "google.com"
-      },
-      {
-        title: "third wheels motor club",
-        // subtitle: "vroom vroom",
-        thumbnailURL: randomThumb(),
-        url: "google.com"
-      },
-    ],
-
+  
+  let data
+  data = {
+    featured_collections: featured,
     radio_and_tv: programs
-
   }
 
   return data
@@ -48,8 +36,8 @@ export default function Collections() {
     <div className='body-container'>
       <SummaryBox title="Collections" text="The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below." />
       
-      <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-      <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+      <TVMenu title="Featured Collections" programs={ data.featured_collections } />
+      <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } />
     </div>
   )
 }

@@ -15,12 +15,11 @@ const drawerItems = {
         external: false,
                 
       },
-      {
-        label: "Educator Resources",
-        url: "/resources",
-        external: false,
-                
-      },
+      // {
+      //   label: "Educator Resources",
+      //   url: "/resources",
+      //   external: false,
+      // },
     ],
   participate: [
       {
@@ -75,7 +74,7 @@ export default function Header(props) {
       <DrawerMenu label="Explore" items={ drawerItems.explore } />
       <DrawerMenu label="Participate" items={ drawerItems.participate } />
       <DrawerMenu label="About" items={ drawerItems.about } />
-      <LayoutSearch indexName={ props.indexName } />
+      <LayoutSearch esIndex={ props.esIndex } />
     </div>
   )
 }

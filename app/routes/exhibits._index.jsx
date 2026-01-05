@@ -1,20 +1,23 @@
 import { useLoaderData } from 'react-router'
-// import shuffle from '~/utils/shuffle'
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
-import recordToTVProgram from "../utils/recordToTVProgram"
+import { exhibitToTVProgram } from "../utils/toTVProgram"
+import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
-  let records = await randomRecords(10)
+  let exhibits
+  exhibits = await getExhibits()
   let programs = []
-  if(records){
-    programs = records.map((record) => recordToTVProgram(record) )
+  console.log( 'Eckuso', exhibits )
+  if(exhibits){
+    programs = exhibits.map((exhibit) => exhibitToTVProgram(exhibit) )
   }
 
-  let data = {
-    exhibits: programs
+  let data
+  data = {
+    exhibits: programs,
   }
 
   return data

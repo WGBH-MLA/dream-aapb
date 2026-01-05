@@ -1,4 +1,4 @@
-curl -v -X PUT "localhost:9200/aapb-sweetie/" \
+curl -v -X PUT "localhost:9200/aapb-cold-steel/" \
 -H "Authorization: ApiKey "R1hxQWQ1a0J5LU1iaVpUWDhYTVg6WmVIUmlPS3lTVHVUb291bm5iSDNPdw=="" \
 -H "Content-Type: application/json" \
 -d'{

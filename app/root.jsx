@@ -14,8 +14,22 @@ export const meta = () => {
 }
 
 export const loader = () => {
-  return {indexName: process.env.ES_INDEX}
+  return {
+    // indexName: process.env.ES_INDEX,
+    
+    wagtailHost: process.env.WAGTAIL_HOST,
+    esIndex: process.env.ES_INDEX,
+    esURL: process.env.ES_URL,
+    apiKey: process.env.ES_API_KEY,
+  }
 }
+
+
+        // <script
+        //   dangerouslySetInnerHTML={{
+        //     __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+        //   }}
+        // />
 
 // standard
 import "@fontsource/inter/400.css";
@@ -38,7 +52,7 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header indexName={ data.indexName } />
+        <Header esIndex={ data.esIndex } />
         <Outlet />
         <Footer />
 

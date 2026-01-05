@@ -7,7 +7,7 @@ import Mappy from "../components/Mappy"
 
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
-import recordToTVProgram from "../utils/recordToTVProgram"
+import { recordToTVProgram } from "../utils/toTVProgram"
 
 export const loader = async () => {
 
@@ -44,7 +44,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    indexName: process.env.ES_INDEX
+    esIndex: process.env.ES_INDEX
   }
 
 
@@ -59,7 +59,7 @@ export default function Index() {
         <h2>
           Discover historic programs of publicly funded radio and television across America. Watch and listen.
         </h2>
-        <LayoutSearch indexName={ data.indexName } />
+        <LayoutSearch esIndex={ data.esIndex } />
       </div>
 
       <div className="feature-video-container marbot">
