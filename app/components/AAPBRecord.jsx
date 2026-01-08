@@ -108,7 +108,7 @@ export default function AAPBRecord(props) {
   if (props.showTitle) {
     titleBar = (
       <div className='shade-bar'>
-        <a href={`/search/${props.guid}`}>
+        <a href={`/catalog/${props.guid}`}>
           { title }
         </a>
       </div>

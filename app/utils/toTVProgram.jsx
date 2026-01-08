@@ -13,7 +13,7 @@ export function recordToTVProgram(record){
     subtitle = record.pbcoreDescriptionDocument.pbcoreDescription[0].text.slice(0,128)
   }
 
-  url = `/search/${record.guid}`
+  url = `/catalog/${record.guid}`
 
   return {
     key: record.guid,

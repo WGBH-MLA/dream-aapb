@@ -13,7 +13,7 @@ export const loader = async ({
   let server_url = process.env.WAGTAIL_HOST
   let exhibit
   exhibit = await getPageBySlug('aapb_exhibits.AAPBExhibit', params.exhibitSlug)
-  // console.log( 'exy', exhibit )
+  console.log( 'exy', exhibit )
   // find aapb_records blocks
   let aapb_record_blocks = exhibit.body.filter((block) => block.type == "aapb_record")
   if(aapb_record_blocks.length > 0){
@@ -46,6 +46,11 @@ export const loader = async ({
     })
   }
 
+  exhibit.sections = [
+    {url: "google.com", text: "google"},
+    {url: "doogle.com", text: "doogle"},
+    {url: "shmoogle.com", text: "shmoogle"},
+  ]
 
   return { exhibit, server_url }
 }

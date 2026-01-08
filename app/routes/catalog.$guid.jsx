@@ -7,7 +7,7 @@ import { niceTitle } from '../utils/niceTitle'
 
 export const loader = async ({params, request}) => {
   let data = await getRecord(params.guid)
-
+  console.log( 'umm wahttttt' )
   if(data){
     return data
   } else {

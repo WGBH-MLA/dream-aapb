@@ -65,17 +65,4 @@ export async function getPageBySlug(type, slug) {
 
   var fetchResp = await fetch(`${process.env.WAGTAIL_HOST}/api/v2/pages/${body.items[0].id}`)
   return await fetchResp.json()
-
-  // // return ex or coll from json
-  // let lecty
-  // if(type === "aapb_collections.AAPBCollection"){
-  //   lecty = collections.items.find((collection) => collection.meta.slug === slug)
-  // } else {
-  //   lecty = collections.items.find((collection) => collection.meta.slug === slug)
-  // }
-  // if(lecty){
-  //   return lecty
-  // } else {
-  //   throw new Response("page sucks", {status: 404, statusText: "who cares"})
-  // }
 }

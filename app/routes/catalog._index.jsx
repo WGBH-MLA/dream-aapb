@@ -59,8 +59,6 @@ function CustomSearchBox(props) {
           }}
         />
 
-        <button onClick={ () => refine("lobster") } >boing</button>
-
         <div hidden={!isSearchStalled}>Searching…</div>
         <h4>Contains all of these words</h4>
         <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />

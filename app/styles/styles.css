@@ -37,7 +37,7 @@ body {
 }
 
 /*universal*/
-div, h1, h2, h3, h4, h5, a{
+div, h1, h2, h3, h4, h5, a, ul{
   color: #000;
   margin: 0;
   padding: 0;
@@ -57,10 +57,11 @@ a:visited {
   color: #3C439B;
 }
 
-
 a:hover {
+  color: #2B2F6E;
   font-weight: bold;
 }
+
 /*generic positioning*/
 
 .marleft {
@@ -78,12 +79,17 @@ a:hover {
 .marbot {
   margin-bottom: 2em;
 }
+
 .smartop {
   margin-top: 1em;
 }
 
 .smarbot {
   margin-bottom: 1em;
+}
+
+.smarleft {
+  margin-left: 1em;
 }
 
 .smarright {
@@ -140,6 +146,65 @@ div.skinny-body-container {
   width: 75%;
   margin-left: 12.5%;
   text-align: left;
+}
+
+div.sidey-body-container {
+  font-size: 1.2em;
+  text-align: left;
+}
+
+div.sidey-container {
+  margin-left: 12.5%;
+  margin-right: 12.5%;
+  flex-wrap: nowrap;
+  display: inline-flex;
+}
+
+div.sidey-sidebar-container {
+  width: 25%;
+}
+
+div.sidey-sidebar {
+  position: fixed;
+  margin-right: 0;
+  text-align: left;
+  width: 15%;
+  min-width: 15%;
+}
+
+
+div.sidey-spacer {
+  display: inline-block;
+  margin: 0;
+  min-height: 1px;
+  width: 15%;
+  min-width: 15%;
+}
+
+div.sidey-sidebar h2 {
+  font-size: 1em;
+}
+
+div.sidey-body {
+  font-size: 1.2em;
+  width: 100%;
+  text-align: left;
+}
+
+div.sidey-sidebar ul li {
+  font-size: 1em;
+  list-style: none;
+  margin-right: 1em;
+  word-wrap: break-word;
+}
+
+div.sidey-sidebar ul li a, div.sidey-sidebar ul li a:visited {
+  color: #000;
+}
+
+div.sidey-sidebar h2:hover, div.sidey-sidebar ul li a:hover {
+  font-weight: bold;
+  color: #2B2F6E;
 }
 
 div.header-bar {
@@ -425,6 +490,14 @@ div.homepage-search div.layout-search input {
 div.homepage-search div.layout-search button {
   height: 3.6em;
   width: 6em;
+}
+
+div.layout-search.wide input {
+  width: 85%;
+}
+
+div.layout-search.wide button {
+  width: 10%;
 }
 
 div.feature-video-container iframe{
@@ -1319,7 +1392,7 @@ div.nice-item:hover {
   outline: 2px solid rgba(53, 59, 144);
 }
 
-div.skinny-body-container div.nice-item h2 {
+div.nice-item h2 {
   color: #fff;
   min-height: 2em;
   font-size: 1em;
@@ -1360,25 +1433,67 @@ div.skinny-body-container h2 {
   font-size: 1.2em;
 }
 
-div.page-container div.skinny-body-container.exhibit-title {
+div.page-container div.sidey-body-container.exhibit-title {
   width: 100%;
   align-items: center;
   vertical-align: middle;
 }
 
-div.page-container div.skinny-body-container.exhibit-title {
+div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-container {
+  display: inline-flex;
+  overflow-x: hidden;
 }
 
-div.page-container div.skinny-body-container.exhibit-title h2 {
-  background-color: #E4C9FF;
+div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-container h2 {
+/*  background-color: #E4C9FF;*/
 /*  background-color: #CD9CFF;*/
 /*  background-color: #e6cce9;*/
-/*  #FFC3E6*/
   border-radius: 8px 8px 0px 0px;
-  width: 67.75%;
   padding: 2em;
+  width: 20%;
 }
 
+div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-container img {
+  margin-left: 4em;
+  margin-right: 4em;
+  
+  margin-left: auto;
+  margin-right: auto;  
+
+  padding-top: 2em;
+  padding-bottom: 2em;
+  width: 40%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+div.exhibit-title div.exhibit-top-container {
+  background-color: #f9f9f9;
+}
+
+div.exhibit-title div.exhibit-top-slice-container {
+  border-radius: 8px 8px 0px 0px;
+}
+
+div.exhibit-title div.exhibit-top-back-link-container {
+  border-radius: 0px 0px 8px 8px;
+}
+
+div.exhibit-title div.exhibit-top-back-link-container, div.exhibit-title div.exhibit-top-slice-container {
+  padding: 0.5em;
+  background-color: #F2D7F5;
+}
+
+a.exhibit-top-back-link {
+  text-decoration: none;
+  margin-left: 75%;
+  margin-right: auto;
+  border-radius: 8px;
+  width: 24%;
+  padding: 1em;
+  display: block;
+  font-size: 0.65em;
+}
 
 
 div.page-container div.skinny-body-container.collection-title {
@@ -1410,7 +1525,7 @@ div.page-container h2 a, div.page-container h2 a:visited {
   text-decoration: none;
 }
 
-div.page-container h2 a:hover {
+div.page-container h2 a:hover, div.page-container a:hover {
   color: rgba(37, 39, 78);
 }
 
@@ -1438,25 +1553,6 @@ a.top-back-link {
   padding: 1em;
   display: block;
   font-size: 0.75em;
-}
-
-div.exhibit-title div {
-  border-radius: 0px 0px 8px 8px;
-  width: 73.35%;
-  padding: 0.5em;
-  background-color: #f9f9f9;
-}
-
-a.exhibit-top-back-link {
-  background-color: #f9f9f9;
-  text-decoration: none;
-  margin-left: 75%;
-  margin-right: auto;
-  border-radius: 8px;
-  width: 16%;
-  padding: 1em;
-  display: block;
-  font-size: 0.65em;
 }
 
 a.back-link:hover, a.top-back-link:hover {
@@ -1848,5 +1944,6 @@ div.author div span {
     width: 9.3%;
     max-width: 9.3%;
   }
-
 }
+
+

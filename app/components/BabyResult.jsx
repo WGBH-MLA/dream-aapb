@@ -46,7 +46,7 @@ export default function SearchResult({hit}){
         { "" || JSON.stringify(hit) }
       </pre>
 
-      <a href={`/search/${guid}`} >
+      <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } babyTitle={ hit.title } />
         </div>

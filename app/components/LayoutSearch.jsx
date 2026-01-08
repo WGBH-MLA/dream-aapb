@@ -4,7 +4,11 @@ import { ExternalLink, Search, X } from 'lucide-react'
 export default function LayoutSearch(props){
   const [search, setSearch] = useState("")
   function goToSearch(){
-    window.location.href = `/search?${ props.esIndex }[query]=${search}`
+    if(props.searchFilter){
+      window.location.href = `/catalog?${ props.esIndex }[query]=${search}&${props.searchFilter}`
+    } else {
+      window.location.href = `/catalog?${ props.esIndex }[query]=${search}`
+    }
   }
 
   function handleEnter(e){
@@ -13,10 +17,21 @@ export default function LayoutSearch(props){
     }
   }
 
+  let classes = "layout-search"
+  if(props.wide){
+    classes += " wide"
+  }
+
+  let placeholder
+  if(props.placeholder){
+    placeholder = props.placeholder
+  } else {
+    placeholder = "Search the Archive"
+  }
  
   return (
-    <div className="layout-search">
-      <input onKeyUp={ (e) => handleEnter(e) } onChange={ (e) => setSearch(e.target.value) } type="text" name="query" placeholder="Search the Archive" />
+    <div className={ classes }>
+      <input onKeyUp={ (e) => handleEnter(e) } onChange={ (e) => setSearch(e.target.value) } type="text" name="query" placeholder={ placeholder } />
       <button onClick={ goToSearch }><Search size={16} /></button>
     </div>
   )

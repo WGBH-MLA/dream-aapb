@@ -42,14 +42,14 @@ export default function ListResult({hit}){
 
   return (
     <div className="search-result list">
-      <a href={`/search/${guid}`} >
+      <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
         </div>
       </a>
 
       <div className="hit-info-container">
-        <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+        <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
 
         <div className="hit-details">
           <ScoreLight score={ hit._score } />

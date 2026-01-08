@@ -1,6 +1,8 @@
 export async function getRecord(guid, esURL, esIndex, esAPIKey){
   var query = { "query": {"match_phrase": { "guid": guid } } }
   var data = await executeQuery(query, esURL, esIndex, esAPIKey)
+
+  console.log( 'help me!!!', data )
   if(data && data.hits && data.hits.hits && data.hits.hits[0] && data.hits.hits[0]._source){
     return data.hits.hits[0]._source
   }  

@@ -2,7 +2,8 @@ import { decode } from "html-entities"
 import { renderBlocks, dangerousDiv } from "./contentHelpers"
 import NiceItem from "../components/NiceItem"
 import thumbnailURL from "../utils/thumbnailURL"
-import BabySearch from "../components/BabySearch"
+// import BabySearch from "../components/BabySearch"
+import LayoutSearch from "../components/LayoutSearch"
 
 //<BabySearch indexName={ esConfig.esIndex } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
 
@@ -12,7 +13,7 @@ export function renderCollection(collection, esConfig) {
   let specialCollectionTag = collection.tag || "peabody"
   
   let niceItems
-  niceItems = collection.featured_items.map((item) => <NiceItem title={item.value.title} guid={item.value.guids[0]} mediaType={ collection.featuredRecords[item.value.guids[0]]?.media_type } itemURL={ `/search/${item.value.guids[0]}` } />)
+  niceItems = collection.featured_items.map((item) => <NiceItem title={item.value.title} guid={item.value.guids[0]} mediaType={ collection.featuredRecords[item.value.guids[0]]?.media_type } itemURL={ `/catalog/${item.value.guids[0]}` } />)
   let blocks = renderBlocks(collection.content)
   return (
     <div>
@@ -27,6 +28,10 @@ export function renderCollection(collection, esConfig) {
             <h2>{ dangerousDiv(collection.title, false) }</h2>
             <a className="top-back-link martop" href="/collections">&lt; Back To Collections</a>
           </div>
+        </div>
+
+        <div className="skinny-body-container marbot">
+          <LayoutSearch wide={ true } placeholder={ "Search within the collection..." } />
         </div>
   
         <div className="skinny-body-container">
@@ -46,7 +51,7 @@ export function renderCollection(collection, esConfig) {
           <h2 className="smarbot">Featured Items</h2>
           <div className="page-body marbot">
             <div className="items-search smarbot">
-              
+
             </div>
             
             <div className="nice-items-container marbot">

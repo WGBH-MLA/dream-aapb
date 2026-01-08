@@ -46,7 +46,7 @@ export default function SearchResult({hit}){
         { "" || JSON.stringify(hit) }
       </pre>
 
-      <a href={`/search/${guid}`} >
+      <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
         </div>
@@ -54,7 +54,7 @@ export default function SearchResult({hit}){
 
       <div className="hit-info-container">
         <div className="smarbot martop">
-          <h3 className="hit-title martop marleft"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+          <h3 className="hit-title martop marleft"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
         </div>
 
         <div className="smarbot marleft">
