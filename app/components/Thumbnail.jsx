@@ -51,11 +51,9 @@ export default function Thumbnail(props) {
             if( checkVisible(ele) ){
               fetch(url, {method: "HEAD"}).then((resp) => {
                 setExists(resp.ok)
-                console.log( 'wow wat a fool', props.guid )
                 setCompletedCheck(CHECKED)
               }).catch((err) => {
                 setExists(null)
-                console.log( 'it not there', props.guid )
                 setCompletedCheck(CHECKED)
               })
             }
@@ -78,10 +76,8 @@ export default function Thumbnail(props) {
                 })
               }
 
-
             setCompletedCheck(WAITING)
           }
-
          
         })
       }

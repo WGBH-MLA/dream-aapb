@@ -1199,6 +1199,7 @@ hr.top-bar-divider {
 }
 
 div.pagination-bar {
+  height: 3.25em;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
@@ -1323,7 +1324,7 @@ div.sort-container.per-page svg {
 
 div.current-refinements-container {
   display: inline-flex;
-  width: 65%;
+  width: 63%;
 }
 
 div.current-refinements-container.closed {
@@ -2025,7 +2026,7 @@ div.author div span {
 
 
   div.current-refinements-container {
-    width: 75%;
+    width: 70%;
   }
 
 

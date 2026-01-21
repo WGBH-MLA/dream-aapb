@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useLoaderData, useSearchParams, useNavigate } from 'react-router'
+import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
@@ -41,54 +41,14 @@ export const loader = async ({params, request}) => {
 }
 
 function CustomSearchArea(props){
-  const navigateHook = useNavigate()
 
-  const [justArrived, setJustArrived] = useState(true)
-
-  // include transcript in search or not
-  const [searchSet, setSearchSet] = useState("both")
-  
   const { _query, refine } = useSearchBox()
 
-  let view = props.searchParams.get("view") || "standard"
-  const [viewSelect, setViewSelect] = useState(view)
-
-  // config viewed refinements
-  const [showingRefinements, setShowingRefinements] = useState(false)
-  let currentRefinementsClasses, showRefinementButtonText
-  if(!showingRefinements){
-    currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All Refinements"
-  } else {
-    currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
-  }
-
-  let searchResultComponent
-  if(viewSelect == "standard"){
-    searchResultComponent = SearchResult
-  } else if(viewSelect == "list"){
-    searchResultComponent = ListResult
-  } else if(viewSelect == "gallery"){
-    searchResultComponent = GalleryResult
-  }
-
-
-// none of this garbage works
+  
   useEffect(() => {
   //   let urlSearch = props.searchParams.get(`${props.esIndex}[query]`)
   //   // if(justArrived && urlSearch && urlSearch.length > 0 || urlSearch != props.customQuery.query){
   //     console.log( 'well, ive only just arrived!! but ill try to apply your params!!', urlSearch, props.customQuery.query )
-
-    props.setCustomQuery({
-      query: props.searchParams.get(`${props.esIndex}[query]`) || "",
-      all: props.searchParams.get("all") || "",
-      title: props.searchParams.get("title") || "",
-      none: props.searchParams.get("none") || "",
-      startDate: props.searchParams.get("startDate") || "",
-      endDate: props.searchParams.get("endDate") || "",
-    })
-
 
 
 
@@ -198,6 +158,30 @@ function CustomSearchArea(props){
   ////
 
 
+  let currentRefinementsClasses, showRefinementButtonText
+  if(!props.showingRefinements){
+    currentRefinementsClasses = "current-refinements-container closed"
+    showRefinementButtonText = "Show All Refinements"
+  } else {
+    currentRefinementsClasses = "current-refinements-container"
+    showRefinementButtonText = "Show Less"
+  }
+
+
+  let searchResultComponent
+  if(props.viewSelect == "standard"){
+    searchResultComponent = SearchResult
+  } else if(props.viewSelect == "list"){
+    searchResultComponent = ListResult
+  } else if(props.viewSelect == "gallery"){
+    searchResultComponent = GalleryResult
+  }
+
+  let pagination
+  if(false){
+    pagination = <Pagination />
+  }
+
   let searchbox
   searchbox = <CustomSearchBox
               refine={ refine }
@@ -236,9 +220,9 @@ function CustomSearchArea(props){
           </div>
 
           <div className="marleft marright">
-            <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
-            <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
-            <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            <ViewSelect selected={ props.viewSelect == "standard" } viewType="standard" viewSelect={ () => props.setViewSelect("standard") } />
+            <ViewSelect selected={ props.viewSelect == "gallery" } viewType="gallery" viewSelect={ () => props.setViewSelect("gallery") } />
+            <ViewSelect selected={ props.viewSelect == "list" } viewType="list" viewSelect={ () => props.setViewSelect("list") } />
           </div>
         </div>
         
@@ -258,7 +242,7 @@ function CustomSearchArea(props){
         <div className="clear-refinements-container">
           <ClearRefinements />
           <div className="more-refinements">
-            <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
+            <button onClick={ () => { props.setShowingRefinements(!props.showingRefinements) } }>{showRefinementButtonText}</button>
           </div>
         </div>
       </div>
@@ -276,9 +260,9 @@ function CustomSearchArea(props){
         <SearchAccordion title="Options" content ={
           <>
             <div>Include</div>
-            <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
-            <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
-            <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            <div><label>All Sources<input onChange={ () => props.setSearchSet("both") } type="radio" value="both" checked={ props.searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+            <div><label>Records<input onChange={ () => props.setSearchSet("records") } type="radio" value="records" checked={ props.searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+            <div><label>Transcripts<input onChange={ () => props.setSearchSet("transcripts") } type="radio" value="transcripts" checked={ props.searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
           </>
         }/>
 
@@ -391,14 +375,14 @@ function CustomSearchArea(props){
       <div className="page-maincolumn bmarright">
 
         <div className="pagination-bar">
-          <Pagination />
+          { pagination }
         </div>
 
         <hr/>
 
         <Hits hitComponent={ searchResultComponent } />
         <div className="pagination-bar marbot">
-          <Pagination />
+          { pagination }
         </div>
       </div>
     </>
@@ -454,6 +438,16 @@ export default function Catalog() {
     startDate: searchParams.get("startDate") || "",
     endDate: searchParams.get("endDate") || "",
   })
+
+
+// include transcript in search or not
+  const [searchSet, setSearchSet] = useState("both")
+
+  let view = searchParams.get("view") || "standard"
+  const [viewSelect, setViewSelect] = useState(view)
+
+  // config viewed refinements
+  const [showingRefinements, setShowingRefinements] = useState(false)
 
   function handleCustomQuery(type, value, refine){
     // ohh la la
@@ -818,7 +812,6 @@ export default function Catalog() {
     }
   })
 
-  // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
       let emptyQuery = query === "" || query.match(/^\s+$/)
@@ -957,12 +950,6 @@ export default function Catalog() {
     }
   })
 
-  // url params should always take over box state so linked searches work correclty
-  // let queryFromURL = searchParams.get(`${data.esIndex}[query]`)
-  // if(queryFromURL && (!customQuery.query || customQuery.query != queryFromURL)){
-  //   setCustomQuery({...customQuery, query: queryFromURL})
-  // }
-  
 
   return (
     <div className="body-container">
@@ -979,6 +966,14 @@ export default function Catalog() {
           customQuery={ customQuery }
           setCustomQuery={ setCustomQuery }
           handleCustomQuery={ handleCustomQuery }
+
+          // pass em in
+          viewSelect={ viewSelect }
+          setViewSelect={ setViewSelect }
+          showingRefinements={ showingRefinements }
+          setShowingRefinements={ setShowingRefinements }
+          searchSet={ searchSet }
+          setSearchSet={ setSearchSet }
         />
 
       </InstantSearch>
