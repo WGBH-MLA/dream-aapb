@@ -74,7 +74,6 @@ const drawerItems = {
 export default function Header(props) {
   let navigateHook = useNavigate()
   let [searchParams, setSearchParams] = useSearchParams()
-
   const [search, setSearch] = useState("")
   const handleLayoutSearch = (val) => {
     setSearch(val)
@@ -93,8 +92,6 @@ export default function Header(props) {
         navigateHook={ navigateHook }
         esIndex={ props.esIndex }
         handleChange={ handleLayoutSearch }
-
-        queryFromURL={ searchParams.get(`${props.esIndex}[query]`) }
         searchQuery={ search }
       />
     </div>

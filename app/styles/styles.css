@@ -1216,6 +1216,7 @@ div.pagination-bar hr {
 }
 
 div.top-refinements-bar {
+  width: 91%;
   min-height: 4em;
   line-height: 2.2em;
   font-size: 0.8em;

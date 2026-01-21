@@ -2,14 +2,13 @@ import { useEffect } from "react"
 import { ExternalLink, Search, X } from "lucide-react"
 
 export default function LayoutSearch(props){
-  let searchy
+  let searchy = props.searchQuery
 
-  useEffect(() => {
-    if(props.queryFromURL && props.queryFromURL.length > 0 && props.queryFromURL != searchy){
-      // console.log( 'i LOVE to replace it', props.searchQuery, "with",  props.queryFromURL)
-      searchy = props.queryFromURL
-    }
-  })
+  // useEffect(() => {
+  //   if(!props.searchQuery && props.queryFromURL && props.queryFromURL.length > 0 && props.queryFromURL != searchy){
+  //     searchy = props.queryFromURL
+  //   }
+  // })
 
   function goToSearch(){
     let destination
@@ -18,15 +17,15 @@ export default function LayoutSearch(props){
     } else {
       destination = `/catalog?${ props.esIndex }[query]=${searchy}`
     }
-    if(!window.location.pathname.includes("/catalog")){
+    // if(!window.location.pathname.includes("/catalog")){
       // regular navigate
       props.navigateHook(destination)
-    } else {
+    // } else {
       // just force refresh since we're on search page
-      window.location.href = destination
-      console.log( 'DOESNT WORK' )
+      // window.location.href = destination
+      // console.log( 'DOESNT WORK' )
       // window.location.reload()
-    }
+    // }
   }
 
   function handleEnter(e){
@@ -49,7 +48,14 @@ export default function LayoutSearch(props){
 
   return (
     <div className={ classes }>
-      <input className="layout-input" onKeyUp={ handleEnter } defaultValue={ searchy } onChange={ (e) => props.handleChange(e.target.value) } type="text" name="query" placeholder={ placeholder } />
+      <input
+        className="layout-input"
+        type="text"
+        name="query"
+        placeholder={ placeholder }
+        onKeyUp={ handleEnter }
+        defaultValue={ searchy }
+        onChange={ (e) => props.handleChange(e.target.value) } />
       <button onClick={ goToSearch }><Search size={16} /></button>
     </div>
   )
