@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react'
 import thumbnailURL from "../utils/thumbnailURL"
 import { getRecord } from "../utils/getRecord"
 
+const UNCHECKED = 0
+const WAITING = 1
+const CHECKED = 2
+
 export default function Thumbnail(props) {
   var img, bottomBar
   if(props.url){
@@ -9,7 +13,7 @@ export default function Thumbnail(props) {
     img = <img src={ props.url } />
   } else {
 
-    const [completedCheck, setCompletedCheck] = useState(false)
+    const [completedCheck, setCompletedCheck] = useState(UNCHECKED)
     const [exists, setExists] = useState(false)
     var url = thumbnailURL(props.guid)
 
@@ -36,24 +40,51 @@ export default function Thumbnail(props) {
     }
 
     useEffect(() => {
-      window.addEventListener('scroll', function () {
-        
-        // check if thumbnail exists, when appropriate
-        let ele = document.getElementById(props.guid)
-        if(!completedCheck){
 
-          if( checkVisible(ele) ){
+      // dont run in ssr
+      if (typeof window !== "undefined") {
+        // TODO refactor to method, no time
+        if(!exists && completedCheck === UNCHECKED){
+
+          let ele = document.getElementById(props.guid)
+
+            if( checkVisible(ele) ){
               fetch(url, {method: "HEAD"}).then((resp) => {
                 setExists(resp.ok)
+                console.log( 'wow wat a fool', props.guid )
+                setCompletedCheck(CHECKED)
               }).catch((err) => {
                 setExists(null)
+                console.log( 'it not there', props.guid )
+                setCompletedCheck(CHECKED)
               })
-
-            // ultimately only check once, when the img elemetn is visible
-            setCompletedCheck(true)
-          }
+            }
+          setCompletedCheck(WAITING)
         }
-      })
+       
+        window.addEventListener('scrollend', function () {
+
+          if(!exists && completedCheck === UNCHECKED){
+
+            let ele = document.getElementById(props.guid)
+
+              if( checkVisible(ele) ){
+                fetch(url, {method: "HEAD"}).then((resp) => {
+                  setExists(resp.ok)
+                  setCompletedCheck(CHECKED)
+                }).catch((err) => {
+                  setExists(null)
+                  setCompletedCheck(CHECKED)
+                })
+              }
+
+
+            setCompletedCheck(WAITING)
+          }
+
+         
+        })
+      }
     }, [])
   }
 
@@ -76,7 +107,7 @@ function checkVisible(ele) {
     // element was missing somewhere during render cycle oopsie!!
     return false
   }
-  
+
   var rect = ele.getBoundingClientRect()
   var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0)

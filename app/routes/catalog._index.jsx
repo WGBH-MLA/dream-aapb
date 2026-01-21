@@ -78,26 +78,23 @@ function CustomSearchArea(props){
   useEffect(() => {
   //   let urlSearch = props.searchParams.get(`${props.esIndex}[query]`)
   //   // if(justArrived && urlSearch && urlSearch.length > 0 || urlSearch != props.customQuery.query){
-    if(justArrived){
   //     console.log( 'well, ive only just arrived!! but ill try to apply your params!!', urlSearch, props.customQuery.query )
 
-      props.setCustomQuery({
-        query: props.searchParams.get(`${props.esIndex}[query]`) || "",
-        all: props.searchParams.get("all") || "",
-        title: props.searchParams.get("title") || "",
-        none: props.searchParams.get("none") || "",
-        startDate: props.searchParams.get("startDate") || "",
-        endDate: props.searchParams.get("endDate") || "",
-      })
+    props.setCustomQuery({
+      query: props.searchParams.get(`${props.esIndex}[query]`) || "",
+      all: props.searchParams.get("all") || "",
+      title: props.searchParams.get("title") || "",
+      none: props.searchParams.get("none") || "",
+      startDate: props.searchParams.get("startDate") || "",
+      endDate: props.searchParams.get("endDate") || "",
+    })
 
-      setJustArrived(false)
 
 
 
   //     // this doesn't seem to filter down, does search correctly but wont sync up with the CustomSearchBox
   //     // set query to urlsearch and refine
   //     // props.handleCustomQuery("query", urlSearch, refine)
-    }
 
   //   // bad!
   //   // let layoutInputs = document.querySelectorAll("input.layout-input")
@@ -105,7 +102,7 @@ function CustomSearchArea(props){
   //   //   console.log( 'setto ni!!', input, props.customQuery.query )
   //   //   input.value = props.customQuery.query
   //   // }
-  })
+  }, [])
 
 
 
