@@ -1,8 +1,16 @@
+import { useState } from "react"
+import { useNavigate, useSearchParams } from "react-router"
 import DrawerMenu from "./DrawerMenu"
 import LayoutSearch from "./LayoutSearch"
 
 const drawerItems = {
   explore: [
+      {
+        label: "Search",
+        url: "/catalog",
+        external: false,
+                
+      },
       {
         label: "Collections",
         url: "/collections",
@@ -30,7 +38,7 @@ const drawerItems = {
       },
       {
         label: "Fix Transcripts",
-        url: "/fixitplus",
+        url: "https://fixitplus.americanarchive.org",
         external: false,
                 
       },
@@ -50,7 +58,7 @@ const drawerItems = {
       },
       {
         label: "Visit",
-        url: "/visit",
+        url: "/on-location",
         external: false,
                 
       },
@@ -61,10 +69,17 @@ const drawerItems = {
                 
       },
     ]
-
 }
 
 export default function Header(props) {
+  let navigateHook = useNavigate()
+  let [searchParams, setSearchParams] = useSearchParams()
+
+  const [search, setSearch] = useState("")
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
+  }
+
   return (
     <div className="header-bar marbot">
       <a href="/">
@@ -74,7 +89,14 @@ export default function Header(props) {
       <DrawerMenu label="Explore" items={ drawerItems.explore } />
       <DrawerMenu label="Participate" items={ drawerItems.participate } />
       <DrawerMenu label="About" items={ drawerItems.about } />
-      <LayoutSearch esIndex={ props.esIndex } />
+      <LayoutSearch
+        navigateHook={ navigateHook }
+        esIndex={ props.esIndex }
+        handleChange={ handleLayoutSearch }
+
+        queryFromURL={ searchParams.get(`${props.esIndex}[query]`) }
+        searchQuery={ search }
+      />
     </div>
   )
 }

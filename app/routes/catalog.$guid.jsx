@@ -6,8 +6,10 @@ import { getRecord } from '../utils/getRecord'
 import { niceTitle } from '../utils/niceTitle'
 
 export const loader = async ({params, request}) => {
-  let data = await getRecord(params.guid)
-  console.log( 'umm wahttttt' )
+  let esURL = process.env.ES_URL
+  let esIndex = process.env.ES_INDEX
+  let esAPIKey = process.env.ES_API_KEY
+  let data = await getRecord(params.guid, esURL, esIndex, esAPIKey)
   if(data){
     return data
   } else {
@@ -61,7 +63,6 @@ export default function ShowRecord() {
       })
 
       creators = creators.filter((cre) => cre != undefined)
-      creators = creators.join("\n")
     }
 
     if(creators){
@@ -117,35 +118,28 @@ export default function ShowRecord() {
 
   return (
     <>
-      <div className="skinny-body-container">
-        <HeaderBar title={ title} />
-
-        <pre style={{ fontSize: "10px", display: "none" }}>
-          {JSON.stringify(data, null, 20)}
-        </pre>
-
-        <div className="body-container">
+      <div className="page-container">
+        <div className="skinny-body-container bmarbot">
+          <HeaderBar title={ title} />
+  
           <div className="show-media">
             <VideoPlayer guid={ data.guid } />
           </div>
-        </div>
 
-        <div className="show-metadata-container">
-          <div className="show-metadata-header">Info</div>
-          { mediaType }
-          { description }
-
-          { orgs }
-
-          { identifiers }
-
-          { people }
-
-          { coverages }
-
-          { dates }
+            
+          <div className="show-metadata-container">
+            <div className="show-metadata-header">Info</div>
+            { mediaType }
+            { description }
+            { orgs }
+            { identifiers }
+            { people }
+            { coverages }
+            { dates }
+          </div>
         </div>
       </div>
+
     </>
   )
 }

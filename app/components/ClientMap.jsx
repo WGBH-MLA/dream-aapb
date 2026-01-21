@@ -38,8 +38,8 @@ export default function Mappy(props) {
 
   var markers = []
   Object.values(orgsByState).map(orgsInState => {
-    Object.keys(orgsInState).map(orgId => {
-      let org = orgs[orgId]
+    Object.keys(orgsInState).map((orgID, i) => {
+      let org = orgs[orgID]
       let logo =
         org.Logo ?
           <img
@@ -48,9 +48,9 @@ export default function Mappy(props) {
           />
         : null
       markers.push(
-        <Marker position={{ lat: org.location[0], lng: org.location[1] }}>
+        <Marker key={orgID + i} position={{ lat: org.location[0], lng: org.location[1] }}>
           <Popup>
-            <a href={`/organizations/${orgId}`} target='_blank' class='org-url'>
+            <a href={`/organizations/${orgID}`} target='_blank' class='org-url'>
               <h3>{org.Name}</h3>
             </a>
             <div>
@@ -58,7 +58,7 @@ export default function Mappy(props) {
             </div>
             {logo}
             <a
-              href='/search?orgsid?????todo'
+              href={ `/catalog?organization_id=${ orgID }` }
               target='_blank'
               class='btn btn-default btn-sm'>
               View all records

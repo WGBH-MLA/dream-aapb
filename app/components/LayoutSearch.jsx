@@ -1,13 +1,31 @@
-import { useState } from 'react'
-import { ExternalLink, Search, X } from 'lucide-react'
+import { useEffect } from "react"
+import { ExternalLink, Search, X } from "lucide-react"
 
 export default function LayoutSearch(props){
-  const [search, setSearch] = useState("")
+  let searchy
+
+  useEffect(() => {
+    if(props.queryFromURL && props.queryFromURL.length > 0 && props.queryFromURL != searchy){
+      // console.log( 'i LOVE to replace it', props.searchQuery, "with",  props.queryFromURL)
+      searchy = props.queryFromURL
+    }
+  })
+
   function goToSearch(){
+    let destination
     if(props.searchFilter){
-      window.location.href = `/catalog?${ props.esIndex }[query]=${search}&${props.searchFilter}`
+      destination = `/catalog?${ props.esIndex }[query]=${searchy}${props.searchFilter}`
     } else {
-      window.location.href = `/catalog?${ props.esIndex }[query]=${search}`
+      destination = `/catalog?${ props.esIndex }[query]=${searchy}`
+    }
+    if(!window.location.pathname.includes("/catalog")){
+      // regular navigate
+      props.navigateHook(destination)
+    } else {
+      // just force refresh since we're on search page
+      window.location.href = destination
+      console.log( 'DOESNT WORK' )
+      // window.location.reload()
     }
   }
 
@@ -28,10 +46,10 @@ export default function LayoutSearch(props){
   } else {
     placeholder = "Search the Archive"
   }
- 
+
   return (
     <div className={ classes }>
-      <input onKeyUp={ (e) => handleEnter(e) } onChange={ (e) => setSearch(e.target.value) } type="text" name="query" placeholder={ placeholder } />
+      <input className="layout-input" onKeyUp={ handleEnter } defaultValue={ searchy } onChange={ (e) => props.handleChange(e.target.value) } type="text" name="query" placeholder={ placeholder } />
       <button onClick={ goToSearch }><Search size={16} /></button>
     </div>
   )

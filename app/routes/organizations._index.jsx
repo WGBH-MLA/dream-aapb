@@ -1,4 +1,5 @@
 import { useLoaderData } from 'react-router'
+import Mappy from "../components/Mappy"
 import HeaderBar from "../components/HeaderBar"
 import orgs from "../data/orgs.json"
 
@@ -26,8 +27,13 @@ export default function Organizations() {
           {JSON.stringify(data, null, 20)}
         </pre>
 
-        <div className="body-container">
+
+
+
+        <div className="mappy-container marbot">
+          <Mappy />
         </div>
+
       </div>
     </>
   )

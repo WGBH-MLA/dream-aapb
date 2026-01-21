@@ -13,6 +13,10 @@ export default function VideoPlayer(props){
       </div>    
     )
   } else {
-    return <Thumbnail guid={ props.guid } mediaType={props.mediaType} cmsPlayer={props.cmsPlayer} babyTitle={props.title} />
+    return (
+      <div className="martop marbot">
+        <Thumbnail guid={ props.guid } mediaType={props.mediaType} cmsPlayer={props.cmsPlayer} babyTitle={props.title} />
+      </div>
+    )
   }
 }

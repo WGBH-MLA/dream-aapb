@@ -54,8 +54,6 @@ export function collectionToTVProgram(collection){
 }
 
 export function exhibitToTVProgram(exhibit){
-
-  console.log( 'the exhibit', exhibit )
   let title,subtitle,thumbnail,url
   if(exhibit.title && exhibit.title.length > 0){
     title = exhibit.title

@@ -8,6 +8,7 @@ export default function Thumbnail(props) {
     img = <img src={ props.url } />
   } else {
 
+    const [completedCheck, setCompletedCheck] = useState(false)
     const [exists, setExists] = useState(false)
     var url = thumbnailURL(props.guid)
 
@@ -21,23 +22,42 @@ export default function Thumbnail(props) {
     }
 
     if(exists){
-      img = <img crossOrigin="anonymous" className="thumbnail" src={ url } />
-      bottomBar = <img src="/video-slice.png" className="thumbnail-bar" />
+      img = <img id={ props.guid } crossOrigin="anonymous" className="thumbnail" src={ url } />
+      bottomBar = <img id={ props.guid } src="/video-slice.png" className="thumbnail-bar" />
     } else {
       if(props.mediaType == "Moving Image"){
-        img = <img src="/VIDEO.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/VIDEO.png" className="thumbnail" />
       } else if(props.mediaType == "Sound") {
-        img = <img src="/AUDIO.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/AUDIO.png" className="thumbnail" />
       } else {
-        img = <img src="/NONE.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/NONE.png" className="thumbnail" />
       }
     }
 
     useEffect(() => {
-      // todo need to get the hostname into here, but with Hits -> hitComponent pattern not clear how to bring in addl props
-      var hostname = "http://18.235.155.36:4000"
-      hostname = "http://localhost:4000"
-      fetch(url, {method: "HEAD"}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
+
+      // TODO: CHECK IF THUMB IS ONSCREEN BEFORE DOING THIS GODDAMNIT!!
+      let ele = document.getElementById(props.guid)
+  
+      if(!completedCheck){
+
+        if( checkVisible(ele) ){
+          fetch(url, {method: "HEAD"}).then((resp) => {
+            setExists(resp.ok)
+          }).catch((err) => {
+            setExists(null)
+          })
+        }
+
+        setCompletedCheck(true)
+      }
+
+      window.addEventListener('scroll', function () {
+        // IF we didnt already find that it EXISTS, allow the check again on SCROLL
+        if(!exists){
+          setCompletedCheck(false)
+        }
+      })
     })
   }
 
@@ -53,4 +73,11 @@ export default function Thumbnail(props) {
       { babyTitle }
     </div>
   )
+}
+
+
+function checkVisible(elm) {
+  var rect = elm.getBoundingClientRect()
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }

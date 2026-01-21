@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData
+  useLoaderData,
 } from "react-router"
 
 export const meta = () => {
@@ -15,21 +16,12 @@ export const meta = () => {
 
 export const loader = () => {
   return {
-    // indexName: process.env.ES_INDEX,
-    
     wagtailHost: process.env.WAGTAIL_HOST,
     esIndex: process.env.ES_INDEX,
     esURL: process.env.ES_URL,
     apiKey: process.env.ES_API_KEY,
   }
 }
-
-
-        // <script
-        //   dangerouslySetInnerHTML={{
-        //     __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
-        //   }}
-        // />
 
 // standard
 import "@fontsource/inter/400.css";
@@ -40,6 +32,8 @@ import Footer from "./components/Footer"
 import "./styles/styles.css"
 
 export default function App() {
+  const [pleaseRotate, setPleaseRotate] = useState(false)
+
   const data = useLoaderData()
   return (
     <html>
@@ -52,6 +46,8 @@ export default function App() {
         <Links />
       </head>
       <body>
+
+
         <Header esIndex={ data.esIndex } />
         <Outlet />
         <Footer />
@@ -60,5 +56,5 @@ export default function App() {
         <Scripts />
       </body>
     </html>
-  );
+  )
 }

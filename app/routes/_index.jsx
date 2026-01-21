@@ -1,10 +1,12 @@
-import { useLoaderData } from 'react-router'
-// import shuffle from '~/utils/shuffle'
+
+import { useState } from "react"
+import { useNavigate } from "react-router"
+import { useLoaderData } from "react-router"
+
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import Mappy from "../components/Mappy"
-
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
 import { recordToTVProgram } from "../utils/toTVProgram"
@@ -53,13 +55,25 @@ export const loader = async () => {
 
 export default function Index() {
   let data = useLoaderData()
+  
+  let navigateHook = useNavigate()
+  const [search, setSearch] = useState("")
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
+  }
+
   return (
     <>
       <div className="homepage-search">
         <h2>
           Discover historic programs of publicly funded radio and television across America. Watch and listen.
         </h2>
-        <LayoutSearch esIndex={ data.esIndex } />
+        <LayoutSearch
+          esIndex={ data.esIndex }
+          navigateHook={ navigateHook }
+          handleChange={ handleLayoutSearch }
+          searchQuery={ search }
+        />
       </div>
 
       <div className="feature-video-container marbot">

@@ -1,8 +1,6 @@
 export async function getRecord(guid, esURL, esIndex, esAPIKey){
   var query = { "query": {"match_phrase": { "guid": guid } } }
   var data = await executeQuery(query, esURL, esIndex, esAPIKey)
-
-  console.log( 'help me!!!', data )
   if(data && data.hits && data.hits.hits && data.hits.hits[0] && data.hits.hits[0]._source){
     return data.hits.hits[0]._source
   }  
@@ -12,7 +10,6 @@ export async function getRecordPromise(guid, esURL, esIndex, esAPIKey){
   var query = { "query": {"match_phrase": { "guid": guid } } }
   return executeQuery(query, esURL, esIndex, esAPIKey)
 }
-
 
 export async function getRecords(guids, esURL, esIndex, esAPIKey){
   let guidClauses = guids.map((guid) => { return {"match_phrase": {"guid": guid}} } )
@@ -26,16 +23,9 @@ export async function getRecords(guids, esURL, esIndex, esAPIKey){
   }
 
   var data
-  try {
+  data = await executeQuery(query, esURL, esIndex, esAPIKey)
 
-    data = await executeQuery(query, esURL, esIndex, esAPIKey)
-  
-  } catch(error){
-    console.log( 'you goofed!', error )
-  }
-  
   if(data && data.hits && data.hits.hits ){
-
     if(data.hits.hits[0] && data.hits.hits[0]._source){
       // console.log( 'hey bumba', data.hits.hits[0]._source )
       return data.hits.hits.map((hit) => hit._source)
@@ -43,7 +33,6 @@ export async function getRecords(guids, esURL, esIndex, esAPIKey){
       return []
     }
   }
-  
 }
 
 async function executeQuery(query, esURL, esIndex, esAPIKey){
@@ -55,6 +44,6 @@ async function executeQuery(query, esURL, esIndex, esAPIKey){
   })
 
   var data = await response.json()
-  console.log( 'DATAVERSE REPORT::::::: ', data )
+  // console.log( 'DATAVERSE REPORT::::::: ', data )
   return data
 }

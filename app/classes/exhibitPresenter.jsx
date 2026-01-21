@@ -1,6 +1,5 @@
 import { decode } from "html-entities"
-import { useEffect } from 'react'
-// import { renderSidebar, renderPageTitleBar } from "./pageHelpers"
+import { useEffect } from "react"
 import { renderBlocks } from "./contentHelpers"
 import Author from "../components/Author"
 import InvitingSidebar from "../components/InvitingSidebar"
@@ -22,8 +21,18 @@ export function renderExhibit(exhibit) {
   }
 
   useEffect(() => {
-    fixLinks()
+    // fixLinks()
   }, [])
+
+
+  let titleURL, titleText
+  if(exhibit.meta.parent.title !== "AAPB"){
+    titleURL = exhibit.meta.parent.meta.html_url.replace("http://aapb/", "/exhibits/") 
+    titleText = exhibit.meta.parent.title
+  } else {
+    titleURL = exhibit.meta.html_url
+    titleText = exhibit.title
+  }
 
   return (
     <div>
@@ -31,7 +40,7 @@ export function renderExhibit(exhibit) {
       <div className="page-container">
         <div className="sidey-container">
           {/* todo: corrected exhibit main page link */}
-          <InvitingSidebar titleText={ exhibit.meta.parent.title } titleURL={ exhibit.meta.parent.meta.html_url.replace("http://aapb", "") } links={ exhibit.sections } />
+          <InvitingSidebar titleText={ titleText } titleURL={ titleURL } links={ exhibit.sections } />
 
           <div className="sidey-body marleft">
             <div className="sidey-body-container exhibit-title marbot">
@@ -64,16 +73,14 @@ export function renderExhibit(exhibit) {
   )
 }
 
-function fixLinks(){
-  var links = document.querySelectorAll('a')
-  links.forEach((link) => {
-    if(link.pathname.startsWith("/exhibits/")){
-      link.pathname = link.pathname.replace(/.md$/, '').replace(/^\/exhibits\/.*\//, '/exhibits/')
-    }
-  })
-}
-
-
+// function fixLinks(){
+//   var links = document.querySelectorAll('a')
+//   links.forEach((link) => {
+//     if(link.pathname.startsWith("/exhibits/")){
+//       link.pathname = link.pathname.replace(/.md$/, '').replace(/^\/exhibits\/.*\//, '/exhibits/')
+//     }
+//   })
+// }
 
 // copied from OV front
 export function renderSidebarSection(title, id, key) {

@@ -29,7 +29,6 @@ export const loader = async ({
 
     // mix it back in to the collection they said
     collection.featuredRecords = featuredRecords
-    console.log( 'i weewy wike it!!', featuredRecords )
   }
 
   return { collection, serverURL, esIndex, esURL, apiKey }
@@ -37,12 +36,6 @@ export const loader = async ({
 
 export const meta = ({ data }) => {
   let collection = data?.collection
-
-  // if(collection && !collection.thumbnail){
-  //   collection.cover_image = {
-  //     url: "/jenny.png"
-  //   }
-  // }
 
   if (!collection) {
     return [

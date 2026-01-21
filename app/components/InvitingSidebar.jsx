@@ -46,7 +46,7 @@ export default function InvitingSidebar(props){
         sidebarMenu.style.top = initialSidebarTop - scrollTop + 'px'
         sidebarMenu.style.position = 'fixed'
         // sidebarMenu.style.backgroundColor = "#0f0"
-        sidebarMenu.style.width = '15%'
+        sidebarMenu.style.width = '100%'
 
         document.getElementsByClassName("sidey-sidebar-container")[0].classList.add("floating")
       
@@ -57,10 +57,11 @@ export default function InvitingSidebar(props){
 
   return (
     <div className="sidey-sidebar-container">
-      <div className="sidey-sidebar">
-        <a href={ props.titleURL }>
-          <h2 className="smartop marbot">{ props.titleText }</h2>
+      <div className="sidey-sidebar bmarbot">
+        <a className="sidey-sidebar-title" href={ props.titleURL }>
+          <h2 className="smartop smarbot">{ props.titleText }</h2>
         </a>
+        <hr />
         <ul>
           { links }
         </ul>
