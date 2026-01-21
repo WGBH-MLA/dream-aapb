@@ -76,17 +76,23 @@ export default function Index() {
         />
       </div>
 
-      <div className="feature-video-container marbot">
-        <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
-      </div>
+      <div className="page-container">
 
-      <div className="mappy-container marbot">
-        <Mappy />
-      </div>
 
-      <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-        <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <div className="skinny-body-container">
+
+          <div className="feature-video-container marbot">
+            <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
+          </div>
+
+          <div className="mappy-container marbot">
+            <Mappy />
+          </div>
+
+          <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
+          <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+
+        </div>
       </div>
     </>
   )

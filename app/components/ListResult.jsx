@@ -35,10 +35,10 @@ export default function ListResult({hit}){
     date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
   }
 
-  if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-    // this needs to be changed to a field producing_org that will be at the top level
-    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
-  }
+  // if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+  //   // this needs to be changed to a field producing_org that will be at the top level
+  //   producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
+  // }
 
   return (
     <div className="search-result list">
@@ -49,10 +49,12 @@ export default function ListResult({hit}){
       </a>
 
       <div className="hit-info-container">
-        <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
+        <h3 className="hit-title ssmartop smarleft ssmarbot">
+          <ScoreLight score={ hit._score } />
+          <a href={`/catalog/${guid}`} >{ hit.title }</a>
+        </h3>
 
         <div className="hit-details">
-          <ScoreLight score={ hit._score } />
           { date }
           { producingOrg }
         </div>

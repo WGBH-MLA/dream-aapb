@@ -42,10 +42,7 @@ export default function SearchResult({hit}){
 
   return (
     <div className="search-result standard marbot">
-      <pre>
-        { "" || JSON.stringify(hit) }
-      </pre>
-
+      {/*TODO back to search link, with your query saved*/}
       <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />

@@ -9,7 +9,6 @@ const OR_FIELDS = [
   "pbcoreDescriptionDocument.pbcoreCreator.creator"
 ]
 
-// import your InstantSearch components
 import {
           InstantSearch,
           SearchBox,
@@ -38,37 +37,6 @@ export const loader = async ({params, request}) => {
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
-}
-
-function CustomSearchArea(props){
-
-
-/*  
-  useEffect(() => {
-  //   let urlSearch = props.searchParams.get(`${props.esIndex}[query]`)
-  //   // if(justArrived && urlSearch && urlSearch.length > 0 || urlSearch != props.customQuery.query){
-  //     console.log( 'well, ive only just arrived!! but ill try to apply your params!!', urlSearch, props.customQuery.query )
-
-
-
-  //     // this doesn't seem to filter down, does search correctly but wont sync up with the CustomSearchBox
-  //     // set query to urlsearch and refine
-  //     // props.handleCustomQuery("query", urlSearch, refine)
-
-  //   // bad!
-  //   // let layoutInputs = document.querySelectorAll("input.layout-input")
-  //   // for(let input of layoutInputs){
-  //   //   console.log( 'setto ni!!', input, props.customQuery.query )
-  //   //   input.value = props.customQuery.query
-  //   // }
-  }, [])
-*/
-  
-  return (
-    <>
-
-    </>
-  )
 }
 
 function CustomSearchBox(props) {
@@ -115,18 +83,18 @@ export default function Catalog() {
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
-    // query: searchParams.get(`${data.esIndex}[query]`) || "",
-    // all: searchParams.get("all") || "",
-    // title: searchParams.get("title") || "",
-    // none: searchParams.get("none") || "",
-    // startDate: searchParams.get("startDate") || "",
-    // endDate: searchParams.get("endDate") || "",
-    query: "", 
-    all: "", 
-    title: "", 
-    none: "", 
-    startDate: "", 
-    endDate: "", 
+    query: searchParams.get(`${data.esIndex}[query]`) || "",
+    all: searchParams.get("all") || "",
+    title: searchParams.get("title") || "",
+    none: searchParams.get("none") || "",
+    startDate: searchParams.get("startDate") || "",
+    endDate: searchParams.get("endDate") || "",
+    // query: "", 
+    // all: "", 
+    // title: "", 
+    // none: "", 
+    // startDate: "", 
+    // endDate: "", 
   })
 
 
@@ -144,15 +112,16 @@ export default function Catalog() {
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
 
-    // let layoutInputs = document.getElementsByClassName("layout-input")
+    // TODO (ahhhhhhhhhh)
+    // let layoutInputs = document.getElementsByClassName("layout-input")[0]
     // console.log( 'LAYOUOOOOO', layoutInputs )
-
-    
-      // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
-      // refine(customQuery.query === "" ? " " : customQuery.query)
-      refine(customQuery.query)
-      // setCustomQuery({...customQuery, lastQuery: customQuery.query})
+    // for(let input in layoutInputs){
+    //   console.log( 'this is an input', input )
+    //   input.value = value
     // }
+
+    // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
+    refine(customQuery.query === "" ? " " : customQuery.query)
   }
 
   //////////
@@ -972,7 +941,6 @@ export default function Catalog() {
             { pagination }
           </div>
         </div>
-
       </InstantSearch>
     </div>
   )

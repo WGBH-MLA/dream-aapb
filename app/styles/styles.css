@@ -495,10 +495,9 @@ div.mappy-container {
   z-index: 100;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 75%;
   height: 30rem;
   min-height: 30rem;
 }
@@ -516,6 +515,7 @@ img.mappy-logo {
 }
 
 div.homepage-search {
+  overflow: hidden;
   text-align: justify;
   background-image: url(/draft-bg.png);
   min-height: 12em;
@@ -528,6 +528,7 @@ div.homepage-search {
 }
 
 div.homepage-search h2 {
+
   margin-left: 20%;
   width: 60%;
 }
@@ -594,6 +595,19 @@ div.tv-menu-container {
   width: 96%;
 }
 
+div.tv-menu-container div.tv-menu-body {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
+
+}
+
+div.tv-menu-container.three div.tv-menu-body {
+  flex-wrap: nowrap;
+}
+
 div.tv-menu-container a {
   text-decoration: none;
   display: block;
@@ -608,9 +622,6 @@ div.tv-menu-container.three img {
   background-size: 50%;
 }
 
-div.tv-menu-container.three div.tv-menu-body {
-}
-
 div.tv-menu-container h2 {
   margin-left: 1.5em;
   margin-bottom: 1em;
@@ -618,40 +629,35 @@ div.tv-menu-container h2 {
 
 
 div.tv-menu-container div.tv-menu-program.three img, div.tv-menu-container div.tv-menu-program.three div {
-  width: 24.4rem;
-  max-height: 18.75rem;
-  height: 18.75rem;
+  width: 15em;
+  max-height: 11.25em;
+  height: 11.25em;
 }
 
 div.tv-menu-container div.tv-menu-program {
 /*  background-color: #ff0;*/
-  display: inline-flex;
-  flex-grow: 1;
-  width: 17.5rem;
-  min-width: 17.5rem;
-  height: 20rem;
+  margin-left: 2em;
+  width: 14em;
+  min-width: 14em;
+  height: 14em;
   overflow: hidden;
   position: relative;
 }
 
 div.tv-menu-container div.tv-menu-program.three {
-  min-width: 24.75rem;
-  width: 24.75rem;
-  height: 22rem;
-  max-height: 22rem;
-}
-
-div.tv-menu-container.three div.tv-menu-body {
-  /* this allows the div to be as wide as the content, making it NOT overflow at the end of the line */
-  width: max-content;
+  min-width: 15em;
+  width: 15em;
+  height: 22em;
+  max-height: 22em;
 }
 
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
-  width: 18rem;
-  height: 13.5rem;
-  max-height: 13.5rem;
+  overflow: hidden;
+  width: 12em;
+  height: 9em;
+  max-height: 9em;
 }
 
 div.tv-menu-container div.tv-menu-program h4 {
@@ -682,7 +688,7 @@ div.tv-menu-container div.tv-menu-program h5 {
 div.tv-menu-container a.see-all {
   position: absolute;
 /*  float: right;*/
-  left: 89.5%;
+  left: 91%;
   font-weight: bold;
   text-decoration: none;
   color: #808;
@@ -1162,7 +1168,7 @@ div.hit-thumbnail img.thumbnail {
 
 div.tv-menu-program div.show-thumbnail img.thumbnail-bar {
   position: absolute;
-  bottom: 6.5em;
+  bottom: 0;
   min-height: 2em;
   height: 2em;
 }
@@ -2014,20 +2020,37 @@ div.author div span {
 @media only screen and (min-width: 1600px) {
   /*tv menu*/
 
+
+  div.tv-menu-container a.see-all {
+    left: 94.75%;
+  }
+
   div.tv-menu-container div.tv-menu-program {
-    width: 24rem;
-    min-width: 24rem;
+    margin-left: 3.25em;
+    width: 18em;
+    min-width: 18em;
   }
 
   div.tv-menu-container div.tv-menu-program.three {
-    min-width: 39.5rem;
-    width: 39.5rem;
-    max-width: 39.5rem;
+    margin-left: 2em;
+    min-width: 20em;
+    width: 20em;
+    max-width: 20em;
+  }
+
+  div.tv-menu-container div.tv-menu-program h4 {
+    width: 75%;
+    max-width: 75%;
+  }
+
+  div.tv-menu-container.three div.tv-menu-program h4 {
+    width: 85%;
+    max-width: 85%;
   }
 
 
   div.current-refinements-container {
-    width: 70%;
+    width: 73%;
   }
 
 

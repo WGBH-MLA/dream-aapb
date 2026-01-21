@@ -23,8 +23,9 @@ export default function TVMenu(props){
   return (
     <div className={ classes }>
       { seeAll }
+      <h2>{props.title}</h2>
+      
       <div className="tv-menu-body">
-        <h2>{props.title}</h2>
         { programs }
       </div>
     </div>
@@ -41,7 +42,7 @@ function TVProgram(props){
     thumb = <Thumbnail url={props.thumbnailURL} />
   }
   return (
-    <div key={props.key} className={"tv-menu-program marleft " + (props.classes ? props.classes : "")} >
+    <div key={props.key} className={"tv-menu-program " + (props.classes ? props.classes : "")} >
       <a href={props.url} >
         { thumb }
         <h4>{ props.title }</h4>

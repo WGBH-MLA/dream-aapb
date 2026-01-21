@@ -1,4 +1,4 @@
-import { useLoaderData } from 'react-router'
+import { useLoaderData, useSearchParams } from 'react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
@@ -19,6 +19,12 @@ export const loader = async ({params, request}) => {
 
 export default function ShowRecord() {
   const data = useLoaderData()
+  const [searchParams, setSearchParams] = useSearchParams()
+  
+  let yourQuery
+  if(searchParams.get(`${data.esIndex}[query]`)){
+    yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
+  }
 
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates
@@ -104,7 +110,6 @@ export default function ShowRecord() {
       )
     }
 
-
     if(data.pbcoreDescriptionDocument.pbcoreAssetDate && data.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
       dates = (
         <>
@@ -113,7 +118,6 @@ export default function ShowRecord() {
         </>
       )
     }
-
   }
 
   return (
@@ -126,7 +130,6 @@ export default function ShowRecord() {
             <VideoPlayer guid={ data.guid } />
           </div>
 
-            
           <div className="show-metadata-container">
             <div className="show-metadata-header">Info</div>
             { mediaType }
@@ -137,6 +140,10 @@ export default function ShowRecord() {
             { coverages }
             { dates }
           </div>
+        </div>
+
+        <div className="skinny-body-container">
+          <a className="back-link martop marbot" href={ `/catalog${yourQuery}` }>&lt; Back To Search</a>
         </div>
       </div>
 
