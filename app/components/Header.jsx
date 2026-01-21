@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, useSearchParams } from "react-router"
+import { useNavigate } from "react-router"
 import DrawerMenu from "./DrawerMenu"
 import LayoutSearch from "./LayoutSearch"
 
@@ -73,7 +73,6 @@ const drawerItems = {
 
 export default function Header(props) {
   let navigateHook = useNavigate()
-  let [searchParams, setSearchParams] = useSearchParams()
   const [search, setSearch] = useState("")
   const handleLayoutSearch = (val) => {
     setSearch(val)

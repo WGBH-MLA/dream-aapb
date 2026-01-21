@@ -42,9 +42,8 @@ export const loader = async ({params, request}) => {
 
 function CustomSearchArea(props){
 
-  const { _query, refine } = useSearchBox()
 
-  
+/*  
   useEffect(() => {
   //   let urlSearch = props.searchParams.get(`${props.esIndex}[query]`)
   //   // if(justArrived && urlSearch && urlSearch.length > 0 || urlSearch != props.customQuery.query){
@@ -63,8 +62,100 @@ function CustomSearchArea(props){
   //   //   input.value = props.customQuery.query
   //   // }
   }, [])
+*/
+  
+  return (
+    <>
+
+    </>
+  )
+}
+
+function CustomSearchBox(props) {
+  const { status } = useInstantSearch()
+  const { _query, refine } = useSearchBox()
+
+  const inputRef = useRef(null)
+  const isSearchStalled = status === "stalled";
+
+  return (
+    <>
+      <div className="">
+        <h4>Search for</h4>
+        <input
+          id="query"
+          className="sidebar-search smarbot"
+          ref={inputRef}
+          defaultValue={ props.query }
+          onKeyUp={(e) => {
+            props.handleCustomQuery(e.target.id, e.target.value, refine)
+          }}
+        />
+
+        <div hidden={!isSearchStalled}>Searching…</div>
+        <h4>Contains all of these words</h4>
+        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>This title</h4>
+        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>None of these words</h4>
+        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <div>
+          <button className="sidebar-search-button">Update</button>
+        </div>
+
+      </div>
+    </>
+  )  
+}
+
+export default function Catalog() {
+  const data = useLoaderData()
 
 
+  // state that we need out here, and down inside the search area...
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [customQuery, setCustomQuery] = useState({
+    // query: searchParams.get(`${data.esIndex}[query]`) || "",
+    // all: searchParams.get("all") || "",
+    // title: searchParams.get("title") || "",
+    // none: searchParams.get("none") || "",
+    // startDate: searchParams.get("startDate") || "",
+    // endDate: searchParams.get("endDate") || "",
+    query: "", 
+    all: "", 
+    title: "", 
+    none: "", 
+    startDate: "", 
+    endDate: "", 
+  })
+
+
+// include transcript in search or not
+  const [searchSet, setSearchSet] = useState("both")
+
+  let view = searchParams.get("view") || "standard"
+  const [viewSelect, setViewSelect] = useState(view)
+
+  // config viewed refinements
+  const [showingRefinements, setShowingRefinements] = useState(false)
+
+  function handleCustomQuery(type, value, refine){
+    // ohh la la
+    setCustomQuery({...customQuery, [type]: value})
+    // console.log( 'the current complete value of customQuery is ', customQuery )
+
+    // let layoutInputs = document.getElementsByClassName("layout-input")
+    // console.log( 'LAYOUOOOOO', layoutInputs )
+
+    
+      // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
+      // refine(customQuery.query === "" ? " " : customQuery.query)
+      refine(customQuery.query)
+      // setCustomQuery({...customQuery, lastQuery: customQuery.query})
+    // }
+  }
+
+  //////////
 
   ////
   const dateToYear = (items) => {
@@ -130,7 +221,10 @@ function CustomSearchArea(props){
         break
       case "special_collections":
         return "Collection"
-        break        
+        break
+      case "series_titles":
+        return "Series Title"
+        break
     }
   }
 
@@ -139,6 +233,7 @@ function CustomSearchArea(props){
 
       let refs = attribute.refinements.map((ref) => {
         // label is the actual facet field value which seems slightly weird
+        ref.key = `${ref.label}-${Math.random().toString(36).slice(2)}`
         ref.label = `${ prettyFieldNames(attribute.label) }: ${ref.label}`
         return ref
       })
@@ -159,7 +254,7 @@ function CustomSearchArea(props){
 
 
   let currentRefinementsClasses, showRefinementButtonText
-  if(!props.showingRefinements){
+  if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
     showRefinementButtonText = "Show All Refinements"
   } else {
@@ -169,11 +264,11 @@ function CustomSearchArea(props){
 
 
   let searchResultComponent
-  if(props.viewSelect == "standard"){
+  if(viewSelect == "standard"){
     searchResultComponent = SearchResult
-  } else if(props.viewSelect == "list"){
+  } else if(viewSelect == "list"){
     searchResultComponent = ListResult
-  } else if(props.viewSelect == "gallery"){
+  } else if(viewSelect == "gallery"){
     searchResultComponent = GalleryResult
   }
 
@@ -184,288 +279,14 @@ function CustomSearchArea(props){
 
   let searchbox
   searchbox = <CustomSearchBox
-              refine={ refine }
-              handleCustomQuery={ props.handleCustomQuery }
-              query={ props.customQuery.query }
-              defaultQuery={ props.customQuery.query }
+              handleCustomQuery={ handleCustomQuery }
+              query={ customQuery.query }
+              defaultQuery={ customQuery.query }
             />
 
 
-  return (
-    <>
-      <div className="top-search-bar bmarleft smarbot smarright">
-        <div className="options-container martop">
-          <h2 className="">Search Results</h2>
-          
-          <div className="header-spacer" />
 
-          <div className="sort-container sort marleft marright">
-            Sort
-            <SortBy
-              items={[
-                { key: "sort1", label: "Relevance", value: `${props.esIndex}_default` },
-                { key: "sort2", label: "Title", value: `${props.esIndex}_title_keyword_asc` },
-                { key: "sort3", label: "Broadcast Date", value: `${props.esIndex}_broadcast_date_desc` },
-              ]}
-            />
-            <ChevronDown style={{ right: "18px"}} />
-          </div>
-          
-          <div className="sort-container per-page marleft marright">
-            Items per page
-            <HitsPerPage
-              items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
-            />
-            <ChevronDown />
-          </div>
-
-          <div className="marleft marright">
-            <ViewSelect selected={ props.viewSelect == "standard" } viewType="standard" viewSelect={ () => props.setViewSelect("standard") } />
-            <ViewSelect selected={ props.viewSelect == "gallery" } viewType="gallery" viewSelect={ () => props.setViewSelect("gallery") } />
-            <ViewSelect selected={ props.viewSelect == "list" } viewType="list" viewSelect={ () => props.setViewSelect("list") } />
-          </div>
-        </div>
-        
-
-      </div>
-
-      <div className="top-refinements-bar marbot bmarleft bmarright">
-        <div className="stats-container">
-          <Stats />
-        </div>
-
-        <div className={ currentRefinementsClasses }>
-          <CurrentRefinements
-            transformItems={prettyCurrentRefinements}
-          />
-        </div>
-        <div className="clear-refinements-container">
-          <ClearRefinements />
-          <div className="more-refinements">
-            <button onClick={ () => { props.setShowingRefinements(!props.showingRefinements) } }>{showRefinementButtonText}</button>
-          </div>
-        </div>
-      </div>
-
-      <div className="page-sidebar bmarleft">
-        <h3 className="sidebar-title">Refine Search</h3>
-        <hr />
-        
-        <SearchAccordion title="Keywords" content={
-          searchbox
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Options" content ={
-          <>
-            <div>Include</div>
-            <div><label>All Sources<input onChange={ () => props.setSearchSet("both") } type="radio" value="both" checked={ props.searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
-            <div><label>Records<input onChange={ () => props.setSearchSet("records") } type="radio" value="records" checked={ props.searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
-            <div><label>Transcripts<input onChange={ () => props.setSearchSet("transcripts") } type="radio" value="transcripts" checked={ props.searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
-          </>
-        }/>
-
-        <SearchAccordion title="Broadcast Date" content={
-          <>
-            <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
-            <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
-          </>
-        }/>
-
-        <SearchAccordion title="Availability" content={
-          <>
-            <RefinementList
-              attribute="access_level"
-              transformItems={ accessLevel }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Media Type" content={
-          <>
-            <RefinementList
-              attribute="media_type"
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Producing Organization" content={
-          <>
-            <RefinementList
-              attribute="producing_org"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Asset Type" startClosed={true} content={
-          <>
-            <RefinementList
-              attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Genre" startClosed={true} content={
-          <>
-            <RefinementList
-              attribute="genres"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Topic" startClosed={true} content={
-          <>
-            <RefinementList
-              attribute="topics"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <SearchAccordion title="Contributing Organization" startClosed={true} content={
-          <>
-            <RefinementList
-              attribute="contributing_orgs"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Collection" startClosed={true} content={
-          <>
-            <RefinementList
-              attribute="special_collections"
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />
-
-        <SearchAccordion title="Series Title" startClosed={false} content={
-          <>
-            <RefinementList
-              attribute="series_titles"
-              searchable={true}
-
-              // transformItems={ producingOrganization }
-            />
-          </>
-        }/>
-
-        <hr />          
-      </div>
-
-      <div className="page-maincolumn bmarright">
-
-        <div className="pagination-bar">
-          { pagination }
-        </div>
-
-        <hr/>
-
-        <Hits hitComponent={ searchResultComponent } />
-        <div className="pagination-bar marbot">
-          { pagination }
-        </div>
-      </div>
-    </>
-  )
-}
-
-function CustomSearchBox(props) {
-  const { status } = useInstantSearch()
-  const inputRef = useRef(null)
-  const isSearchStalled = status === "stalled";
-
-  return (
-    <>
-      <div className="">
-        <h4>Search for</h4>
-        <input
-          id="query"
-          className="sidebar-search smarbot"
-          ref={inputRef}
-          defaultValue={ props.query }
-          onKeyUp={(e) => {
-            props.handleCustomQuery(e.target.id, e.target.value, props.refine)
-          }}
-        />
-
-        <div hidden={!isSearchStalled}>Searching…</div>
-        <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, props.refine) } />
-        <h4>This title</h4>
-        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, props.refine) } />
-        <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, props.refine) } />
-        <div>
-          <button className="sidebar-search-button">Update</button>
-        </div>
-
-      </div>
-    </>
-  )  
-}
-
-export default function Catalog() {
-  const data = useLoaderData()
-
-
-  // state that we need out here, and down inside the search area...
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [customQuery, setCustomQuery] = useState({
-    query: searchParams.get(`${data.esIndex}[query]`) || "",
-    all: searchParams.get("all") || "",
-    title: searchParams.get("title") || "",
-    none: searchParams.get("none") || "",
-    startDate: searchParams.get("startDate") || "",
-    endDate: searchParams.get("endDate") || "",
-  })
-
-
-// include transcript in search or not
-  const [searchSet, setSearchSet] = useState("both")
-
-  let view = searchParams.get("view") || "standard"
-  const [viewSelect, setViewSelect] = useState(view)
-
-  // config viewed refinements
-  const [showingRefinements, setShowingRefinements] = useState(false)
-
-  function handleCustomQuery(type, value, refine){
-    // ohh la la
-    setCustomQuery({...customQuery, [type]: value})
-    // console.log( 'the current complete value of customQuery is ', customQuery )
-
-    // let layoutInputs = document.getElementsByClassName("layout-input")
-    // console.log( 'LAYOUOOOOO', layoutInputs )
-
-    
-      // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
-      // refine(customQuery.query === "" ? " " : customQuery.query)
-      refine(customQuery.query)
-      // setCustomQuery({...customQuery, lastQuery: customQuery.query})
-    // }
-  }
-
-
+  //////////
 
   
   // othiz
@@ -958,23 +779,199 @@ export default function Catalog() {
         searchClient={ searchClient }
         routing={ true }
       >
-        <CustomSearchArea
-          esIndex={ data.esIndex }
 
-          // state needed inside getQuery method AND inside the area
-          searchParams={ searchParams }
-          customQuery={ customQuery }
-          setCustomQuery={ setCustomQuery }
-          handleCustomQuery={ handleCustomQuery }
+        <div className="top-search-bar bmarleft smarbot smarright">
+          <div className="options-container martop">
+            <h2 className="">Search Results</h2>
+            
+            <div className="header-spacer" />
 
-          // pass em in
-          viewSelect={ viewSelect }
-          setViewSelect={ setViewSelect }
-          showingRefinements={ showingRefinements }
-          setShowingRefinements={ setShowingRefinements }
-          searchSet={ searchSet }
-          setSearchSet={ setSearchSet }
-        />
+            <div className="sort-container sort marleft marright">
+              Sort
+              <SortBy
+                items={[
+                  { key: "sort1", label: "Relevance", value: `${data.esIndex}_default` },
+                  { key: "sort2", label: "Title", value: `${data.esIndex}_title_keyword_asc` },
+                  { key: "sort3", label: "Broadcast Date", value: `${data.esIndex}_broadcast_date_desc` },
+                ]}
+              />
+              <ChevronDown style={{ right: "18px"}} />
+            </div>
+            
+            <div className="sort-container per-page marleft marright">
+              Items per page
+              <HitsPerPage
+                items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
+              />
+              <ChevronDown />
+            </div>
+
+            <div className="marleft marright">
+              <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
+              <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
+              <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            </div>
+          </div>
+          
+
+        </div>
+
+        <div className="top-refinements-bar marbot bmarleft bmarright">
+          <div className="stats-container">
+            <Stats />
+          </div>
+
+          <div className={ currentRefinementsClasses }>
+            <CurrentRefinements
+              transformItems={prettyCurrentRefinements}
+            />
+          </div>
+          <div className="clear-refinements-container">
+            <ClearRefinements />
+            <div className="more-refinements">
+              <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="page-sidebar bmarleft">
+          <h3 className="sidebar-title">Refine Search</h3>
+          <hr />
+          
+          <SearchAccordion title="Keywords" content={
+            searchbox
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Options" content ={
+            <>
+              <div style={{ color: "#ddd" }}>Include</div>
+              <div style={{ color: "#ddd" }}><label>All Sources<input onChange={ () => setSearchSet("both") } disabled type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Records<input onChange={ () => setSearchSet("records") } disabled type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } disabled type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            </>
+          }/>
+
+          <SearchAccordion title="Broadcast Date" content={
+            <>
+              <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
+              <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
+            </>
+          }/>
+
+          <SearchAccordion title="Availability" content={
+            <>
+              <RefinementList
+                attribute="access_level"
+                transformItems={ accessLevel }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Media Type" content={
+            <>
+              <RefinementList
+                attribute="media_type"
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Producing Organization" content={
+            <>
+              <RefinementList
+                attribute="producing_org"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Asset Type" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Genre" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="genres"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Topic" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="topics"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <SearchAccordion title="Contributing Organization" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="contributing_orgs"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Collection" startClosed={true} content={
+            <>
+              <RefinementList
+                attribute="special_collections"
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Series Title" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="series_titles"
+                searchable={true}
+
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />          
+        </div>
+
+        <div className="page-maincolumn bmarright">
+
+          <div className="pagination-bar">
+            { pagination }
+          </div>
+
+          <hr/>
+
+          <Hits hitComponent={ searchResultComponent } />
+          <div className="pagination-bar marbot">
+            { pagination }
+          </div>
+        </div>
 
       </InstantSearch>
     </div>
