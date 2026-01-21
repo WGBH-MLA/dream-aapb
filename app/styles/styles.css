@@ -498,8 +498,6 @@ div.mappy-container {
   margin-left: auto;
   margin-right: auto;
   width: 75%;
-  height: 30rem;
-  min-height: 30rem;
 }
 
 div.mappy-container div.leaflet-container {

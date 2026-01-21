@@ -81,11 +81,13 @@ export default function Index() {
 
         <div className="skinny-body-container">
 
-          <div className="feature-video-container marbot">
+          <div className="feature-video-container bmarbot">
             <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
           </div>
 
+
           <div className="mappy-container marbot">
+          <h2 className="marbot">Explore Stations Featured in the AAPB</h2>
             <Mappy />
           </div>
 
