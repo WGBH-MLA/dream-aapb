@@ -5,6 +5,7 @@ import { getRecord } from "../utils/getRecord"
 export default function Thumbnail(props) {
   var img, bottomBar
   if(props.url){
+    // it exists, or so you claim..................
     img = <img src={ props.url } />
   } else {
 
@@ -35,30 +36,25 @@ export default function Thumbnail(props) {
     }
 
     useEffect(() => {
-
-      // TODO: CHECK IF THUMB IS ONSCREEN BEFORE DOING THIS GODDAMNIT!!
-      let ele = document.getElementById(props.guid)
-  
-      if(!completedCheck){
-
-        if( checkVisible(ele) ){
-          fetch(url, {method: "HEAD"}).then((resp) => {
-            setExists(resp.ok)
-          }).catch((err) => {
-            setExists(null)
-          })
-        }
-
-        setCompletedCheck(true)
-      }
-
       window.addEventListener('scroll', function () {
-        // IF we didnt already find that it EXISTS, allow the check again on SCROLL
-        if(!exists){
-          setCompletedCheck(false)
+        
+        // check if thumbnail exists, when appropriate
+        let ele = document.getElementById(props.guid)
+        if(!completedCheck){
+
+          if( checkVisible(ele) ){
+              fetch(url, {method: "HEAD"}).then((resp) => {
+                setExists(resp.ok)
+              }).catch((err) => {
+                setExists(null)
+              })
+
+            // ultimately only check once, when the img elemetn is visible
+            setCompletedCheck(true)
+          }
         }
       })
-    })
+    }, [])
   }
 
   let babyTitle
@@ -75,9 +71,13 @@ export default function Thumbnail(props) {
   )
 }
 
-
-function checkVisible(elm) {
-  var rect = elm.getBoundingClientRect()
+function checkVisible(ele) {
+  if(!ele){
+    // element was missing somewhere during render cycle oopsie!!
+    return false
+  }
+  
+  var rect = ele.getBoundingClientRect()
   var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }
