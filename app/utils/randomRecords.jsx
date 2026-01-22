@@ -3,7 +3,7 @@ export default async function randomRecords(num){
     throw "that is just not an appropriate number okayyyyy??"
   }
 
-  let esIndex = process.env.ES_INDEX || "aapb_catalog_v1"
+  let esIndex = process.env.ES_INDEX || "hot-aapb"
   let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
   let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
 

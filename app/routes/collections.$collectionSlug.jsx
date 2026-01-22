@@ -10,7 +10,7 @@ export const loader = async ({
 }) => {
 
   let serverURL = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
-  let esIndex = process.env.ES_INDEX || "aapb_catalog_v1"
+  let esIndex = process.env.ES_INDEX || "hot-aapb"
   let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
   let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
   
