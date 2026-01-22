@@ -68,7 +68,6 @@ export async function getPageBySlug(type, slug) {
     })
   }
 
-  let wagHost = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
   var fetchResp = await fetch(`${wagHost}/api/v2/pages/${body.items[0].id}`)
   return await fetchResp.json()
 }
