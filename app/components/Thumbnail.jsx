@@ -3,8 +3,7 @@ import thumbnailURL from "../utils/thumbnailURL"
 import { getRecord } from "../utils/getRecord"
 
 // exists
-const UNKNOWN = -2
-const CHECKING = -1
+const UNKNOWN = -1
 const NOTEXIST = 0
 const EXIST = 1
 
@@ -15,7 +14,6 @@ export default function Thumbnail(props) {
     img = <img src={ props.url } />
   } else {
 
-    // const [completedCheck, setCompletedCheck] = useState(UNCHECKED)
     const [exists, setExists] = useState(UNKNOWN)
     var url = thumbnailURL(props.guid)
 
@@ -50,14 +48,11 @@ export default function Thumbnail(props) {
           if( checkVisible(ele) ){
             fetch(url, {method: "HEAD"}).then((resp) => {
               setExists(resp.ok ? EXIST : NOTEXIST)
-              // setCompletedCheck(CHECKED)
             }).catch((err) => {
               setExists(NOTEXIST)
-              // setCompletedCheck(CHECKED)
             })
+            
           }
-          setExists(CHECKING)
-          // setCompletedCheck(WAITING)
 
           window.addEventListener('scrollend', function () {
 
@@ -66,13 +61,10 @@ export default function Thumbnail(props) {
               if( checkVisible(ele) ){
                 fetch(url, {method: "HEAD"}).then((resp) => {
                   setExists(resp.ok ? EXIST : NOTEXIST)
-                  // setCompletedCheck(CHECKED)
                 }).catch((err) => {
                   setExists(NOTEXIST)
-                  // setCompletedCheck(CHECKED)
                 })
 
-                setExists(CHECKING)
               }
             }
            
