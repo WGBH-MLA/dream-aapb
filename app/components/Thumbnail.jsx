@@ -51,7 +51,6 @@ export default function Thumbnail(props) {
             }).catch((err) => {
               setExists(NOTEXIST)
             })
-            
           }
 
           window.addEventListener('scrollend', function () {
@@ -67,11 +66,8 @@ export default function Thumbnail(props) {
 
               }
             }
-           
           })
         }
-       
-        
       }
     }, [])
   }
