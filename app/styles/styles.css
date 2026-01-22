@@ -658,8 +658,7 @@ div.tv-menu-container div.tv-menu-program {
 }
 
 div.tv-menu-container div.tv-menu-program.three {
-  min-width: 15em;
-  width: 15em;
+  width: 13em;
   height: 22em;
   max-height: 22em;
 }
@@ -676,7 +675,7 @@ div.tv-menu-container div.tv-menu-program img {
 div.tv-menu-container div.tv-menu-program h4 {
   font-weight: bold;
   font-style: italic;
-  font-size: 1.2em;
+  font-size: 1em;
   position: relative;
   z-index: 10;
   margin-top: 1em;
