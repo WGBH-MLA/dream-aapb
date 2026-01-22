@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
@@ -20,14 +21,15 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
   const [searchParams, setSearchParams] = useSearchParams()
+  const [showPbcore, setShowPbcore] = useState(false)
   
-  let yourQuery
+  let yourQuery = ""
   if(searchParams.get(`${data.esIndex}[query]`)){
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
   }
 
   let people, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates
+  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
   if(data){
     title = niceTitle(data.pbcoreDescriptionDocument.pbcoreTitle)
 
@@ -118,7 +120,25 @@ export default function ShowRecord() {
         </>
       )
     }
+
+    
+    if(data.pbcoreDescriptionDocument){
+      pbCore = (
+        <>
+          <div className="show-metadata-header">pbcoreDescriptionDocument</div>
+          <pre>
+            { JSON.stringify(data.pbcoreDescriptionDocument, null, 4) }
+          </pre>
+        </>
+      )
+    }
   }
+  
+  let pbClasses = "show-metadata-container bmarbot pbcore"
+  if(showPbcore){
+    pbClasses += " show"
+  }
+
 
   return (
     <>
@@ -130,7 +150,7 @@ export default function ShowRecord() {
             <VideoPlayer guid={ data.guid } />
           </div>
 
-          <div className="show-metadata-container">
+          <div className="show-metadata-container bmarbot">
             <div className="show-metadata-header">Info</div>
             { mediaType }
             { description }
@@ -139,6 +159,10 @@ export default function ShowRecord() {
             { people }
             { coverages }
             { dates }
+          </div>
+
+          <div className={ pbClasses } onClick={ () => setShowPbcore(!showPbcore) }>
+            { pbCore }
           </div>
         </div>
 

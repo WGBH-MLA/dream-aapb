@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 import thumbnailURL from "../utils/thumbnailURL"
 import { getRecord } from "../utils/getRecord"
 
-const UNCHECKED = 0
-const WAITING = 1
-const CHECKED = 2
+// exists
+const UNKNOWN = -2
+const CHECKING = -1
+const NOTEXIST = 0
+const EXIST = 1
 
 export default function Thumbnail(props) {
   var img, bottomBar
@@ -13,8 +15,8 @@ export default function Thumbnail(props) {
     img = <img src={ props.url } />
   } else {
 
-    const [completedCheck, setCompletedCheck] = useState(UNCHECKED)
-    const [exists, setExists] = useState(false)
+    // const [completedCheck, setCompletedCheck] = useState(UNCHECKED)
+    const [exists, setExists] = useState(UNKNOWN)
     var url = thumbnailURL(props.guid)
 
     var classes
@@ -26,7 +28,7 @@ export default function Thumbnail(props) {
       classes = "show-thumbnail"
     }
 
-    if(exists){
+    if(exists === EXIST){
       img = <img id={ props.guid } crossOrigin="anonymous" className="thumbnail" src={ url } />
       bottomBar = <img id={ props.guid } src="/video-slice.png" className="thumbnail-bar" />
     } else {
@@ -43,43 +45,41 @@ export default function Thumbnail(props) {
 
       // dont run in ssr
       if (typeof window !== "undefined") {
-        // TODO refactor to method, no time
-        if(!exists && completedCheck === UNCHECKED){
-
+        if(exists === UNKNOWN){
           let ele = document.getElementById(props.guid)
+          if( checkVisible(ele) ){
+            fetch(url, {method: "HEAD"}).then((resp) => {
+              setExists(resp.ok ? EXIST : NOTEXIST)
+              // setCompletedCheck(CHECKED)
+            }).catch((err) => {
+              setExists(NOTEXIST)
+              // setCompletedCheck(CHECKED)
+            })
+          }
+          setExists(CHECKING)
+          // setCompletedCheck(WAITING)
 
-            if( checkVisible(ele) ){
-              fetch(url, {method: "HEAD"}).then((resp) => {
-                setExists(resp.ok)
-                setCompletedCheck(CHECKED)
-              }).catch((err) => {
-                setExists(null)
-                setCompletedCheck(CHECKED)
-              })
-            }
-          setCompletedCheck(WAITING)
-        }
-       
-        window.addEventListener('scrollend', function () {
+          window.addEventListener('scrollend', function () {
 
-          if(!exists && completedCheck === UNCHECKED){
-
-            let ele = document.getElementById(props.guid)
-
+            if(exists === UNKNOWN){
+              let ele = document.getElementById(props.guid)
               if( checkVisible(ele) ){
                 fetch(url, {method: "HEAD"}).then((resp) => {
-                  setExists(resp.ok)
-                  setCompletedCheck(CHECKED)
+                  setExists(resp.ok ? EXIST : NOTEXIST)
+                  // setCompletedCheck(CHECKED)
                 }).catch((err) => {
-                  setExists(null)
-                  setCompletedCheck(CHECKED)
+                  setExists(NOTEXIST)
+                  // setCompletedCheck(CHECKED)
                 })
-              }
 
-            setCompletedCheck(WAITING)
-          }
-         
-        })
+                setExists(CHECKING)
+              }
+            }
+           
+          })
+        }
+       
+        
       }
     }, [])
   }

@@ -46,6 +46,21 @@ div, span, h1, h2, h3, h4, h5, a, ul{
   transition: transform 248s;
 }
 
+pre {
+  padding: 2em;
+  background-color: #ddd;
+}
+
+div.pbcore {
+  overflow: hidden;
+  height: 8em;
+/*  box-shadow: 2px 2px #0f0;*/
+}
+
+div.pbcore.show {
+  height: auto;
+}
+
 span.rotate * {
   -webkit-animation: rotate-anim 48s ease-in-out infinite alternate;
   -moz-animation: rotate-anim 48s ease-in-out infinite alternate;
