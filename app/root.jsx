@@ -16,7 +16,7 @@ export const meta = () => {
 
 export const loader = () => {
   return {
-    wagtailHost: process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000",
+    wagtailHost: process.env.AAPB_API_URL || "http://aapb-api/api/v2",
     esIndex: process.env.ES_INDEX || "hot-aapb",
     esURL: process.env.ES_URL || "https://elastic.dev.wgbh-mla.org",
     apiKey: process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw==",
