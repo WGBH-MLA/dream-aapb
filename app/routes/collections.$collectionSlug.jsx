@@ -9,10 +9,11 @@ export const loader = async ({
   request,
 }) => {
 
-  let serverURL = process.env.WAGTAIL_HOST
-  let esIndex = process.env.ES_INDEX
-  let esURL = process.env.ES_URL
-  let apiKey = process.env.ES_API_KEY
+  let serverURL = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+  let esIndex = process.env.ES_INDEX || "aapb_catalog_v1"
+  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
+  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  
   let collection
   collection = await getPageBySlug('aapb_collections.AAPBCollection', params.collectionSlug)
 

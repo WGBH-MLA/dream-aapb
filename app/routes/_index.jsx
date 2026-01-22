@@ -46,7 +46,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    esIndex: process.env.ES_INDEX
+    esIndex: process.env.ES_INDEX || "aapb_catalog_v1",
   }
 
 

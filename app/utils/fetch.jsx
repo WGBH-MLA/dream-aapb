@@ -2,7 +2,8 @@ import { redirect } from 'react-router';
 
 export async function getExhibits() {
   let resp = await fetch(
-    process.env.WAGTAIL_HOST + '/api/v2/pages/?type=aapb_exhibits.AAPBExhibit&limit=999999',
+    let wagHost = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+    wagHost + '/api/v2/pages/?type=aapb_exhibits.AAPBExhibit&limit=999999',
     {
       headers: {"Host": "aapb-api"},
     },  
@@ -20,7 +21,8 @@ export async function getExhibits() {
 
 export async function getCollections() {
   let resp =  await fetch(
-    process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=999999`,
+    let wagHost = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+    wagHost + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=999999`,
     {
       headers: {Host: "aapb-api"},
     },
@@ -33,8 +35,9 @@ export async function getCollections() {
 
 export async function getFeatured() {
   let resp =  await fetch(
-    // process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection?featured=true&limit=3`,
-    process.env.WAGTAIL_HOST + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=3`,
+    let wagHost = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+    // wagHost + `/api/v2/pages/?type=aapb_collections.AAPBCollection?featured=true&limit=3`,
+    wagHost + `/api/v2/pages/?type=aapb_collections.AAPBCollection&limit=3`,
     {
       headers: {Host: "aapb-api"},
     },
@@ -46,7 +49,8 @@ export async function getFeatured() {
 }
 
 export async function getPageBySlug(type, slug) {
-  var resp = await fetch(`${process.env.WAGTAIL_HOST}/api/v2/pages?type=${type}&slug=${slug}`, {headers: {"Host": "aapb-api"}} )
+  let wagHost = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+  var resp = await fetch(`${wagHost}/api/v2/pages?type=${type}&slug=${slug}`, {headers: {"Host": "aapb-api"}} )
   var body
   try {
     body = await resp.json()

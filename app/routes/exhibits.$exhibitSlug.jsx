@@ -10,7 +10,11 @@ export const loader = async ({
   request,
 }) => {
 
-  let server_url = process.env.WAGTAIL_HOST
+  let serverURL = process.env.WAGTAIL_HOST || "https://ov-wag-pr-258.dev.wgbh-mla.org:8000"
+  let esIndex = process.env.ES_INDEX || "aapb_catalog_v1"
+  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
+  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+
   let exhibit
   exhibit = await getPageBySlug('aapb_exhibits.AAPBExhibit', params.exhibitSlug)
   // console.log( 'exy', exhibit )
@@ -20,7 +24,7 @@ export const loader = async ({
     // there are record blocks
 
     // get the record data for these aapb records in one query
-    let aapb_record_data = await getRecords( aapb_record_blocks.map((ar) => ar.guid ), process.env.ES_URL, process.env.ES_INDEX, process.env.ES_API_KEY )
+    let aapb_record_data = await getRecords( aapb_record_blocks.map((ar) => ar.guid ), esURL, esIndex, apiKey )
 
     // format to hash so less looping
     let aapb_record_dict = {}
@@ -59,7 +63,7 @@ export const loader = async ({
 
   ]
 
-  return { exhibit, server_url }
+  return { exhibit, serverURL }
 }
 
 export const meta = ({ data }) => {
@@ -80,7 +84,7 @@ export const meta = ({ data }) => {
       content: exhibit?.meta?.search_description || 'AAPB Exhibit',
       charset: 'utf-8'
     },
-    ...extractMeta(data.server_url, exhibit),
+    ...extractMeta(data.serverURL, exhibit),
   ]
 }
 
