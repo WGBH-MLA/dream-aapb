@@ -7,9 +7,12 @@ import { getRecord } from '../utils/getRecord'
 import { niceTitle } from '../utils/niceTitle'
 
 export const loader = async ({params, request}) => {
-  let esIndex = process.env.ES_INDEX || "hot-aapb"
-  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
-  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  // let esIndex = process.env.ES_INDEX || "hot-aapb"
+  // let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
+  // let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  let esIndex = "hot-aapb"
+  let esURL = "https://elastic.dev.wgbh-mla.org"
+  let apiKey = "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
 
   let data = await getRecord(params.guid, esURL, esIndex, apiKey)
   if(data){
