@@ -39,7 +39,3 @@ export default function Preview() {
     </div>
   )
 }
-
-export const sitemap: SitemapFunction = async ({ config, request }) => ({
-  exclude: true,
-})
