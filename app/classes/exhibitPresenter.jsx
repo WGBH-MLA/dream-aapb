@@ -26,6 +26,7 @@ export function renderExhibit(exhibit) {
 
 
   let titleURL, titleText
+  // hack, doesnt work for top level pages
   if(exhibit.meta.parent.title !== "AAPB"){
     titleURL = exhibit.meta.parent.meta.html_url.replace("http://aapb/", "/exhibits/") 
     titleText = exhibit.meta.parent.title

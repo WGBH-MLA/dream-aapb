@@ -225,7 +225,7 @@ export default function Catalog() {
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All Refinements"
+    showRefinementButtonText = "Show All"
   } else {
     currentRefinementsClasses = "current-refinements-container"
     showRefinementButtonText = "Show Less"
@@ -755,7 +755,7 @@ export default function Catalog() {
             
             <div className="header-spacer" />
 
-            <div className="sort-container sort marleft marright">
+            <div className="sort-container sort">
               Sort
               <SortBy
                 items={[
@@ -764,10 +764,10 @@ export default function Catalog() {
                   { key: "sort3", label: "Broadcast Date", value: `${data.esIndex}_broadcast_date_desc` },
                 ]}
               />
-              <ChevronDown style={{ right: "18px"}} />
+              <ChevronDown />
             </div>
             
-            <div className="sort-container per-page marleft marright">
+            <div className="sort-container per-page">
               Items per page
               <HitsPerPage
                 items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
@@ -775,7 +775,7 @@ export default function Catalog() {
               <ChevronDown />
             </div>
 
-            <div className="marleft marright">
+            <div className="smarright">
               <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
               <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
               <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
@@ -796,7 +796,7 @@ export default function Catalog() {
             />
           </div>
           <div className="clear-refinements-container">
-            <ClearRefinements />
+            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
@@ -824,8 +824,10 @@ export default function Catalog() {
 
           <SearchAccordion title="Broadcast Date" content={
             <>
-              <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
-              <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } /></div>
+              <div>
+                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+              </div>
             </>
           }/>
 

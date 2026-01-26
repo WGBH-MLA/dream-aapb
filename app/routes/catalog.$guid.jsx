@@ -143,7 +143,6 @@ export default function ShowRecord() {
     pbClasses += " show"
   }
 
-
   return (
     <>
       <div className="page-container">

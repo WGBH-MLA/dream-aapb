@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 
 export default function SearchAccordion(props){
   const [isOpen, setIsOpen] = useState(!props.startClosed)
@@ -13,7 +13,7 @@ export default function SearchAccordion(props){
   if(isOpen){
     chevy = <ChevronDown />
   } else {
-    chevy = <ChevronUp />
+    chevy = <ChevronRight />
   }
 
   return (

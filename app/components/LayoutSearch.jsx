@@ -17,15 +17,14 @@ export default function LayoutSearch(props){
     } else {
       destination = `/catalog?${ props.esIndex }[query]=${searchy}`
     }
-    // if(!window.location.pathname.includes("/catalog")){
+    if(!window.location.pathname.includes("/catalog")){
       // regular navigate
       props.navigateHook(destination)
-    // } else {
+    } else {
       // just force refresh since we're on search page
-      // window.location.href = destination
-      // console.log( 'DOESNT WORK' )
-      // window.location.reload()
-    // }
+      window.location.href = destination
+      window.location.reload()
+    }
   }
 
   function handleEnter(e){
