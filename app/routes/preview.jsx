@@ -1,11 +1,10 @@
 import { useLoaderData } from 'react-router';
-import { LoaderFunctionArgs } from 'react-router';
 import { getPreview } from '../utils/preview'
 import { renderCollection } from '../classes/collectionPresenter'
 import { renderExhibit } from '../classes/exhibitPresenter'
 import { getPageBySlug } from '../utils/fetch'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request }) => {
   var params = new URLSearchParams(request.url.replace(/.*\?/, ''))
 
   // leaving existing lookup by id, since current preview link provides only it
