@@ -2,7 +2,6 @@ import { useLoaderData } from 'react-router';
 import { getPreview } from '../utils/preview'
 import { renderCollection } from '../classes/collectionPresenter'
 import { renderExhibit } from '../classes/exhibitPresenter'
-import { getPageBySlug } from '../utils/fetch'
 
 export const loader = async ({ request }) => {
   var params = new URLSearchParams(request.url.replace(/.*\?/, ''))
@@ -17,8 +16,9 @@ export const loader = async ({ request }) => {
 }
 
 export default function Preview() {
+  console.log( 'I DID NOT ASK' )
   const preview = useLoaderData()
-
+  console.log( 'and I did not receive', preview )
   if (!(preview && preview.meta)) {
     throw new Error('Not found!')
   }
