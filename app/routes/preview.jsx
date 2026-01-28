@@ -16,11 +16,10 @@ export const loader = async ({ request }) => {
 }
 
 export default function Preview() {
-  console.log( 'I DID NOT ASK' )
   const preview = useLoaderData()
-  console.log( 'and I did not receive', preview )
   if (!(preview && preview.meta)) {
     throw new Error('Not found!')
+
   }
 
   let rendered
