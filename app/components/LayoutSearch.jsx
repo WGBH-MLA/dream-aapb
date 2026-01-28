@@ -2,8 +2,7 @@ import { useEffect } from "react"
 import { ExternalLink, Search, X } from "lucide-react"
 
 export default function LayoutSearch(props){
-  let searchy = props.searchQuery
-
+  var encodedQuery = encodeURIComponent(props.searchQuery || "")
   // useEffect(() => {
   //   if(!props.searchQuery && props.queryFromURL && props.queryFromURL.length > 0 && props.queryFromURL != searchy){
   //     searchy = props.queryFromURL
@@ -13,9 +12,9 @@ export default function LayoutSearch(props){
   function goToSearch(){
     let destination
     if(props.searchFilter){
-      destination = `/catalog?${ props.esIndex }[query]=${searchy}${props.searchFilter}`
+      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}${props.searchFilter}`
     } else {
-      destination = `/catalog?${ props.esIndex }[query]=${searchy}`
+      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}`
     }
     if(!window.location.pathname.includes("/catalog")){
       // regular navigate
