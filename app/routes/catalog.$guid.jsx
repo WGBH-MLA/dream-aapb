@@ -14,7 +14,11 @@ export const loader = async ({params, request}) => {
   let esURL = "https://elastic.dev.wgbh-mla.org"
   let apiKey = "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
 
-  let data = await getRecord(params.guid, esURL, esIndex, apiKey)
+  let record = await getRecord(params.guid, esURL, esIndex, apiKey)
+  let data = {
+    record: record,
+    esIndex: esIndex
+  }
   if(data){
     return data
   } else {
@@ -35,12 +39,12 @@ export default function ShowRecord() {
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
   if(data){
-    title = niceTitle(data.pbcoreDescriptionDocument.pbcoreTitle)
+    title = niceTitle(data.record.pbcoreDescriptionDocument.pbcoreTitle)
 
-    if(data?.pbcoreDescriptionDocument?.pbcoreDescription[0]){
-      if(data.pbcoreDescriptionDocument.pbcoreDescription[0]?.text){
+    if(data?.record?.pbcoreDescriptionDocument?.pbcoreDescription[0]){
+      if(data.record.pbcoreDescriptionDocument.pbcoreDescription[0]?.text){
         // aapb currently takes the first description only, obv we can show more if we ant
-        description = data.pbcoreDescriptionDocument.pbcoreDescription[0].text
+        description = data.record.pbcoreDescriptionDocument.pbcoreDescription[0].text
       } else {
         description = "No Description Available"
       }
@@ -48,13 +52,13 @@ export default function ShowRecord() {
       description = <ShowBox label="Description" text={ description } />
     }
 
-    if(data.media_type){
-      mediaType = <ShowBox label="Media Type" text={ data.media_type } />
+    if(data.record.media_type){
+      mediaType = <ShowBox label="Media Type" text={ data.record.media_type } />
     }
 
     // orgs
-    if(data.producing_org){
-      producingOrg = <ShowBox label="Producing Organization" text={ data.producing_org } />
+    if(data.record.producing_org){
+      producingOrg = <ShowBox label="Producing Organization" text={ data.record.producing_org } />
     }
 
     if(producingOrg){
@@ -67,8 +71,8 @@ export default function ShowRecord() {
     }
 
     // people
-    if(data.pbcoreDescriptionDocument.pbcoreCreator && data.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-      creators = data.pbcoreDescriptionDocument.pbcoreCreator.map((pbc, i) => {
+    if(data.record.pbcoreDescriptionDocument.pbcoreCreator && data.record.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+      creators = data.record.pbcoreDescriptionDocument.pbcoreCreator.map((pbc, i) => {
         if(pbc.creator && pbc.creatorRole && pbc.creatorRole.text && pbc.creatorRole.text != "Producing Organization"){
           return <ShowBox label={ pbc.creatorRole.text } text={ pbc.creator.text } />
         }
@@ -88,8 +92,8 @@ export default function ShowRecord() {
     }
 
 
-    if(data.pbcoreDescriptionDocument.pbcoreCoverage && data.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
-      coverages = data.pbcoreDescriptionDocument.pbcoreCoverage.map((pbc, i) => {
+    if(data.record.pbcoreDescriptionDocument.pbcoreCoverage && data.record.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
+      coverages = data.record.pbcoreDescriptionDocument.pbcoreCoverage.map((pbc, i) => {
         if(pbc.creatorRole && pbc.creatorRole.text != "Producing Organization"){
           return (
             <>
@@ -101,8 +105,8 @@ export default function ShowRecord() {
       })
     }
 
-    if(data.pbcoreDescriptionDocument.pbcoreIdentifier && data.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
-      eachId = data.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi) => {
+    if(data.record.pbcoreDescriptionDocument.pbcoreIdentifier && data.record.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
+      eachId = data.record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi) => {
         return <ShowBox label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
     }
@@ -116,22 +120,22 @@ export default function ShowRecord() {
       )
     }
 
-    if(data.pbcoreDescriptionDocument.pbcoreAssetDate && data.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
+    if(data.record.pbcoreDescriptionDocument.pbcoreAssetDate && data.record.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
       dates = (
         <>
           <div className="show-metadata-header">Dates</div>
-          { data.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ pbad.dateType } text={ pbad.text } />) }
+          { data.record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ pbad.dateType } text={ pbad.text } />) }
         </>
       )
     }
 
     
-    if(data.pbcoreDescriptionDocument){
+    if(data.record.pbcoreDescriptionDocument){
       pbCore = (
         <>
           <div className="show-metadata-header">pbcoreDescriptionDocument</div>
           <pre>
-            { JSON.stringify(data.pbcoreDescriptionDocument, null, 4) }
+            { JSON.stringify(data.record.pbcoreDescriptionDocument, null, 4) }
           </pre>
         </>
       )
@@ -150,7 +154,7 @@ export default function ShowRecord() {
           <HeaderBar title={ title} />
   
           <div className="show-media">
-            <VideoPlayer guid={ data.guid } />
+            <VideoPlayer guid={ data.record.guid } />
           </div>
 
           <div className="show-metadata-container bmarbot">
