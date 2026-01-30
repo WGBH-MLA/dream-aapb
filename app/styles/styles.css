@@ -31,6 +31,7 @@ span.ais-RefinementList-count {
 
 
 body {
+  overscroll-behavior: auto;
   margin: 0;
   font-family: Inter, helvetica;
   font-size: 16px;
@@ -260,7 +261,7 @@ div.header-bar {
   display: flex;
 }
 
-div.header-bar img.header-logo {
+div.header-bar a.header-logo img {
   height: 4em;
   min-height: 4em;
   margin-top: 2em;
@@ -432,7 +433,7 @@ div.biglink a {
 
 /* compononents  */
 div.view-select-button {
-  margin-left: 1em;
+  margin-left: 2em;
 }
 
 div.view-select-button img {
@@ -517,6 +518,7 @@ div.mappy-container {
 }
 
 div.mappy-container div.leaflet-container {
+  position: relative;
   height: 30rem;
 }
 
@@ -526,6 +528,10 @@ img.mappy-logo {
   height: auto;
   min-height: 4em;
   width: 6em;
+}
+
+div.leaflet-pane {
+  z-index: 0;
 }
 
 div.homepage-search {
@@ -632,57 +638,62 @@ div.tv-menu-container.three {
   height: 30rem;*/
 }
 
-div.tv-menu-container.three img {
-  background-size: 50%;
-}
 
 div.tv-menu-container h2 {
-  margin-left: 1.5em;
   margin-bottom: 1em;
 }
 
+div.tv-menu-container div.tv-menu-program, div.tv-menu-container div.tv-menu-program img {
+  width: 10.4175em;
+  min-width: 10.4175em;
+}
 
-div.tv-menu-container div.tv-menu-program.three img, div.tv-menu-container div.tv-menu-program.three div {
-  width: 15em;
-  max-height: 11.25em;
-  height: 11.25em;
+div.tv-menu-container div.tv-menu-program.three, div.tv-menu-container div.tv-menu-program.three img {
+  width: 14.5em;
+  min-width: 14.5em;
 }
 
 div.tv-menu-container div.tv-menu-program {
-/*  background-color: #ff0;*/
-  margin-left: 2em;
-  width: 14em;
-  min-width: 14em;
+  margin-right: 1.125em;
   height: 14em;
+
   overflow: hidden;
   position: relative;
 }
 
 div.tv-menu-container div.tv-menu-program.three {
-  width: 13em;
-  height: 22em;
-  max-height: 22em;
+  margin-right: 1em;
+  height: 14em;
+  max-height: 14em;
+}
+
+div.tv-menu-container div.tv-menu-program.three img {
+  display: block;
+  object-fit: cover;
+  overflow: hidden;
+  height: 12em;
 }
 
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
   overflow: hidden;
-  width: 12em;
-  height: 9em;
-  max-height: 9em;
+}
+
+div.tv-menu-program:hover > a h4 {
+  font-weight: bold;
 }
 
 div.tv-menu-container div.tv-menu-program h4 {
-  font-weight: bold;
+  font-weight: normal;
   font-style: italic;
   font-size: 1em;
   position: relative;
   z-index: 10;
   margin-top: 1em;
 
-  width: 75%;
-  max-width: 75%;
+  width: 90%;
+  max-width: 90%;
   position: relative;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -705,6 +716,7 @@ div.tv-menu-container a.see-all {
   font-weight: bold;
   text-decoration: none;
   color: #808;
+  z-index: 100;
 }
 
 /*summary box*/
@@ -2041,12 +2053,26 @@ div.author div span {
 
 /*leetle*/
 @media only screen and (max-width: 992px) {
-  div.search-result {
-    background-color: #ff0;
+  /* header */
+  div.header-bar {
+    display: block;
+  }
+
+  div.header-bar a.header-logo {
+    display: block;
+    width: 100%;
+  }
+
+  div.header-bar a.header-logo img {
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  div.body-container {
+    margin-left: 0;
   }
 
   div.ais-Hits {
-    background-color: #ff0;
     display: block;
   }
 
@@ -2056,29 +2082,113 @@ div.author div span {
     display: block;
   }
 
+  div.layout-search {
+    margin-left: 2em;
+  }
+
+  div.current-refinements-container {
+    margin-left: 2em;
+    display: block;
+    width: 100%;
+  }
+
+  div.stats-container {
+    width: 100%;
+    display: block;
+  }
+
+
 
   /* search ui */
+  div.page-sidebar.bmarleft {
+    margin-left: 2em;
+  }
+
+  div.page-maincolumn {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  div.hit-info-container {
+    width: 65%;
+    margin-left: 2em;
+  }
+
+  div.hit-info-container div.martop,  div.hit-info-container div.martop h3.martop {
+    margin-top: 0;
+  }
+
+  div.sort-container.view-select.marright {
+    margin-right: 4em;
+  }
+
+  h2.search-result-label {
+    display: none;
+  }
+
   div.options-container h2 {
     font-size: 2em;
     margin-right: 2em;
   }
 
+  div.top-search-bar {
+    margin-left: 2em;
+  }
+
+  div.top-refinements-bar {
+    width: 100%;
+    padding-left: 2em;
+    padding-top: 2em;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
+    width: 8rem;
+    height: 8rem;
+  }
 
   div.header-bar div.header-spacer, div.options-container div.header-spacer {
     flex-grow: 0;
     display: none;
   }
 
-  div.options-container div {
-    width: default;
+  div.sort-container div.view-select div {
+/*    display: inline-block;*/
+  }
+
+  div.options-container, div.sort-container.per-page, div.sort-container.sort, div.sort-container.view-select {
+    display: inline-block;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  div.sort-container.view-select {
+    width: 10%;
+  }
+
+  div.options-container {
+    display: inline-flex;
+    vertical-align: middle;
+    height: 2rem;
+    font-weight: bold;
+    line-height: 2.4em;
+  }
+
+  div.sort-container.per-page div, div.sort-container.sort div, div.sort-container div.view-select div {
+
   }
 
 }
 
-@media only screen and (min-width: 900px){
+@media only screen and (min-width: 1000px){
   div.page-maincolumn {
     display: inline-block;
     width: 62%;
+    margin-right: 0;
+  }
+
+  div.page-maincolumn.bmarright {
   }
 
   div.hit-thumbnail img {
@@ -2111,22 +2221,43 @@ div.author div span {
   }
 
   /*tv menu*/
-  div.tv-menu-container a.see-all {
-    left: 94.75%;
+  div.tv-menu-container div.tv-menu-program, div.tv-menu-container div.tv-menu-program img {
+    width: 14.125em;
+    min-width: 14.125em;
+  }
+
+  div.tv-menu-container div.tv-menu-program.three, div.tv-menu-container div.tv-menu-program.three img {
+    width: 18.5em;
+    min-width: 18.5em;
   }
 
   div.tv-menu-container div.tv-menu-program {
-    margin-left: 3.25em;
-    width: 18em;
-    min-width: 18em;
+    margin-right: 1.125em;
+    height: 18em;
+
+    overflow: hidden;
+    position: relative;
   }
 
   div.tv-menu-container div.tv-menu-program.three {
-    margin-left: 2em;
-    min-width: 20em;
-    width: 20em;
-    max-width: 20em;
+    margin-right: 2.25em;
+    height: 16em;
+    max-height: 16em;
   }
+
+  div.tv-menu-container div.tv-menu-program.three img {
+    display: block;
+    object-fit: cover;
+    overflow: hidden;
+    height: 14em;
+  }
+
+  div.tv-menu-container div.tv-menu-program img {
+    display: block;
+    object-fit: cover;
+    overflow: hidden;
+  }
+
 
   div.tv-menu-container div.tv-menu-program h4 {
     width: 75%;

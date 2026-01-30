@@ -242,9 +242,7 @@ export default function Catalog() {
   }
 
   let pagination
-  if(false){
-    pagination = <Pagination />
-  }
+  pagination = <Pagination />
 
   let searchbox
   searchbox = <CustomSearchBox
@@ -751,7 +749,7 @@ export default function Catalog() {
 
         <div className="top-search-bar bmarleft smarbot smarright">
           <div className="options-container martop">
-            <h2 className="">Search Results</h2>
+            <h2 className="search-result-label">Search Results</h2>
             
             <div className="header-spacer" />
 
@@ -775,10 +773,12 @@ export default function Catalog() {
               <ChevronDown />
             </div>
 
-            <div className="smarright">
-              <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
-              <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
-              <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            <div className="sort-container view-select marright">
+              <div className="view-select">
+                <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
+                <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
+                <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+              </div>
             </div>
           </div>
           

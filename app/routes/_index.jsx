@@ -1,5 +1,4 @@
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useLoaderData } from "react-router"
 
@@ -59,9 +58,21 @@ export default function Index() {
   
   let navigateHook = useNavigate()
   const [search, setSearch] = useState("")
+  const [block, setBlockMapZoom] = useState("")
+
   const handleLayoutSearch = (val) => {
     setSearch(val)
   }
+
+  // useEffect(() => {
+  //   window.addEventListener('scroll', () => {
+  //     document.getElementById("mappy").style.overflow = "hidden"
+
+  //     setTimeout(() => {
+  //       document.getElementById("mappy").style.overflow = "inherit"
+  //     }, 100)
+  //   })
+  // }, [])
 
   return (
     <>
@@ -79,7 +90,6 @@ export default function Index() {
 
       <div className="page-container">
 
-
         <div className="skinny-body-container">
 
           <div className="feature-video-container bmarbot">
@@ -87,14 +97,15 @@ export default function Index() {
           </div>
 
 
-          <div className="mappy-container marbot">
+          <div id="mappy" className="mappy-container marbot">
           <h2 className="marbot">Explore Stations Featured in the AAPB</h2>
             <Mappy />
           </div>
 
-          <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-          <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
-
+          <div className="marleft">
+            <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
+            <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+          </div>
         </div>
       </div>
     </>
