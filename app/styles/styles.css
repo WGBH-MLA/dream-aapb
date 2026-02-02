@@ -2100,6 +2100,16 @@ div.author div span {
 
 
   /* search ui */
+  div.pagination-bar {
+    overflow: hidden;
+    width: 90%;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+    margin-bottom: 4em;
+  }
+
   div.page-sidebar.bmarleft {
     margin-left: 2em;
   }
