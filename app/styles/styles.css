@@ -111,8 +111,8 @@ div.header-bar {
 }
 
 div.header-bar img.header-logo {
-  height: 4em;
-  min-height: 4em;
+  height: 2em;
+  min-height: 2em;
   margin-top: 2em;
   margin-left: 6em;
   object-fit: contain;
@@ -329,7 +329,7 @@ div.newsletter-bar input[type="submit"] {
 div.newsletter-signup input {
   height: 2em;
 }
- 
+
 div.newsletter-signup input[type="text"] {
   width: 10em;
 }
@@ -468,7 +468,7 @@ div.tv-menu-container div.tv-menu-program {
   display: inline-flex;
   flex-grow: 1;
   width: 23.5rem;
-  min-width: 23.5rem;  
+  min-width: 23.5rem;
   overflow: hidden;
   position: relative;
 }
@@ -775,7 +775,7 @@ div.show-description {
 div.show-media {
   margin-left: 30%;
   width: 40%;
-  
+
   height: 20.25vw;
   max-width: 27vw;
   width: 27vw;
@@ -874,7 +874,7 @@ div.search-result.list div.hit-thumbnail-container {
   width: 20%;
 }
 
-div.search-result.list div.hit-thumbnail-container div.hit-thumbnail, div.search-result.list div.hit-thumbnail-container div.hit-thumbnail img { 
+div.search-result.list div.hit-thumbnail-container div.hit-thumbnail, div.search-result.list div.hit-thumbnail-container div.hit-thumbnail img {
   width: 4rem;
   height: 4rem;
 }
@@ -1204,7 +1204,7 @@ div.search-accordion-container svg {
 }
 
 div.ais-SearchBox form button.ais-SearchBox-submit, div.ais-SearchBox form button.ais-SearchBox-reset {
-  
+
 }
 
 div.ais-SearchBox form, div.ais-SearchBox form input {
