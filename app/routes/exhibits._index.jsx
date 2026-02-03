@@ -26,10 +26,15 @@ export const loader = async () => {
 export default function Index() {
   let data = useLoaderData()
   return (
-    <div className='body-container'>
-      <SummaryBox title="Scholarly Exhibits" text="American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance." />
+    <div className='page-container'>
+      <div className="skinny-body-container">
+        <SummaryBox title="Scholarly Exhibits" text="American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance." />
+
+      </div>
+      <div className="skinny-body-container">
       
-      <TVMenu title="" programs={ data.exhibits } />
+        <TVMenu title="" programs={ data.exhibits } />
+      </div>
     </div>
   )
 }

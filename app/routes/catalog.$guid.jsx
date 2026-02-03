@@ -151,7 +151,7 @@ export default function ShowRecord() {
     <>
       <div className="page-container">
         <div className="skinny-body-container bmarbot">
-          <HeaderBar title={ title} />
+          <HeaderBar title={ title } />
   
           <div className="show-media">
             <VideoPlayer guid={ data.record.guid } />
@@ -206,3 +206,4 @@ function dateTypeName(type){
       return "Copyright Date"
   }
 }
+

@@ -610,16 +610,21 @@ div.layout-search button {
 
 /*listy pages*/
 div.tv-menu-container {
-  margin-left: 2em;
-  display: block;
+  display: grid;
   width: 96%;
 }
 
 div.tv-menu-container div.tv-menu-body {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto auto auto;
+/*  align-items: left;*/
+/*  grid-row-end: 3;*/
+  row-gap: 1em;
+  column-gap: 1em;
+  grid-template-columns: 33% 33% 33%;
+/*  flex-direction: row;*/
+/*  flex-wrap: wrap;*/
   overflow: hidden;
 
 }
@@ -644,8 +649,8 @@ div.tv-menu-container h2 {
 }
 
 div.tv-menu-container div.tv-menu-program, div.tv-menu-container div.tv-menu-program img {
-  width: 10.4175em;
-  min-width: 10.4175em;
+  width: 14em;
+  min-width: 14em;
 }
 
 div.tv-menu-container div.tv-menu-program.three, div.tv-menu-container div.tv-menu-program.three img {
@@ -654,8 +659,8 @@ div.tv-menu-container div.tv-menu-program.three, div.tv-menu-container div.tv-me
 }
 
 div.tv-menu-container div.tv-menu-program {
-  margin-right: 1.125em;
-  height: 14em;
+/*  margin-right: 1em;*/
+  height: 15em;
 
   overflow: hidden;
   position: relative;
@@ -663,8 +668,8 @@ div.tv-menu-container div.tv-menu-program {
 
 div.tv-menu-container div.tv-menu-program.three {
   margin-right: 1em;
-  height: 14em;
-  max-height: 14em;
+  height: 16em;
+  max-height: 16em;
 }
 
 div.tv-menu-container div.tv-menu-program.three img {
@@ -677,7 +682,6 @@ div.tv-menu-container div.tv-menu-program.three img {
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
-  overflow: hidden;
 }
 
 div.tv-menu-program:hover > a h4 {
@@ -685,19 +689,14 @@ div.tv-menu-program:hover > a h4 {
 }
 
 div.tv-menu-container div.tv-menu-program h4 {
+  width: 100%;
+  word-break: break-word;
   font-weight: normal;
   font-style: italic;
   font-size: 1em;
   position: relative;
   z-index: 10;
   margin-top: 1em;
-
-  width: 90%;
-  max-width: 90%;
-  position: relative;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 div.tv-menu-container div.tv-menu-program h5 {
@@ -722,10 +721,9 @@ div.tv-menu-container a.see-all {
 /*summary box*/
 div.summary-box-container {
   text-align: left;
-  margin-left: 4em;
   margin-bottom: 2em;
-  margin-right: 4em;
   display: block;
+  margin-right: 4em;
 }
 
 div.summary-box-container h2 {
@@ -784,7 +782,7 @@ div.pull-quote-group-quote {
 
 div.pull-quote-group-bubbles {
   text-align: center;
-  padding-bottom: 4em;
+  padding-bottom: 2em;
   width: 100%;
 }
 
@@ -2050,9 +2048,74 @@ div.author div span {
 }
 
 
+@media only screen and (max-width: 1280px){
+  div.tv-menu-container div.tv-menu-body {
+    grid-template-columns: 50% 50%;
+  }
+}
+
 
 /*leetle*/
 @media only screen and (max-width: 992px) {
+  /* layout */
+  div.skinny-body-container {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  /* static pages */
+  div.pull-quote-group-container {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  div.pull-quote-group-container.bmarleft.bmarright {
+    margin-left: 0;
+    margin-right: 0;
+
+  }
+
+  div.pull-quote-group-quote {
+    height: auto;
+  }
+
+  div.pull-quote-group-bubbles {
+    margin-top: 2em;
+  }
+
+  /* tv menu program */
+  div.tv-menu-container div.tv-menu-program, div.tv-menu-container div.tv-menu-program img {
+    width: 20em;
+    min-width: 20em;
+  }
+
+  div.tv-menu-container div.tv-menu-program.three, div.tv-menu-container div.tv-menu-program.three img {
+    width: 18em;
+    min-width: 18em;
+  }
+
+  div.tv-menu-container div.tv-menu-program {
+    margin-right: 1.125em;
+    height: 20em;
+
+    overflow: hidden;
+    position: relative;
+  }
+
+  div.tv-menu-container div.tv-menu-program.three {
+    height: 16em;
+    max-height: 16em;
+  }
+
+  div.tv-menu-container div.tv-menu-program h4 {
+    height: 20em;
+    display: inline-block;
+  }
+
+  div.tv-menu-container div.tv-menu-body {
+    grid-template-columns: 100%;
+  }
+
   /* header */
   div.header-bar {
     display: block;
@@ -2185,9 +2248,7 @@ div.author div span {
     line-height: 2.4em;
   }
 
-  div.sort-container.per-page div, div.sort-container.sort div, div.sort-container div.view-select div {
-
-  }
+/*  div.sort-container.per-page div, div.sort-container.sort div, div.sort-container div.view-select div {}*/
 
 }
 
@@ -2214,6 +2275,9 @@ div.author div span {
   }
 
 }
+
+
+
 
 /*beeg*/
 @media only screen and (min-width: 1600px) {

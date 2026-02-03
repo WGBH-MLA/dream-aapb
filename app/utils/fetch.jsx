@@ -6,7 +6,7 @@ export async function getExhibits() {
     wagHost + '/pages/?type=aapb_exhibits.AAPBExhibit&limit=999999',
     {
       headers: {"Host": "aapb-api"},
-    },  
+    },
     res => {
       console.log('exs', res)
     }

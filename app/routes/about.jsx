@@ -13,6 +13,7 @@ export default function About() {
           </div>
         </div>
 
+
         <div className="link-bank">
           <a href="/our-story">Our Story</a>
           <hr />
