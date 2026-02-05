@@ -50,17 +50,16 @@ export default function SearchResult({hit}){
       </a>
 
       <div className="hit-info-container">
-        <div className="smarbot martop">
-          <h3 className="hit-title martop marleft"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
+        <div className="smarbot">
+          <h3 className="hit-title "><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
         </div>
 
-        <div className="smarbot marleft">
-          <ScoreLight score={ hit._score } />
+        <div className="smarbot ">
           { date }
           { producingOrg }
         </div>
 
-        <div className="marleft marbot">
+        <div className=" marbot">
           { description }
         </div>
       </div>

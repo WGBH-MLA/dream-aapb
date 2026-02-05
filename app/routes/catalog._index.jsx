@@ -785,7 +785,7 @@ export default function Catalog() {
 
         </div>
 
-        <div className="top-refinements-bar marbot bmarleft bmarright">
+        <div className="top-refinements-bar smarbot bmarleft bmarright">
           <div className="stats-container">
             <Stats />
           </div>

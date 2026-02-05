@@ -22,6 +22,7 @@ ul.ais-Pagination-list li.ais-Pagination-item.ais-Pagination-item--page.ais-Pagi
 
 ol.ais-Hits-list {
   list-style-type: none;
+  margin-left: 1em;
 }
 
 span.ais-RefinementList-count {
@@ -38,10 +39,11 @@ body {
 }
 
 /*universal*/
-div, span, h1, h2, h3, h4, h5, a, ul{
+div, span, h1, h2, h3, h4, h5, a, ul, ol {
   color: #000;
   margin: 0;
   padding: 0;
+  padding-inline-start: 0;
   font-weight: normal;
   transform: rotate(0deg);
   transition: transform 248s;
@@ -262,13 +264,13 @@ div.header-bar {
 }
 
 div.header-bar a.header-logo img {
-  height: 4em;
+  height: 6em;
+  width: 20em;
   min-height: 4em;
-  margin-top: 2em;
   margin-left: 6em;
   object-fit: contain;
   flex-grow: 2;
-  max-width: 16rem;
+/*  max-width: 16em;*/
 
 }
 
@@ -940,20 +942,20 @@ div.drawermenu-items {
 div.page-sidebar {
   vertical-align: top;
   display: inline-block;
-  min-width: 12em;
-  width: 20vw;
-  max-width: 20vw;
   overflow: hidden;
+  width: 18%;
 }
 
 div.page-sidebar h3.sidebar-title {
-  margin-bottom: 2em;
+  margin-top: 1em;
+  margin-bottom: 1em;
   font-weight: 800;
 }
 
 div.page-maincolumn {
   display: inline-block;
-  width: 69%;
+  width: 72%;
+  margin-right: 0;
 }
 
 div.clear-refinements-container div.ais-ClearRefinements {
@@ -1040,12 +1042,14 @@ div.video-player-container video {
 /*search result*/
 
 
-
 div.search-result, div.baby-result {
   position: relative;
   min-height: 8rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
 }
 
+/*baby search*/
 div.baby-search li.ais-Hits-item {
   display: inline-flex;
   margin-right: 2em;
@@ -1088,7 +1092,7 @@ button.sidebar-search-button {
 div.hit-thumbnail-container, div.hit-info-container {
   vertical-align: top;
   display: inline-block;
-  min-height: 9rem;
+  min-height: 1em;
 }
 
 div.hit-thumbnail-container {
@@ -1143,6 +1147,17 @@ div.search-result.gallery div.hit-thumbnail-container {
   width: 100%;
 }
 
+div.hit-info-container h3.hit-title {
+  width: 92%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+div.hit-info-container h3.hit-title a {
+  font-weight: 800;
+}
+
 div.search-result.gallery h3.hit-title {
   font-size: 1em;
   overflow: hidden;
@@ -1158,30 +1173,22 @@ div.hit-info-container {
   max-width: 80%;
 }
 
-div.hit-info-container h3.hit-title {
-  width: 92%;
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 800;
-}
-
 div.hit-thumbnail {
   position: relative;
-  width: 12rem;
-  height: 12rem;
-}
-
-div.hit-thumbnail img {
-  width: 12rem;
 }
 
 div.hit-thumbnail img.thumbnail {
   position: absolute;
   object-fit: cover;
-  width: 12rem;
-  height: 12rem;
+}
+
+div.hit-thumbnail, div.hit-thumbnail img.thumbnail, div.hit-thumbnail img {
+  /* redundant/separate from height for little VIDEO/AUDIO bar on hit thumbnails */
+  width: 11em;
+}
+
+div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
+  height: 11em;
 }
 
 div.tv-menu-program div.show-thumbnail img.thumbnail-bar {
@@ -1255,10 +1262,7 @@ div.options-container {
 
 div.ais-SortBy select option {
   font-weight: 800;
-}
-
-div.ais-SortBy select {
-  padding: 0.6em;
+  font-size: 10em;
 }
 
 div.ais-Stats span.ais-Stats-text {
@@ -1301,7 +1305,7 @@ div.options-container div {
   display: inline-flex;
   vertical-align: middle;
   width: 12%;
-  height: 2rem;
+  height: 2em;
   font-weight: bold;
   line-height: 2.4em;
 }
@@ -1313,7 +1317,7 @@ div.options-container div * {
 div.options-container select {
   background-color: transparent;
   z-index: 100;
-  height: 2.2rem;
+  height: 2em;
   width: 12rem;
   font-size: 1.1em;
   font-weight: 800;
@@ -1324,7 +1328,7 @@ div.options-container select {
 }
 
 div.options-container div.sort-container {
-  font-size: 1.1em;
+  font-size: 1.3em;
   position: relative;
 }
 
@@ -1414,9 +1418,14 @@ ul.ais-CurrentRefinements-list li span.ais-CurrentRefinements-category {
   padding-left: 0.5em;
   display: inline-flex;
   vertical-align: middle;
-  color: rgba(101, 105, 170);
   background-color: #fff;
+  font-size: 1.1em;
   height: 2em;
+  border: 1px solid rgba(101, 105, 170);
+}
+
+span.ais-CurrentRefinements-category span.ais-CurrentRefinements-categoryLabel, span.ais-CurrentRefinements-category button.ais-CurrentRefinements-delete {
+  color: rgba(101, 105, 170);
 }
 
 ul.ais-CurrentRefinements-list li {
@@ -1471,7 +1480,7 @@ div.ais-SearchBox form button.ais-SearchBox-submit, div.ais-SearchBox form butto
 div.ais-SearchBox form, div.ais-SearchBox form input {
   position: relative;
   left: -0.1em;
-  width: 77%;
+  width: 80%;
   padding: 0.25em;
  }
  div.ais-SearchBox form button {
@@ -1479,7 +1488,7 @@ div.ais-SearchBox form, div.ais-SearchBox form input {
  }
 
 input.sidebar-search  {
-  width: 56%;
+  width: 90%;
   height: 1em;
   padding: 0.25em;
 }
@@ -2168,6 +2177,7 @@ div.author div span {
     width: 90%;
     padding-left: 1em;
     padding-right: 1em;
+    padding-bottom: 1em;
     margin-left: 1em;
     margin-right: 1em;
     margin-bottom: 4em;
@@ -2252,7 +2262,7 @@ div.author div span {
 
 }
 
-@media only screen and (min-width: 1000px){
+/*@media only screen and (min-width: 1000px){
   div.page-maincolumn {
     display: inline-block;
     width: 62%;
@@ -2275,7 +2285,7 @@ div.author div span {
   }
 
 }
-
+*/
 
 
 
