@@ -1,3 +1,5 @@
+import { decode } from "html-entities"
+
 export default function SummaryBox(props){
   let title
   if(props.title && props.title.length > 0){
@@ -6,9 +8,7 @@ export default function SummaryBox(props){
   return (
     <div className="summary-box-container">
       { title }
-      <div className="summary-box">
-        { props.text }
-      </div>
+      <div className="summary-box" dangerouslySetInnerHTML={{ __html: decode(props.text) }} />
     </div>
   )
 }

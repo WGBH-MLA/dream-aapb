@@ -16,10 +16,10 @@ export default function Footer(props) {
           url: "/exhibits",
           text: "Scholarly Exhibits"
         },
-        {
-          url: "/resources",
-          text: "Educator Resources"
-        },
+        // {
+        //   url: "/resources",
+        //   text: "Educator Resources"
+        // },
       ]
     },
     participate: {
@@ -29,10 +29,6 @@ export default function Footer(props) {
         {
           url: "/contribute",
           text: "Contribute Content"
-        },
-        {
-          url: "/volunteer",
-          text: "Vounteer"
         },
         {
           url: "/fixitplus",
@@ -57,7 +53,7 @@ export default function Footer(props) {
           text: "FAQ"
         },
         {
-          url: "/contact",
+          url: "/contact-us",
           text: "Contact Us"
         },        
       ]

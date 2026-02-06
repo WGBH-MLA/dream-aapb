@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
+import QuickPagination from "../components/QuickPagination"
 import SummaryBox from "../components/SummaryBox"
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
@@ -25,6 +27,12 @@ export const loader = async () => {
 
 export default function Index() {
   let data = useLoaderData()
+  const [currentPage, setCurrentPage] = useState(0)
+
+  var handleChangePage = (pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+
   return (
     <div className='page-container'>
       <div className="skinny-body-container">
@@ -34,6 +42,10 @@ export default function Index() {
       <div className="skinny-body-container">
       
         <TVMenu title="" programs={ data.exhibits } />
+      </div>
+
+      <div>
+        <QuickPagination baseURL={ "/exhibits" } currentPage={ currentPage } handleChangePage={ handleChangePage } />
       </div>
     </div>
   )
