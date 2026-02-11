@@ -33,9 +33,9 @@ import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
   return {
-    esIndex: "hot-aapb",
-    apiKey: "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw==",
-    esURL: "https://elastic.dev.wgbh-mla.org"
+    esIndex: process.env.ES_INDEX,
+    apiKey: process.env.ES_API_KEY,
+    esURL: process.env.ES_URL
   }
 }
 

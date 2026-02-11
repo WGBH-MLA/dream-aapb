@@ -45,8 +45,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    // esIndex: process.env.ES_INDEX || "hot-aapb",
-    esIndex: "hot-aapb",
+    esIndex: process.env.ES_INDEX || "hot-aapb",
   }
 
 

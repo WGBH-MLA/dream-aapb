@@ -1,5 +1,5 @@
-curl -v -X PUT "localhost:9200/aapb-cold-steel/" \
--H "Authorization: ApiKey "R1hxQWQ1a0J5LU1iaVpUWDhYTVg6WmVIUmlPS3lTVHVUb291bm5iSDNPdw=="" \
+curl -v -X PUT "localhost:9200/aapb-hot-titanium/" \
+-H "Authorization: ApiKey "aHNzd1Nad0JobVVPNERIeHNvOW46MVQxQUlaZlFTSjdJUHV6NGEzb1RCUQ=="" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {

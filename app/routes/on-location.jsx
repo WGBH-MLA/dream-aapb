@@ -39,7 +39,7 @@ export default function OnLocation() {
 
         <h3 className="marbot">Visiting the Library of Congress</h3>
 
-        <div className="marbot" style={{ display: "flex"}}>
+        <div className="marbot" style={{ display: "flex" }}>
           <img src='https://s3.amazonaws.com/americanarchive.org/on-location/library-exterior.jpg' />
 
           <span className="side-box marbot">The Library of Congress Motion Picture, Broadcasting and Recorded Sound Division contains two sections, Recorded Sound and Moving Image. These two sections have distinct policies and procedures regarding on-site access.</span>
@@ -48,7 +48,7 @@ export default function OnLocation() {
         <h3 className="marbot">Recorded Sound Section</h3>
 
         <div className="marbot" style={{ display: "flex"}}>
-          <img className="marright" src='https://s3.amazonaws.com/americanarchive.org/on-location/wgbh-exterior.jpg' />
+          <img className="marright" src='https://s3.us-east-1.amazonaws.com/americanarchive.org/override/loc-sound-recording.png' />
           <ul className="blank-list">
             <li>Hours and Location:</li>
             <li>8:30 am to 5 pm, Monday through Friday</li>

@@ -9,14 +9,10 @@ export const loader = async ({
   request,
 }) => {
 
-  // let serverURL = process.env.AAPB_API_URL || "http://aapb-api/api/v2"
-  // let esIndex = process.env.ES_INDEX || "hot-aapb"
-  // let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
-  // let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
-  let serverURL = "http://aapb-api/api/v2"
-  let esIndex = "hot-aapb"
-  let esURL = "https://elastic.dev.wgbh-mla.org"
-  let apiKey = "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  let serverURL = process.env.AAPB_API_URL || "http://aapb-api/api/v2"
+  let esIndex = process.env.ES_INDEX || "hot-aapb"
+  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
+  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
   
   let collection
   collection = await getPageBySlug('aapb_collections.AAPBCollection', params.collectionSlug)
