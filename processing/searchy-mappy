@@ -1,5 +1,5 @@
 curl -v -X PUT "localhost:9200/aapb-hot-titanium/" \
--H "Authorization: ApiKey "aHNzd1Nad0JobVVPNERIeHNvOW46MVQxQUlaZlFTSjdJUHV6NGEzb1RCUQ=="" \
+-H "Authorization: ApiKey "aGFwMHRKd0JOMVZ0MzRNUDhJOTI6WUlsR05OVVpqbVgxalRZeEMxNlVJUQ=="" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {
