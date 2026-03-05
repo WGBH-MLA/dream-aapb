@@ -1,6 +1,34 @@
 // copied
 
-// not needed v
+// desc card
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreDescription != null && ctx.pbcoreDescriptionDocument.pbcoreDescription instanceof String){
+  String descVal = ctx.pbcoreDescriptionDocument.pbcoreDescription;
+  HashMap descObj = new HashMap();
+  descObj.text = descVal;
+  ctx.pbcoreDescriptionDocument.pbcoreDescription = new ArrayList();
+  ctx.pbcoreDescriptionDocument.pbcoreDescription.add(descObj);
+}
+
+// title texti + cardi
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle instanceof String){
+  String titVal = ctx.pbcoreDescriptionDocument.pbcoreTitle;
+  HashMap titObj = new HashMap();
+  titObj.text = titVal;
+  ctx.pbcoreDescriptionDocument.pbcoreTitle = new ArrayList();
+  ctx.pbcoreDescriptionDocument.pbcoreTitle.add(titObj);
+}
+
+// title cardi only
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle instanceof HashMap){
+  HashMap titObj = ctx.pbcoreDescriptionDocument.pbcoreTitle;
+  ctx.pbcoreDescriptionDocument.pbcoreTitle = new ArrayList();
+  ctx.pbcoreDescriptionDocument.pbcoreTitle.add(titObj);
+}
+
+
+
+
+// desc
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreDescription != null && ctx.pbcoreDescriptionDocument.pbcoreDescription.length > 0){
   for(int x=0; x<ctx.pbcoreDescriptionDocument.pbcoreDescription.length; x++){
     if(ctx.pbcoreDescriptionDocument.pbcoreDescription[x] != null && ctx.pbcoreDescriptionDocument.pbcoreDescription[x] instanceof String){
@@ -11,8 +39,6 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
   }
 }
 
-
-// needed 6.17.25
 // fix instantiation cardinality
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation instanceof HashMap){
   HashMap instVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation;
@@ -30,6 +56,43 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
     }
   }
 }
+
+
+// fix instantiationmediatype cardinality
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
+  for(int o=0; o < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; o++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType instanceof String){
+      String imVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType;
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType = new HashMap();
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType.text = imVal;
+    }
+  }
+}
+
+// fix instantiationPhysical/ textiness
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
+  for(int q=0; q < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; q++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[q].instantiationPhysical != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[q].instantiationPhysical instanceof String){
+      String ipVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[q].instantiationPhysical;
+      HashMap ipObj = new HashMap();
+      ipObj.text = ipVal;
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[q].instantiationPhysical = ipObj;
+    }
+  }
+}
+
+// fix instantiationDigital textiness
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
+  for(int r=0; r < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; r++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[r].instantiationDigital != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[r].instantiationDigital instanceof String){
+      String idVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[r].instantiationDigital;
+      HashMap idObj = new HashMap();
+      idObj.text = idVal;
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[r].instantiationDigital = idObj;
+    }
+  }
+}
+
 
 // fix pbcoreAnnotation cardinality
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation != null){
@@ -53,6 +116,61 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
   }
 }
 
+
+// genre annotation and source
+if( ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDocument.pbcoreGenre instanceof ArrayList){
+  for(int n = 0; n < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; n++){
+
+    if(ctx.pbcoreDescriptionDocument.pbcoreGenre[n] != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation instanceof HashMap ){
+      String oldGenreAnno = ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation.text;
+      ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation = oldGenreAnno;
+    }
+
+    if(ctx.pbcoreDescriptionDocument.pbcoreGenre[n] != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].source instanceof HashMap ){
+      String oldGenreSource = ctx.pbcoreDescriptionDocument.pbcoreGenre[n].source.text;
+      ctx.pbcoreDescriptionDocument.pbcoreGenre[n].source = oldGenreSource;
+    }
+  }
+}
+
+// fix pbcorecreator cardi
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator instanceof HashMap){
+  HashMap creatorVal = ctx.pbcoreDescriptionDocument.pbcoreCreator;
+  ctx.pbcoreDescriptionDocument.pbcoreCreator = new ArrayList();
+  ctx.pbcoreDescriptionDocument.pbcoreCreator.add(creatorVal);
+}
+
+// fix creatorrole cardi
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+  for(int t = 0; t < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; t++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[t] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole instanceof HashMap){
+      HashMap creRoleVal = ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole;
+      ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole = new ArrayList();
+      ctx.pbcoreDescriptionDocument.pbcoreCreator.creatorRole.add(creRoleVal);
+    }
+  }
+}
+
+// fix pbcore creator textiness
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+  for(int p=0; p < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; p++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creator instanceof String){
+      String creVal = ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creator;
+      ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creator = new HashMap();
+      ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creator.text = creVal;
+    }
+
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creatorRole instanceof String){
+      String croVal = ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creatorRole;
+      ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creatorRole = new ArrayList();
+      ctx.pbcoreDescriptionDocument.pbcoreCreator[p].creatorRole.add(croVal);
+    }    
+  }
+}
+
+
+
+
 // reall v
 
 
@@ -75,9 +193,11 @@ ctx.producing_org = null;
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
 
   for (int i = 0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
-    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.text == "Producing Organization"){
-      if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
-        ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
+    for (int s = 0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
+      if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s].text == "Producing Organization"){
+        if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
+          ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
+        }
       }
     }
   }
@@ -118,7 +238,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreIdentifier != null && ctx.pbcoreDescripti
 ctx.genres = new ArrayList();
 if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDocument.pbcoreGenre.length > 0){
   for(int b=0; b < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; b++){
-    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[b] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation.text != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation.text == "genre") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source == "AAPB Format Genre") ){
+    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[b] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].annotation == "genre") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[b].source == "AAPB Format Genre") ){
       ctx.genres.add(ctx.pbcoreDescriptionDocument.pbcoreGenre[b].text);
     }
   }
@@ -182,7 +302,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDoc
   for(int g=0; g < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; g++){
 
     // not sure if both annotation AND source values are required but feels reasonable to take either as close enough
-    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[g] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation.text != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation.text == "topic") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source == "AAPB Topical Genre") ){
+    if( ctx.pbcoreDescriptionDocument.pbcoreGenre[g] != null && (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].annotation == "topic") || (ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[g].source == "AAPB Topical Genre") ){
       ctx.topics.add(ctx.pbcoreDescriptionDocument.pbcoreGenre[g].text);
     }
   }
@@ -191,7 +311,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDoc
 
 
 
-// stored display title -> people will think they can search for the displayed title, which is not txt from a single element
+// stored display ` -> people will think they can search for the displayed title, which is not txt from a single element
 ctx.title = null;
 
 ArrayList display_titles = new ArrayList();
