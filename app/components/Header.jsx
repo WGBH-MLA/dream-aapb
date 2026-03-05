@@ -7,19 +7,24 @@ const drawerItems = {
         label: "Collections",
         url: "/collections",
         external: false,
-                
+
       },
       {
         label: "Scholarly Exhibits",
         url: "/exhibits",
         external: false,
-                
+
       },
       {
         label: "Educator Resources",
         url: "/resources",
         external: false,
-                
+
+      },
+      {
+        label: "National History Day",
+        url: "/national-history-day",
+        external: false,
       },
     ],
   participate: [
@@ -27,13 +32,13 @@ const drawerItems = {
         label: "Contribute Content",
         url: "/contribute",
         external: false,
-                
+
       },
       {
         label: "Fix Transcripts",
         url: "/fixitplus",
         external: false,
-                
+
       },
     ],
   about: [
@@ -41,25 +46,25 @@ const drawerItems = {
         label: "About the AAPB",
         url: "/about",
         external: false,
-                
+
       },
       {
         label: "Participating Organizations",
         url: "/organizations",
         external: false,
-                
+
       },
       {
         label: "Visit",
         url: "/visit",
         external: false,
-                
+
       },
       {
         label: "FAQ",
         url: "/faq",
         external: false,
-                
+
       },
     ]
 
