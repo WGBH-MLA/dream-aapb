@@ -1,6 +1,6 @@
 import ScoreLight from "../components/ScoreLight"
 import Thumbnail from "../components/Thumbnail"
-import { niceTitle } from "../util/niceTitle"
+import { niceTitle } from "../utils/niceTitle"
 
 function aapbGuid(descdoc){
   if(descdoc && descdoc.pbcoreIdentifier && descdoc.pbcoreIdentifier.length > 0){
@@ -42,28 +42,24 @@ export default function SearchResult({hit}){
 
   return (
     <div className="search-result standard marbot">
-      <pre>
-        { "" || JSON.stringify(hit) }
-      </pre>
-
-      <a href={`/search/${guid}`} >
+      {/*TODO back to search link, with your query saved*/}
+      <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
         </div>
       </a>
 
       <div className="hit-info-container">
-        <div className="smarbot martop">
-          <h3 className="hit-title martop marleft"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+        <div className="smarbot">
+          <h3 className="hit-title "><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
         </div>
 
-        <div className="smarbot marleft">
-          <ScoreLight score={ hit._score } />
+        <div className="smarbot ">
           { date }
           { producingOrg }
         </div>
 
-        <div className="marleft marbot">
+        <div className=" marbot">
           { description }
         </div>
       </div>

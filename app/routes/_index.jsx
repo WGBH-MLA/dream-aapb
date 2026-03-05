@@ -1,13 +1,14 @@
-import { useLoaderData } from 'react-router'
-// import shuffle from '~/utils/shuffle'
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router"
+import { useLoaderData } from "react-router"
+
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import Mappy from "../components/Mappy"
-
-import randomThumb from "../util/randomThumb"
-import randomRecords from "../util/randomRecords"
-import recordToTVProgram from "../util/recordToTVProgram"
+import randomThumb from "../utils/randomThumb"
+import randomRecords from "../utils/randomRecords"
+import { recordToTVProgram } from "../utils/toTVProgram"
 
 export const loader = async () => {
 
@@ -44,7 +45,7 @@ export const loader = async () => {
 
     radio_and_tv: programs,
 
-    indexName: process.env.ES_INDEX
+    esIndex: process.env.ES_INDEX || "hot-aapb",
   }
 
 
@@ -53,26 +54,58 @@ export const loader = async () => {
 
 export default function Index() {
   let data = useLoaderData()
+  
+  let navigateHook = useNavigate()
+  const [search, setSearch] = useState("")
+  const [block, setBlockMapZoom] = useState("")
+
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
+  }
+
+  // useEffect(() => {
+  //   window.addEventListener('scroll', () => {
+  //     document.getElementById("mappy").style.overflow = "hidden"
+
+  //     setTimeout(() => {
+  //       document.getElementById("mappy").style.overflow = "inherit"
+  //     }, 100)
+  //   })
+  // }, [])
+
   return (
     <>
       <div className="homepage-search">
         <h2>
           Discover historic programs of publicly funded radio and television across America. Watch and listen.
         </h2>
-        <LayoutSearch indexName={ data.indexName } />
+        <LayoutSearch
+          esIndex={ data.esIndex }
+          navigateHook={ navigateHook }
+          handleChange={ handleLayoutSearch }
+          searchQuery={ search }
+        />
       </div>
 
-      <div className="feature-video-container marbot">
-        <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
-      </div>
+      <div className="page-container">
 
-      <div className="mappy-container marbot">
-        <Mappy />
-      </div>
+        <div className="skinny-body-container">
 
-      <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-        <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+          <div className="feature-video-container bmarbot">
+            <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
+          </div>
+
+
+          <div id="mappy" className="mappy-container marbot">
+          <h2 className="marbot">Explore Stations Featured in the AAPB</h2>
+            <Mappy />
+          </div>
+
+          <div className="marleft">
+            <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
+            <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
+          </div>
+        </div>
       </div>
     </>
   )

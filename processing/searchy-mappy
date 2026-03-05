@@ -1,5 +1,6 @@
-curl -v -X PUT "localhost:9200/aapb-sweetie/" \
--H "Authorization: ApiKey "R1hxQWQ1a0J5LU1iaVpUWDhYTVg6WmVIUmlPS3lTVHVUb291bm5iSDNPdw=="" \
+curl -X DELETE -H "Authorization: ApiKey TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw==" "http://localhost:9200/aapb-tepid-rhodium"
+curl -v -X PUT "localhost:9200/aapb-tepid-rhodium/" \
+-H "Authorization: ApiKey "TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw=="" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {

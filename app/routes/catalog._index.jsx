@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
@@ -9,7 +9,6 @@ const OR_FIELDS = [
   "pbcoreDescriptionDocument.pbcoreCreator.creator"
 ]
 
-// import your InstantSearch components
 import {
           InstantSearch,
           SearchBox,
@@ -34,7 +33,7 @@ import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
   return {
-    indexName: process.env.ES_INDEX || "dream-aapb-temporary",
+    esIndex: process.env.ES_INDEX,
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
@@ -43,8 +42,8 @@ export const loader = async ({params, request}) => {
 function CustomSearchBox(props) {
   const { status } = useInstantSearch()
   const { _query, refine } = useSearchBox()
-  const inputRef = useRef(null)
 
+  const inputRef = useRef(null)
   const isSearchStalled = status === "stalled";
 
   return (
@@ -52,14 +51,14 @@ function CustomSearchBox(props) {
       <div className="">
         <h4>Search for</h4>
         <input
+          id="query"
           className="sidebar-search smarbot"
           ref={inputRef}
-          onKeyUp={(event) => {
-            props.handleCustomQuery("query", event.currentTarget.value, refine)
+          defaultValue={ props.query }
+          onKeyUp={(e) => {
+            props.handleCustomQuery(e.target.id, e.target.value, refine)
           }}
         />
-
-        <button onClick={ () => refine("lobster") } >boing</button>
 
         <div hidden={!isSearchStalled}>Searching…</div>
         <h4>Contains all of these words</h4>
@@ -77,21 +76,29 @@ function CustomSearchBox(props) {
   )  
 }
 
-
-export default function Search() {
+export default function Catalog() {
   const data = useLoaderData()
-  const [searchParams, setSearchParams] = useSearchParams()
 
-  // custom query from url params
+
+  // state that we need out here, and down inside the search area...
+  const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
-    query: searchParams.get(`${data.indexName}[query]`) || "",
+    query: searchParams.get(`${data.esIndex}[query]`) || "",
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || "",
     startDate: searchParams.get("startDate") || "",
     endDate: searchParams.get("endDate") || "",
+    // query: "", 
+    // all: "", 
+    // title: "", 
+    // none: "", 
+    // startDate: "", 
+    // endDate: "", 
   })
-  const [allowSearch, setAllowSearch] = useState(true)
+
+
+// include transcript in search or not
   const [searchSet, setSearchSet] = useState("both")
 
   let view = searchParams.get("view") || "standard"
@@ -99,24 +106,157 @@ export default function Search() {
 
   // config viewed refinements
   const [showingRefinements, setShowingRefinements] = useState(false)
-  let currentRefinementsClasses, showRefinementButtonText
-  if(!showingRefinements){
-    currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All Refinements"
-  } else {
-    currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
-  }
 
   function handleCustomQuery(type, value, refine){
     // ohh la la
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
 
+    // TODO (ahhhhhhhhhh)
+    // let layoutInputs = document.getElementsByClassName("layout-input")[0]
+    // console.log( 'LAYOUOOOOO', layoutInputs )
+    // for(let input in layoutInputs){
+    //   console.log( 'this is an input', input )
+    //   input.value = value
+    // }
+
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
   }
 
+  //////////
+
+  ////
+  const dateToYear = (items) => {
+    return items.map((item) => {
+      if(item.value){
+        var notYear = item.value.match(/^\d{4}(.*)/)[1]
+        item.value = item.value.replace( notYear, "")
+        item.label = item.label.replace( notYear, "")
+      }
+      
+      return item
+    })
+  }
+
+  const accessLevel = (items) => {
+    return items.map( (item) => {
+      if(item.label == "Online Reading Room"){
+        item.label = "Available Online"
+      } else if(item.label == "On Location"){
+        item.label = "All Digitized"
+      } else {
+        // private or nothing
+        item.label = "All Records"
+      }
+
+      return item
+    }).sort((a,b) => {
+      // sort availabilty options a-z so they dont jump around ui based on num results
+      if(a < b){
+        return 1
+      } else {
+        return -1
+      }
+    })
+  }
+
+  const isOrField = (fieldName) => {  
+    return OR_FIELDS.includes(fieldName)
+  }
+
+  const prettyFieldNames = (fieldName) => {
+    switch(fieldName){
+      case "producing_org":
+        return "Producing Organization"
+        break
+      case "contributing_orgs":
+        return "Contributing Organization"
+        break        
+      case "media_type":
+        return "Media Type"
+        break
+      case "access_level":
+        return "Availability"
+        break
+      case "genres":
+        return "Genre"
+        break
+      case "topics":
+        return "Topic"
+        break        
+      case "pbcoreDescriptionDocument.pbcoreAssetType.text":
+        return "Asset Type"
+        break
+      case "special_collections":
+        return "Collection"
+        break
+      case "series_titles":
+        return "Series Title"
+        break
+    }
+  }
+
+  const prettyCurrentRefinements = (attributes) => {
+    attributes.map((attribute) => {
+
+      let refs = attribute.refinements.map((ref) => {
+        // label is the actual facet field value which seems slightly weird
+        ref.key = `${ref.label}-${Math.random().toString(36).slice(2)}`
+        ref.label = `${ prettyFieldNames(attribute.label) }: ${ref.label}`
+        return ref
+      })
+
+      // name of field (dont show in top bar)
+      attribute.label = ""
+      attribute.refinements = refs
+      return attribute
+    })
+
+    return attributes
+  }
+
+  function onlyUnique(value, index, array) {
+    return array.indexOf(value) === index;
+  }
+  ////
+
+
+  let currentRefinementsClasses, showRefinementButtonText
+  if(!showingRefinements){
+    currentRefinementsClasses = "current-refinements-container closed"
+    showRefinementButtonText = "Show All"
+  } else {
+    currentRefinementsClasses = "current-refinements-container"
+    showRefinementButtonText = "Show Less"
+  }
+
+
+  let searchResultComponent
+  if(viewSelect == "standard"){
+    searchResultComponent = SearchResult
+  } else if(viewSelect == "list"){
+    searchResultComponent = ListResult
+  } else if(viewSelect == "gallery"){
+    searchResultComponent = GalleryResult
+  }
+
+  let pagination
+  pagination = <Pagination />
+
+  let searchbox
+  searchbox = <CustomSearchBox
+              handleCustomQuery={ handleCustomQuery }
+              query={ customQuery.query }
+              defaultQuery={ customQuery.query }
+            />
+
+
+
+  //////////
+
+  
+  // othiz
   function titleQuery(tQuery){
     // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
     return {
@@ -460,96 +600,6 @@ export default function Search() {
     }
   })
 
-  const dateToYear = (items) => {
-    return items.map((item) => {
-      if(item.value){
-        var notYear = item.value.match(/^\d{4}(.*)/)[1]
-        item.value = item.value.replace( notYear, "")
-        item.label = item.label.replace( notYear, "")
-      }
-      
-      return item
-    })
-  }
-
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(item.label == "Online Reading Room"){
-        item.label = "Available Online"
-      } else if(item.label == "On Location"){
-        item.label = "All Digitized"
-      } else {
-        // private or nothing
-        item.label = "All Records"
-      }
-
-      return item
-    }).sort((a,b) => {
-      // sort availabilty options a-z so they dont jump around ui based on num results
-      if(a < b){
-        return 1
-      } else {
-        return -1
-      }
-    })
-  }
-
-  const isOrField = (fieldName) => {  
-    return OR_FIELDS.includes(fieldName)
-  }
-
-  const prettyFieldNames = (fieldName) => {
-    switch(fieldName){
-      case "producing_org":
-        return "Producing Organization"
-        break
-      case "contributing_orgs":
-        return "Contributing Organization"
-        break        
-      case "media_type":
-        return "Media Type"
-        break
-      case "access_level":
-        return "Availability"
-        break
-      case "genres":
-        return "Genre"
-        break
-      case "topics":
-        return "Topic"
-        break        
-      case "pbcoreDescriptionDocument.pbcoreAssetType.text":
-        return "Asset Type"
-        break
-      case "collections":
-        return "Collection"
-        break        
-    }
-  }
-
-  const prettyCurrentRefinements = (attributes) => {
-    attributes.map((attribute) => {
-
-      let refs = attribute.refinements.map((ref) => {
-        // label is the actual facet field value which seems slightly weird
-        ref.label = `${ prettyFieldNames(attribute.label) }: ${ref.label}`
-        return ref
-      })
-
-      // name of field (dont show in top bar)
-      attribute.label = ""
-      attribute.refinements = refs
-      return attribute
-    })
-
-    return attributes
-  }
-
-  function onlyUnique(value, index, array) {
-    return array.indexOf(value) === index;
-  }
-
-  // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
       let emptyQuery = query === "" || query.match(/^\s+$/)
@@ -599,7 +649,7 @@ export default function Search() {
           var quoted = query.match(/"(\\.|[^"\\])*"/g)
           var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
           if(quoted.length > 0){
-            console.log( 'dummbo', quoted, unquoted )
+            // console.log( 'dummbo', quoted, unquoted )
             // make a one-hit-required term array for each distinct quoted term
 
             // todo fix this!! dates use filtering now
@@ -609,7 +659,6 @@ export default function Search() {
         } else {
           // big main compound query...
           mainAllFieldsArray = allFieldsArray(query)
-
         }
 
         if(emptyQuery){
@@ -683,48 +732,40 @@ export default function Search() {
           }
         }
 
-        // console.log( 'finishing with qh', queryHash )
+        // console.log( 'finishing with qh', query, queryHash )
         return queryHash
       }
     }
   })
 
-  let searchResultComponent
-  if(viewSelect == "standard"){
-    searchResultComponent = SearchResult
-  } else if(viewSelect == "list"){
-    searchResultComponent = ListResult
-  } else if(viewSelect == "gallery"){
-    searchResultComponent = GalleryResult
-  }
 
   return (
     <div className="body-container">
       <InstantSearch
-        indexName={data.indexName}
+        indexName={ data.esIndex }
         searchClient={ searchClient }
-        routing={true}
+        routing={ true }
       >
 
         <div className="top-search-bar bmarleft smarbot smarright">
           <div className="options-container martop">
-            <h2 className="">Search Results</h2>
+            <h2 className="search-result-label">Search Results</h2>
             
             <div className="header-spacer" />
 
-            <div className="sort-container sort marleft marright">
+            <div className="sort-container sort">
               Sort
               <SortBy
                 items={[
-                  { key: "sort1", label: "Relevance", value: `${data.indexName}_default` },
-                  { key: "sort2", label: "Title", value: `${data.indexName}_title_keyword_asc` },
-                  { key: "sort3", label: "Broadcast Date", value: `${data.indexName}_broadcast_date_desc` },
+                  { key: "sort1", label: "Relevance", value: `${data.esIndex}_default` },
+                  { key: "sort2", label: "Title", value: `${data.esIndex}_title_keyword_asc` },
+                  { key: "sort3", label: "Broadcast Date", value: `${data.esIndex}_broadcast_date_desc` },
                 ]}
               />
-              <ChevronDown style={{ right: "18px"}} />
+              <ChevronDown />
             </div>
             
-            <div className="sort-container per-page marleft marright">
+            <div className="sort-container per-page">
               Items per page
               <HitsPerPage
                 items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
@@ -732,28 +773,30 @@ export default function Search() {
               <ChevronDown />
             </div>
 
-            <div className="marleft marright">
-              <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
-              <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
-              <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+            <div className="sort-container view-select marright">
+              <div className="view-select">
+                <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
+                <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
+                <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+              </div>
             </div>
           </div>
           
 
         </div>
 
-        <div className="top-refinements-bar marbot bmarleft bmarright">
+        <div className="top-refinements-bar smarbot bmarleft bmarright">
           <div className="stats-container">
             <Stats />
           </div>
- 
+
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
               transformItems={prettyCurrentRefinements}
             />
           </div>
           <div className="clear-refinements-container">
-            <ClearRefinements />
+            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
@@ -765,25 +808,26 @@ export default function Search() {
           <hr />
           
           <SearchAccordion title="Keywords" content={
-            <CustomSearchBox handleCustomQuery={ handleCustomQuery } />
+            searchbox
           }/>
 
           <hr />
 
           <SearchAccordion title="Options" content ={
             <>
-              <div>Include</div>
-              <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}>Include</div>
+              <div style={{ color: "#ddd" }}><label>All Sources<input onChange={ () => setSearchSet("both") } disabled type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Records<input onChange={ () => setSearchSet("records") } disabled type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } disabled type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 
-
-          <SearchAccordion title="Broadcast Date" content ={
+          <SearchAccordion title="Broadcast Date" content={
             <>
-              <div><input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
-              <div><input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } /></div>
+              <div>
+                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+              </div>
             </>
           }/>
 
@@ -889,14 +933,14 @@ export default function Search() {
         <div className="page-maincolumn bmarright">
 
           <div className="pagination-bar">
-            <Pagination />
+            { pagination }
           </div>
 
           <hr/>
 
           <Hits hitComponent={ searchResultComponent } />
           <div className="pagination-bar marbot">
-            <Pagination />
+            { pagination }
           </div>
         </div>
       </InstantSearch>

@@ -6,7 +6,6 @@ export default function BigLink(props){
         <ExternalLink size={64} />
         <div>
           <h3>{props.title}</h3>
-          { props.text }
         </div>
       </a>
     </div>

@@ -16,10 +16,10 @@ export default function Footer(props) {
           url: "/exhibits",
           text: "Scholarly Exhibits"
         },
-        {
-          url: "/resources",
-          text: "Educator Resources"
-        },
+        // {
+        //   url: "/resources",
+        //   text: "Educator Resources"
+        // },
       ]
     },
     participate: {
@@ -29,10 +29,6 @@ export default function Footer(props) {
         {
           url: "/contribute",
           text: "Contribute Content"
-        },
-        {
-          url: "/volunteer",
-          text: "Vounteer"
         },
         {
           url: "/fixitplus",
@@ -49,7 +45,7 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
-          url: "/visit",
+          url: "/on-location",
           text: "Visit"
         },
         {
@@ -57,7 +53,7 @@ export default function Footer(props) {
           text: "FAQ"
         },
         {
-          url: "/contact",
+          url: "/contact-us",
           text: "Contact Us"
         },        
       ]
@@ -67,7 +63,7 @@ export default function Footer(props) {
       titleURL: null,
       links: [
         {
-          url: "/blog",
+          url: "https://blog.americanarchive.org/",
           text: "Blog"
         },
         {
@@ -75,7 +71,7 @@ export default function Footer(props) {
           text: "Feedback"
         },
         {
-          url: "/content",
+          url: "/content-statement",
           text: "Content Statement"
         },
         {

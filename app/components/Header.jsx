@@ -1,3 +1,5 @@
+import { useState } from "react"
+import { useNavigate } from "react-router"
 import DrawerMenu from "./DrawerMenu"
 import LayoutSearch from "./LayoutSearch"
 
@@ -67,20 +69,30 @@ const drawerItems = {
 
     },
   ]
-
 }
 
 export default function Header(props) {
+  let navigateHook = useNavigate()
+  const [search, setSearch] = useState("")
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
+  }
+
   return (
     <div className="header-bar marbot">
-      <a href="/">
-        <img src="/aapb.png" className="header-logo" />
+      <a href="/" className="header-logo">
+        <img src="/aapb.png" />
       </a>
       <div className="header-spacer" />
-      <DrawerMenu label="Explore" items={drawerItems.explore} />
-      <DrawerMenu label="Participate" items={drawerItems.participate} />
-      <DrawerMenu label="About" items={drawerItems.about} />
-      <LayoutSearch indexName={props.indexName} />
+      <DrawerMenu label="Explore" items={ drawerItems.explore } />
+      <DrawerMenu label="Participate" items={ drawerItems.participate } />
+      <DrawerMenu label="About" items={ drawerItems.about } />
+      <LayoutSearch
+        navigateHook={ navigateHook }
+        esIndex={ props.esIndex }
+        handleChange={ handleLayoutSearch }
+        searchQuery={ search }
+      />
     </div>
   )
 }

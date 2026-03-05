@@ -1,6 +1,6 @@
 import ScoreLight from "../components/ScoreLight"
 import Thumbnail from "../components/Thumbnail"
-import { niceTitle } from "../util/niceTitle"
+import { niceTitle } from "../utils/niceTitle"
 
 function aapbGuid(descdoc){
   if(descdoc && descdoc.pbcoreIdentifier && descdoc.pbcoreIdentifier.length > 0){
@@ -38,10 +38,10 @@ export default function GalleryResult({hit}){
 
   return (
     <div className="search-result gallery">
-      <a href={`/search/${guid}`} >
+      <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
-          <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/search/${guid}`} >{ hit.title }</a></h3>
+          <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
         </div>
       </a>
     </div>
