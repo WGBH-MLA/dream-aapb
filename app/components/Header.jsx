@@ -3,65 +3,70 @@ import LayoutSearch from "./LayoutSearch"
 
 const drawerItems = {
   explore: [
-      {
-        label: "Collections",
-        url: "/collections",
-        external: false,
-                
-      },
-      {
-        label: "Scholarly Exhibits",
-        url: "/exhibits",
-        external: false,
-                
-      },
-      {
-        label: "Educator Resources",
-        url: "/resources",
-        external: false,
-                
-      },
-    ],
+    {
+      label: "Collections",
+      url: "/collections",
+      external: false,
+
+    },
+    {
+      label: "Scholarly Exhibits",
+      url: "/exhibits",
+      external: false,
+
+    },
+    {
+      label: "Educator Resources",
+      url: "/resources",
+      external: false,
+
+    },
+    {
+      label: "National History Day",
+      url: "/national-history-day",
+      external: false,
+    },
+  ],
   participate: [
-      {
-        label: "Contribute Content",
-        url: "/contribute",
-        external: false,
-                
-      },
-      {
-        label: "Fix Transcripts",
-        url: "/fixitplus",
-        external: false,
-                
-      },
-    ],
+    {
+      label: "Contribute Content",
+      url: "/contribute",
+      external: false,
+
+    },
+    {
+      label: "Fix Transcripts",
+      url: "/fixitplus",
+      external: false,
+
+    },
+  ],
   about: [
-      {
-        label: "About the AAPB",
-        url: "/about",
-        external: false,
-                
-      },
-      {
-        label: "Participating Organizations",
-        url: "/organizations",
-        external: false,
-                
-      },
-      {
-        label: "Visit",
-        url: "/visit",
-        external: false,
-                
-      },
-      {
-        label: "FAQ",
-        url: "/faq",
-        external: false,
-                
-      },
-    ]
+    {
+      label: "About the AAPB",
+      url: "/about",
+      external: false,
+
+    },
+    {
+      label: "Participating Organizations",
+      url: "/organizations",
+      external: false,
+
+    },
+    {
+      label: "Visit",
+      url: "/visit",
+      external: false,
+
+    },
+    {
+      label: "FAQ",
+      url: "/faq",
+      external: false,
+
+    },
+  ]
 
 }
 
@@ -72,10 +77,10 @@ export default function Header(props) {
         <img src="/aapb.png" className="header-logo" />
       </a>
       <div className="header-spacer" />
-      <DrawerMenu label="Explore" items={ drawerItems.explore } />
-      <DrawerMenu label="Participate" items={ drawerItems.participate } />
-      <DrawerMenu label="About" items={ drawerItems.about } />
-      <LayoutSearch indexName={ props.indexName } />
+      <DrawerMenu label="Explore" items={drawerItems.explore} />
+      <DrawerMenu label="Participate" items={drawerItems.participate} />
+      <DrawerMenu label="About" items={drawerItems.about} />
+      <LayoutSearch indexName={props.indexName} />
     </div>
   )
 }
