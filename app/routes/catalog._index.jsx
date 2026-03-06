@@ -79,7 +79,6 @@ function CustomSearchBox(props) {
 export default function Catalog() {
   const data = useLoaderData()
 
-
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
@@ -112,21 +111,10 @@ export default function Catalog() {
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
 
-    // TODO (ahhhhhhhhhh)
-    // let layoutInputs = document.getElementsByClassName("layout-input")[0]
-    // console.log( 'LAYOUOOOOO', layoutInputs )
-    // for(let input in layoutInputs){
-    //   console.log( 'this is an input', input )
-    //   input.value = value
-    // }
-
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
   }
 
-  //////////
-
-  ////
   const dateToYear = (items) => {
     return items.map((item) => {
       if(item.value){
@@ -219,7 +207,6 @@ export default function Catalog() {
   function onlyUnique(value, index, array) {
     return array.indexOf(value) === index;
   }
-  ////
 
 
   let currentRefinementsClasses, showRefinementButtonText
@@ -473,6 +460,72 @@ export default function Catalog() {
     }
   }
 
+  function allFieldsMatchPhraseArray(query){
+
+    return [ 
+      {
+        match_phrase: {
+          guid: query
+        }
+      },
+      {
+        match_phrase: {
+          genres: query
+        }
+      },
+      {
+        match_phrase: {
+          topics: query
+        }
+      },
+      {
+        match_phrase: {
+          title: query
+        }
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreDescription",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreDescription.text": query
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreTitle",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreTitle.text": query
+            }
+          },
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
+            }
+          }
+        }
+      }
+    ]
+  }
+
 
   const sk = new Searchkit({
     connection: {
@@ -602,7 +655,6 @@ export default function Catalog() {
 
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
-      let emptyQuery = query === "" || query.match(/^\s+$/)
       var queryHash
 
       // console.log( 'Search was triggered with custom', customQuery )
@@ -611,132 +663,132 @@ export default function Catalog() {
         title_if_present = customQuery.title
       }
 
-      // console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
       // look for quoted phrases in the main search box
-      if(false && query && query.includes('\"')){
-        var quoted = query.match(/"(\\.|[^"\\])*"/g)
-        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+      var quoties
+      if(query && query.includes('\"')){
+        quoties = pullQuotedClauses(query)
 
-        var full_query
-        if(quoted && quoted.length > 0){
-          // require one of quoted strings, or optional everything else unquoted
-          full_query = `+${quoted.join(" | +")}`
-
-          if(unquoted.length > 0 && unquoted.trim().length > 0){
-            full_query = full_query + ` OR (${unquoted})`
-          }
-        } else {
-          full_query = unquoted
-        }
-
-        if(customQuery.none && customQuery.none.length > 0){
-          var none_terms = customQuery.none.split(" ")
-          full_query += ` -(${none_terms.join(" OR ")})`
-        }
-
-        queryHash = {
-          simple_query_string: {
-            query: full_query,
-            // default_operator: "and"
-          }
-        }
-
-      } else {
-        
-        var mainAllFieldsArray
-        // broken creepy quote handling
-        if(false && query && query.includes('\"')){
-          var quoted = query.match(/"(\\.|[^"\\])*"/g)
-          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
-          if(quoted.length > 0){
-            // console.log( 'dummbo', quoted, unquoted )
-            // make a one-hit-required term array for each distinct quoted term
-
-            // todo fix this!! dates use filtering now
-            queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
-          }
-
-        } else {
-          // big main compound query...
-          mainAllFieldsArray = allFieldsArray(query)
-        }
-
-        if(emptyQuery){
-          // there *is not* a main box query
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              should: []
-            }
-          }
-        } else {
-          // there *is* a main box query
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              should: [
-                {
-                  bool: {
-                    should: mainAllFieldsArray,
-                    minimum_should_match: 1
-                  }
-                }
-              ]
-            }
-          }
-        }
-
-        // add in clauses for each of 3 secondary searchbox fields
-        if(customQuery.all && customQuery.all.length > 0){
-          // add second big should clause to outer bool query
-          var allQuery =  {
-            bool: {
-              should: allFieldsArray( customQuery.all )
-            }
-          }
-          queryHash.bool.should.push(allQuery)
-          if(emptyQuery){
-            // no quer present
-            queryHash.bool.minimum_should_match = 1
-          } else {
-            // normal 
-            // require a hit on the main clause, and also this 'all terms' one
-            queryHash.bool.minimum_should_match = 2
-          }
-        }
-
-        if(customQuery.none && customQuery.none.length > 0){
-          // add must_not clause to big bool
-          queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
-        }
-
-        if(customQuery.title && customQuery.title.length > 0){
-          queryHash.bool.must = [ titleQuery( customQuery.title ) ]
-        }
-
-        if(customQuery.startDate || customQuery.endDate){
-          queryHash.bool.filter = {
-            range: {
-              broadcast_date: {}
-            }
-          }
-
-          if(customQuery.startDate){
-            queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
-          }
-
-          if(customQuery.endDate){
-            queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
-          }
-        }
-
-        // console.log( 'finishing with qh', query, queryHash )
-        return queryHash
+        // remove quoted clauses from the query itself
+        query = query.replace(/".*?"/g ,"")
+        console.log( 'I WANT MY QUOTIES', quoties, query )
       }
+
+      // is query empty now
+      let emptyQuery = query === "" || query.match(/^\s+$/)
+      
+      var mainAllFieldsArray = allFieldsArray(query)
+
+      if(emptyQuery){
+        // there *is not* a main box query
+        queryHash = {
+          // top bool
+          bool: {
+            // big should
+            should: []
+          }
+        }
+      } else {
+        // there *is* a main box query
+        queryHash = {
+          // top bool
+          bool: {
+            // big should
+            should: [
+              {
+                bool: {
+                  should: mainAllFieldsArray,
+                  minimum_should_match: 1
+                }
+              }
+            ]
+          }
+        }
+      }
+
+      // add in clauses for each of 3 secondary searchbox fields
+      if(customQuery.all && customQuery.all.length > 0){
+        // add second big should clause to outer bool query
+        var allQuery =  {
+          bool: {
+            should: allFieldsArray( customQuery.all )
+          }
+        }
+        queryHash.bool.should.push(allQuery)
+        if(emptyQuery){
+          // no main query present
+          queryHash.bool.minimum_should_match = 1
+        } else {
+          // normal 
+          // require a hit on the main clause, and also this 'all terms' one
+          queryHash.bool.minimum_should_match = 2
+        }
+      }
+
+      if(customQuery.none && customQuery.none.length > 0){
+        // add must_not clause to big bool
+        queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
+      }
+
+      if(customQuery.title && customQuery.title.length > 0){
+        queryHash.bool.must = [ titleQuery( customQuery.title ) ]
+      }
+
+      if(customQuery.startDate || customQuery.endDate){
+        queryHash.bool.filter = {
+          range: {
+            broadcast_date: {}
+          }
+        }
+
+        if(customQuery.startDate){
+          queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
+        }
+
+        if(customQuery.endDate){
+          queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
+        }
+      }
+
+      if(quoties){
+        // ooh wee we got da quoties
+        queryHash.bool.must ||= []
+        quoties.forEach( (quooty) => {
+          // add all-fields-array match_phrase query for each quoty
+
+          // each quoty term *must* satisfy its *should*
+          // its *should* requires at least one field to match_phrase the quoty term
+          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )
+        })
+      }
+
+      // console.log( 'finishing with qh', query, queryHash )
+      // regahdless
+      return queryHash
     }
   })
+
+  function matchPhraseShouldClause(quoty){
+    // return a bool that *should* match minimum one field with our quoty clause
+    return  {
+      bool: {
+        should: allFieldsMatchPhraseArray(quoty),
+        minimum_should_match: 1
+      }
+    }
+  }
+
+  function pullQuotedClauses(query){
+    var result = []
+    var rx = /".*?"/g
+    var quoty
+    while( quoty = rx.exec( query ) ) {
+      if(quoty && quoty[0]){
+        result.push(quoty[0].replace(/\"/g, ''))
+      }
+    }
+
+    return result
+  }
 
 
   return (
