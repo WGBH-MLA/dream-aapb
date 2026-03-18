@@ -19,7 +19,8 @@ import {
           ToggleRefinement,
           Pagination,
           HitsPerPage,
-          Stats,
+          // Stats,
+          useStats,
           SortBy,
           useSearchBox,
           useInstantSearch,
@@ -37,6 +38,27 @@ export const loader = async ({params, request}) => {
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
+}
+
+function CustomStats() {
+  const {
+    hitsPerPage,
+    nbHits,
+    areHitsSorted,
+    nbSortedHits,
+    nbPages,
+    page,
+    processingTimeMS,
+    query,
+  } = useStats()
+
+  return (
+    <div className="ais-Stats">
+      <span className="ais-Stats-text">
+        Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+      </span>
+    </div>
+  )
 }
 
 function CustomSearchBox(props) {
@@ -60,7 +82,6 @@ function CustomSearchBox(props) {
           }}
         />
 
-        <div hidden={!isSearchStalled}>Searching…</div>
         <h4>Contains all of these words</h4>
         <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>This title</h4>
@@ -70,6 +91,7 @@ function CustomSearchBox(props) {
         <div>
           <button className="sidebar-search-button">Update</button>
         </div>
+        <div hidden={!isSearchStalled}>Searching…</div>
 
       </div>
     </>
@@ -204,10 +226,27 @@ export default function Catalog() {
     return attributes
   }
 
-  function onlyUnique(value, index, array) {
-    return array.indexOf(value) === index;
+  const onlyUnique = (value, index, array) => {
+    return array.indexOf(value) === index
   }
 
+  const hasQuoties = (query) => {
+    return query && query.includes('\"')
+  }
+
+  const extractQuotiesFromSearchbox = (query) => {
+    var quoties = pullQuotedClauses(query)
+    // remove quoted clauses from the query itself
+    query = query.replace(/".*?"/g ,"")
+    // console.log( 'I WANT MY QUOTIES', quoties, query )
+
+    return {
+      query: query, 
+      quoties: quoties
+    }
+  }
+
+  // createquotyquyery???
 
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
@@ -259,6 +298,34 @@ export default function Catalog() {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
               query: {
                 match: {
+                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                    query: tQuery,
+                  }
+                }
+              }
+            } 
+          },
+        ],
+        minimum_should_match: 1
+      }
+    }
+  }
+
+  function titleQueryExact(tQuery){
+    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
+    return {
+      bool: {
+        should: [
+          {
+            match_phrase: {
+              "title": tQuery
+            }
+          },
+          {
+            nested: {
+              path: "pbcoreDescriptionDocument.pbcoreTitle",
+              query: {
+                match_phrase: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
                     query: tQuery,
                   }
@@ -663,14 +730,11 @@ export default function Catalog() {
         title_if_present = customQuery.title
       }
 
-      // look for quoted phrases in the main search box
-      var quoties
-      if(query && query.includes('\"')){
-        quoties = pullQuotedClauses(query)
-
-        // remove quoted clauses from the query itself
-        query = query.replace(/".*?"/g ,"")
-        console.log( 'I WANT MY QUOTIES', quoties, query )
+      var mainBoxQuoties
+      if(hasQuoties(query)){
+        var mainBox = extractQuotiesFromSearchbox(query)
+        query = mainBox.query
+        mainBoxQuoties = mainBox.quoties
       }
 
       // is query empty now
@@ -679,6 +743,8 @@ export default function Catalog() {
       var mainAllFieldsArray = allFieldsArray(query)
 
       if(emptyQuery){
+
+        console.log( 'it aint no query' )
         // there *is not* a main box query
         queryHash = {
           // top bool
@@ -706,31 +772,102 @@ export default function Catalog() {
       }
 
       // add in clauses for each of 3 secondary searchbox fields
+      var allBox, allBoxQuoties
       if(customQuery.all && customQuery.all.length > 0){
-        // add second big should clause to outer bool query
-        var allQuery =  {
-          bool: {
-            should: allFieldsArray( customQuery.all )
-          }
+
+        // lets get crazy
+        var allBoxQueryString = customQuery.all
+
+        if( hasQuoties(allBoxQueryString) ){
+          // quoty me on that
+          
+          // we're modifying the actual value of the main query here (to remove quoties) so don't store the altered state in customQuery
+           allBox = extractQuotiesFromSearchbox(allBoxQueryString)
+           allBoxQueryString = allBox.query
+           allBoxQuoties = allBox.quoties
+
+          // add appropriate quoty search clauses to bool down at the end
         }
-        queryHash.bool.should.push(allQuery)
+
+        // whether query was modified or not, go ahead and do nonquoty all query v
+
+        // add second big should clause to outer bool query
+        var allQuery
+        if(allBoxQueryString && allBoxQueryString.length > 0){
+          // only add the regular query for allbox IF there remains a NONQUOTY allbox query
+
+          allQuery = {
+            bool: {
+              should: allFieldsArray( allBoxQueryString )
+            }
+          }
+
+          // adding 'all' box query to outer bool here
+          queryHash.bool.should.push(allQuery)
+        }
+        
         if(emptyQuery){
           // no main query present
           queryHash.bool.minimum_should_match = 1
         } else {
           // normal 
-          // require a hit on the main clause, and also this 'all terms' one
+          // require a hit on the main clause, and also this 'all terms' one that we just added
           queryHash.bool.minimum_should_match = 2
         }
       }
 
+      var noneBox, noneBoxQuoties
       if(customQuery.none && customQuery.none.length > 0){
+        
+        // lets get noney
+        var noneBoxQueryString = customQuery.none        
+        if( hasQuoties(noneBoxQueryString) ){
+          
+          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered state in customQuery
+          noneBox = extractQuotiesFromSearchbox(noneBoxQueryString)
+          noneBoxQueryString = noneBox.query
+          noneBoxQuoties = noneBox.quoties
+
+          // add appropriate quoty search clauses to bool down at the end
+        }
+
+        queryHash.bool.must_not ||= []
+
         // add must_not clause to big bool
-        queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
+        if(noneBoxQueryString && noneBoxQueryString.length > 0){
+          // only add it IF there remains a NONQUOTY nonebox query
+          queryHash.bool.must_not.push( allFieldsTermQuery(noneBoxQueryString) )
+        }
+
+        if(noneBoxQuoties && noneBoxQuoties.length > 0){
+          // now also add our quoty clauses to must_not
+          noneBoxQuoties.forEach( (quooty) => {
+            // add all-fields-array match_phrase query for each quoty
+            queryHash.bool.must_not.push( matchPhraseShouldClause(quooty) )
+          })
+        }
       }
 
+      var titleBox, titleBoxQuoties
       if(customQuery.title && customQuery.title.length > 0){
-        queryHash.bool.must = [ titleQuery( customQuery.title ) ]
+
+        // lets get title-oriented
+        var titleBoxQueryString = customQuery.title
+
+        queryHash.bool.must ||= []
+        if( hasQuoties(titleBoxQueryString) ){
+          
+          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered query state in customQuery
+           titleBox = extractQuotiesFromSearchbox(titleBoxQueryString)
+           titleBoxQueryString = titleBox.query
+           titleBoxQuoties = titleBox.quoties
+          
+          // we add the appropriate quoty search clauses to the bool down at the end
+        }
+
+        if(titleBoxQueryString && titleBoxQueryString.length > 0){
+          queryHash.bool.must.push( titleQuery(titleBoxQueryString) )
+        }
       }
 
       if(customQuery.startDate || customQuery.endDate){
@@ -749,10 +886,10 @@ export default function Catalog() {
         }
       }
 
-      if(quoties){
+      if(mainBoxQuoties){
         // ooh wee we got da quoties
         queryHash.bool.must ||= []
-        quoties.forEach( (quooty) => {
+        mainBoxQuoties.forEach( (quooty) => {
           // add all-fields-array match_phrase query for each quoty
 
           // each quoty term *must* satisfy its *should*
@@ -761,7 +898,22 @@ export default function Catalog() {
         })
       }
 
-      // console.log( 'finishing with qh', query, queryHash )
+      if(allBoxQuoties){
+        queryHash.bool.must ||= []
+        allBoxQuoties.forEach( (quooty) => {
+          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )  
+        })
+      }
+
+      if(titleBoxQuoties){
+        queryHash.bool.must ||= []
+        titleBoxQuoties.forEach( (quooty) => {
+          // same query required for quoties in 'all' box vs 'main' box, so just do the exact same thing
+          queryHash.bool.must.push( titleQueryExact(quooty) )
+        })
+      }
+
+      console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
     }
@@ -839,7 +991,7 @@ export default function Catalog() {
 
         <div className="top-refinements-bar smarbot bmarleft bmarright">
           <div className="stats-container">
-            <Stats />
+            <CustomStats />
           </div>
 
           <div className={ currentRefinementsClasses }>
