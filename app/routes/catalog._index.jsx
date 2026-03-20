@@ -521,7 +521,7 @@ export default function Catalog() {
       bool: {
         // this is admittedly just crazy
         should: nested_clauses,
-        // this is for must_not, any match fails!
+        // this is for must_not, any single match fails!
         minimum_should_match: 1
       }
     }
@@ -720,11 +720,14 @@ export default function Catalog() {
     }
   })
 
+  const isEmpty = (query) => {
+    return query === "" || query.match(/^\s+$/)
+  }
+
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
       var queryHash
 
-      // console.log( 'Search was triggered with custom', customQuery )
       var title_if_present
       if(customQuery.title && customQuery.title.length > 0){
         title_if_present = customQuery.title
@@ -737,8 +740,8 @@ export default function Catalog() {
         mainBoxQuoties = mainBox.quoties
       }
 
-      // is query empty now
-      let emptyQuery = query === "" || query.match(/^\s+$/)
+      // is query empty now ?
+      let emptyQuery = isEmpty(query)
       
       var mainAllFieldsArray = allFieldsArray(query)
 
@@ -750,7 +753,7 @@ export default function Catalog() {
           // top bool
           bool: {
             // big should
-            should: []
+            // should: []
           }
         }
       } else {
@@ -777,7 +780,6 @@ export default function Catalog() {
 
         // lets get crazy
         var allBoxQueryString = customQuery.all
-
         if( hasQuoties(allBoxQueryString) ){
           // quoty me on that
           
@@ -785,7 +787,6 @@ export default function Catalog() {
            allBox = extractQuotiesFromSearchbox(allBoxQueryString)
            allBoxQueryString = allBox.query
            allBoxQuoties = allBox.quoties
-
           // add appropriate quoty search clauses to bool down at the end
         }
 
@@ -793,26 +794,20 @@ export default function Catalog() {
 
         // add second big should clause to outer bool query
         var allQuery
-        if(allBoxQueryString && allBoxQueryString.length > 0){
+        if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
           // only add the regular query for allbox IF there remains a NONQUOTY allbox query
-
+          console.log( 'there is a remaining allbox query' )
           allQuery = {
             bool: {
-              should: allFieldsArray( allBoxQueryString )
+              should: allFieldsArray( allBoxQueryString ),
+              // allbox query should ALWAYS have min match one on ITS OWN BOOL, because doc doesnt match unless allboxquery appears in at least one field!
+              minimum_should_match: 1
             }
           }
 
           // adding 'all' box query to outer bool here
-          queryHash.bool.should.push(allQuery)
-        }
-        
-        if(emptyQuery){
-          // no main query present
-          queryHash.bool.minimum_should_match = 1
-        } else {
-          // normal 
-          // require a hit on the main clause, and also this 'all terms' one that we just added
-          queryHash.bool.minimum_should_match = 2
+          queryHash.bool.must ||= []
+          queryHash.bool.must.push(allQuery)
         }
       }
 
