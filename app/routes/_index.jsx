@@ -3,12 +3,13 @@ import { useNavigate } from "react-router"
 import { useLoaderData } from "react-router"
 
 import LayoutSearch from "../components/LayoutSearch"
+import HomepageHeader from "../components/HomepageHeader"
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
-import Mappy from "../components/Mappy"
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
 import { recordToTVProgram } from "../utils/toTVProgram"
+import { Home } from 'lucide-react'
 
 export const loader = async () => {
 
@@ -54,7 +55,7 @@ export const loader = async () => {
 
 export default function Index() {
   let data = useLoaderData()
-  
+
   let navigateHook = useNavigate()
   const [search, setSearch] = useState("")
   const [block, setBlockMapZoom] = useState("")
@@ -75,6 +76,7 @@ export default function Index() {
 
   return (
     <>
+    <HomepageHeader esIndex={data.esIndex} />
       <div className="homepage-search">
         <h2>
           Discover historic programs of publicly funded radio and television across America. Watch and listen.
@@ -84,28 +86,22 @@ export default function Index() {
           navigateHook={ navigateHook }
           handleChange={ handleLayoutSearch }
           searchQuery={ search }
+          placeholder="Search by program, location, or topic"
         />
       </div>
-
-      <div className="page-container">
-
-        <div className="skinny-body-container">
-
-          <div className="feature-video-container bmarbot">
-            <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" width="1000" height="562"></iframe>
-          </div>
-
-
-          <div id="mappy" className="mappy-container marbot">
-          <h2 className="marbot">Explore Stations Featured in the AAPB</h2>
-            <Mappy />
-          </div>
-
-          <div className="marleft">
-            <TVMenu title="Featured Collections" programs={ data.featured_collections } seeAllURL="/collections" />
-            <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } seeAllURL="/collections" />
-          </div>
-        </div>
+      <div className='body-container'>
+        <TVMenu title="Featured Collections" programs={data.featured_collections} />
+        <TVMenu title="Radio and Television Programs" programs={data.radio_and_tv} seeAllURL="/collections" />
+        <TVMenu title="Historical Events and Interviews" programs={data.radio_and_tv} seeAllURL="/collections" />
+        <TVMenu title="Stations and Organizations" programs={data.radio_and_tv} seeAllURL="/collections" />
+      </div>
+      <div className="body-container">
+        <a href="/organizations" style={{ textDecoration: 'none' }}>
+          <img src="/homepage-map.png" className="map-image" />
+        </a>
+        <a href="https://fixitplus.americanarchive.org/" target="_blank" rel="noopener noreferrer">
+          <img src="/homepage-fixit.png" className="fixit-image" />
+        </a>
       </div>
     </>
   )

@@ -24,10 +24,10 @@ export default function DrawerMenu(props) {
 
   return (
     <div className={drawerClasses}>
-      <span className='drawermenu-label'>
-        {props.label}
-        <ChevronDown size={16} />
-      </span>
+      <div className='drawermenu-trigger'>
+        <span className='drawermenu-label'>{props.label}</span>
+        <ChevronDown size={26} />
+      </div>
 
       <div className='drawermenu-items'>{items}</div>
     </div>
@@ -36,7 +36,7 @@ export default function DrawerMenu(props) {
 
 const DrawerItem = (props) => {
   let classes = "drawer-item"
-  if(props.last){
+  if (props.last) {
     classes += " marbot"
   }
   return (

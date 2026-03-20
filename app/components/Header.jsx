@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useNavigate } from "react-router"
+import React, { useState } from "react"
 import DrawerMenu from "./DrawerMenu"
 import LayoutSearch from "./LayoutSearch"
 
@@ -69,30 +68,51 @@ const drawerItems = {
 
     },
   ]
+
 }
 
 export default function Header(props) {
-  let navigateHook = useNavigate()
-  const [search, setSearch] = useState("")
-  const handleLayoutSearch = (val) => {
-    setSearch(val)
-  }
-
+  const [hovered, setHovered] = useState(false);
   return (
-    <div className="header-bar marbot">
-      <a href="/" className="header-logo">
-        <img src="/aapb.png" />
+    <div>
+      <a href="/america250" style={{ textDecoration: 'none' }}>
+        <div
+          style={{
+            backgroundColor: '#9d2264',
+            color: '#ffffff',
+            textAlign: 'center',
+            padding: '6px 16px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            letterSpacing: '0.1em',
+            cursor: 'pointer',
+          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          <span style={{
+            display: 'inline-block',
+            transform: hovered ? 'translateY(3px)' : 'translateY(0)',
+            transition: 'transform 0.2s ease',
+          }}>
+            CELEBRATING AMERICA 250 >
+          </span>
+        </div>
       </a>
-      <div className="header-spacer" />
-      <DrawerMenu label="Explore" items={ drawerItems.explore } />
-      <DrawerMenu label="Participate" items={ drawerItems.participate } />
-      <DrawerMenu label="About" items={ drawerItems.about } />
-      <LayoutSearch
-        navigateHook={ navigateHook }
-        esIndex={ props.esIndex }
-        handleChange={ handleLayoutSearch }
-        searchQuery={ search }
-      />
-    </div>
-  )
+      <div className="header-bar marbot">
+        <a href="/">
+          <img src="/aapb.png" className="header-logo" />
+        </a>
+        <div className="header-spacer" />
+        <DrawerMenu label="Explore" items={drawerItems.explore} />
+        <DrawerMenu label="Participate" items={drawerItems.participate} />
+        <DrawerMenu label="About" items={drawerItems.about} />
+        <LayoutSearch indexName={props.indexName} />
+      </div>
+      <div className="header-bar marbot">
+        <a href="/">
+          <img src="/corner-squares.png" className="header-squares" />
+        </a>
+      </div>
+    </div>);
 }

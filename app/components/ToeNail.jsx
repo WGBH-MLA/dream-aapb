@@ -4,8 +4,8 @@ export default function ToeNail(props){
   return (
     <div className="toenail-bar">
       {/*gloss only*/}
-      
-      <div className="toenail-logos">
+
+      <div className="toenail-logos" style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
         A collaboration:
         <img src="/gbh.png" />
         <img src="/loc.png" />

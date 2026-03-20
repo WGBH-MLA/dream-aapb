@@ -16,10 +16,14 @@ export default function Footer(props) {
           url: "/exhibits",
           text: "Scholarly Exhibits"
         },
-        // {
-        //   url: "/resources",
-        //   text: "Educator Resources"
-        // },
+        {
+          url: "/resources",
+          text: "Educator Resources"
+        },
+        {
+          url: "/national-history-day",
+          text: "National History Day"
+        },
       ]
     },
     participate: {
@@ -29,6 +33,10 @@ export default function Footer(props) {
         {
           url: "/contribute",
           text: "Contribute Content"
+        },
+        {
+          url: "/volunteer",
+          text: "Vounteer"
         },
         {
           url: "/fixitplus",
@@ -45,7 +53,7 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
-          url: "/on-location",
+          url: "/visit",
           text: "Visit"
         },
         {
@@ -53,9 +61,9 @@ export default function Footer(props) {
           text: "FAQ"
         },
         {
-          url: "/contact-us",
+          url: "/contact",
           text: "Contact Us"
-        },        
+        },
       ]
     },
     last: {
@@ -63,7 +71,7 @@ export default function Footer(props) {
       titleURL: null,
       links: [
         {
-          url: "https://blog.americanarchive.org/",
+          url: "/blog",
           text: "Blog"
         },
         {
@@ -71,7 +79,7 @@ export default function Footer(props) {
           text: "Feedback"
         },
         {
-          url: "/content-statement",
+          url: "/content",
           text: "Content Statement"
         },
         {
@@ -89,19 +97,17 @@ export default function Footer(props) {
 
   return (
     <>
+      <NewsletterBar />
       <div className="footer-bar">
-        <FooterLinks title={ linkData.explore.title } titleURL={ linkData.explore.titleURL } links={ linkData.explore.links } />
-        <FooterLinks title={ linkData.participate.title } titleURL={ linkData.participate.titleURL } links={ linkData.participate.links } />
-        <FooterLinks title={ linkData.about.title } titleURL={ linkData.about.titleURL } links={ linkData.about.links } />
-        <FooterLinks links={ linkData.last.links } />
-
-        <div className="footer-branding">
-          <img src="/aapb.png" />
+        <FooterLinks title={linkData.explore.title} titleURL={linkData.explore.titleURL} links={linkData.explore.links} />
+        <FooterLinks title={linkData.participate.title} titleURL={linkData.participate.titleURL} links={linkData.participate.links} />
+        <FooterLinks title={linkData.about.title} titleURL={linkData.about.titleURL} links={linkData.about.links} />
+        <FooterLinks links={linkData.last.links} />
+        <div className="footer-branding" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+          <img src="/aapb.png" style={{ width: '16rem', marginBottom: '1em' }} />
           <DonateButton />
         </div>
       </div>
-
-      <NewsletterBar />
       <ToeNail />
     </>
   )
@@ -127,7 +133,7 @@ function FooterLinks(props){
 
   return (
     <div className="footer-stack">
-      { titleBlock } 
+      { titleBlock }
       { links }
     </div>
 
