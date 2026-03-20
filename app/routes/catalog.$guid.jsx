@@ -71,7 +71,7 @@ export default function ShowRecord() {
     if(data.record.pbcoreDescriptionDocument.pbcoreCreator && data.record.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
       creators = data.record.pbcoreDescriptionDocument.pbcoreCreator.map((pbc, i) => {
         if(pbc.creator && pbc.creatorRole && pbc.creatorRole.text && pbc.creatorRole.text != "Producing Organization"){
-          return <ShowBox label={ pbc.creatorRole.text } text={ pbc.creator.text } />
+          return <ShowBox key={i} label={ pbc.creatorRole.text } text={ pbc.creator.text } />
         }
       })
 
