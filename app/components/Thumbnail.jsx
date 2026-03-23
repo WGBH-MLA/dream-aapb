@@ -1,40 +1,98 @@
 import { useState, useEffect } from 'react'
-import thumbnailURL from "../util/thumbnailURL"
+import thumbnailURL from "../utils/thumbnailURL"
+import { getRecord } from "../utils/getRecord"
+
+// exists
+const UNKNOWN = -1
+const NOTEXIST = 0
+const EXIST = 1
 
 export default function Thumbnail(props) {
   var img, bottomBar
   if(props.url){
+    // it exists, or so you claim..................
     img = <img src={ props.url } />
   } else {
-    const [exists, setExists] = useState(false)
-    var url = thumbnailURL(props.guid)
-    var classes = props.searchResult ? "hit-thumbnail" : "show-thumbnail"
 
-    if(exists){
-      img = <img crossOrigin="anonymous" className="thumbnail" src={ url } />
-      bottomBar = <img src="/video-slice.png" className="thumbnail-bar" />
+    const [exists, setExists] = useState(UNKNOWN)
+    var url = thumbnailURL(props.guid)
+
+    var classes
+    if(props.searchResult){
+      classes = "hit-thumbnail"
+    } else if(props.cmsPlayer){
+      classes = "cms-thumbnail"
+    } else {
+      classes = "show-thumbnail"
+    }
+
+    if(exists === EXIST){
+      img = <img id={ props.guid } crossOrigin="anonymous" className="thumbnail" src={ url } />
+      bottomBar = <img id={ props.guid } src="/video-slice.png" className="thumbnail-bar" />
     } else {
       if(props.mediaType == "Moving Image"){
-        img = <img src="/VIDEO.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/VIDEO.png" className="thumbnail" />
       } else if(props.mediaType == "Sound") {
-        img = <img src="/AUDIO.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/AUDIO.png" className="thumbnail" />
       } else {
-        img = <img src="/NONE.png" className="thumbnail" />
+        img = <img id={ props.guid } src="/NONE.png" className="thumbnail" />
       }
     }
 
     useEffect(() => {
-      // todo need to get the hostname into here, but with Hits -> hitComponent pattern not clear how to bring in addl props
-      var hostname = "http://18.235.155.36:4000"
-      hostname = "http://localhost:4000"
-      fetch(url, {method: "HEAD", headers: {"Referer": hostname}}).then((resp) => setExists(resp.ok)).catch((err) => setExists(null))
-    })
+
+      // dont run in ssr
+      if (typeof window !== "undefined") {
+        if(exists === UNKNOWN){
+          let ele = document.getElementById(props.guid)
+          if( checkVisible(ele) ){
+            fetch(url, {method: "HEAD"}).then((resp) => {
+              setExists(resp.ok ? EXIST : NOTEXIST)
+            }).catch((err) => {
+              setExists(NOTEXIST)
+            })
+          }
+
+          window.addEventListener('scrollend', function () {
+
+            if(exists === UNKNOWN){
+              let ele = document.getElementById(props.guid)
+              if( checkVisible(ele) ){
+                fetch(url, {method: "HEAD"}).then((resp) => {
+                  setExists(resp.ok ? EXIST : NOTEXIST)
+                }).catch((err) => {
+                  setExists(NOTEXIST)
+                })
+
+              }
+            }
+          })
+        }
+      }
+    }, [])
+  }
+
+  let babyTitle
+  if(props.babyTitle){
+    babyTitle = <div className="baby-title">{ props.babyTitle }</div>
   }
 
   return (
     <div className={ classes }>
       { img }
       { bottomBar }
+      { babyTitle }
     </div>
   )
+}
+
+function checkVisible(ele) {
+  if(!ele){
+    // element was missing somewhere during render cycle oopsie!!
+    return false
+  }
+
+  var rect = ele.getBoundingClientRect()
+  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }

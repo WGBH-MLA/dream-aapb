@@ -1,65 +1,29 @@
-import { useEffect, useState } from 'react'
-import { useLoaderData, useSearchParams, useRouteError } from 'react-router'
-import Searchkit from 'searchkit'
-import { SortBy } from 'react-instantsearch'
+import { useState, useEffect, useRef } from 'react'
+import { useLoaderData, useSearchParams } from 'react-router'
+import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
-import { ESTransporter } from 'searchkit'
-import { Error } from '../components/search/Error'
+
 const OR_FIELDS = [
   'producing_org',
   'pbcoreDescriptionDocument.pbcoreCreator.creator',
 ]
 
-class ErrorTransporter extends ESTransporter {
-  constructor(esURL, esApiKey) {
-    super()
-    this.esURL = esURL
-    this.esApiKey = esApiKey
-  }
-
-  async performNetworkRequest(requests) {
-    let url = 'https://elastic.wgbh-mla.org/_msearch'
-    console.log(
-      'ErrorTransporter requests',
-      requests,
-      this.esURL,
-      this.esApiKey,
-      url
-    )
-    let response = fetch(url, {
-      headers: {
-        Authorization: `Bearer ${this.esApiKey}`,
-      },
-      body: this.createElasticsearchQueryFromRequest(requests),
-      method: 'POST',
-    })
-      .then(res => res)
-      .catch(err => {
-        console.error('Elastic fetch error', err)
-        throw new Response(`Elastic fetch error: ${err.message}`, {
-          status: 500,
-          statusText: 'Internal Elastic Error',
-        })
-      })
-    return response
-  }
-}
-
-// import your InstantSearch components
 import {
-  InstantSearch,
-  SearchBox,
-  Hits,
-  RefinementList,
-  CurrentRefinements,
-  ClearRefinements,
-  ToggleRefinement,
-  Pagination,
-  HitsPerPage,
-  RangeInput,
-  Stats,
-} from 'react-instantsearch'
+          InstantSearch,
+          SearchBox,
+          Hits,
+          RefinementList,
+          CurrentRefinements,
+          ClearRefinements,
+          ToggleRefinement,
+          Pagination,
+          HitsPerPage,
+          Stats,
+          SortBy,
+          useSearchBox,
+          useInstantSearch,
+      } from 'react-instantsearch';
 
 import SearchResult from '../components/SearchResult'
 import ListResult from '../components/ListResult'
@@ -69,59 +33,231 @@ import ViewSelect from '../components/ViewSelect'
 
 export const loader = async ({ params, request }) => {
   return {
-    indexName: process.env.ES_INDEX_NAME || 'aapb_augmented_biggram',
-    esURL: process.env.ES_URL || 'https://elastic.wgbh-mla.org',
-    esApiKey: process.env.ES_API_KEY || '123',
+    esIndex: process.env.ES_INDEX,
+    apiKey: process.env.ES_API_KEY,
+    esURL: process.env.ES_URL
   }
 }
 
-export default function Search() {
+function CustomSearchBox(props) {
+  const { status } = useInstantSearch()
+  const { _query, refine } = useSearchBox()
+
+  const inputRef = useRef(null)
+  const isSearchStalled = status === "stalled";
+
+  return (
+    <>
+      <div className="">
+        <h4>Search for</h4>
+        <input
+          id="query"
+          className="sidebar-search smarbot"
+          ref={inputRef}
+          defaultValue={ props.query }
+          onKeyUp={(e) => {
+            props.handleCustomQuery(e.target.id, e.target.value, refine)
+          }}
+        />
+
+        <div hidden={!isSearchStalled}>Searching…</div>
+        <h4>Contains all of these words</h4>
+        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>This title</h4>
+        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <h4>None of these words</h4>
+        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <div>
+          <button className="sidebar-search-button">Update</button>
+        </div>
+
+      </div>
+    </>
+  )  
+}
+
+export default function Catalog() {
   const data = useLoaderData()
+
+
+  // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
-    all: searchParams.get('all') || '',
-    title: searchParams.get('title') || '',
-    none: searchParams.get('none') || '',
+    query: searchParams.get(`${data.esIndex}[query]`) || "",
+    all: searchParams.get("all") || "",
+    title: searchParams.get("title") || "",
+    none: searchParams.get("none") || "",
+    startDate: searchParams.get("startDate") || "",
+    endDate: searchParams.get("endDate") || "",
+    // query: "", 
+    // all: "", 
+    // title: "", 
+    // none: "", 
+    // startDate: "", 
+    // endDate: "", 
   })
-  const [allowSearch, setAllowSearch] = useState(true)
+
+
+// include transcript in search or not
   const [searchSet, setSearchSet] = useState("both")
 
   let view = searchParams.get('view') || 'standard'
   const [viewSelect, setViewSelect] = useState(view)
 
-  // const [numberOfRefinements, setNumberOfRefinements] = useState(4)
+  // config viewed refinements
   const [showingRefinements, setShowingRefinements] = useState(false)
+
+  function handleCustomQuery(type, value, refine){
+    // ohh la la
+    setCustomQuery({...customQuery, [type]: value})
+    // console.log( 'the current complete value of customQuery is ', customQuery )
+
+    // TODO (ahhhhhhhhhh)
+    // let layoutInputs = document.getElementsByClassName("layout-input")[0]
+    // console.log( 'LAYOUOOOOO', layoutInputs )
+    // for(let input in layoutInputs){
+    //   console.log( 'this is an input', input )
+    //   input.value = value
+    // }
+
+    // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
+    refine(customQuery.query === "" ? " " : customQuery.query)
+  }
+
+  //////////
+
+  ////
+  const dateToYear = (items) => {
+    return items.map((item) => {
+      if(item.value){
+        var notYear = item.value.match(/^\d{4}(.*)/)[1]
+        item.value = item.value.replace( notYear, "")
+        item.label = item.label.replace( notYear, "")
+      }
+      
+      return item
+    })
+  }
+
+  const accessLevel = (items) => {
+    return items.map( (item) => {
+      if(item.label == "Online Reading Room"){
+        item.label = "Available Online"
+      } else if(item.label == "On Location"){
+        item.label = "All Digitized"
+      } else {
+        // private or nothing
+        item.label = "All Records"
+      }
+
+      return item
+    }).sort((a,b) => {
+      // sort availabilty options a-z so they dont jump around ui based on num results
+      if(a < b){
+        return 1
+      } else {
+        return -1
+      }
+    })
+  }
+
+  const isOrField = (fieldName) => {  
+    return OR_FIELDS.includes(fieldName)
+  }
+
+  const prettyFieldNames = (fieldName) => {
+    switch(fieldName){
+      case "producing_org":
+        return "Producing Organization"
+        break
+      case "contributing_orgs":
+        return "Contributing Organization"
+        break        
+      case "media_type":
+        return "Media Type"
+        break
+      case "access_level":
+        return "Availability"
+        break
+      case "genres":
+        return "Genre"
+        break
+      case "topics":
+        return "Topic"
+        break        
+      case "pbcoreDescriptionDocument.pbcoreAssetType.text":
+        return "Asset Type"
+        break
+      case "special_collections":
+        return "Collection"
+        break
+      case "series_titles":
+        return "Series Title"
+        break
+    }
+  }
+
+  const prettyCurrentRefinements = (attributes) => {
+    attributes.map((attribute) => {
+
+      let refs = attribute.refinements.map((ref) => {
+        // label is the actual facet field value which seems slightly weird
+        ref.key = `${ref.label}-${Math.random().toString(36).slice(2)}`
+        ref.label = `${ prettyFieldNames(attribute.label) }: ${ref.label}`
+        return ref
+      })
+
+      // name of field (dont show in top bar)
+      attribute.label = ""
+      attribute.refinements = refs
+      return attribute
+    })
+
+    return attributes
+  }
+
+  function onlyUnique(value, index, array) {
+    return array.indexOf(value) === index;
+  }
+  ////
+
+
   let currentRefinementsClasses, showRefinementButtonText
-    // if(!showMoreRefinements && numberOfRefinements > 3){
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All Refinements"
+    showRefinementButtonText = "Show All"
   } else {
     currentRefinementsClasses = 'current-refinements-container'
     showRefinementButtonText = 'Show Less'
   }
 
-  function handleCustomQuery(type, value){
-    setCustomQuery({...customQuery, [type]: value})
+
+  let searchResultComponent
+  if(viewSelect == "standard"){
+    searchResultComponent = SearchResult
+  } else if(viewSelect == "list"){
+    searchResultComponent = ListResult
+  } else if(viewSelect == "gallery"){
+    searchResultComponent = GalleryResult
   }
 
-  function handleSearchBox(query, search) {
-    if (allowSearch) {
-      // flag off
-      setAllowSearch(false)
-      // search
-      search(query)
+  let pagination
+  pagination = <Pagination />
 
-      // wait
-      let timeoutId = setTimeout(() => {
-        clearTimeout(timeoutId)
-        // flag on
-        setAllowSearch(true)
-      }, 300)
-    }
-  }
+  let searchbox
+  searchbox = <CustomSearchBox
+              handleCustomQuery={ handleCustomQuery }
+              query={ customQuery.query }
+              defaultQuery={ customQuery.query }
+            />
 
-  function titleQuery(tQuery) {
+
+
+  //////////
+
+  
+  // othiz
+  function titleQuery(tQuery){
     // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
     return {
       bool: {
@@ -436,10 +572,10 @@ export default function Search() {
           field: 'genres',
           type: 'string',
         },
-        {
-          attribute: 'contributing_orgs',
-          field: 'contributing_orgs',
-          type: 'string',
+        { 
+          attribute: "contributing_orgs",
+          field: "contributing_orgs",
+          type: "string",
         },
         {
           attribute: 'special_collections',
@@ -451,11 +587,6 @@ export default function Search() {
           field: 'topics',
           type: 'string',
         },
-        // {
-        //   attribute: "broadcast_date",
-        //   field: "broadcast_date",
-        //   type: "date",
-        // },
         {
           attribute: 'series_titles',
           field: 'series_titles',
@@ -480,104 +611,18 @@ export default function Search() {
     },
   })
 
-  const dateToYear = items => {
-    return items.map(item => {
-      if (item.value) {
-        var notYear = item.value.match(/^\d{4}(.*)/)[1]
-        item.value = item.value.replace(notYear, '')
-        item.label = item.label.replace(notYear, '')
-      }
-
-      return item
-    })
-  }
-
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(item.label == "Online Reading Room"){
-        item.label = "Available Online"
-      } else if(item.label == "On Location"){
-        item.label = "All Digitized"
-      } else {
-        // private or nothing
-        item.label = "All Records"
-      }
-
-        return item
-      })
-      .sort((a, b) => {
-        // sort availabilty options a-z so they dont jump around ui based on num results
-        if (a < b) {
-          return 1
-        } else {
-          return -1
-        }
-      })
-  }
-
-  const isOrField = fieldName => {
-    return OR_FIELDS.includes(fieldName)
-  }
-
-  const prettyFieldNames = fieldName => {
-    switch (fieldName) {
-      case 'producing_org':
-        return 'Producing Organization'
-        break
-      case 'contributing_orgs':
-        return 'Contributing Organization'
-        break
-      case 'media_type':
-        return 'Media Type'
-        break
-      case 'access_level':
-        return 'Availability'
-        break
-      case 'genres':
-        return 'Genre'
-        break
-      case 'topics':
-        return 'Topic'
-        break
-      case 'pbcoreDescriptionDocument.pbcoreAssetType.text':
-        return 'Asset Type'
-        break
-      case 'collections':
-        return 'Collection'
-        break
-    }
-  }
-
-  const prettyCurrentRefinements = attributes => {
-    attributes.map(attribute => {
-      let refs = attribute.refinements.map(ref => {
-        // label is the actual facet field value which seems slightly weird
-        ref.label = `${prettyFieldNames(attribute.label)}: ${ref.label}`
-        return ref
-      })
-
-      // name of field (dont show in top bar)
-      attribute.label = ''
-      attribute.refinements = refs
-      return attribute
-    })
-
-    return attributes
-  }
-
-  function onlyUnique(value, index, array) {
-    return array.indexOf(value) === index
-  }
-  // const searchClient = Client(sk)
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
+      let emptyQuery = query === "" || query.match(/^\s+$/)
       var queryHash
 
+      // console.log( 'Search was triggered with custom', customQuery )
       var title_if_present
       if (customQuery.title && customQuery.title.length > 0) {
         title_if_present = customQuery.title
       }
 
+      // console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
       // look for quoted phrases in the main search box
       if (false && query && query.includes('\"')) {
         var quoted = query.match(/"(\\.|[^"\\])*"/g)
@@ -607,39 +652,53 @@ export default function Search() {
           },
         }
       } else {
+        
         var mainAllFieldsArray
         // broken creepy quote handling
         if (false && query && query.includes('\"')) {
           var quoted = query.match(/"(\\.|[^"\\])*"/g)
-          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, '')
-          if (quoted.length > 0) {
-            console.log('dummbo', quoted, unquoted)
+          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+          if(quoted.length > 0){
+            // console.log( 'dummbo', quoted, unquoted )
             // make a one-hit-required term array for each distinct quoted term
-            queryHash.bool.filter = quoted
-              .reduce()
-              .map(quoterm => allFieldsArray(quoterm.replace(/['"]+/g, '')))
-              .flat()
+
+            // todo fix this!! dates use filtering now
+            queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
           }
         } else {
+          // big main compound query...
           mainAllFieldsArray = allFieldsArray(query)
         }
 
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            should: [
-              {
-                bool: {
-                  should: mainAllFieldsArray,
-                  minimum_should_match: 1,
-                },
-              },
-            ],
-          },
+        if(emptyQuery){
+          // there *is not* a main box query
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: []
+            }
+          }
+        } else {
+          // there *is* a main box query
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  bool: {
+                    should: mainAllFieldsArray,
+                    minimum_should_match: 1
+                  }
+                }
+              ]
+            }
+          }
         }
 
-        if (customQuery.all && customQuery.all.length > 0) {
+        // add in clauses for each of 3 secondary searchbox fields
+        if(customQuery.all && customQuery.all.length > 0){
           // add second big should clause to outer bool query
           var allQuery = {
             bool: {
@@ -647,7 +706,14 @@ export default function Search() {
             },
           }
           queryHash.bool.should.push(allQuery)
-          queryHash.bool.minimum_should_match = 2
+          if(emptyQuery){
+            // no quer present
+            queryHash.bool.minimum_should_match = 1
+          } else {
+            // normal 
+            // require a hit on the main clause, and also this 'all terms' one
+            queryHash.bool.minimum_should_match = 2
+          }
         }
 
         if (customQuery.none && customQuery.none.length > 0) {
@@ -659,62 +725,57 @@ export default function Search() {
           queryHash.bool.must = [titleQuery(customQuery.title)]
         }
 
-        // set num of refinments for show more refinements UI
-        // not working
-        // setNumberOfRefinements( document.getElementsByClassName("span.ais-CurrentRefinements-category").length )
+        if(customQuery.startDate || customQuery.endDate){
+          queryHash.bool.filter = {
+            range: {
+              broadcast_date: {}
+            }
+          }
+
+          if(customQuery.startDate){
+            queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
+          }
+
+          if(customQuery.endDate){
+            queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
+          }
+        }
+
+        // console.log( 'finishing with qh', query, queryHash )
         return queryHash
       }
     },
   })
   console.log('searchClient', searchClient)
 
-  let searchResultComponent
-  if (viewSelect == 'standard') {
-    searchResultComponent = SearchResult
-  } else if (viewSelect == 'list') {
-    searchResultComponent = ListResult
-  } else if (viewSelect == 'gallery') {
-    searchResultComponent = GalleryResult
-  }
 
-  // <SearchBox queryHook={ handleSearchBox } />
   return (
     <div className='body-container'>
       <InstantSearch
-        indexName={data.indexName}
-        searchClient={searchClient}
-        routing={true}>
-        <div className='top-search-bar bmarleft smarbot smarright'>
-          <div className='options-container martop'>
-            <h2 className=''>Search Results</h2>
+        indexName={ data.esIndex }
+        searchClient={ searchClient }
+        routing={ true }
+      >
 
-            <div className='header-spacer' />
+        <div className="top-search-bar bmarleft smarbot smarright">
+          <div className="options-container martop">
+            <h2 className="search-result-label">Search Results</h2>
+            
+            <div className="header-spacer" />
 
-            <div className='sort-container sort marleft marright'>
+            <div className="sort-container sort">
               Sort
               <SortBy
                 items={[
-                  {
-                    key: 'sort1',
-                    label: 'Relevance',
-                    value: `${data.indexName}_default`,
-                  },
-                  {
-                    key: 'sort2',
-                    label: 'Title',
-                    value: `${data.indexName}_title_keyword_asc`,
-                  },
-                  {
-                    key: 'sort3',
-                    label: 'Broadcast Date',
-                    value: `${data.indexName}_broadcast_date_desc`,
-                  },
+                  { key: "sort1", label: "Relevance", value: `${data.esIndex}_default` },
+                  { key: "sort2", label: "Title", value: `${data.esIndex}_title_keyword_asc` },
+                  { key: "sort3", label: "Broadcast Date", value: `${data.esIndex}_broadcast_date_desc` },
                 ]}
               />
-              <ChevronDown style={{ right: '18px' }} />
+              <ChevronDown />
             </div>
-
-            <div className='sort-container per-page marleft marright'>
+            
+            <div className="sort-container per-page">
               Items per page
               <HitsPerPage
                 items={[
@@ -727,43 +788,30 @@ export default function Search() {
               <ChevronDown />
             </div>
 
-            <div className='marleft marright'>
-              <ViewSelect
-                selected={viewSelect == 'standard'}
-                viewType='standard'
-                viewSelect={() => setViewSelect('standard')}
-              />
-              <ViewSelect
-                selected={viewSelect == 'gallery'}
-                viewType='gallery'
-                viewSelect={() => setViewSelect('gallery')}
-              />
-              <ViewSelect
-                selected={viewSelect == 'list'}
-                viewType='list'
-                viewSelect={() => setViewSelect('list')}
-              />
+            <div className="sort-container view-select marright">
+              <div className="view-select">
+                <ViewSelect selected={ viewSelect == "standard" } viewType="standard" viewSelect={ () => setViewSelect("standard") } />
+                <ViewSelect selected={ viewSelect == "gallery" } viewType="gallery" viewSelect={ () => setViewSelect("gallery") } />
+                <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className='top-refinements-bar marbot bmarleft bmarright'>
-          <div className='stats-container'>
+        <div className="top-refinements-bar smarbot bmarleft bmarright">
+          <div className="stats-container">
             <Stats />
           </div>
 
-          <div className={currentRefinementsClasses}>
-            <CurrentRefinements transformItems={prettyCurrentRefinements} />
+          <div className={ currentRefinementsClasses }>
+            <CurrentRefinements
+              transformItems={prettyCurrentRefinements}
+            />
           </div>
-          <div className='clear-refinements-container'>
-            <ClearRefinements />
-            <div className='more-refinements'>
-              <button
-                onClick={() => {
-                  setShowingRefinements(!showingRefinements)
-                }}>
-                {showRefinementButtonText}
-              </button>
+          <div className="clear-refinements-container">
+            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
+            <div className="more-refinements">
+              <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
           </div>
         </div>
@@ -771,33 +819,28 @@ export default function Search() {
         <div className="page-sidebar bmarleft">
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
-
-          <SearchAccordion
-            title='Keywords'
-            content={
-              <>
-                <h4>Search for</h4>
-              <SearchBox  className="sidebar-search smarbot" />
-              <h4>Contains all of these words</h4>
-              <input id="all"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>This title</h4>
-              <input id="title"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <h4>None of these words</h4>
-              <input id="none"  className="sidebar-search smarbot" type="text" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value) } />
-              <div>
-                <button className="sidebar-search-button">Update</button>
-              </div>
-            </>
+          
+          <SearchAccordion title="Keywords" content={
+            searchbox
           }/>
 
           <hr />
 
           <SearchAccordion title="Options" content ={
             <>
-              <div>Include</div>
-              <div><label>All Sources<input onChange={ () => setSearchSet("both") } type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => setSearchSet("records") } type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}>Include</div>
+              <div style={{ color: "#ddd" }}><label>All Sources<input onChange={ () => setSearchSet("both") } disabled type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Records<input onChange={ () => setSearchSet("records") } disabled type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
+              <div style={{ color: "#ddd" }}><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } disabled type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+            </>
+          }/>
+
+          <SearchAccordion title="Broadcast Date" content={
+            <>
+              <div>
+                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+              </div>
             </>
           }/>
 
@@ -942,16 +985,17 @@ export default function Search() {
           <hr />
         </div>
 
-        <div className='page-maincolumn bmarright'>
-          <div className='pagination-bar'>
-            <Pagination />
+        <div className="page-maincolumn bmarright">
+
+          <div className="pagination-bar">
+            { pagination }
           </div>
 
-          <hr />
-          <Error />
-          <Hits hitComponent={searchResultComponent} />
-          <div className='pagination-bar marbot'>
-            <Pagination />
+          <hr/>
+
+          <Hits hitComponent={ searchResultComponent } />
+          <div className="pagination-bar marbot">
+            { pagination }
           </div>
         </div>
       </InstantSearch>

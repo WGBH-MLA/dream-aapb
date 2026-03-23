@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Links,
   Meta,
@@ -14,7 +15,12 @@ export const meta = () => {
 }
 
 export const loader = () => {
-  return { indexName: process.env.ES_INDEX_NAME }
+  return {
+    wagtailHost: process.env.AAPB_API_URL || "http://aapb-api/api/v2",
+    esIndex: process.env.ES_INDEX || "hot-aapb",
+    esURL: process.env.ES_URL || "https://elastic.dev.wgbh-mla.org",
+    apiKey: process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw==",
+  }
 }
 
 // standard
@@ -26,6 +32,8 @@ import Footer from './components/Footer'
 import './styles/styles.css'
 
 export default function App() {
+  const [pleaseRotate, setPleaseRotate] = useState(false)
+
   const data = useLoaderData()
   return (
     <html>
@@ -35,7 +43,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Header indexName={data.indexName} />
+
+
+        <Header esIndex={ data.esIndex } />
         <Outlet />
         <Footer />
 

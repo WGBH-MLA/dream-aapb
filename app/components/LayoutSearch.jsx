@@ -1,10 +1,29 @@
-import { useState } from 'react'
-import { ExternalLink, Search, X } from 'lucide-react'
+import { useEffect } from "react"
+import { ExternalLink, Search, X } from "lucide-react"
 
 export default function LayoutSearch(props){
-  const [search, setSearch] = useState(null)
+  var encodedQuery = encodeURIComponent(props.searchQuery || "")
+  // useEffect(() => {
+  //   if(!props.searchQuery && props.queryFromURL && props.queryFromURL.length > 0 && props.queryFromURL != searchy){
+  //     searchy = props.queryFromURL
+  //   }
+  // })
+
   function goToSearch(){
-    window.location.href = `/search?${ props.indexName }[query]=${search}`
+    let destination
+    if(props.searchFilter){
+      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}${props.searchFilter}`
+    } else {
+      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}`
+    }
+    if(!window.location.pathname.includes("/catalog")){
+      // regular navigate
+      props.navigateHook(destination)
+    } else {
+      // just force refresh since we're on search page
+      window.location.href = destination
+      window.location.reload()
+    }
   }
 
   function handleEnter(e){
@@ -12,11 +31,30 @@ export default function LayoutSearch(props){
       goToSearch()
     }
   }
- 
+
+  let classes = "layout-search"
+  if(props.wide){
+    classes += " wide"
+  }
+
+  let placeholder
+  if(props.placeholder){
+    placeholder = props.placeholder
+  } else {
+    placeholder = "Search the Archive"
+  }
+
   return (
-    <div className="layout-search">
-      <input onKeyUp={ (e) => handleEnter(e) } onChange={ (e) => setSearch(e.target.value) } type="text" name="query" placeholder="Search the Archive" />
-      <button onClick={ goToSearch }><Search size={16} /></button>
+    <div className={ classes }>
+      <input
+        className="layout-input"
+        type="text"
+        name="query"
+        placeholder={ placeholder }
+        onKeyUp={ handleEnter }
+        defaultValue={ encodedQuery }
+        onChange={ (e) => props.handleChange(e.target.value) } />
+      <button onClick={ goToSearch }><Search size={24} /></button>
     </div>
   )
 }

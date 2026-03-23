@@ -23,7 +23,7 @@ export default function PullQuoteGroup(props){
   })
 
   return (
-    <div className="pull-quote-group-container">
+    <div className="pull-quote-group-container bmarleft bmarright">
       <div onClick={ () => displayQuote(display-1, quotes.length) } className="pull-quote-group-button">&lt;</div>
       
       <div className="pull-quote-group-quote">
