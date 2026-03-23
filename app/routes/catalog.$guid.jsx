@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, useNavigate } from 'react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
@@ -25,9 +25,19 @@ export const loader = async ({params, request}) => {
 
 export default function ShowRecord() {
   const data = useLoaderData()
-  const [searchParams, setSearchParams] = useSearchParams()
+
+  // state for layoutsearch
+  let navigateHook = useNavigate()
+  const [search, setSearch] = useState("")
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
+  }
+
+  // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
-  
+
+  // preserve link back to users referring search (if available), via url params
+  const [searchParams, setSearchParams] = useSearchParams()
   let yourQuery = ""
   if(searchParams.get(`${data.esIndex}[query]`)){
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
