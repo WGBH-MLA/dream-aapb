@@ -3,6 +3,7 @@ import { useLoaderData, useSearchParams, useRouteError } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
+import ErrorTransporter from '../classes/ErrorTransporter'
 
 const OR_FIELDS = [
   'producing_org',
