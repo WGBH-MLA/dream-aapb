@@ -1,5 +1,5 @@
-curl -X DELETE -H "Authorization: ApiKey TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw==" "http://localhost:9200/aapb-tepid-rhodium"
-curl -v -X PUT "localhost:9200/aapb-tepid-rhodium/" \
+curl -X DELETE -H "Authorization: ApiKey TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw==" "http://localhost:9200/aapb-chill-platinum"
+curl -v -X PUT "localhost:9200/aapb-chill-platinum/" \
 -H "Authorization: ApiKey "TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw=="" \
 -H "Content-Type: application/json" \
 -d'{

@@ -10,20 +10,22 @@ export default function LayoutSearch(props){
   // })
 
   function goToSearch(){
+    let resource
+    if(window.location.pathname.includes("/catalog") && !window.location.pathname.includes("/catalog/")){
+      // different handling because we're already on the path (/catalog) we want to go to!
+      resource = "recatalog"
+    } else {
+      resource = "catalog"
+    }
+
     let destination
     if(props.searchFilter){
-      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}${props.searchFilter}`
+      destination = `/${resource}?${ props.esIndex }[query]=${encodedQuery}${props.searchFilter}`
     } else {
-      destination = `/catalog?${ props.esIndex }[query]=${encodedQuery}`
+      destination = `/${resource}?${ props.esIndex }[query]=${encodedQuery}`
     }
-    if(!window.location.pathname.includes("/catalog")){
-      // regular navigate
-      props.navigateHook(destination)
-    } else {
-      // just force refresh since we're on search page
-      window.location.href = destination
-      window.location.reload()
-    }
+
+    props.navigateHook(destination)
   }
 
   function handleEnter(e){
