@@ -5,12 +5,10 @@ import BigLink from "../components/BigLink"
 
 export default function Collaborators() {
   return (
-    <div className="page-container">
-      <div className="skinny-body-container martop bmarbot static-logos">
-
-        <h1 id="library-and-education-collaborators">Library and Education Collaborators</h1>
-        <p>The American Archive of Public Broadcasting (AAPB) collaborates with educational and cultural organizations across the nation, as well as libraries and archives to share in the effort of providing access to historic records. The AAPB is pleased to collaborate with the following organizations:</p>
-        <h3 class="spaced-h3">Digital Public Library of America</h3>
+      <div className="skinny-body-container">
+      <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+<SummaryBox title="Library and Education Collaborators" text="The American Archive of Public Broadcasting (AAPB) collaborates with educational and cultural organizations across the nation, as well as libraries and archives to share in the effort of providing access to historic records. The AAPB is pleased to collaborate with the following organizations:" />
+        <h3>Digital Public Library of America</h3>
         <p class="spaced-paragraph">
           <img class="left-logo" src="https://s3.amazonaws.com/americanarchive.org/org-logos/DPLA_logo.png" alt="DLPA Logo Image"/>
           The <a href="https://dp.la">Digital Public Library of America</a> amplifies the value of libraries and cultural organizations as Americans’ most trusted sources of shared knowledge. The AAPB has made items searchable in the DPLA, and you can find historic items from the AAPB in their primary source sets.
@@ -37,7 +35,7 @@ export default function Collaborators() {
 
         <h3 class="spaced-h3">PBS Learning Media</h3>
         <p class="spaced-paragraph">
-          <a href="https://mass.pbslearningmedia.org/">PBS LearningMedia</a> provides educational resources produced by public media and targeted specifically for educators. High-quality content is tied to Common Core and national curriculum standards and is freely available to all educators as a basic service. The AAPB and PBSLM are working together to match resources in PBSLM with full-length and related archival programs and original materials made available in the AAPB Online Reading Room. 
+          <a href="https://mass.pbslearningmedia.org/">PBS LearningMedia</a> provides educational resources produced by public media and targeted specifically for educators. High-quality content is tied to Common Core and national curriculum standards and is freely available to all educators as a basic service. The AAPB and PBSLM are working together to match resources in PBSLM with full-length and related archival programs and original materials made available in the AAPB Online Reading Room.
         </p>
 
         <h3 class="spaced-h3">Professional Learning and Outreach Initiatives Office, Library of Congress</h3>
@@ -56,12 +54,21 @@ export default function Collaborators() {
           <img class="left-logo" src="https://s3.amazonaws.com/americanarchive.org/org-logos/scms_logo.png" alt="SCMS Logo Image"/>
           <a href=" ">Aca-Media Podcast</a> The <a href="https://www.cmstudies.org/">Society for Cinema and Media Studies</a> (SCMS) is a leading scholarly organization in the United States dedicated to promoting a broad understanding of film, television, and related media through research and teaching grounded in the contemporary humanities tradition. The SCMS podcast <a href="https://www.cmstudies.org/">Aca-Media</a> offers an academic perspective on media and co-collaborates on the AAPB <a href="https://americanarchive.org/about-the-american-archive/podcast">“Presenting the Past”</a> podcast.
         </p>
+  <div className="link-bank">
+        <a href="/our-story">Our Story</a>
+        <hr />
+        <a href="/vision-and-mission">Vision and Mission</a>
+        <hr />
+        <a href="/history">History</a>
 
       </div>
-
-      <div className="skinny-body-container">
-        <a className="back-link martop marbot" href="/about">&lt; Back To About the AAPB</a>
+      <div className="link-bank">
+        <a href="/council-and-committee">Council and Committee Members</a>
+        <hr />
+        <a href="/projects">Projects</a>
+        <hr />
+        <a href="/funding">Funding</a>
       </div>
-    </div>
+      </div>
   )
 }

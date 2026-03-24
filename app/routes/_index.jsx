@@ -1,57 +1,37 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router"
 import { useLoaderData } from "react-router"
-
 import LayoutSearch from "../components/LayoutSearch"
 import HomepageHeader from "../components/HomepageHeader"
 import TVMenu from "../components/TVMenu"
-import SummaryBox from "../components/SummaryBox"
-import randomThumb from "../utils/randomThumb"
-import randomRecords from "../utils/randomRecords"
 import { recordToTVProgram } from "../utils/toTVProgram"
 import { Home } from 'lucide-react'
+import { collectionToTVProgram } from "../utils/toTVProgram"
+import { getCollections, getFeatured } from "../utils/fetch"
 
 export const loader = async () => {
 
-  let records = await randomRecords(10)
-  let programs = []
-  if(records){
-    programs = records.map((record) => recordToTVProgram(record) )
-  }
-
-  let data = {
-    featured_collections: [
-      {
-        key: "coll1",
-        title: "Televising Black Politics in the Black Power Era: Black Journal and Soul!",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/black_power/b_greaves_and_house_option_2_cropped.png",
-        url: "google.com"
-      },
-      {
-        key: "coll2",
-        title: "ZOOM (1972-1978): Children’s Community and Public Television in the 1970s",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/zoom/Zoom_mainimage.png",
-        url: "google.com"
-      },
-      {
-        key: "coll3",
-        title: "Protecting Places: Historic Preservation and Public Broadcasting",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/pennstationcrop.jpg",
-        url: "google.com"
-      },
-    ],
-
-    radio_and_tv: programs,
-
-    esIndex: process.env.ES_INDEX || "hot-aapb",
-  }
+  let collections = await getCollections()
+   let featured = await getFeatured()
+   let programs = []
+   let proggys = []
+   console.log( 'lecto', collections )
+   if(collections){
+     programs = collections.map((collection) => collectionToTVProgram(collection) )
+   }
+   if(featured){
+     featured = featured.map((collection) => collectionToTVProgram(collection) )
+   }
 
 
-  return data
-}
+   let data
+   data = {
+     featured_collections: featured,
+     radio_and_tv: programs
+   }
+
+   return data
+ }
 
 export default function Index() {
   let data = useLoaderData()
@@ -90,10 +70,10 @@ export default function Index() {
         />
       </div>
       <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={data.featured_collections} />
-        <TVMenu title="Radio and Television Programs" programs={data.radio_and_tv} seeAllURL="/collections" />
-        <TVMenu title="Historical Events and Interviews" programs={data.radio_and_tv} seeAllURL="/collections" />
-        <TVMenu title="Stations and Organizations" programs={data.radio_and_tv} seeAllURL="/collections" />
+        <TVMenu title="Featured Collections" programs={data.featured_collections.slice(0, 3)} />
+        <TVMenu title="Radio and Television Programs" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
+        <TVMenu title="Historical Events and Interviews" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
+        <TVMenu title="Stations and Organizations" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
       </div>
       <div className="body-container">
         <a href="/organizations" style={{ textDecoration: 'none' }}>

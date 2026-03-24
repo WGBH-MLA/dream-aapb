@@ -35,7 +35,7 @@ export default function Carousel({ title, items = [], seeAllUrl }) {
           style={{
             background: "none",
             border: "none",
-            fontSize: "1.8em",
+            fontSize: "2em",
             cursor: canLeft ? "pointer" : "default",
             color: canLeft ? "#3c429d" : "#ccc",
             padding: "0 0.3em",
@@ -118,7 +118,7 @@ export default function Carousel({ title, items = [], seeAllUrl }) {
           style={{
             background: "none",
             border: "none",
-            fontSize: "1.8em",
+            fontSize: "2em",
             cursor: canRight ? "pointer" : "default",
             color: canRight ? "#3c429d" : "#ccc",
             padding: "0 0.3em",

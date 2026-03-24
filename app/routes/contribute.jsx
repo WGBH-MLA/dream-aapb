@@ -41,7 +41,7 @@ export default function Contribute() {
         </ul>
       </div>
 
-      <div className="blue-box marbot">
+      <div className="blue-box">
         <h3>Digitization Submission Procedures</h3>
 
         The AAPB invites stations, producers, and archivists to submit their collections for the Mellon-funded Digital Preservation Project. To streamline the process, the AAPB has developed the following step-by-step guide:

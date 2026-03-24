@@ -2,11 +2,11 @@ import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
 import PullQuote from "../components/PullQuote"
 import PullQuoteGroup from "../components/PullQuoteGroup"
-import LinkBankFooter from '../components/LinkBankFooter';
 
 export default function About() {
   return (
     <div className="skinny-body-container">
+       <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
       <SummaryBox title="Our Story" text="The Library of Congress and WGBH in Boston have embarked on a project to preserve for posterity the most significant public television and radio programs of the past 60 years: The American Archive of Public Broadcasting. " />
 
       <PullQuoteGroup quotes={[
@@ -20,45 +20,60 @@ export default function About() {
         <PullQuote text="The American Archive will ensure that the wealth of public broadcasting programming that Americans have paid for does not sit locked away, deteriorating, on aging tape and film. This rich programming represents the most comprehensive chronicle of our nation’s history, our people, our culture and our democracy. It has enormous continuing value to current and future generations and must not be left to fade away." attribution="Jon Abbott, Former President and CEO of WGBH Boston" />
       ]} />
 
-      <div className="marbot">
+      <p>
         The American people have made a huge investment in public radio and television over many decades, calculated at more than $10 billion. The American Archive will ensure that this rich source for American political, social, and cultural history and creativity will be saved and made available once again to future generations.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         In August 2013, the Library and WGBH received a grant from the Corporation for Public Broadcasting to engage in the first phase of a long-term project to preserve public media. During this first phase, scheduled to end in September 2016, the Library and WGBH are overseeing the digitization of approximately 40,000 hours of programs selected by more than 100 public broadcasting stations throughout the nation. Dating from the 1940s to the 21st century and emanating from all regions of the nation, these programs will be available to scholars, researchers, educators, students, and the general public at the Library’s audiovisual research centers and at WGBH.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         During the initial phase, the American Archive has launched a website to give the public online access to thousands of hours of programming – as much material as legally possible to include. More than 7,000 historic public radio and television programs are now available for streaming and more content will be added periodically. In addition, the website provides data records for approximately 2.5 million items inventoried by public broadcasting stations for this project.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         The collection of 40,000 hours contains thousands of high quality programs that have had national impact. The vast majority of this initial American Archive content, however, consists of regional and local programs that document American communities during the last half of the twentieth century and the first decade of the twenty-first. This extraordinary collection includes local news and public affairs programs, local history productions that document the heritage of local communities, and programs dealing with education, environmental issues, music, art, literature, dance, poetry, religion, and even filmmaking on a local level. For scholars and educators, this collection is of critical importance. Writing about public broadcasting programs produced during the turbulent decade of the 1960s, a historian of the period has stated:
+      </p>
+        <PullQuote text="These programs are rich and promising in so many areas: Jazz history; civil rights history; the history of the war in Vietnam as debated and experienced by famous and ordinary people; the urban crisis and the development of urban minority political power; the programs of Lyndon Johnson’s War on Poverty and the hidden history of battles over social welfare and rights…. In discussions with Library of Congress staff about the American Archive project, I learned about tantalizing programming that critically evaluated the role that television and journalism played in shaping public perception." attribution="Thomas F. Jackson, University of North Carolina, Greensboro" />
 
-        <PullQuote text="These programs are rich and promising in so many areas: Jazz history; civil rights history; the history of the war in Vietnam as debated and experienced by famous and ordinary people; the urban crisis and the development of urban minority political power; the programs of Lyndon Johnson’s War on Poverty and the hidden history of battles over social welfare and rights…. In discussions with Library of Congress staff about the American Archive project, I learned about tantalizing programming that critically evaluated the role that television and journalism played in shaping public perception." attribution="Thomas F. Jackson, University of North Carolina" />
-      </div>
 
-      <div className="marbot">
+      <p>
         The Library is pleased and honored to collaborate with WGBH, acclaimed universally as a long-time leader in media production, media management, preservation, and rights management issues. The Library will house these treasures in its Packard Campus for Audio Visual Conservation, the state of the art preservation facility in Culpeper, Virginia, that was built for the Library through the support and generosity of David Woodley Packard and his Packard Humanities Institute. The collection of public broadcasting materials will be preserved and made accessible to the school child as well as the scholar.  And the extraordinary multimedia treasures from the Library of Congress collections will be significantly enhanced in this important way.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         In the future, the American Archive plans to expand by targeting important collections of materials from stations and archives that were not included in the initial phase. It is of great importance for the Library of Congress to digitize and add to the archive the unparalleled collection of public broadcasting programming that the Library has safely stored in its own vaults for more than 40 years.
-      </div>
+      </p>
 
 
-      <div className="marbot">
+      <p>
         As a public broadcaster, WGBH brings extensive knowledge of the public media system and an understanding of the core issues facing both TV and radio stations to the table. WGBH has long been positioned as a leader in the areas of media management, preservation and copyright issues. WGBH has demonstrated its strengths in these areas with the Open Vault website and other websites maintained and developed by WGBH.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         “Acquire, preserve, and provide access to a universal collection of knowledge and the record of America’s creativity” is a key strategic goal of the Library of Congress. Adopting the American Archive project advances the mission of the Library of Congress, as America’s national library, to preserve our nation’s broadcast history for future generations and further the progress of knowledge and creativity for the benefit of the American people. The Library’s experience, expertise, and national leadership in preserving and making publicly accessible digitally reformatted audiovisual materials will ensure that future operations of the American Archive are performed according to highest standards and best practices.
-      </div>
+      </p>
 
-      <div className="marbot">
+      <p>
         WGBH and the Library believe that the legacy of American public broadcasting must be preserved for future generations. We look forward to maintaining a central role in keeping, organizing and providing access to the cultural treasures created by the public media system to enhance education and knowledge of the American public.
+      </p>
+          <>
+      <div className="link-bank">
+        <a href="/vision-and-mission">Vision and Mission</a>
+        <hr />
+        <a href="/history">History</a>
+        <hr />
+        <a href="/council-and-committee">Council and Committee Members</a>
       </div>
-      <LinkBankFooter />
+      <div className="link-bank">
+        <a href="/projects">Projects</a>
+        <hr />
+        <a href="/funding">Funding</a>
+        <hr />
+        <a href="/collaborators">Library and Education Collaborators</a>
+      </div>
+    </>
     </div>
   )
 }

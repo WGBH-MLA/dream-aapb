@@ -3,6 +3,8 @@ import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
 import SummaryBox from "../components/SummaryBox"
 import Carousel from '../components/Carousel';
+import randomRecords from '../utils/randomRecords';
+import randomThumb from '../utils/randomThumb';
 
 export const loader = async () => {
     let records = await randomRecords(10)
@@ -99,18 +101,16 @@ export default function Index() {
         { title: "Fifth Item", url: "/exhibits/fifth", thumbnail: "https://..." },
     ];
     return (
-        <div className="skinny-body-container marbot">
-            <SummaryBox title="Celebrating 250 Years of American Stories">
-                <p>As the United States marks its 250th anniversary, the American Archive of Public Broadcasting (AAPB) invites you to
+        <div className="body-container">
+            <h1>Celebrating 250 Years of American Stories</h1>
+            <p>As the United States marks its 250th anniversary, the American Archive of Public Broadcasting (AAPB) invites you to
                     explore the voices, events, and moments that have shaped the nation. Through historic broadcasts, firsthand accounts, and
                     cultural reflections, this collection offers a unique window into America's past - its struggles, triumphs, and evolving
                     identity.</p>
-                <p>From groundbreaking political moments to the everyday experiences of communities across the country, these programs capture the spirit of the nation as told through public media organizations from the 1950s to today. Discover the stories that define America - then, now, and for the future.
-                </p>
-            </SummaryBox>
+            <p>From groundbreaking political moments to the everyday experiences of communities across the country, these programs capture the spirit of the nation as told through public media organizations from the 1950s to today. Discover the stories that define America - then, now, and for the future.</p>
 
             <div className="welcome-video-container">
-                <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" style={{ width: '100%', height: '100%', border: 'none' }}></iframe>
+                <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479" style={{ width: '85%', border: 'none' }}></iframe>
             </div>
             <hr />
             <Carousel title="Key Historical Events" items={key_events} />

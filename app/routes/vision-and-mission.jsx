@@ -7,11 +7,9 @@ import LinkBankFooter from '../components/LinkBankFooter';
 export default function VisionStatements() {
   return (
     <div className="skinny-body-container">
-
-       <SummaryBox title="Vision Statement" text="The American Archive of Public Broadcasting seeks to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity." />
-
-
-      <h3>Mission Statement</h3>
+      <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+      <SummaryBox title="Vision Statement" text="The American Archive of Public Broadcasting seeks to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity." />
+  <SummaryBox title="Mission Statement" />
       <ul>
         <li>Become a focal point for discoverability of historical public media content</li>
         <li>Coordinate a national effort to preserve and make accessible as much significant public broadcasting materials as possible</li>
@@ -20,7 +18,20 @@ export default function VisionStatements() {
         <li>Increase public awareness of the significance of historical public media and the need to preserve and make accessible significant public broadcasting programs</li>
         <li>Ensure the perpetuation of the archive by working toward financial sustainability.</li>
       </ul>
-           <LinkBankFooter />
+ <div className="link-bank">
+        <a href="/our-story">Our Story</a>
+        <hr />
+        <a href="/history">History</a>
+        <hr />
+        <a href="/council-and-committee">Council and Committee Members</a>
+      </div>
+      <div className="link-bank">
+        <a href="/projects">Projects</a>
+        <hr />
+        <a href="/funding">Funding</a>
+        <hr />
+        <a href="/collaborators">Library and Education Collaborators</a>
+      </div>
     </div>
   )
 }

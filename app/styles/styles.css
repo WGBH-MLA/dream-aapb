@@ -67,7 +67,7 @@ input, button {
 
 .marbot {
   margin-bottom: 2em;
-  margin-left:9em;
+  margin-left:3em;
 }
 .smartop {
   margin-top: 1em;
@@ -100,19 +100,49 @@ input, button {
 /*general page layout*/
 div.body-container {
   width: 96%;
-  margin-left: 2%;
+  margin-left: 1%;
 }
 
+div.body-container h1 {
+  margin-left: 2.8em;
+  margin-bottom: 1em;
+}
+
+div.body-container p {
+  width: 60%;
+  margin-left: 4.5em;
+  font-size: 20px;
+}
 div.skinny-body-container {
   font-size: 1.5em;
   width: 75%;
-  margin-left: 10.5%;
+  margin-left: 8%;
   text-align: left;
 }
 
 div.skinny-body-container h3 {
-  font-weight: 700;
-  margin-left: 8em;
+font-weight: 700;
+  width: 80%;
+  margin-left: 13.5%;
+  margin-top: 2em;
+}
+
+div.skinny-body-container p {
+  font-size: .80em;
+  width: 85%;
+  margin-left: 14%;
+}
+
+div.skinny-body-container ul {
+       width: 80%;
+   margin-left: 12%;
+       display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+div.skinny-body-container div.blue-box h3 {
+  text-align: left;
 }
 
 div.header-bar {
@@ -127,18 +157,18 @@ div.header-bar img.header-logo {
   height:3em;
   margin-top: .9em;
   margin-bottom: .8em;
-  margin-left: -2em;
+  margin-left: 5em;
   object-fit: contain;
   max-width: 28rem;
   display: block;
 }
 
 div.header-bar img.header-squares {
-  height: max-content;
+  height: 75%;
   width: max-content;
   margin-top: .2em;
   display: block;
-  margin-left: -9rem;
+  margin-left: -3em;
 }
 
 div.header-bar div.header-spacer, div.options-container div.header-spacer {
@@ -154,6 +184,10 @@ div.header-subbar {
   margin-left: 2em;
 }
 
+a {
+  text-decoration: none;
+}
+
 button.donate {
   /*  darkblue*/
   background-color: rgba(53, 59, 144);
@@ -166,6 +200,17 @@ button.donate {
   margin-left: -1em;
   margin-top: 1em;
   margin-right: 4.3em;
+}
+
+.skinny-body-container .back-link-nav {
+  color: #3d439c;
+  font-size: .6em;
+  margin-left: -.4em;
+  text-decoration: none;
+}
+
+.skinny-body-container a {
+  color: #3d439c;
 }
 
 /*footer bar*/
@@ -211,7 +256,6 @@ div.footer-bar div.footer-title {
 }
 
 div.footer-bar div.footer-stack a {
-  text-decoration: none;
   margin-bottom: .5em;
   display: block;
 }
@@ -264,8 +308,8 @@ div.social-icon img {
 }
 
 div.welcome-video-container {
-  width: 70%;
-  margin-left: 17%;
+  width: 87%;
+  margin-left: 13%;
   margin-top: 2em;
   text-align: left;
 
@@ -282,10 +326,9 @@ div.link-bank {
   vertical-align: top;
   text-align: left;
   margin-top: 2em;
-  margin-bottom: 4em;
   display: inline-block;
-  width: 27%;
-  margin-left: 17%;
+  width: 40%;
+  margin-left: 13.2%;
   margin-right: -10%;
 }
 
@@ -296,13 +339,13 @@ div.link-bank a {
   font-size: .8em;
   font-weight: bold;
   color: #3c4399;
-  text-decoration: none;
 }
 
 div.link-bank hr {
-  width: 120%;
+  width: 105%;
   margin-bottom: .7em;
   margin-top: .3em;
+  color: #b3b3b3;
 }
 
 div.biglink svg {
@@ -329,7 +372,6 @@ div.biglink h3 {
 }
 
 div.biglink a {
-  text-decoration: none;
   display: block;
 }
 
@@ -349,14 +391,15 @@ div.view-select-button.selected img {
 
 /*misc static page components*/
 div.newsletter-bar {
-  font-size: 1.2em;
+  font-size: 1.3em;
   text-align: center;
   background-color: rgba(53, 59, 144);
+  margin-top: 5em;
 }
 
 div.newsletter-bar div {
-  padding-top: 2em;
-  padding-bottom: 2em;
+  padding-top: 1em;
+  padding-bottom: 1em;
   display: inline-block;
   color: #fff;
   margin-left: 2em;
@@ -369,7 +412,7 @@ div.newsletter-bar input {
 }
 
 div.newsletter-bar input[type="text"] {
-  width: 16em;
+  width: 20em;
 }
 
 
@@ -445,7 +488,7 @@ div.homepage-search div.layout-search input {
   width: 30%;
   border: none;
   outline: none;
-  box-shadow: 10px 10px 10px #e4e5ef1c;
+  box-shadow: 10px 10px 10px rgba(228, 229, 239, 0.6);
   border-radius: 3px 0 0 3px;
   padding-left: 1em;
   font-size: 23px;
@@ -453,8 +496,9 @@ div.homepage-search div.layout-search input {
 }
 
 div.homepage-search div.layout-search button {
-  height: 4.5em;
-  width: 7em;
+  height: 5.2em;
+  width: 6em;
+  margin-bottom: .5em;
   border-radius: 0 3px 3px 0;
   box-shadow: 0 2px 8px #e4e5ef;
 }
@@ -518,10 +562,9 @@ div.layout-search button {
 
 
 /*listy pages*/
-/* Base container */
 
 div.tv-menu-container {
-  margin-left: 2em;
+
   position: relative;
   width: 96%;
   height: 22rem;
@@ -531,51 +574,52 @@ div.tv-menu-container {
 }
 
 div.tv-menu-container a {
-  text-decoration: none;
   display: block;
 }
 
 div.tv-menu-container h2 {
-  margin-left: 1em;
-  margin-bottom: 0.3em;
+  padding-left: 3.8em;
+  padding-bottom: .2em;
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1.6em;
 }
 
 div.tv-menu-container a.see-all {
   position: absolute;
   top: 0;
-  right: 7em;
+  right: 2em;
   font-weight: bold;
   color: #4b4fa5;
 }
 
 /* Body */
 div.tv-menu-container div.tv-menu-body {
-  max-width: 500%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
 /* Program card base */
 div.tv-menu-container div.tv-menu-program {
-  display: inline-flex;
   flex-grow: 1;
-  width: 21rem;
-  min-width: 21rem;
-  margin-left: 2em;
+  min-width: 0;
+  margin-left: 0;
 }
 
 div.tv-menu-container div.tv-menu-program a > div {
   overflow: hidden;
   border-radius: 4px;
   width: 100%;
-  height: 20rem;
+  height: auto;
 }
 
 div.tv-menu-container div.tv-menu-program img {
   display: block;
   object-fit: cover;
-  width: 55%;
-  height: 85%;
+  width: 100%;
+  height: 100%;
   border-radius: 4px;
 }
 
@@ -583,9 +627,7 @@ div.tv-menu-container div.tv-menu-program img {
 div.tv-menu-container div.tv-menu-program h4 {
   font-weight: 600;
   font-style: italic;
-  font-size: 1.2em;
-  margin-left: 0em;
-  width: 100%;
+  width: 80%;
   display: block;
   overflow-x: hidden;
   white-space: nowrap;
@@ -595,40 +637,42 @@ div.tv-menu-container div.tv-menu-program h4 {
 /* h5 base */
 div.tv-menu-container div.tv-menu-program h5 {
   font-size: 1em;
-  margin-top: 0.5em;
+  margin-top: 0.2em;
 }
 
 /* .three variant */
+
 div.tv-menu-container.three {
-  height: 35rem;
+  height: auto;
   overflow-x: hidden;
+  overflow-y: visible;
 }
 
 div.tv-menu-container.three div.tv-menu-body {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  padding: 0 2em;
+  margin-left: 4em;
 }
 
-div.tv-menu-container.three div.tv-menu-body h2 {
-  width: 100%;
+div.tv-menu-container.three div.tv-menu-program img {
+  height: auto;
+  aspect-ratio: 16 / 9;
 }
-
 
 div.tv-menu-container div.tv-menu-program.three h4 {
   font-size: 1.5em;
-  width: 55%;
 }
 
 /* .four variant */
 div.tv-menu-container.four {
   height: auto;
   min-height: 18rem;
+  overflow-x: hidden;
   overflow-y: visible;
 }
 
-div.tv-menu-container.four div.tv-menu-program {
-  height: auto;
+div.tv-menu-container.four div.tv-menu-body {
+  padding: 0 2em;
+  margin-left: 4em;
 }
 
 div.tv-menu-container.four div.tv-menu-program img {
@@ -638,34 +682,32 @@ div.tv-menu-container.four div.tv-menu-program img {
 }
 /*summary box*/
 div.summary-box-container {
-  text-align: left;
-  margin-top: 1em;
   margin-bottom: 2em;
   display: block;
 }
 
 div.summary-box  {
   margin-top: 2em;
-  text-align: left;
-  margin-left: 9em;
+  margin-left: 7em;
 }
 
 div.summary-box-text {
   font-size: 1.2em;
-  font-weight: 300;
   line-height: 1.4em;
 }
 
 /*pull quote*/
 div.pull-quote-container {
-  margin-top: 1em;
-  width: 100%;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  margin-left: 7.5em;
+  width: 85%;
   border-left: 3px #9a1f61 solid;
 }
 
 div.pull-quote-text, div.pull-quote-attribution {
   text-align: left;
-  margin-top: 1.9em;
+  margin-top: 1em;
   margin-left: 1em;
   font-size: .8em;
 }
@@ -673,23 +715,28 @@ div.pull-quote-text, div.pull-quote-attribution {
 div.pull-quote-group-container div.pull-quote-container {
   border-left: none;
   padding-left: 0;
+  margin-left: 0;
+  margin-bottom: 0;
+width: 100%;
 }
 
 div.pull-quote-attribution {
   font-weight: bold;
 }
 
+
+
 /*pull quote group*/
 div.pull-quote-group-container {
   background-color: #e4e6f2;
   border-radius: 4px;;
-  margin-bottom: 4em;
-  margin-left: 8em;
+  margin-bottom: 2em;
+  margin-left: 7.1em;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  padding: 2em 0;
+  padding: .5em 0;
 }
 
 div.pull-quote-row {
@@ -712,36 +759,44 @@ div.pull-quote-group-button {
 div.pull-quote-group-quote {
   flex: 1;
   min-height: 10em;
-  padding: 0 1em;
 }
 
 div.pull-quote-group-bubbles {
   text-align: center;
-  padding-bottom: 1em;
+  padding-bottom: .3em;
   width: 100%;
-  margin-top: 1em;
+  margin-top: .5em;
 }
 
 div.pull-quote-group-bubble {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: .7em;
+  height: .7em;
   margin-left: 0.2em;
-  border-radius: 36px;
-  background-color: #ccc;
+  border-radius: 30px;
+  background-color: #8f93c6;
 }
 div.pull-quote-group-bubble.fill {
-  background-color: #778;
+  background-color: #3c429b;
+}
+
+/*council and committee images*/
+.img-circle {
+  width: 150px;       /* pick one consistent size */
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  float: left;
+  margin-right: 1em;
+  margin-bottom: .5em;
 }
 
 /*contribute list*/
-div.contribute-list {
-  margin-left: 8em;
-}
 
 div.contribute-list ul {
   margin-bottom: 4em;
   list-style-type: none;
+  margin-left: 5em;
 }
 
 div.contribute-list ul li {
@@ -757,17 +812,21 @@ div.contribute-list ul li b, div.contribute-list ul li {
 }
 
 div.blue-box {
-  padding: 2em;
+  padding: 1em;
+  padding-top: .1em;
   margin-bottom: 3em;
+  margin-left: 7em;
   background-color: #e4e6f2;
 }
 
 div.blue-box h3 {
   margin-bottom: 1em;
+  text-align: left;
 }
 
 div.blue-box b {
   margin-bottom: 2em;
+  text-align: left;
 }
 
 /*drawer menu*/
@@ -814,7 +873,7 @@ a.drawer-item hr {
 }
 
 a.drawer-item h4 {
-  font-size: 1.3em;
+  font-size: 1em;
 }
 
 a.drawer-item:hover > h4 {
@@ -833,9 +892,9 @@ div.drawermenu-trigger {
 }
 
 span.drawermenu-label {
-  font-size: 1.3em;
+  font-size: 1em;
   color: rgba(74, 78, 156);
-  /* remove width: 100% */
+  padding: 0 .1em;
 }
 
 div.drawermenu-container svg.lucide-chevron-down {
@@ -982,10 +1041,6 @@ div.video-player-container video {
 
 div.search-result {
   min-height: 8rem;
-}
-
-div.search-result a {
-  text-decoration: none;
 }
 
 div.search-result pre {
