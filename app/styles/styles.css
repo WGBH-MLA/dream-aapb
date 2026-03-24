@@ -39,7 +39,7 @@ body {
 }
 
 /*universal*/
-div, span, h1, h2, h3, h4, h5, a, ul, ol {
+div, span, h1, h2, h3, h4, h5, a, ul, ol, pre {
   color: #000;
   margin: 0;
   padding: 0;
@@ -51,7 +51,9 @@ div, span, h1, h2, h3, h4, h5, a, ul, ol {
 
 pre {
   padding: 2em;
-  background-color: #ddd;
+  /*word-wrap: break-word;*/
+  /*white-space: normal;*/
+  background-color: #eee;
 }
 
 ul.clean {
@@ -81,14 +83,46 @@ a.donate-button:active {
   top:1px;
 }
 
-div.pbcore {
+div.viewer  {
   overflow: hidden;
   height: 8em;
-/*  box-shadow: 2px 2px #0f0;*/
+  font-size: 0.8em;
 }
 
-div.pbcore.show {
+div.viewer.show {
   height: auto;
+}
+
+div.viewer div.viewer-controls {
+  padding-inline-start: 0;
+  padding: 1em;
+  background-color: #d2d5e2;
+  font-weight: bold;
+}
+
+div.viewer div.viewer-controls:hover:after {
+  margin-left: 2em;
+  color: #3C439B;
+  font-size: 0.8em;
+  content: "(Click to toggle full PBCore view)";
+}
+
+div.viewer div.viewer-controls svg {
+  position: absolute;
+  right: 1em;
+}
+
+div.viewer div.viewer-content pre {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: scroll;
+}
+
+div.rotation-helper {
+  min-height: 1em;
+  min-width: 1em;
+  z-index: 1000;
+  position: fixed;
 }
 
 span.rotate * {

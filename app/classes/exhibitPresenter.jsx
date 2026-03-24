@@ -20,11 +20,6 @@ export function renderExhibit(exhibit) {
     )
   }
 
-  useEffect(() => {
-    // fixLinks()
-  }, [])
-
-
   let titleURL, titleText
   // hack, doesnt work for top level pages
   if(exhibit.meta.parent.title !== "AAPB"){

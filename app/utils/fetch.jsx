@@ -13,7 +13,6 @@ export async function getExhibits() {
   )
 
   let body = await resp.json()
-
   // TODO REMOVE ->> real top level exhibits via top_exhibit field
   // return body.items.filter((ex) => (ex.meta.html_url.match(/\//g) || []).length == 4 )
   return body.items
@@ -29,8 +28,6 @@ export async function getCollections() {
   )
   let body = await resp.json()
   return body.items
-
-  // return collections.items
 }
 
 export async function getFeatured() {
@@ -43,8 +40,6 @@ export async function getFeatured() {
   )
   let body = await resp.json()
   return body.items
-
-  // return collections.items
 }
 
 export async function getPageBySlug(type, slug) {

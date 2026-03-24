@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { useLoaderData, useSearchParams, useNavigate } from 'react-router'
+import { useLoaderData, useSearchParams } from 'react-router'
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
+import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import { niceTitle } from '../utils/niceTitle'
 
 export const loader = async ({params, request}) => {
-  let esIndex = process.env.ES_INDEX || "hot-aapb"
-  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
-  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  let esIndex = process.env.ES_INDEX
+  let esURL = process.env.ES_URL
+  let apiKey = process.env.ES_API_KEY
 
   let record = await getRecord(params.guid, esURL, esIndex, apiKey)
   let data = {
@@ -25,13 +26,6 @@ export const loader = async ({params, request}) => {
 
 export default function ShowRecord() {
   const data = useLoaderData()
-
-  // state for layoutsearch
-  let navigateHook = useNavigate()
-  const [search, setSearch] = useState("")
-  const handleLayoutSearch = (val) => {
-    setSearch(val)
-  }
 
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
@@ -105,7 +99,7 @@ export default function ShowRecord() {
           return (
             <>
               <div className="show-metadata-header">Locations</div>
-              <ShowBox label={ pbc.coverageType.text } text={ pbc.coverage.text } />
+              <ShowBox key={i} label={ pbc.coverageType.text } text={ pbc.coverage.text } />
             </>
           )  
         }
@@ -113,8 +107,8 @@ export default function ShowRecord() {
     }
 
     if(data.record.pbcoreDescriptionDocument.pbcoreIdentifier && data.record.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
-      eachId = data.record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi) => {
-        return <ShowBox label={ pbi.source || "Unknown ID" } text={ pbi.text } />
+      eachId = data.record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
+        return <ShowBox key={i} label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
     }
 
@@ -136,24 +130,11 @@ export default function ShowRecord() {
       )
     }
 
-    
     if(data.record.pbcoreDescriptionDocument){
-      pbCore = (
-        <>
-          <div className="show-metadata-header">pbcoreDescriptionDocument</div>
-          <pre>
-            { JSON.stringify(data.record.pbcoreDescriptionDocument, null, 4) }
-          </pre>
-        </>
-      )
+      pbCore = JSON.stringify(data.record.pbcoreDescriptionDocument, null, 4)
     }
   }
   
-  let pbClasses = "show-metadata-container bmarbot pbcore"
-  if(showPbcore){
-    pbClasses += " show"
-  }
-
   return (
     <>
       <div className="page-container">
@@ -175,8 +156,8 @@ export default function ShowRecord() {
             { dates }
           </div>
 
-          <div className={ pbClasses } onClick={ () => setShowPbcore(!showPbcore) }>
-            { pbCore }
+          <div className="pbcore-viewer-container">
+            <Viewer label="PBCore Metadata" content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
           </div>
         </div>
 

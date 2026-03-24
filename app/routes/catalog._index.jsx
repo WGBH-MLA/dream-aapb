@@ -103,6 +103,16 @@ export default function Catalog() {
 
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
+
+  // useEffect(() => {
+  //   // check for if we're here from layoutsearch, and run thru recatalog if so
+  //   if(searchParams.get("reload") !== null){
+  //     console.log( 'i go!', searchParams.get("reload") )
+  //     // setSearchParams(searchParams, {shitass: "bitch"})
+  //     window.location.search = "?shit=woppalooba"
+  //   }
+  // }, [])
+
   const [customQuery, setCustomQuery] = useState({
     query: searchParams.get(`${data.esIndex}[query]`) || "",
     all: searchParams.get("all") || "",
@@ -110,12 +120,6 @@ export default function Catalog() {
     none: searchParams.get("none") || "",
     startDate: searchParams.get("startDate") || "",
     endDate: searchParams.get("endDate") || "",
-    // query: "", 
-    // all: "", 
-    // title: "", 
-    // none: "", 
-    // startDate: "", 
-    // endDate: "", 
   })
 
 
@@ -135,6 +139,10 @@ export default function Catalog() {
 
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
+  }
+
+  function handleDateQuery(type, value){
+    setCustomQuery({...customQuery, [type]: value})
   }
 
   const dateToYear = (items) => {
@@ -747,7 +755,8 @@ export default function Catalog() {
 
       if(emptyQuery){
 
-        console.log( 'it aint no query' )
+        // console.log( 'it aint no query' )
+        
         // there *is not* a main box query
         queryHash = {
           // top bool
@@ -908,7 +917,7 @@ export default function Catalog() {
         })
       }
 
-      console.log( 'finishing with qh', query, queryHash )
+      // console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
     }
@@ -1024,8 +1033,8 @@ export default function Catalog() {
           <SearchAccordion title="Broadcast Date" content={
             <>
               <div>
-                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
-                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
+                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
               </div>
             </>
           }/>
