@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, useRouteError } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
