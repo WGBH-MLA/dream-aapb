@@ -1,4 +1,4 @@
-export default class Record{
+export default class Record {
   constructor(props){
     this.data = props
     if(!this.data || !this.data.guid){

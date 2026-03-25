@@ -6,10 +6,28 @@ import ShowBox from "../components/ShowBox"
 import { getRecord } from '../utils/getRecord'
 import { niceTitle } from '../utils/niceTitle'
 
+import { getCiToken, getCiMediaURL } from '../utils/media'
+import VideoHound from '../classes/VideoHound'
+
 export const loader = async ({params, request}) => {
-  let esIndex = process.env.ES_INDEX || "hot-aapb"
-  let esURL = process.env.ES_URL || "https://elastic.dev.wgbh-mla.org"
-  let apiKey = process.env.ES_API_KEY || "bjVNcTVwc0JXX1JRWThNV091ZTc6WDdiUG0tVHl5dlE2M2dYaUctcnFodw=="
+  let esIndex = process.env.ES_INDEX
+  let esURL = process.env.ES_URL
+  let apiKey = process.env.ES_API_KEY
+
+  let ciConfig = {
+    ciAPIHost: process.env.SONY_CI_API_HOST,
+    ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
+    ciUser: process.env.SONY_CI_USERNAME,
+    ciPassword: process.env.SONY_CI_PASSWORD,
+    ciClientId: process.env.SONY_CI_CLIENT_ID,
+    ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
+  }
+  
+  // let swag = await getCiToken(ciAPIHost, ciWorkspaceId, ciUser, ciPassword, ciClientId, ciClientSecret)
+  // let swag = await getCiToken(ciAPIHost, ciWorkspaceId, ciUser, ciPassword, ciClientId, ciClientSecret)
+  let videoHound = <VideoHound ciConfig={ ciConfig } />
+  let mediaURL = await videoHound.findMedia()
+  console.log( 'hey hey!!', mediaURL )
 
   let record = await getRecord(params.guid, esURL, esIndex, apiKey)
   let data = {
