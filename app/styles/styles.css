@@ -303,7 +303,7 @@ div.header-bar.marbot {
 }
 
 div.header-bar img.header-logo {
-  height:3em;
+  height:4em;
   margin-top: .9em;
   margin-bottom: .8em;
   margin-left: 5em;
@@ -343,7 +343,7 @@ button.donate {
   border-radius: 3px;
   border: none;
   margin-left: -1em;
-  margin-top: 1em;
+  margin-top: 1.5em;
   margin-right: 4.3em;
 }
 
@@ -472,6 +472,7 @@ div.link-bank {
   vertical-align: top;
   text-align: left;
   margin-top: 2em;
+  margin-bottom: 2em;
   display: inline-block;
   width: 40%;
   margin-left: 13.2%;
@@ -595,6 +596,7 @@ img.map-image {
   object-fit: contain;
   width: 85%;
   margin-left: 8rem;
+  border-radius: 6px;
 }
 
 div.mappy-container {
@@ -608,11 +610,12 @@ div.mappy-container {
 
 img.fixit-image {
   object-fit: contain;
-  margin-left: 8rem;
+  margin-left: 15rem;
   margin-top: 8rem;
   margin-bottom: 8rem;
   width: 75%;
   height: 98%;
+  border-radius: 6px;
 }
 
 div.mappy-container div.leaflet-container {
@@ -1010,7 +1013,7 @@ div.drawermenu-container {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 1.5em;
+  margin-top: 2em;
   margin-right: 5em;
   z-index: 100;
 }
@@ -1066,7 +1069,7 @@ div.drawermenu-trigger {
 }
 
 span.drawermenu-label {
-  font-size: 1em;
+  font-size: 1.3em;
   color: rgba(74, 78, 156);
   padding: 0 .1em;
 }
