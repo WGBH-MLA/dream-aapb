@@ -54,7 +54,7 @@ export default function LayoutSearch(props){
         onKeyUp={ handleEnter }
         defaultValue={ encodedQuery }
         onChange={ (e) => props.handleChange(e.target.value) } />
-      <button onClick={ goToSearch }><Search size={24} /></button>
+      <button onClick={ goToSearch }><Search size={28} /></button>
     </div>
   )
 }
