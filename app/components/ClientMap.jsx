@@ -71,7 +71,7 @@ export default function Mappy(props) {
 
   return (
     <>
-      <MapContainer scrollWheelZoom={false} center={[37.8, -130]} zoom={2.5}>
+      <MapContainer scrollWheelZoom={false} center={[50, -105]} zoom={2.5} style={{ height: "650px", width: "85%"}}>
         <TileLayer
           attribution={`Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors`}
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'

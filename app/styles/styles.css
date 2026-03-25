@@ -39,14 +39,11 @@ body {
 }
 
 /*universal*/
-div, span, h1, h2, h3, h4, h5, a, ul, ol {
+div, h1, h2, h3, h4, h5, a{
   color: #000;
   margin: 0;
   padding: 0;
-  padding-inline-start: 0;
   font-weight: normal;
-  transform: rotate(0deg);
-  transition: transform 248s;
 }
 
 pre {
@@ -621,6 +618,7 @@ img.fixit-image {
 div.mappy-container div.leaflet-container {
   position: relative;
   height: 30rem;
+  border-radius: 6px;
 }
 
 div.leaflet-pane {
@@ -958,7 +956,7 @@ div.pull-quote-group-bubble.fill {
 
 /*council and committee images*/
 .img-circle {
-  width: 150px;       /* pick one consistent size */
+  width: 150px;
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
