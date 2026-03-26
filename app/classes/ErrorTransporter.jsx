@@ -8,7 +8,7 @@ export default class ErrorTransporter extends ESTransporter {
   }
 
   async performNetworkRequest(requests) {
-    let url = 'https://elastic.wgbh-mla.org/_msearch'
+    let url = `${this.esURL}/_msearch`
     console.log(
       'ErrorTransporter requests',
       requests,
