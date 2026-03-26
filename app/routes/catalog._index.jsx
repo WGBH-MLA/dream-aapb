@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, useRouteError } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown } from 'lucide-react'
+import ErrorTransporter from '../classes/ErrorTransporter'
 
 const OR_FIELDS = [
-  "producing_org",
-  "pbcoreDescriptionDocument.pbcoreCreator.creator"
+  'producing_org',
+  'pbcoreDescriptionDocument.pbcoreCreator.creator',
 ]
 
 import {
@@ -25,13 +26,13 @@ import {
           useInstantSearch,
       } from 'react-instantsearch';
 
-import SearchResult from "../components/SearchResult"
-import ListResult from "../components/ListResult"
-import GalleryResult from "../components/GalleryResult"
-import SearchAccordion from "../components/SearchAccordion"
-import ViewSelect from "../components/ViewSelect"
+import SearchResult from '../components/SearchResult'
+import ListResult from '../components/ListResult'
+import GalleryResult from '../components/GalleryResult'
+import SearchAccordion from '../components/SearchAccordion'
+import ViewSelect from '../components/ViewSelect'
 
-export const loader = async ({params, request}) => {
+export const loader = async ({ params, request }) => {
   return {
     esIndex: process.env.ES_INDEX,
     apiKey: process.env.ES_API_KEY,
@@ -101,7 +102,7 @@ export default function Catalog() {
 // include transcript in search or not
   const [searchSet, setSearchSet] = useState("both")
 
-  let view = searchParams.get("view") || "standard"
+  let view = searchParams.get('view') || 'standard'
   const [viewSelect, setViewSelect] = useState(view)
 
   // config viewed refinements
@@ -227,8 +228,8 @@ export default function Catalog() {
     currentRefinementsClasses = "current-refinements-container closed"
     showRefinementButtonText = "Show All"
   } else {
-    currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
+    currentRefinementsClasses = 'current-refinements-container'
+    showRefinementButtonText = 'Show Less'
   }
 
 
@@ -264,224 +265,229 @@ export default function Catalog() {
         should: [
           {
             match: {
-              "title": tQuery
-            }
+              title: tQuery,
+            },
           },
           {
             nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
+              path: 'pbcoreDescriptionDocument.pbcoreTitle',
               query: {
                 match: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                  'pbcoreDescriptionDocument.pbcoreTitle.text': {
                     query: tQuery,
-                  }
-                }
-              }
-            } 
+                  },
+                },
+              },
+            },
           },
         ],
-        minimum_should_match: 1
-      }
+        minimum_should_match: 1,
+      },
     }
   }
 
-  function allFieldsArray(query){
+  function allFieldsArray(query) {
     return [
       // simplified syntax that works but omits options
       {
         match: {
-          "guid": query
-        }
+          guid: query,
+        },
       },
       {
         match: {
-          "genres": query,
-        }
+          genres: query,
+        },
       },
       {
         match: {
-          "topics": query,
-        }
+          topics: query,
+        },
       },
-      
+
       //full syntax w options
       {
         match: {
           title: {
             query: query,
-            analyzer: "standard",
-            boost: 4
-          }
-        }
+            analyzer: 'standard',
+            boost: 4,
+          },
+        },
       },
 
       {
         nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
+          path: 'pbcoreDescriptionDocument.pbcoreDescription',
           query: {
             match: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
+              'pbcoreDescriptionDocument.pbcoreDescription.text': {
                 query: query,
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                query: query,
-                analyzer: "standard",
-                boost: 3
-              }
-            }
+              },
+            },
           },
-        } 
+        },
       },
       {
         nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          path: 'pbcoreDescriptionDocument.pbcoreTitle',
           query: {
             match: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                query: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              'pbcoreDescriptionDocument.pbcoreTitle.text': {
                 query: query,
-                boost: 1
-              }
-            }
-          }
-        }
-      }
+                analyzer: 'standard',
+                boost: 3,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreAssetDate',
+          query: {
+            match: {
+              'pbcoreDescriptionDocument.pbcoreAssetDate.text': {
+                query: query,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreCreator.creator',
+          query: {
+            match: {
+              'pbcoreDescriptionDocument.pbcoreCreator.creator.text': {
+                query: query,
+                boost: 1,
+              },
+            },
+          },
+        },
+      },
     ]
   }
 
-  function allFieldsTermArray(query){
-
-    return [ 
+  function allFieldsTermArray(query) {
+    return [
       {
         term: {
           guid: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           genres: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           topics: {
             value: query,
-            case_insensitive: true
-          }
-        }
+            case_insensitive: true,
+          },
+        },
       },
       {
         term: {
           title: {
             value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
+            case_insensitive: true,
           },
-        } 
+        },
       },
       {
         nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          path: 'pbcoreDescriptionDocument.pbcoreDescription',
           query: {
             term: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                value: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              'pbcoreDescriptionDocument.pbcoreDescription.text': {
                 value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        }
-      }
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreTitle',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreTitle.text': {
+                value: query,
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreAssetDate',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreAssetDate.text': {
+                value: query,
+              },
+            },
+          },
+        },
+      },
+      {
+        nested: {
+          path: 'pbcoreDescriptionDocument.pbcoreCreator.creator',
+          query: {
+            term: {
+              'pbcoreDescriptionDocument.pbcoreCreator.creator.text': {
+                value: query,
+                case_insensitive: true,
+              },
+            },
+          },
+        },
+      },
     ]
   }
 
-  function allFieldsTermQuery(query){
+  function allFieldsTermQuery(query) {
     // should with a term match for each field, min match 1
     // if one of these hits, the must_not clause in the big bool will remove it
 
-    var nested_clauses = query.split(" ").map((q) => allFieldsTermArray(q)).flat()
+    var nested_clauses = query
+      .split(' ')
+      .map(q => allFieldsTermArray(q))
+      .flat()
     return {
       bool: {
         // this is admittedly just crazy
         should: nested_clauses,
         // this is for must_not, any match fails!
-        minimum_should_match: 1
-      }
+        minimum_should_match: 1,
+      },
     }
   }
-
-
   const sk = new Searchkit({
-    connection: {
-      host: data.esURL,
-      apiKey: data.apiKey
-    },
+    // connection: {
+    //   host: data.esURL,
+    //   index: data.indexName,
+    //   ...(data.esApiKey ? { apiKey: data.esApiKey } : {}),
+    // },
+    connection: new ErrorTransporter({
+      esURL: data.esURL,
+      esApiKey: data.esApiKey,
+    }),
 
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
+      highlight_attributes: ['pbcoreDescriptionDocument.pbcoreTitle.text'],
 
       search_attributes: [
         // "guid",
@@ -492,11 +498,17 @@ export default function Catalog() {
         // { field: "pbcoreDescriptionDocument.pbcoreCreator", weight: 2 }
         // "pbcoreDescriptionDocument.pbcoreAnnotation.first.text",
         // "pbcoreDescriptionDocument.pbcoreIdentifier",
-        
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
+      result_attributes: [
+        'guid',
+        'title',
+        'broadcast_date',
+        'pbcoreDescriptionDocument',
+        'media_type',
+        'producing_org',
+      ],
 
       // // maybe used in concert with filter range frontend
       // filter_attributes: [
@@ -504,100 +516,100 @@ export default function Catalog() {
       // ],
 
       facet_attributes: [
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text", 
-        //   field: "text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.text",
+        //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         // },
-        // { 
+        // {
         //   attribute: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation.annotationType.text",
-        //   field: "text", 
+        //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreInstantiation.instantiationAnnotation"
         // },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreAssetDate.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreAssetDate.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreAssetDate"
         // },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreGenre.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreGenre.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreGenre"
         // },
-        { 
-          attribute: "pbcoreDescriptionDocument.pbcoreAssetType.text", 
-          field: "text",
-          type: "string",
-          nestedPath: "pbcoreDescriptionDocument.pbcoreAssetType"
+        {
+          attribute: 'pbcoreDescriptionDocument.pbcoreAssetType.text',
+          field: 'text',
+          type: 'string',
+          nestedPath: 'pbcoreDescriptionDocument.pbcoreAssetType',
         },
-        // { 
-        //   attribute: "pbcoreDescriptionDocument.pbcoreDescription.text", 
+        // {
+        //   attribute: "pbcoreDescriptionDocument.pbcoreDescription.text",
         //   field: "text",
         //   type: "string",
         //   nestedPath: "pbcoreDescriptionDocument.pbcoreDescription"
-        // },        
+        // },
         // derived
-        { 
-          attribute: "producing_org", 
-          field: "producing_org",
-          type: "string"
+        {
+          attribute: 'producing_org',
+          field: 'producing_org',
+          type: 'string',
         },
-        { 
-          attribute: "media_type", 
-          field: "media_type",
-          type: "string"
+        {
+          attribute: 'media_type',
+          field: 'media_type',
+          type: 'string',
         },
-        { 
-          attribute: "access_level", 
-          field: "access_level",
-          type: "string"
+        {
+          attribute: 'access_level',
+          field: 'access_level',
+          type: 'string',
         },
-        { 
-          attribute: "genres", 
-          field: "genres",
-          type: "string",
+        {
+          attribute: 'genres',
+          field: 'genres',
+          type: 'string',
         },
         { 
           attribute: "contributing_orgs",
           field: "contributing_orgs",
           type: "string",
         },
-        { 
-          attribute: "special_collections", 
-          field: "special_collections",
-          type: "string",
-        },
-        { 
-          attribute: "topics", 
-          field: "topics",
-          type: "string",
+        {
+          attribute: 'special_collections',
+          field: 'special_collections',
+          type: 'string',
         },
         {
-          attribute: "series_titles",
-          field: "series_titles",
-          type: "string"
-        }
+          attribute: 'topics',
+          field: 'topics',
+          type: 'string',
+        },
+        {
+          attribute: 'series_titles',
+          field: 'series_titles',
+          type: 'string',
+        },
       ],
 
       sorting: {
         _default: {
-          field: "_score",
-          order: "desc"
+          field: '_score',
+          order: 'desc',
         },
         _title_keyword_asc: {
-          field: "title_keyword",
-          order: "asc"
+          field: 'title_keyword',
+          order: 'asc',
         },
         _broadcast_date_desc: {
-          field: "broadcast_date",
-          order: "desc"
+          field: 'broadcast_date',
+          order: 'desc',
         },
-      }
-    }
+      },
+    },
   })
 
   const searchClient = Client(sk, {
@@ -607,45 +619,44 @@ export default function Catalog() {
 
       // console.log( 'Search was triggered with custom', customQuery )
       var title_if_present
-      if(customQuery.title && customQuery.title.length > 0){
+      if (customQuery.title && customQuery.title.length > 0) {
         title_if_present = customQuery.title
       }
 
       // console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
       // look for quoted phrases in the main search box
-      if(false && query && query.includes('\"')){
+      if (false && query && query.includes('\"')) {
         var quoted = query.match(/"(\\.|[^"\\])*"/g)
-        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
+        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, '')
 
         var full_query
-        if(quoted && quoted.length > 0){
+        if (quoted && quoted.length > 0) {
           // require one of quoted strings, or optional everything else unquoted
-          full_query = `+${quoted.join(" | +")}`
+          full_query = `+${quoted.join(' | +')}`
 
-          if(unquoted.length > 0 && unquoted.trim().length > 0){
+          if (unquoted.length > 0 && unquoted.trim().length > 0) {
             full_query = full_query + ` OR (${unquoted})`
           }
         } else {
           full_query = unquoted
         }
 
-        if(customQuery.none && customQuery.none.length > 0){
-          var none_terms = customQuery.none.split(" ")
-          full_query += ` -(${none_terms.join(" OR ")})`
+        if (customQuery.none && customQuery.none.length > 0) {
+          var none_terms = customQuery.none.split(' ')
+          full_query += ` -(${none_terms.join(' OR ')})`
         }
 
         queryHash = {
           simple_query_string: {
             query: full_query,
             // default_operator: "and"
-          }
+          },
         }
-
       } else {
         
         var mainAllFieldsArray
         // broken creepy quote handling
-        if(false && query && query.includes('\"')){
+        if (false && query && query.includes('\"')) {
           var quoted = query.match(/"(\\.|[^"\\])*"/g)
           var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
           if(quoted.length > 0){
@@ -655,7 +666,6 @@ export default function Catalog() {
             // todo fix this!! dates use filtering now
             queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
           }
-
         } else {
           // big main compound query...
           mainAllFieldsArray = allFieldsArray(query)
@@ -691,10 +701,10 @@ export default function Catalog() {
         // add in clauses for each of 3 secondary searchbox fields
         if(customQuery.all && customQuery.all.length > 0){
           // add second big should clause to outer bool query
-          var allQuery =  {
+          var allQuery = {
             bool: {
-              should: allFieldsArray( customQuery.all )
-            }
+              should: allFieldsArray(customQuery.all),
+            },
           }
           queryHash.bool.should.push(allQuery)
           if(emptyQuery){
@@ -707,13 +717,13 @@ export default function Catalog() {
           }
         }
 
-        if(customQuery.none && customQuery.none.length > 0){
+        if (customQuery.none && customQuery.none.length > 0) {
           // add must_not clause to big bool
-          queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
+          queryHash.bool.must_not = [allFieldsTermQuery(customQuery.none)]
         }
 
-        if(customQuery.title && customQuery.title.length > 0){
-          queryHash.bool.must = [ titleQuery( customQuery.title ) ]
+        if (customQuery.title && customQuery.title.length > 0) {
+          queryHash.bool.must = [titleQuery(customQuery.title)]
         }
 
         if(customQuery.startDate || customQuery.endDate){
@@ -735,12 +745,13 @@ export default function Catalog() {
         // console.log( 'finishing with qh', query, queryHash )
         return queryHash
       }
-    }
+    },
   })
+  console.log('searchClient', searchClient)
 
 
   return (
-    <div className="body-container">
+    <div className='body-container'>
       <InstantSearch
         indexName={ data.esIndex }
         searchClient={ searchClient }
@@ -768,7 +779,12 @@ export default function Catalog() {
             <div className="sort-container per-page">
               Items per page
               <HitsPerPage
-                items={ [{label: "10", value: 10},{label: "20", value: 20, default: true},{label: "50", value: 50},{label: "100", value: 100},] }
+                items={[
+                  { label: '10', value: 10 },
+                  { label: '20', value: 20, default: true },
+                  { label: '50', value: 50 },
+                  { label: '100', value: 100 },
+                ]}
               />
               <ChevronDown />
             </div>
@@ -781,8 +797,6 @@ export default function Catalog() {
               </div>
             </div>
           </div>
-          
-
         </div>
 
         <div className="top-refinements-bar smarbot bmarleft bmarright">
@@ -842,92 +856,134 @@ export default function Catalog() {
 
           <hr />
 
-          <SearchAccordion title="Media Type" content={
-            <>
-              <RefinementList
-                attribute="media_type"
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Availability'
+            content={
+              <>
+                <RefinementList
+                  attribute='access_level'
+                  transformItems={accessLevel}
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Producing Organization" content={
-            <>
-              <RefinementList
-                attribute="producing_org"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Media Type'
+            content={
+              <>
+                <RefinementList attribute='media_type' />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Asset Type" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Producing Organization'
+            content={
+              <>
+                <RefinementList
+                  attribute='producing_org'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Genre" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="genres"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Asset Type'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='pbcoreDescriptionDocument.pbcoreAssetType.text'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Topic" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="topics"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
-
-          <SearchAccordion title="Contributing Organization" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="contributing_orgs"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Genre'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='genres'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Collection" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="special_collections"
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <SearchAccordion
+            title='Topic'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='topics'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
+
+          <SearchAccordion
+            title='Contributing Organization'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='contributing_orgs'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
           <hr />
 
-          <SearchAccordion title="Series Title" startClosed={false} content={
-            <>
-              <RefinementList
-                attribute="series_titles"
-                searchable={true}
+          <SearchAccordion
+            title='Collection'
+            startClosed={true}
+            content={
+              <>
+                <RefinementList
+                  attribute='special_collections'
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
 
-                // transformItems={ producingOrganization }
-              />
-            </>
-          }/>
+          <hr />
 
-          <hr />          
+          <SearchAccordion
+            title='Series Title'
+            startClosed={false}
+            content={
+              <>
+                <RefinementList
+                  attribute='series_titles'
+                  searchable={true}
+
+                  // transformItems={ producingOrganization }
+                />
+              </>
+            }
+          />
+
+          <hr />
         </div>
 
         <div className="page-maincolumn bmarright">
@@ -944,6 +1000,18 @@ export default function Catalog() {
           </div>
         </div>
       </InstantSearch>
+    </div>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  console.log('search page error', error)
+  return (
+    <div className='body-container'>
+      <h1>Search Error</h1>
+      <h4>We're sorry! Search appears to be broken!</h4>
+      <pre>{error.message}</pre>
     </div>
   )
 }

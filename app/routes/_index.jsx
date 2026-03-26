@@ -11,35 +11,40 @@ import randomRecords from "../utils/randomRecords"
 import { recordToTVProgram } from "../utils/toTVProgram"
 
 export const loader = async () => {
-
   let records = await randomRecords(10)
   let programs = []
-  if(records){
-    programs = records.map((record) => recordToTVProgram(record) )
+  if (records) {
+    programs = records.map(record => recordToTVProgram(record))
   }
 
   let data = {
     featured_collections: [
       {
-        key: "coll1",
-        title: "Televising Black Politics in the Black Power Era: Black Journal and Soul!",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/black_power/b_greaves_and_house_option_2_cropped.png",
-        url: "google.com"
+        key: 'coll1',
+        title:
+          'Televising Black Politics in the Black Power Era: Black Journal and Soul!',
+        subtitle: '',
+        thumbnailURL:
+          'https://s3.amazonaws.com/americanarchive.org/exhibits/black_power/b_greaves_and_house_option_2_cropped.png',
+        url: 'google.com',
       },
       {
-        key: "coll2",
-        title: "ZOOM (1972-1978): Children’s Community and Public Television in the 1970s",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/zoom/Zoom_mainimage.png",
-        url: "google.com"
+        key: 'coll2',
+        title:
+          'ZOOM (1972-1978): Children’s Community and Public Television in the 1970s',
+        subtitle: '',
+        thumbnailURL:
+          'https://s3.amazonaws.com/americanarchive.org/exhibits/zoom/Zoom_mainimage.png',
+        url: 'google.com',
       },
       {
-        key: "coll3",
-        title: "Protecting Places: Historic Preservation and Public Broadcasting",
-        subtitle: "",
-        thumbnailURL: "https://s3.amazonaws.com/americanarchive.org/exhibits/pennstationcrop.jpg",
-        url: "google.com"
+        key: 'coll3',
+        title:
+          'Protecting Places: Historic Preservation and Public Broadcasting',
+        subtitle: '',
+        thumbnailURL:
+          'https://s3.amazonaws.com/americanarchive.org/exhibits/pennstationcrop.jpg',
+        url: 'google.com',
       },
     ],
 
@@ -47,7 +52,6 @@ export const loader = async () => {
 
     esIndex: process.env.ES_INDEX || "hot-aapb",
   }
-
 
   return data
 }
@@ -75,9 +79,10 @@ export default function Index() {
 
   return (
     <>
-      <div className="homepage-search">
+      <div className='homepage-search'>
         <h2>
-          Discover historic programs of publicly funded radio and television across America. Watch and listen.
+          Discover historic programs of publicly funded radio and television
+          across America. Watch and listen.
         </h2>
         <LayoutSearch
           esIndex={ data.esIndex }
@@ -109,4 +114,18 @@ export default function Index() {
       </div>
     </>
   )
+}
+export const ErrorBoundary = () => {
+  const error = useRouteError()
+
+  return isRouteErrorResponse(error) ?
+      <div className='page-body-container'>
+        <h1>{error.status} error</h1>
+        <h3>{error.data}</h3>
+        <p>{error.statusText}</p>
+      </div>
+    : <div className='error-container'>
+        <h1>Oh no!</h1>
+        <p>Oops! Something went wrong. Please try again later.</p>
+      </div>
 }

@@ -1,6 +1,8 @@
-export default async function randomRecords(num){
-  if(!num || num < 1){
-    throw "that is just not an appropriate number okayyyyy??"
+import { useLoaderData, useRouteError } from 'react-router'
+
+export default async function randomRecords(num) {
+  if (!num || num < 1) {
+    throw 'that is just not an appropriate number okayyyyy??'
   }
 
   let esIndex = process.env.ES_INDEX || "hot-aapb"
@@ -21,7 +23,19 @@ export default async function randomRecords(num){
     return []
   }
   var data = await response.json()
-  if(data && data.hits && data.hits.hits && data.hits.hits){
-    return data.hits.hits.map( (hit) => hit._source )
+  if (data && data.hits && data.hits.hits && data.hits.hits) {
+    return data.hits.hits.map(hit => hit._source)
   }
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  console.log('search error', error)
+  return (
+    <div className='page-body-container'>
+      <h1>Search Error</h1>
+      <h4>We're sorry! Search appears to be broken!</h4>
+      <pre>{error.message}</pre>
+    </div>
+  )
 }
