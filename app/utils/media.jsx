@@ -41,7 +41,7 @@ export async function getCiMediaURL(ciConfig){
   }
 
   if(ciToken){
-    let resp = await ciRequest(ciAPIHost, ciResource, ciToken, {})
+    let resp = await ciRequest(ciAPIHost, ciResource, ciToken, params)
   } else {
     throw "Ci token was not found!"
   }

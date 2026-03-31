@@ -11,9 +11,10 @@ export default class VideoHound {
     }
 
     this.ciConfig = props.ciConfig
+  
   }
   
-  public async findMedia() {
+  async const findMedia() = {
     let mediaURL = await getCiMediaURL(this.ciConfig)
     return mediaURL
   }

@@ -20,9 +20,9 @@ export function renderExhibit(exhibit) {
     )
   }
 
-  useEffect(() => {
+  // useEffect(() => {
     // fixLinks()
-  }, [])
+  // }, [])
 
 
   let titleURL, titleText
