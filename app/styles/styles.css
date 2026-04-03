@@ -742,8 +742,7 @@ div.layout-search button {
 div.tv-menu-container {
 
   position: relative;
-  width: 96%;
-  height: 22rem;
+  width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   margin-bottom: 4em;
@@ -821,22 +820,28 @@ div.tv-menu-container div.tv-menu-program h5 {
 
 div.tv-menu-container.three {
   height: auto;
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: visible;
 }
 
 div.tv-menu-container.three div.tv-menu-body {
   padding: 0 2em;
   margin-left: 4em;
+  overflow: visible;
 }
 
 div.tv-menu-container.three div.tv-menu-program img {
   height: auto;
-  aspect-ratio: 16 / 9;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
 }
 
 div.tv-menu-container div.tv-menu-program.three h4 {
   font-size: 1.5em;
+  margin-top: 0.5em;
+  display: block;
 }
 
 /* .four variant */
@@ -855,6 +860,10 @@ div.tv-menu-container.four div.tv-menu-body {
 div.tv-menu-container.four div.tv-menu-program img {
   width: 100%;
   height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 
 }
 /*summary box*/
@@ -2520,16 +2529,14 @@ div.author div span {
 
   div.tv-menu-container div.tv-menu-program {
     margin-right: 1.125em;
-    height: 18em;
-    overflow: hidden;
     position: relative;
     flex-shrink: 0;
   }
 
   div.tv-menu-container div.tv-menu-program.three {
-    margin-right: 2.25em;
-    height: 16em;
-    max-height: 16em;
+    margin-right: 1.125em;
+    height: auto;
+    max-height: none;
     flex-shrink: 0;
   }
 
@@ -2537,11 +2544,10 @@ div.author div span {
     display: block;
     width: 100%;
     min-width: 18.5em;
-    height: 14em;
+    height: auto;
     object-fit: cover;
     object-position: center;
-    overflow: hidden;
-    aspect-ratio: auto;
+    aspect-ratio: 1 / 1;
 
   }
 
@@ -2562,10 +2568,36 @@ div.author div span {
   }
 
   div.tv-menu-container.three div.tv-menu-program h4 {
-    width: 85%;
-    max-width: 85%;
+    display: block;
+    margin-top: .5em;
+    width: 75%;
+    max-width: 75%;
   }
 
+  div.tv-menu-container div.tv-menu-program.four {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  margin-right: 1.125em;
+  flex-shrink: 0;
+  }
+
+  div.tv-menu-container div.tv-menu-program.four img {
+  display: block;
+  width: 100%;
+  min-width: 14.125em;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  aspect-ratio: 1 / 1;   /* enforces square */
+  }
+
+  div.tv-menu-container.four div.tv-menu-program h4 {
+  display: block;
+  margin-top: 0.5em;
+  width: 75%;
+  max-width: 75%;
+  }
 
   /* search ui */
   div.current-refinements-container {
