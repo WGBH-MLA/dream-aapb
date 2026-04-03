@@ -101,6 +101,7 @@ export default function Footer(props) {
 
   return (
     <>
+          <NewsletterBar />
       <div className="footer-bar">
         <FooterLinks title={ linkData.explore.title } titleURL={ linkData.explore.titleURL } links={ linkData.explore.links } />
         <FooterLinks title={ linkData.participate.title } titleURL={ linkData.participate.titleURL } links={ linkData.participate.links } />
@@ -112,7 +113,7 @@ export default function Footer(props) {
         </div>
       </div>
 
-      <NewsletterBar />
+
       <ToeNail />
     </>
   )
