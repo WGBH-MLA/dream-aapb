@@ -2521,27 +2521,37 @@ div.author div span {
   div.tv-menu-container div.tv-menu-program {
     margin-right: 1.125em;
     height: 18em;
-
     overflow: hidden;
     position: relative;
+    flex-shrink: 0;
   }
 
   div.tv-menu-container div.tv-menu-program.three {
     margin-right: 2.25em;
     height: 16em;
     max-height: 16em;
+    flex-shrink: 0;
   }
 
   div.tv-menu-container div.tv-menu-program.three img {
     display: block;
-    object-fit: cover;
-    overflow: hidden;
+    width: 100%;
+    min-width: 18.5em;
     height: 14em;
+    object-fit: cover;
+    object-position: center;
+    overflow: hidden;
+    aspect-ratio: auto;
+
   }
 
   div.tv-menu-container div.tv-menu-program img {
     display: block;
+    width: 100%;
+    min-width: 14.125em;
+    height: 100%;
     object-fit: cover;
+    object-position: center;
     overflow: hidden;
   }
 
