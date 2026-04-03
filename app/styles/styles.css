@@ -803,11 +803,10 @@ div.tv-menu-container div.tv-menu-program img {
 div.tv-menu-container div.tv-menu-program h4 {
   font-weight: 600;
   font-style: italic;
-  width: 80%;
+  width: 100%;
   display: block;
   overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  white-space: wrap;
 }
 
 /* h5 base */
@@ -839,7 +838,7 @@ div.tv-menu-container.three div.tv-menu-program img {
 }
 
 div.tv-menu-container div.tv-menu-program.three h4 {
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin-top: 0.5em;
   display: block;
 }
@@ -864,8 +863,14 @@ div.tv-menu-container.four div.tv-menu-program img {
   object-fit: cover;
   object-position: center;
   display: block;
-
 }
+
+div.tv-menu-container.four div.tv-menu-program h4 {
+  font-size: 1em;
+  margin-top: 0.5em;
+  display: block;
+}
+
 /*summary box*/
 div.summary-box-container {
   margin-bottom: 2em;
@@ -2563,15 +2568,15 @@ div.author div span {
 
 
   div.tv-menu-container div.tv-menu-program h4 {
-    width: 75%;
-    max-width: 75%;
+    width: 100%;
+    max-width: 100%;
   }
 
   div.tv-menu-container.three div.tv-menu-program h4 {
     display: block;
     margin-top: .5em;
-    width: 75%;
-    max-width: 75%;
+    width: 100%;
+    max-width: 100%;
   }
 
   div.tv-menu-container div.tv-menu-program.four {
@@ -2595,8 +2600,8 @@ div.author div span {
   div.tv-menu-container.four div.tv-menu-program h4 {
   display: block;
   margin-top: 0.5em;
-  width: 75%;
-  max-width: 75%;
+  width: 100%;
+  max-width: 100%;
   }
 
   /* search ui */
