@@ -397,13 +397,15 @@ div.footer-bar div.footer-branding button.donate {
 }
 
 div.footer-bar div.footer-title {
-  font-weight: bold;
+  font-weight: 800;
 }
 
 div.footer-bar div.footer-stack a {
   text-decoration: none;
   margin-bottom: .5em;
   display: block;
+  color: #010000;
+
 }
 
 div.footer-bar div.footer-branding img {

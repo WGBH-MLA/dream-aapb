@@ -53,6 +53,10 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
+          url: "/organizations",
+          text: "Participating Orgs"
+        },
+        {
           url: "/visit",
           text: "Visit"
         },
