@@ -20,7 +20,7 @@ export const loader = async () => {
     featured = featured.map((collection) => collectionToTVProgram(collection) )
   }
 
-  
+
   let data
   data = {
     featured_collections: featured,
@@ -33,16 +33,11 @@ export const loader = async () => {
 export default function Collections() {
   let data = useLoaderData()
   return (
-    <div className="page-container">
-      <div className="skinny-body-container">
-        <SummaryBox title="Collections" text="The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below." />
-      </div>
-      <div className="skinny-body-container">
+  <div className="body-container">
+        <h1>Collections</h1>
+        <p>The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below.</p>
         <TVMenu title="Featured Collections" programs={ data.featured_collections } />
-      </div>
-      <div className="skinny-body-container">
         <TVMenu title="Radio and Television Programs" programs={ data.radio_and_tv } />
       </div>
-    </div>
   )
 }

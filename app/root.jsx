@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation
 } from "react-router"
 
 export const meta = () => {
@@ -35,6 +36,8 @@ export default function App() {
   const [pleaseRotate, setPleaseRotate] = useState(false)
 
   const data = useLoaderData()
+  const location = useLocation()
+  const isHomepage = location.pathname === "/"
   return (
     <html>
       <head>
@@ -48,7 +51,7 @@ export default function App() {
       <body>
 
 
-        <Header esIndex={ data.esIndex } />
+         {!isHomepage && <Header esIndex={ data.esIndex } />}
         <Outlet />
         <Footer />
 
