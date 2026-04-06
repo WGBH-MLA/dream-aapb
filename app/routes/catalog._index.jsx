@@ -19,7 +19,8 @@ import {
           ToggleRefinement,
           Pagination,
           HitsPerPage,
-          Stats,
+          // Stats,
+          useStats,
           SortBy,
           useSearchBox,
           useInstantSearch,
@@ -37,6 +38,27 @@ export const loader = async ({params, request}) => {
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
+}
+
+function CustomStats() {
+  const {
+    hitsPerPage,
+    nbHits,
+    areHitsSorted,
+    nbSortedHits,
+    nbPages,
+    page,
+    processingTimeMS,
+    query,
+  } = useStats()
+
+  return (
+    <div className="ais-Stats">
+      <span className="ais-Stats-text">
+        Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+      </span>
+    </div>
+  )
 }
 
 function CustomSearchBox(props) {
@@ -60,7 +82,6 @@ function CustomSearchBox(props) {
           }}
         />
 
-        <div hidden={!isSearchStalled}>Searching…</div>
         <h4>Contains all of these words</h4>
         <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>This title</h4>
@@ -70,6 +91,7 @@ function CustomSearchBox(props) {
         <div>
           <button className="sidebar-search-button">Update</button>
         </div>
+        <div hidden={!isSearchStalled}>Searching…</div>
 
       </div>
     </>
@@ -79,9 +101,18 @@ function CustomSearchBox(props) {
 export default function Catalog() {
   const data = useLoaderData()
 
-
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
+
+  // useEffect(() => {
+  //   // check for if we're here from layoutsearch, and run thru recatalog if so
+  //   if(searchParams.get("reload") !== null){
+  //     console.log( 'i go!', searchParams.get("reload") )
+  //     // setSearchParams(searchParams, {shitass: "bitch"})
+  //     window.location.search = "?shit=woppalooba"
+  //   }
+  // }, [])
+
   const [customQuery, setCustomQuery] = useState({
     query: searchParams.get(`${data.esIndex}[query]`) || "",
     all: searchParams.get("all") || "",
@@ -89,12 +120,6 @@ export default function Catalog() {
     none: searchParams.get("none") || "",
     startDate: searchParams.get("startDate") || "",
     endDate: searchParams.get("endDate") || "",
-    // query: "", 
-    // all: "", 
-    // title: "", 
-    // none: "", 
-    // startDate: "", 
-    // endDate: "", 
   })
 
 
@@ -112,21 +137,14 @@ export default function Catalog() {
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
 
-    // TODO (ahhhhhhhhhh)
-    // let layoutInputs = document.getElementsByClassName("layout-input")[0]
-    // console.log( 'LAYOUOOOOO', layoutInputs )
-    // for(let input in layoutInputs){
-    //   console.log( 'this is an input', input )
-    //   input.value = value
-    // }
-
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
   }
 
-  //////////
+  function handleDateQuery(type, value){
+    setCustomQuery({...customQuery, [type]: value})
+  }
 
-  ////
   const dateToYear = (items) => {
     return items.map((item) => {
       if(item.value){
@@ -216,11 +234,27 @@ export default function Catalog() {
     return attributes
   }
 
-  function onlyUnique(value, index, array) {
-    return array.indexOf(value) === index;
+  const onlyUnique = (value, index, array) => {
+    return array.indexOf(value) === index
   }
-  ////
 
+  const hasQuoties = (query) => {
+    return query && query.includes('\"')
+  }
+
+  const extractQuotiesFromSearchbox = (query) => {
+    var quoties = pullQuotedClauses(query)
+    // remove quoted clauses from the query itself
+    query = query.replace(/".*?"/g ,"")
+    // console.log( 'I WANT MY QUOTIES', quoties, query )
+
+    return {
+      query: query, 
+      quoties: quoties
+    }
+  }
+
+  // createquotyquyery???
 
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
@@ -272,6 +306,34 @@ export default function Catalog() {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
               query: {
                 match: {
+                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
+                    query: tQuery,
+                  }
+                }
+              }
+            } 
+          },
+        ],
+        minimum_should_match: 1
+      }
+    }
+  }
+
+  function titleQueryExact(tQuery){
+    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
+    return {
+      bool: {
+        should: [
+          {
+            match_phrase: {
+              "title": tQuery
+            }
+          },
+          {
+            nested: {
+              path: "pbcoreDescriptionDocument.pbcoreTitle",
+              query: {
+                match_phrase: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
                     query: tQuery,
                   }
@@ -467,10 +529,76 @@ export default function Catalog() {
       bool: {
         // this is admittedly just crazy
         should: nested_clauses,
-        // this is for must_not, any match fails!
+        // this is for must_not, any single match fails!
         minimum_should_match: 1
       }
     }
+  }
+
+  function allFieldsMatchPhraseArray(query){
+
+    return [ 
+      {
+        match_phrase: {
+          guid: query
+        }
+      },
+      {
+        match_phrase: {
+          genres: query
+        }
+      },
+      {
+        match_phrase: {
+          topics: query
+        }
+      },
+      {
+        match_phrase: {
+          title: query
+        }
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreDescription",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreDescription.text": query
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreTitle",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreTitle.text": query
+            }
+          },
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
+            }
+          }
+        } 
+      },
+      {
+        nested: {
+          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          query: {
+            match_phrase: {
+              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
+            }
+          }
+        }
+      }
+    ]
   }
 
 
@@ -600,143 +728,223 @@ export default function Catalog() {
     }
   })
 
+  const isEmpty = (query) => {
+    return query === "" || query.match(/^\s+$/)
+  }
+
   const searchClient = Client(sk, {
     getQuery: (query, search_attributes) => {
-      let emptyQuery = query === "" || query.match(/^\s+$/)
       var queryHash
 
-      // console.log( 'Search was triggered with custom', customQuery )
       var title_if_present
       if(customQuery.title && customQuery.title.length > 0){
         title_if_present = customQuery.title
       }
 
-      // console.log( 'i doa the date', customQuery.startDate, customQuery.endDate )
-      // look for quoted phrases in the main search box
-      if(false && query && query.includes('\"')){
-        var quoted = query.match(/"(\\.|[^"\\])*"/g)
-        var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
-
-        var full_query
-        if(quoted && quoted.length > 0){
-          // require one of quoted strings, or optional everything else unquoted
-          full_query = `+${quoted.join(" | +")}`
-
-          if(unquoted.length > 0 && unquoted.trim().length > 0){
-            full_query = full_query + ` OR (${unquoted})`
-          }
-        } else {
-          full_query = unquoted
-        }
-
-        if(customQuery.none && customQuery.none.length > 0){
-          var none_terms = customQuery.none.split(" ")
-          full_query += ` -(${none_terms.join(" OR ")})`
-        }
-
-        queryHash = {
-          simple_query_string: {
-            query: full_query,
-            // default_operator: "and"
-          }
-        }
-
-      } else {
-        
-        var mainAllFieldsArray
-        // broken creepy quote handling
-        if(false && query && query.includes('\"')){
-          var quoted = query.match(/"(\\.|[^"\\])*"/g)
-          var unquoted = query.replace(/"(\\.|[^"\\])*"/g, "")
-          if(quoted.length > 0){
-            // console.log( 'dummbo', quoted, unquoted )
-            // make a one-hit-required term array for each distinct quoted term
-
-            // todo fix this!! dates use filtering now
-            queryHash.bool.filter = quoted.reduce().map( (quoterm) => allFieldsArray(quoterm.replace(/['"]+/g, '')) ).flat()
-          }
-
-        } else {
-          // big main compound query...
-          mainAllFieldsArray = allFieldsArray(query)
-        }
-
-        if(emptyQuery){
-          // there *is not* a main box query
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              should: []
-            }
-          }
-        } else {
-          // there *is* a main box query
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              should: [
-                {
-                  bool: {
-                    should: mainAllFieldsArray,
-                    minimum_should_match: 1
-                  }
-                }
-              ]
-            }
-          }
-        }
-
-        // add in clauses for each of 3 secondary searchbox fields
-        if(customQuery.all && customQuery.all.length > 0){
-          // add second big should clause to outer bool query
-          var allQuery =  {
-            bool: {
-              should: allFieldsArray( customQuery.all )
-            }
-          }
-          queryHash.bool.should.push(allQuery)
-          if(emptyQuery){
-            // no quer present
-            queryHash.bool.minimum_should_match = 1
-          } else {
-            // normal 
-            // require a hit on the main clause, and also this 'all terms' one
-            queryHash.bool.minimum_should_match = 2
-          }
-        }
-
-        if(customQuery.none && customQuery.none.length > 0){
-          // add must_not clause to big bool
-          queryHash.bool.must_not = [ allFieldsTermQuery( customQuery.none ) ]
-        }
-
-        if(customQuery.title && customQuery.title.length > 0){
-          queryHash.bool.must = [ titleQuery( customQuery.title ) ]
-        }
-
-        if(customQuery.startDate || customQuery.endDate){
-          queryHash.bool.filter = {
-            range: {
-              broadcast_date: {}
-            }
-          }
-
-          if(customQuery.startDate){
-            queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
-          }
-
-          if(customQuery.endDate){
-            queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
-          }
-        }
-
-        // console.log( 'finishing with qh', query, queryHash )
-        return queryHash
+      var mainBoxQuoties
+      if(hasQuoties(query)){
+        var mainBox = extractQuotiesFromSearchbox(query)
+        query = mainBox.query
+        mainBoxQuoties = mainBox.quoties
       }
+
+      // is query empty now ?
+      let emptyQuery = isEmpty(query)
+      
+      var mainAllFieldsArray = allFieldsArray(query)
+
+      if(emptyQuery){
+
+        // console.log( 'it aint no query' )
+        
+        // there *is not* a main box query
+        queryHash = {
+          // top bool
+          bool: {
+            // big should
+            // should: []
+          }
+        }
+      } else {
+        // there *is* a main box query
+        queryHash = {
+          // top bool
+          bool: {
+            // big should
+            should: [
+              {
+                bool: {
+                  should: mainAllFieldsArray,
+                  minimum_should_match: 1
+                }
+              }
+            ]
+          }
+        }
+      }
+
+      // add in clauses for each of 3 secondary searchbox fields
+      var allBox, allBoxQuoties
+      if(customQuery.all && customQuery.all.length > 0){
+
+        // lets get crazy
+        var allBoxQueryString = customQuery.all
+        if( hasQuoties(allBoxQueryString) ){
+          // quoty me on that
+          
+          // we're modifying the actual value of the main query here (to remove quoties) so don't store the altered state in customQuery
+           allBox = extractQuotiesFromSearchbox(allBoxQueryString)
+           allBoxQueryString = allBox.query
+           allBoxQuoties = allBox.quoties
+          // add appropriate quoty search clauses to bool down at the end
+        }
+
+        // whether query was modified or not, go ahead and do nonquoty all query v
+
+        // add second big should clause to outer bool query
+        var allQuery
+        if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
+          // only add the regular query for allbox IF there remains a NONQUOTY allbox query
+          console.log( 'there is a remaining allbox query' )
+          allQuery = {
+            bool: {
+              should: allFieldsArray( allBoxQueryString ),
+              // allbox query should ALWAYS have min match one on ITS OWN BOOL, because doc doesnt match unless allboxquery appears in at least one field!
+              minimum_should_match: 1
+            }
+          }
+
+          // adding 'all' box query to outer bool here
+          queryHash.bool.must ||= []
+          queryHash.bool.must.push(allQuery)
+        }
+      }
+
+      var noneBox, noneBoxQuoties
+      if(customQuery.none && customQuery.none.length > 0){
+        
+        // lets get noney
+        var noneBoxQueryString = customQuery.none        
+        if( hasQuoties(noneBoxQueryString) ){
+          
+          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered state in customQuery
+          noneBox = extractQuotiesFromSearchbox(noneBoxQueryString)
+          noneBoxQueryString = noneBox.query
+          noneBoxQuoties = noneBox.quoties
+
+          // add appropriate quoty search clauses to bool down at the end
+        }
+
+        queryHash.bool.must_not ||= []
+
+        // add must_not clause to big bool
+        if(noneBoxQueryString && noneBoxQueryString.length > 0){
+          // only add it IF there remains a NONQUOTY nonebox query
+          queryHash.bool.must_not.push( allFieldsTermQuery(noneBoxQueryString) )
+        }
+
+        if(noneBoxQuoties && noneBoxQuoties.length > 0){
+          // now also add our quoty clauses to must_not
+          noneBoxQuoties.forEach( (quooty) => {
+            // add all-fields-array match_phrase query for each quoty
+            queryHash.bool.must_not.push( matchPhraseShouldClause(quooty) )
+          })
+        }
+      }
+
+      var titleBox, titleBoxQuoties
+      if(customQuery.title && customQuery.title.length > 0){
+
+        // lets get title-oriented
+        var titleBoxQueryString = customQuery.title
+
+        queryHash.bool.must ||= []
+        if( hasQuoties(titleBoxQueryString) ){
+          
+          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered query state in customQuery
+           titleBox = extractQuotiesFromSearchbox(titleBoxQueryString)
+           titleBoxQueryString = titleBox.query
+           titleBoxQuoties = titleBox.quoties
+          
+          // we add the appropriate quoty search clauses to the bool down at the end
+        }
+
+        if(titleBoxQueryString && titleBoxQueryString.length > 0){
+          queryHash.bool.must.push( titleQuery(titleBoxQueryString) )
+        }
+      }
+
+      if(customQuery.startDate || customQuery.endDate){
+        queryHash.bool.filter = {
+          range: {
+            broadcast_date: {}
+          }
+        }
+
+        if(customQuery.startDate){
+          queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
+        }
+
+        if(customQuery.endDate){
+          queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
+        }
+      }
+
+      if(mainBoxQuoties){
+        // ooh wee we got da quoties
+        queryHash.bool.must ||= []
+        mainBoxQuoties.forEach( (quooty) => {
+          // add all-fields-array match_phrase query for each quoty
+
+          // each quoty term *must* satisfy its *should*
+          // its *should* requires at least one field to match_phrase the quoty term
+          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )
+        })
+      }
+
+      if(allBoxQuoties){
+        queryHash.bool.must ||= []
+        allBoxQuoties.forEach( (quooty) => {
+          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )  
+        })
+      }
+
+      if(titleBoxQuoties){
+        queryHash.bool.must ||= []
+        titleBoxQuoties.forEach( (quooty) => {
+          // same query required for quoties in 'all' box vs 'main' box, so just do the exact same thing
+          queryHash.bool.must.push( titleQueryExact(quooty) )
+        })
+      }
+
+      // console.log( 'finishing with qh', query, queryHash )
+      // regahdless
+      return queryHash
     }
   })
+
+  function matchPhraseShouldClause(quoty){
+    // return a bool that *should* match minimum one field with our quoty clause
+    return  {
+      bool: {
+        should: allFieldsMatchPhraseArray(quoty),
+        minimum_should_match: 1
+      }
+    }
+  }
+
+  function pullQuotedClauses(query){
+    var result = []
+    var rx = /".*?"/g
+    var quoty
+    while( quoty = rx.exec( query ) ) {
+      if(quoty && quoty[0]){
+        result.push(quoty[0].replace(/\"/g, ''))
+      }
+    }
+
+    return result
+  }
 
 
   return (
@@ -787,7 +995,7 @@ export default function Catalog() {
 
         <div className="top-refinements-bar smarbot bmarleft bmarright">
           <div className="stats-container">
-            <Stats />
+            <CustomStats />
           </div>
 
           <div className={ currentRefinementsClasses }>
@@ -825,8 +1033,8 @@ export default function Catalog() {
           <SearchAccordion title="Broadcast Date" content={
             <>
               <div>
-                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
-                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleCustomQuery(e.target.id, e.target.value, refine) } />
+                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
+                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
               </div>
             </>
           }/>
