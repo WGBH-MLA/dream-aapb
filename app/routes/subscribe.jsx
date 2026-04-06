@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useLoaderData, Form } from 'react-router'
 
 import LayoutSearch from "../components/LayoutSearch"
@@ -13,17 +12,13 @@ export const loader = async () => {
 export const action = async ({request}) => {
   const body = await request.formData()
   fetch("https://links.iterable.com/lists/publicAddSubscriberForm?publicIdString=1e1d2c08-4d17-48c2-be2f-15eaaaf25e5f", {method: "POST", body: body}).then((resp) => {
-    // setExists(resp.ok ? EXIST : NOTEXIST)
-    console.log( 'i tried it!!', resp )
   }).catch((err) => {
-    // setExists(NOTEXIST)
-    console.log( 'i failed it!!' )
+    console.log( 'failed to subscribe to newsletter', err )
   })
 }
 
 export default function Subscribe() {
   let data = useLoaderData()
-  const [email, setEmail] = useState(null)
 
   return (
     <>
@@ -60,11 +55,3 @@ export default function Subscribe() {
     </>
   )
 }
-
-
-
-{/*
-<div className="layout-search">
-  <input type="text" placeholder="Email Address" onChange={ (e) => setEmail(e.target.value) }  />
-  <button onClick={() => subscribe(email) }>Submit</button>
-</div>*/}

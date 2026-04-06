@@ -1,27 +1,21 @@
 import { getCiMediaURL } from "../utils/media"
 export default class VideoHound {
-  constructor(props){
-    console.log( 'hooray!!' )
-    if(!props.ciConfig){
-      throw "Did not receive sony ci config!!"
+  constructor(config){
+    if(!config){
+      throw "Did not receive sony ci CONFIG!!"
     }
 
-    if(!props.ciConfig.ciAPIHost || !props.ciConfig.ciWorkspaceId || !props.ciConfig.ciUser || !props.ciConfig.ciPassword || !props.ciConfig.ciClientId || !props.ciConfig.ciClientSecret){
-      throw "Ack, missing ci vars, I'm UPSET!"
+    if(!config.ciAPIHost || !config.ciWorkspaceId || !config.ciUser || !config.ciPassword || !config.ciClientId || !config.ciClientSecret){
+      throw "Ack, missing ci vars, I'm BROKEN!"
     }
 
-    this.ciConfig = props.ciConfig
-  
+    this.config = config
   }
   
-  async const findMedia() = {
-    let mediaURL = await getCiMediaURL(this.ciConfig)
-    return mediaURL
+  async findMedia(ciRecordId, isVideo) {
+    let resp = await getCiMediaURL(this.config, ciRecordId, isVideo)
+    if(resp && resp.complete && resp.complete.length > 0 && resp.complete[0] && resp.complete[0].streams && resp.complete[0].streams.length > 0 && resp.complete[0].streams[0] && resp.complete[0].streams[0].url){
+      return resp.complete[0].streams[0].url
+    }
   }
 }
-
-// let scrug = {
-//   sheesh() {
-//     return "any floating function inside like this can be called like scrug.sheesh() - not bad!"
-//   }
-// }

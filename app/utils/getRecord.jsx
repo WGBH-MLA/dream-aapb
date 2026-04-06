@@ -6,11 +6,6 @@ export async function getRecord(guid, esURL, esIndex, esAPIKey){
   }  
 }
 
-export async function getRecordPromise(guid, esURL, esIndex, esAPIKey){
-  var query = { "query": {"match_phrase": { "guid": guid } } }
-  return executeQuery(query, esURL, esIndex, esAPIKey)
-}
-
 export async function getRecords(guids, esURL, esIndex, esAPIKey){
   let guidClauses = guids.map((guid) => { return {"match_phrase": {"guid": guid}} } )
   var query = {

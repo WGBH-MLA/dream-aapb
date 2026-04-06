@@ -1,8 +1,8 @@
-export async function getCiToken(ciAPIHost, ciWorkspaceId, ciUser, ciPassword, ciClientId, ciClientSecret){
+export async function getCiToken(config){
   // get a sony ci token
-  var url = `${ciAPIHost}/oauth2/token`
+  var url = `${config.ciAPIHost}/oauth2/token`
   // encode username and password together for Basic Auth
-  var encodedCreds = btoa(`${ciUser}:${ciPassword}`)
+  var encodedCreds = btoa(`${config.ciUser}:${config.ciPassword}`)
   var response = await fetch(url, { 
     method: "POST",
     headers: {
@@ -11,8 +11,8 @@ export async function getCiToken(ciAPIHost, ciWorkspaceId, ciUser, ciPassword, c
     },
     // deliver all the ci-related secrets in the body, grant_type required
     body: JSON.stringify({
-      client_id: ciClientId,
-      client_secret: ciClientSecret,
+      client_id: config.ciClientId,
+      client_secret: config.ciClientSecret,
       grant_type: "password"
     })
   })
@@ -25,30 +25,35 @@ export async function getCiToken(ciAPIHost, ciWorkspaceId, ciUser, ciPassword, c
   }
 }
 
-export async function getCiMediaURL(ciConfig){
+export async function getCiMediaURL(config, ciRecordId, isVideo){
   // get a sony ci video URL
-  let ciToken = await getCiToken(ciConfig)
+  let ciToken = await getCiToken(config)
 
   // video then stream, audio then download
   let ciResource = isVideo ? `/assets/${ciRecordId}/streams` : `/assets/${ciRecordId}/download`
+
+
+  let expiration = new Date()
+  expiration.setDate(new Date().getDate()+28)
 
   let streamType = "hls"
   let params = {
     streams: [{
       name: `${ciRecordId}-stream`,
-      expirationDate: new Date().toISOString()
+      expirationDate: expiration.toISOString()
+
     }]
   }
 
   if(ciToken){
-    let resp = await ciRequest(ciAPIHost, ciResource, ciToken, params)
+    return await ciRequest(config.ciAPIHost, ciResource, ciToken, params)
   } else {
     throw "Ci token was not found!"
   }
 }
 
 async function ciRequest(ciAPIHost, ciResource, ciToken, params){
-  var url = `${esURL}/${ciResource}`
+  var url = `${ciAPIHost}/${ciResource}`
   if(!ciToken){
     throw "Missing Credentials!"
   }
@@ -63,5 +68,5 @@ async function ciRequest(ciAPIHost, ciResource, ciToken, params){
   })
 
   var data = await response.json()
-  // return data
+  return data
 }

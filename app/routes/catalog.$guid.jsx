@@ -5,6 +5,7 @@ import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
+import Record from '../utils/Record'
 import { niceTitle } from '../utils/niceTitle'
 
 import { getCiToken, getCiMediaURL } from '../utils/media'
@@ -13,27 +14,28 @@ import VideoHound from '../classes/VideoHound'
 export const loader = async ({params, request}) => {
   let esIndex = process.env.ES_INDEX
   let esURL = process.env.ES_URL
-  let apiKey = process.env.ES_API_KEY
+  let esAPIKey = process.env.ES_API_KEY
 
-  let ciConfig = {
-    ciAPIHost: process.env.SONY_CI_API_HOST,
-    ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
-    ciUser: process.env.SONY_CI_USERNAME,
-    ciPassword: process.env.SONY_CI_PASSWORD,
-    ciClientId: process.env.SONY_CI_CLIENT_ID,
-    ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
-  }
-  
-  let videoHound = <VideoHound ciConfig={ ciConfig } />
-  let mediaURL = await videoHound.findMedia()
-  console.log( 'hey hey!!', mediaURL )
-
-  let record = await getRecord(params.guid, esURL, esIndex, apiKey)
+  let record = new Record( await getRecord(params.guid, esURL, esIndex, esAPIKey) )
   let data = {
     record: record,
     esIndex: esIndex
   }
-  if(data){
+  if(data && data.record && data.record.ciID && data.record.media_type){
+
+    // retrieve ci media url
+    let ciConfig = {
+      ciAPIHost: process.env.SONY_CI_API_HOST,
+      ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
+      ciUser: process.env.SONY_CI_USERNAME,
+      ciPassword: process.env.SONY_CI_PASSWORD,
+      ciClientId: process.env.SONY_CI_CLIENT_ID,
+      ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
+    }
+
+    let videoHound = new VideoHound(ciConfig)
+    let mediaURL = await videoHound.findMedia(data.record.ciID, data.record.isVideo())
+    data.mediaURL = mediaURL
     return data
   } else {
     return null
@@ -56,9 +58,10 @@ export default function ShowRecord() {
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
   if(data){
+
     title = niceTitle(data.record.pbcoreDescriptionDocument.pbcoreTitle)
 
-    if(data?.record?.pbcoreDescriptionDocument?.pbcoreDescription[0]){
+    if(data?.record?.pbcoreDescriptionDocument?.pbcoreDescription && data?.record?.pbcoreDescriptionDocument?.pbcoreDescription[0]){
       if(data.record.pbcoreDescriptionDocument.pbcoreDescription[0]?.text){
         // aapb currently takes the first description only, obv we can show more if we ant
         description = data.record.pbcoreDescriptionDocument.pbcoreDescription[0].text
@@ -126,15 +129,15 @@ export default function ShowRecord() {
       eachId = data.record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
         return <ShowBox key={i} label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
-    }
 
-    if(eachId.length > 0){
-      identifiers = (
-        <>
-          <div className="show-metadata-header">Identifiers</div>
-          { eachId }
-        </>
-      )
+      if(eachId.length > 0){
+        identifiers = (
+          <>
+            <div className="show-metadata-header">Identifiers</div>
+            { eachId }
+          </>
+        )
+      }
     }
 
     if(data.record.pbcoreDescriptionDocument.pbcoreAssetDate && data.record.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
@@ -157,8 +160,12 @@ export default function ShowRecord() {
         <div className="skinny-body-container bmarbot">
           <HeaderBar title={ title } />
   
-          <div className="show-media">
-            <VideoPlayer guid={ data.record.guid } />
+          <div className="show-media marbot martop">
+            <VideoPlayer
+              guid={ data.record.guid }
+              title={ data.record.title }
+              mediaURL={ data.mediaURL }
+            />
           </div>
 
           <div className="show-metadata-container bmarbot">
