@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router"
-import { useLoaderData } from "react-router"
+import { useNavigate, useLoaderData } from "react-router"
 
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
@@ -11,7 +10,6 @@ import randomRecords from "../utils/randomRecords"
 import { recordToTVProgram } from "../utils/toTVProgram"
 
 export const loader = async () => {
-
   let records = await randomRecords(10)
   let programs = []
   if(records){
@@ -48,7 +46,6 @@ export const loader = async () => {
     esIndex: process.env.ES_INDEX || "hot-aapb",
   }
 
-
   return data
 }
 
@@ -57,21 +54,9 @@ export default function Index() {
   
   let navigateHook = useNavigate()
   const [search, setSearch] = useState("")
-  const [block, setBlockMapZoom] = useState("")
-
   const handleLayoutSearch = (val) => {
     setSearch(val)
   }
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', () => {
-  //     document.getElementById("mappy").style.overflow = "hidden"
-
-  //     setTimeout(() => {
-  //       document.getElementById("mappy").style.overflow = "inherit"
-  //     }, 100)
-  //   })
-  // }, [])
 
   return (
     <>

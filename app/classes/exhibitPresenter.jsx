@@ -20,10 +20,6 @@ export function renderExhibit(exhibit) {
     )
   }
 
-  // useEffect(() => {
-    // fixLinks()
-  // }, [])
-
 
   let titleURL, titleText
   // hack, doesnt work for top level pages
@@ -73,15 +69,6 @@ export function renderExhibit(exhibit) {
     </div>
   )
 }
-
-// function fixLinks(){
-//   var links = document.querySelectorAll('a')
-//   links.forEach((link) => {
-//     if(link.pathname.startsWith("/exhibits/")){
-//       link.pathname = link.pathname.replace(/.md$/, '').replace(/^\/exhibits\/.*\//, '/exhibits/')
-//     }
-//   })
-// }
 
 // copied from OV front
 export function renderSidebarSection(title, id, key) {
