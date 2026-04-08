@@ -19,7 +19,6 @@ export default function Preview() {
   const preview = useLoaderData()
   if (!(preview && preview.meta)) {
     throw new Error('Not found!')
-
   }
 
   let rendered

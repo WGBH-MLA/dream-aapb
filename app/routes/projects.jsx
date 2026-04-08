@@ -1,8 +1,4 @@
-
-import { CircleCheckBig } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
-import BigLink from "../components/BigLink"
 import LinkBankFooter from '../components/LinkBankFooter';
 
 export default function Projects() {

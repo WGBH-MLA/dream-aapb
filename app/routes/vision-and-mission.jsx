@@ -1,15 +1,13 @@
-import { CircleCheckBig } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
-import BigLink from "../components/BigLink"
-import LinkBankFooter from '../components/LinkBankFooter';
+import LinkBankFooter from '../components/LinkBankFooter'
 
 export default function VisionStatements() {
   return (
     <div className="skinny-body-container">
       <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
       <SummaryBox title="Vision Statement" text="The American Archive of Public Broadcasting seeks to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity." />
-  <SummaryBox title="Mission Statement" />
+    
+      <SummaryBox title="Mission Statement" />
       <ul>
         <li>Become a focal point for discoverability of historical public media content</li>
         <li>Coordinate a national effort to preserve and make accessible as much significant public broadcasting materials as possible</li>

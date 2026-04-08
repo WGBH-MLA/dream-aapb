@@ -1,8 +1,6 @@
-import { ChevronRight } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
-import BigLink from "../components/BigLink"
 import PullQuote from "../components/PullQuote"
+import LinkBankFooter from '../components/LinkBankFooter';
 
 export default function History() {
   return (
@@ -30,7 +28,7 @@ export default function History() {
       <p>
         Aware that a “cohesive, nationwide effort to safeguard and preserve American television and video” was needed due to “the impermanence of videotape with all its formats, the massive volume of generated material, and the decentralized and fragmentary nature of production processes in the United States compared to those of other countries,” the Library of Congress in 1994 called for “a national study on the state of American television and video materials” and the “development of a national television and video preservation plan,” promising to seek congressional authorization and funding under the framework of ATRA to undertake these initiatives.<a href="/about-the-american-archive/history/page3#13"><sup>13</sup></a>  The resultant study, Television and Video Preservation 1997, included a section on public television that began
       </p>
-     <PullQuote text="Despite historically small audiences, public television has been responsible for the production, broadcast, and dissemination of some of the most important programs which in [the] aggregate form the richest audiovisual source of cultural history in the United States. In an age where the multiplicity of cable television program outlets has shifted the paradigm to noncommercial/public television, it is still not easy to overstate the immense cultural value of this unique audiovisual legacy, whose loss would symbolize one of the great conflagrations of our age, tantamount to the burning of Alexandria’s library in the age of antiquity." />
+      <PullQuote text="Despite historically small audiences, public television has been responsible for the production, broadcast, and dissemination of some of the most important programs which in [the] aggregate form the richest audiovisual source of cultural history in the United States. In an age where the multiplicity of cable television program outlets has shifted the paradigm to noncommercial/public television, it is still not easy to overstate the immense cultural value of this unique audiovisual legacy, whose loss would symbolize one of the great conflagrations of our age, tantamount to the burning of Alexandria’s library in the age of antiquity." />
 
       <p>
         In contrast to this elevated prose, the study revealed that practically, “neither PBS nor the Library is in a position to accept or prepare all the materials for transfer” according to the terms of their 1993 agreement. “PBS needs assistance to inventory and prepare the balance of materials for transfer,” the study pointed out, and the Library “requires additional storage space and processing staff to handle them.”[<sup>14</sup>](/about-the-american-archive/history/page3#14)  Similarly, a representative from a leading public broadcasting station spoke for many in the archival and public broadcasting community when he lamented that “having created a unique video record of American arts, ideas, history, nature and sciences, public television is far too financially vulnerable to salvage what it has created.”[<sup>15</sup>](/about-the-american-archive/history/page3#15)
@@ -50,38 +48,21 @@ export default function History() {
         The study offered a plan for the future that prioritized coordination to help stations and archives make informed preservation decisions, more funding for preservation, and increased professionalism:
       </p>
 
-      <PullQuote text="Probably the greatest need to shore up the preservation activities of public broadcasting is simply coordination, which can be brought about by the sharing of information..."
-      />
+      <PullQuote text="Probably the greatest need to shore up the preservation activities of public broadcasting is simply coordination, which can be brought about by the sharing of information..." />
 
-      <PullQuote text="The creation and sharing of comprehensive inventory databases seem essential for achieving any real success in coordinating the efforts of affiliates..."
-      />
+      <PullQuote text="The creation and sharing of comprehensive inventory databases seem essential for achieving any real success in coordinating the efforts of affiliates..." />
 
- <PullQuote text="Since the Library of Congress has assumed responsibility for storing, processing, re-formatting and servicing all past, present, and future PBS transmissions, the Library will ultimately require additional funding which should come from CPB..."
-      />
+      <PullQuote text="Since the Library of Congress has assumed responsibility for storing, processing, re-formatting and servicing all past, present, and future PBS transmissions, the Library will ultimately require additional funding which should come from CPB..." />
 
-    <PullQuote text="Affiliates that are part of state or municipal entities should seek local or regional funding for preservation activities..."
-      />
+      <PullQuote text="Affiliates that are part of state or municipal entities should seek local or regional funding for preservation activities..." />
 
-  <PullQuote text="Affiliates should take a close look at the WGBH Media Archives and Preservation Center as a model for some of the larger producers of programming material."
-      />
+      <PullQuote text="Affiliates should take a close look at the WGBH Media Archives and Preservation Center as a model for some of the larger producers of programming material." />
 
       <div className="marbot">
         At the end of the 20th century, scattered initiatives by professional archivists to preserve public broadcasting materials produced for national broadcast were underway. Hundreds of stations across the nation stored millions of public broadcasting assets under less than optimal conditions. An important study had produced recommendations for the future. Shifts in broadcasting technology soon would offer an opportunity for implementing an exciting new approach to meet the many challenges of preserving public broadcasting materials.
       </div>
- <div className="link-bank">
-        <a href="/our-story">Our Story</a>
-        <hr />
-        <a href="/vision-and-mission">Vision and Mission</a>
-        <hr />
-        <a href="/council-and-committee">Council and Committee Members</a>
-      </div>
-      <div className="link-bank">
-        <a href="/projects">Projects</a>
-        <hr />
-        <a href="/funding">Funding</a>
-        <hr />
-        <a href="/collaborators">Library and Education Collaborators</a>
-      </div>
+
+      <LinkBankFooter />
     </div>
   )
 }

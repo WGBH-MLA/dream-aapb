@@ -1,7 +1,5 @@
-import { CircleCheckBig } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
-import BigLink from "../components/BigLink"
+import LinkBankFooter from "../components/LinkBankFooter"
 
 export default function Funding() {
   return (
@@ -21,22 +19,7 @@ export default function Funding() {
       <h3 id="national-endowment-for-the-humanities">National Endowment for the Humanities</h3>
       <p className="marbot"><img src="https://s3.amazonaws.com/americanarchive.org/org-logos/neh_logo.jpg" alt="NEH Logo Image" /> Created in 1965 as an independent federal agency, the National Endowment for the Humanities supports research and learning in history, literature, philosophy, and other areas of the humanities by funding selected, peer-reviewed proposals from around the nation. Additional information about the National Endowment for the Humanities and its grant programs is available at: www.neh.gov.</p>
 
-      <div className="link-bank">
-        <a href="/our-story">Our Story</a>
-        <hr />
-        <a href="/vision-and-mission">Vision and Mission</a>
-        <hr />
-        <a href="/history">History</a>
-      </div>
-
-      <div className="link-bank">
-        <a href="/council-and-committee">Council and Committee Members</a>
-        <hr />
-        <a href="/projects">Projects</a>
-        <hr />
-
-        <a href="/collaborators">Library and Education Collaborators</a>
-      </div>
+      <LinkBankFooter />
     </div>
   )
 }

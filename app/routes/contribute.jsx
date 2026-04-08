@@ -1,5 +1,4 @@
 import { CircleCheckBig } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
 import BigLink from "../components/BigLink"
 
@@ -88,7 +87,6 @@ export default function Contribute() {
       <hr className="marbot" />
 
       <BigLink url="https://www.mellon.org/article/rescuing-the-nations-stories-one-tape-at-a-time" title="Rescuing the Nation’s Stories One Tape at a Time" text="Though many don’t realize it, a treasure trove of radio and television programs documenting our complex national history are stored in unofficial archives, trapped on obsolete recording formats that very few people can access." />
-
     </div>
   )
 }

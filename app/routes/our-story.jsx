@@ -1,7 +1,7 @@
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
 import PullQuote from "../components/PullQuote"
 import PullQuoteGroup from "../components/PullQuoteGroup"
+import LinkBankFooter from '../components/LinkBankFooter';
 
 export default function About() {
   return (
@@ -58,22 +58,7 @@ export default function About() {
       <p>
         WGBH and the Library believe that the legacy of American public broadcasting must be preserved for future generations. We look forward to maintaining a central role in keeping, organizing and providing access to the cultural treasures created by the public media system to enhance education and knowledge of the American public.
       </p>
-          <>
-      <div className="link-bank">
-        <a href="/vision-and-mission">Vision and Mission</a>
-        <hr />
-        <a href="/history">History</a>
-        <hr />
-        <a href="/council-and-committee">Council and Committee Members</a>
-      </div>
-      <div className="link-bank">
-        <a href="/projects">Projects</a>
-        <hr />
-        <a href="/funding">Funding</a>
-        <hr />
-        <a href="/collaborators">Library and Education Collaborators</a>
-      </div>
-    </>
+      <LinkBankFooter />
     </div>
   )
 }
