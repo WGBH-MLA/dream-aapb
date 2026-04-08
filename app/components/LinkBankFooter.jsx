@@ -16,8 +16,7 @@ export default function LinkBankFooter() {
         <a href="/funding">Funding</a>
         <hr />
         <a href="/collaborators">Library and Education Collaborators</a>
-             <hr />
       </div>
     </>
-  );
+  )
 }

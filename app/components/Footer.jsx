@@ -101,18 +101,17 @@ export default function Footer(props) {
 
   return (
     <>
-          <NewsletterBar />
+      <NewsletterBar />
       <div className="footer-bar">
         <FooterLinks title={ linkData.explore.title } titleURL={ linkData.explore.titleURL } links={ linkData.explore.links } />
         <FooterLinks title={ linkData.participate.title } titleURL={ linkData.participate.titleURL } links={ linkData.participate.links } />
         <FooterLinks title={ linkData.about.title } titleURL={ linkData.about.titleURL } links={ linkData.about.links } />
         <FooterLinks links={ linkData.last.links } />
-        <div className="footer-branding" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <img src="/aapb.png" style={{ width: '16rem', marginBottom: '1em' }} />
+        <div className="footer-branding">
+          <img src="/aapb.png" />
           <DonateButton />
         </div>
       </div>
-
 
       <ToeNail />
     </>
@@ -142,7 +141,5 @@ function FooterLinks(props){
       { titleBlock }
       { links }
     </div>
-
-
   )
 }

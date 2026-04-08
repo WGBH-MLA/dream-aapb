@@ -50,11 +50,13 @@ export default function App() {
       </head>
       <body>
 
+        <div className="rotation-helper" onClick={ () => { setPleaseRotate(!pleaseRotate) }} />
 
-         {!isHomepage && <Header esIndex={ data.esIndex } />}
-        <Outlet />
-        <Footer />
-
+        <span className={ pleaseRotate ? "rotate" : "" }>
+          <Header isHomepage={ isHomepage } esIndex={ data.esIndex } />
+          <Outlet />
+          <Footer />
+        </span>
         <ScrollRestoration />
         <Scripts />
       </body>

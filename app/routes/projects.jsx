@@ -30,20 +30,8 @@ export default function Projects() {
       <p>The Council on Library and Information Resources (CLIR) awarded GBH and the Library of Congress a Cataloging Hidden Special Collections and Archives grant to lead the NET Collection Catalog Project. This project will involve the creation of a national catalog of records to provide robust descriptions of programs distributed by NET (1952-1972). <a href="/about-the-american-archive/projects/net-catalog">Read more about the NET Collection Catalog Project</a>.</p>
       <h3>American Archive Permanent Entity Grant</h3>
       <p>Funded by the Corporation for Public Broadcasting, this grant funded the development of the American Archive of Public Broadcasting through a collaboration between GBH and the Library of Congress. <a href="/about-the-american-archive/projects/permanent-entity"> Read more about the Permanent Entity Grant</a>.</p>
-  <div className="link-bank">
-        <a href="/our-story">Our Story</a>
-        <hr />
-        <a href="/vision-and-mission">Vision and Mission</a>
-        <hr />
-        <a href="/history">History</a>
-      </div>
-      <div className="link-bank">
-            <a href="/council-and-committee">Council and Committee Members</a>
-        <hr />
-        <a href="/funding">Funding</a>
-        <hr />
-        <a href="/collaborators">Library and Education Collaborators</a>
-      </div>
+     
+      <LinkBankFooter />
     </div>
   )
 }

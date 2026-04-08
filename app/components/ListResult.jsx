@@ -50,7 +50,6 @@ export default function ListResult({hit}){
 
       <div className="hit-info-container">
         <h3 className="hit-title ssmartop smarleft ssmarbot">
-          <ScoreLight score={ hit._score } />
           <a href={`/catalog/${guid}`} >{ hit.title }</a>
         </h3>
 

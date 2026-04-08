@@ -18,20 +18,8 @@ export default function VisionStatements() {
         <li>Increase public awareness of the significance of historical public media and the need to preserve and make accessible significant public broadcasting programs</li>
         <li>Ensure the perpetuation of the archive by working toward financial sustainability.</li>
       </ul>
- <div className="link-bank">
-        <a href="/our-story">Our Story</a>
-        <hr />
-        <a href="/history">History</a>
-        <hr />
-        <a href="/council-and-committee">Council and Committee Members</a>
-      </div>
-      <div className="link-bank">
-        <a href="/projects">Projects</a>
-        <hr />
-        <a href="/funding">Funding</a>
-        <hr />
-        <a href="/collaborators">Library and Education Collaborators</a>
-      </div>
+ 
+      <LinkBankFooter />
     </div>
   )
 }

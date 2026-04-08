@@ -41,7 +41,7 @@ export default function GalleryResult({hit}){
       <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container">
           <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
-          <h3 className="hit-title ssmartop smarleft ssmarbot"><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
+          <h3 className="hit-title ssmartop smarleft ssmarbot">{ hit.title }</h3>
         </div>
       </a>
     </div>
