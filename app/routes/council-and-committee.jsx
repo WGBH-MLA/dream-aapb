@@ -1,368 +1,467 @@
 import { ChevronRight } from 'lucide-react'
-import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
-import BigLink from "../components/BigLink"
 import PullQuote from "../components/PullQuote"
+import MemberCard from "../components/Membercard"
+import LinkBankFooter from '../components/LinkBankFooter'
 
 export default function CouncilAndComittee() {
   return (
-    <div className="page-container">
-
-      <div className="skinny-body-container marbot">
-        <h1 id="executive-advisory-council">Executive Advisory Council</h1>
-
-        <p>The AAPB Executive Advisory Council comprises a distinguished group of individuals from around the country who are passionate about public media and its long-term preservation and access. The Council informs and guides the strategic direction of the AAPB with the overarching goal of ensuring that the Archive continues to serve the needs of public media stakeholders and the American people.</p>
-        <p>The Council provides guidance to the Project Team in the following ways:</p>
-        <ul>
+    <div className="skinny-body-container">
+      <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+      <SummaryBox title="Executive Advisory Council" text="AAPB Executive Advisory Council comprises a distinguished group of individuals from around the country who are passionate about public media and its long-term preservation and access. The Council informs and guides the strategic direction of the AAPB with the overarching goal of ensuring that the Archive continues to serve the needs of public media stakeholders and the American people." />
+      <h3>The Council provides guidance to the Project Team in the following ways:</h3>
+      <ul>
         <li>Provides advice and recommendations on strategic direction</li>
         <li>Collaborates with the AAPB team on initiatives to raise awareness of the collection among cultural institutions and the general public</li>
         <li>Assists in outreach to their networks and communities (public media organizations and leaders, educators, government officials and agencies, foundations, journalists, historians, librarians, technology developers, etc.) and beyond</li>
         <li>Guides the AAPB in developing a sustainability plan and its fundraising components.</li>
-        </ul>
-        <hr/>
-        <h2 id="current-council-members">Current Council Members</h2>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/ayers_photo.jpg" alt="Edward Ayers"/></p>
-        <h3 id="edward-ayers">Edward Ayers</h3>
-        <p>Edward Ayers  has been named National Professor of the Year, received the National Humanities Medal from President Obama at the White House, won the Bancroft Prize and Beveridge Prize in American history, and was a finalist for the National Book Award and the Pulitzer Prize.  He has collaborated on major digital history projects including the Valley of the Shadow, American Panorama, and Bunk, and is one of the cohosts for BackStory, a popular podcast about American history.  He is Tucker-Boatwright Professor of the Humanities and president emeritus at the University of Richmond as well as former Dean of Arts and Sciences at the University of Virginia.  His most recent book is The Thin Light of Freedom:  The Civil War and Emancipation in the Heart of America, published in 2017 by W. W. Norton.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Henry_Becton.jpg" alt="Henry Becton"/></p>
-        <h3 id="henry-becton">Henry Becton</h3>
-        <p>Henry Becton served as president of WGBH Educational Foundation from 1984 until October 2007, when he was named Vice Chairman. He served as WGBH&#39;s general manager from 1978 until 1999. He is a Director of Public Radio Exchange (PRX) and the Pew Charitable Trusts. Henry is a former chairman of the Association of Public Television Stations and a former member of the boards of directors of PBS, the PBS Foundation, the Public Radio International, American Documentary Inc. (POV), and The Belo Corporation where he served as lead director. He is a Director Emeritus of Becton Dickinson and Company where he has served as its lead director, and is past trustee or director of DWS Mutual Funds (formerly Deutsche). He is a former President of the Board of Concord Academy and a former Trustee of Connecticut College, the Boston Museum of Science, the New England Aquarium and the North Bennett Street School.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/Bitterman_photo.jpg" alt="Mary G. F. Bitterman"/></p>
-        <h3 id="mary-g-f-bitterman">Mary G. F. Bitterman</h3>
-        <p>Mary G. F. Bitterman is President of The Bernard Osher Foundation, a 42-year-old philanthropic organization headquartered in San Francisco that supports higher education and the arts. The Foundation provides post-secondary scholarship funding to colleges and universities across the nation, with special attention to reentry students. It also benefits programs in integrative medicine in the United States and Sweden, including centers at the University of California, San Francisco; Harvard Medical School and Brigham and Women&#39;s Hospital in Boston; the Karolinska Institute in Stockholm, Sweden; Northwestern University; Vanderbilt University; the University of Miami; and the University of Washington. In addition, the Foundation supports a national network of lifelong learning programs for seasoned adults, the Osher Lifelong Learning Institutes, which currently operate on the campuses of 124 institutions of higher education from Maine to Alaska and Hawaii. Grants to select cultural and arts organizations are made in the San Francisco Bay Area and the State of Maine.</p>
-        <p>Previously, Bitterman served as President and CEO of The James Irvine Foundation and before that as President and CEO of KQED, a major American public broadcasting center. She has served as Director of the Hawaii Public Broadcasting Authority, the Voice of America, the Hawaii State Department of Commerce and Consumer Affairs, and the East-West Center&#39;s Institute of Culture and Communication. Bitterman currently is a director of Bank of Hawaii, Bay Area Council Economic Institute, The Bernard Osher Foundation, Commonwealth Club of California, and the Hawaii Community Foundation, and she chairs the PBS Foundation Board. She also is an Advisory Council member of the Stanford Institute for Economic Policy Research, the Public Policy Institute of California, and Pacific Forum/CSIS. She is an Honorary Member of the National Presswomen&#39;s Federation and a Fellow of the National Academy of Public Administration. Bitterman received her B.A. from Santa Clara University and her M.A. and Ph.D. from Bryn Mawr College.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Ed_Markey.jpg" alt="Ed Markey" aria-hidden="true"/></p>
-        <h3 id="senator-ed-markey">Senator Ed Markey</h3>
-        <p>Senator Edward J. Markey (D-Mass.) is a national leader on telecommunications and technology policy and consumer protection. Having served for 20 years as Chair or Ranking Member of the Subcommittee on Telecommunications and the Internet, he was the principal author of many of the laws now governing our nation’s telephone, broadcasting, cable television, wireless and broadband communications systems. In Congress, Senator Markey has been a long-time and dedicated supporter of public media and has the photos with Big Bird and Arthur the Aardvark to prove it.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/minow_photo.jpg" alt="Mary Minow" aria-hidden="true"/></p>
-        <h3 id="mary-minow">Mary Minow</h3>
-        <h4 id="vice-chair">Vice Chair</h4>
-        <p>Mary Minow is a Presidential Appointee to the National Museum and Library Services Board at the Institute of Museum and Library Services (IMLS). She is a Fellow at the Berkman Klein Center for Internet and Society at Harvard University, serves as a Board Member of the Digital Public Library of America (DPLA), and consultant to the American Library Association. Mary is an attorney, library law consultant, and former librarian.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/Sandie_Viquez_Pedlow.jpg" alt="Sandie Viquez Pedlow" aria-hidden="true"/></p>
-        <h3 id="sandie-viquez-pedlow">Sandie Viquez Pedlow</h3>
-        <p>Sandie Viquez Pedlow, executive director of Latino Public Broadcasting (LPB), manages the operations of public media’s largest Latino-focused content developer and funder which provides programming to public television’s nearly 360 stations, multicast channels, and other media platforms.  Since its inception, Latino Public Broadcasting has awarded over thirteen million dollars to filmmakers nationwide and provided over 255 hours of programming to PBS. Pedlow is the executive producer of <em>VOCES</em>, the PBS series celebrating the rich diversity of the Latino cultural experience. She was also executive producer of <em>Latino Americans</em> which was honored with a George Foster Peabody Award and an IMAGEN Award. </p>
-        <p>Previously, Pedlow was Director of Programming Strategies, Associate Director of Cultural, Drama and Arts Programming, and Senior Program Officer at the Corporation for Public Broadcasting in Washington, D.C for 10 years. In this role, she led the development and funding of national public media programs which addressed history, the arts and all aspects of American culture.  At CPB, she worked with the US Public Television International Consortium and the Latin American Initiative to develop and fund co-productions for public media.</p>
-        <p>Sandie Pedlow also served as Director of Station Relations, PBS Education, working with stations in the marketing and promotion of PBS TeacherLine.  She began her career in public media as a writer/producer at South Carolina Educational Television (SCETV) where she developed cultural and arts programming and managed international initiatives.  Pedlow was the U.S. National Coordinator for INPUT, an international public television forum with more than 35 participating countries.  She led the first U.S. public television exchange with Gosteleradio in the former Soviet Union and U.S. producer workshops in Finland, Denmark and Norway. Pedlow served on the Vme Programming Advisory Council and has served on the boards of CINE, <em>The American Documentary</em>, <em>American Playhouse</em>, INPUT and LPB.  </p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_John_Ptak.jpg" alt="John Ptak" aria-hidden="true"/></p>
-        <h3 id="john-ptak">John Ptak</h3>
-        <p>John Ptak was born in San Diego, California. He began his career in the entertainment industry in 1968 when, after graduating from the University of California, Los Angeles, he joined the staff of The American Film Institute, where he was part of the team that established AFI&#39;s Center for Advanced Studies in Los Angeles. He worked thereafter as a Hollywood talent agent for 35 years, first at ICM and thereafter at William Morris and CAA, with an emphasis on directors, producers and independent films. He left CAA in 2006 to form Arsenal, which provides advisory services to film production companies and financiers.</p>
-        <p>Early in his career, he was directly involved with setting up such films as Airplane, Close Encounters of the Third Kind, Coal Miner&#39;s Daughter, Jaws, National Lampoon&#39;s Vacation, and Taxi Driver. His personal clients included directors such as Bruce Beresford, Costa Gavras, Terry Gilliam, David Lynch, Wolfgang Peterson, Ridley Scott, Tony Scott and Peter Weir, as well as producers such as Miramax and National Lampoon. At CAA, he expanded the role of the talent agent by representing the financing and distribution arrangements of over 100 independent films, working with his own clients as well as with Woody Allen, Jane Campion, Kevin Costner, Paul Haggis and Anthony Minghella on such films as Crash, Dances with Wolves, Driving Miss Daisy, Fear and Loathing in Las Vegas, Hannibal, Lost Highway, The Piano, The Talented Mr. Ripley and True Romance.</p>
-        <p>He was a key executive in CAA’s corporate consultancy arrangements on such accounts as Coca-Cola, IMAX, and the French bank, Credit Lyonnais, with whom he participated in the restructuring of MGM and the rebirth of United Artists in 1993. Ptak was recently an Executive Producer of Peter Weir’s The Way Back, Matt Reeves’ Let Me In, and Terry Gilliam’s Dr. Parnassus.</p>
-        <p>Ptak is a member of the National Film Preservation Board of the Library of Congress, sits on the Board of Directors of The National Film Preservation Foundation, and is on the Foundation Committee of The Motion Picture &amp; Television Fund, where he played a key role in its alliance with the UCLA Health System. He also has served on advisory boards and panels for the Corporation for Public Broadcasting, The National Endowment for the Arts, UCLA, Loyola Marymount University and Chapman University.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Bruce_Ramer.jpg" alt="Bruce Ramer" aria-hidden="true"/></p>
-        <h3 id="bruce-ramer">Bruce Ramer</h3>
-        <p>Bruce M. Ramer was appointed to the CPB Board of Directors by President Barack Obama and confirmed by the Senate in August 2013. This is Mr. Ramer&#39;s second term as a member of the CPB Board, having been previously appointed for his first term by President George W. Bush. He served as chair of the CPB Board of Directors from 2010 to 2012. He is an attorney and partner at Gang, Tyre, Ramer &amp; Brown, a firm specializing in entertainment and media matters.</p>
-        <p>Ramer has been active in public television since joining the board of KCET in Los Angeles in 1992. He served as chair from 2001 to 2003. He is a member of the board of trustees of the University of Southern California (USC). He is chair of the USC Institute on Entertainment Law and Business and a member of the board of councilors of the USC Annenberg School for Communication, the USC Gould School of Law, and the USC Shoah Foundation Institute for Visual History and Education. He is a member of the board of governors for the USC Center for the Digital Future, a member of the board of directors for the Foundation for the National Archives, and a member of the Peabody Board of Advisors. Ramer is founding chairman and member of the board of trustees of the Geffen Playhouse, a board member of the Southern California Committee for the Olympic Games and the Herrhausen Institute for International Dialogue, and a member of the Council on Foreign Relations and the Pacific Council on International Policy.</p>
-        <p>Ramer received the American Jewish Committee Community Service Award in 1987 and the Learned Hand Award in 2005. He has also received the Beverly Hills Bar Association Entertainment Lawyer of the Year Award in 1996; the Commanders Cross of the Order of Merit of the Federal Republic of Germany in 2000; the Medal of Honor of the Konrad Adenauer Foundation in 2001 and the Survivors of the Shoah Visual History Foundation Ambassador for Humanity Award in 2002. He was named one of the 100 most powerful lawyers in California by California Business Lawyer and one of the top 100 lawyers in California by the Daily Journal.</p>
-        <p>Ramer is a graduate of Princeton University and Harvard Law School. He is married to Madeline Ramer, with whom he has four children and five grandchildren.</p>
-        <h3 id="kathryn-washington">Kathryn Washington</h3>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/siemering_photo.jpg" alt="Bill Siemering" aria-hidden="true"/></p>
-        <h3 id="bill-siemering">Bill Siemering</h3>
-        <p>As a founding member of the NPR Board of Directors, Bill Siemering wrote NPR&#39;s original mission and goals. He was then hired to implement it as NPR’s first director of programming and led the development of <em>All Things Considered</em>. Later, Siemering developed <em>Fresh Air</em> with Terry Gross from a local into a national program while vice president for radio at WHYY in Philadelphia. He began working overseas in 1993 as a recipient of a MacArthur Foundation Fellowship. He worked with the Open Society Foundation, (Soros) for ten years, focused on Eastern Europe, Africa and Mongolia. In 2004, he founded Developing Radio Partners (DRP) to enrich the programing of local stations in Africa on climate change and health for women and youth.  He received a Lifetime Achievement Award from National Public Radio and an honorary doctorate from State University of New York at Buffalo and from Arcadia University, Glenside, Pennsylvania. Siemering currently serves as a Senior Fellow at the Wyncote Foundation.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/Waters_photo.jpg" alt="Donald J. Waters" aria-hidden="true"/></p>
-        <h3 id="donald-j-waters">Donald J. Waters</h3>
-        <p>Donald J. Waters is an independent scholar and a management consultant offering strategic advice and operational analysis in the area scholarly communications. In 2019, he retired from The Andrew W. Mellon Foundation as the Senior Program Officer for Scholarly Communications after 20 years of service. Before joining the Foundation, he served as the founding Director of the Digital Library Federation (1997-1999), and as Associate University Librarian at Yale University (1993-1997). Don graduated with a Bachelor’s degree in American Studies from the University of Maryland, College Park in 1973. In 1982, he received his Ph.D. in Anthropology from Yale University. In 1995-96, he co-chaired the Task Force of the Commission on Preservation and Access and the Research Libraries Group on Archiving of Digital Information.  In 2005-2008, Don served on the Library of Congress Section 108 Study Group.  He currently serves on the Steering Committee of the Coalition for Networked Information and on the Executive Advisory Council of the American Archive of Public Broadcasting. Don is also a fellow of the American Association for the Advancement of Science. </p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/jacquie2_5858.jpg" alt="Jacquie Gales Webb" aria-hidden="true"/></p>
-        <h3 id="jacquie-gales-webb">Jacquie Gales Webb</h3>
-        <p>Jacquie Gales Webb is Vice President of Radio for the Corporation for Public Broadcasting (CPB). She develops and implements funding strategies to strengthen the ability of America’s public radio stations to serve their communities with high-quality, multiplatform content. She manages grants that create content and initiatives that have touched the lives of many Americans, including <em>StoryCorps</em>, the Urban Alternative music format for millennials, and radio station outreach to communities around PBS television series. She helps to shape support for public media station collaborations and projects that help rural public radio stations increase their ability to produce content, engage with their communities, and achieve sustainability. </p>
-        <p>Before joining CPB, Jacquie was a senior producer whose national awards included the Peabody award for the Smithsonian radio series “Black Radio: Telling it Like it Was” hosted by Lou Rawls and six local Emmy Awards for her work producing a live television talk and variety show at the CBS television affiliate W*USA in Washington, DC.</p>
-        <p>Jacquie Gales Webb has hosted Sunday Gospel music programming on the commercial radio station 96.3 WHUR since 1990. The Magnolia Pictures documentary <em>Rejoice and Shout</em> featured her knowledge of the history of Gospel music and she was presented the Lifetime Achievement Award for continuous service and support of Gospel music by the National Convention of Gospel Choirs and Choruses.</p>
-        <p>Webb has served on the advisory boards of the John F. Kennedy Center for the Performing Arts, the Smithsonian Center for Folklife and Cultural Heritage, the Foundation for the Advancement of Music Education, and the American Archives of Public Broadcasting. She graduated cum laude with a Bachelor of Arts degree in speech and communication from Emerson College in Boston in 1977.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/woodruff_photo.jpg" alt="Judy Woodruff" aria-hidden="true"/></p>
-        <h3 id="judy-woodruff">Judy Woodruff</h3>
-        <h4 id="chair">Chair</h4>
-        <p>Broadcast journalist Judy Woodruff is the Anchor and Managing Editor of the PBS NewsHour. She has covered politics and other news for more than four decades at CNN, NBC and PBS.</p>
-        <p>For 12 years, Woodruff served as anchor and senior correspondent for CNN, where her duties included anchoring the weekday program, &quot;Inside Politics.&quot; At PBS from 1983 to 1993, she was the chief Washington correspondent for The MacNeil/Lehrer NewsHour. From 1984-1990, she also anchored PBS&#39; award-winning weekly documentary series, &quot;Frontline with Judy Woodruff.&quot;
-        In 2011, Woodruff was the principal reporter for the PBS documentary &quot;Nancy Reagan: The Role of a Lifetime.&quot; And in 2007, she completed an extensive project on the views of young Americans called &quot;Generation Next: Speak Up. Be Heard.&quot; Two hour-long documentaries aired on PBS, along with a series of reports on the NewsHour with Jim Lehrer, NPR and in USA Today.
-        In 2006, Judy was a visiting professor at Duke University&#39;s Terry Sanford Institute of Public Policy. In 2005, she was a visiting fellow at Harvard University&#39;s Joan Shorenstein Center on the Press, Politics and Public Policy. From 2006-2013, she anchored a monthly program for Bloomberg Television, &quot;Conversations with Judy Woodruff.&quot;</p>
-        <p>At NBC News, Woodruff was White House correspondent from 1977 to 1982. For one year after that she served as NBC&#39;s Today Show Chief Washington Correspondent. She wrote the book, &quot;This is Judy Woodruff at the White House,&quot; published in 1982 by Addison-Wesley.</p>
-        <p>Woodruff is a founding co-chair of the International Women&#39;s Media Foundation, an organization dedicated to promoting and encouraging women in communication industries worldwide. She serves on the boards of trustee of the Freedom Forum, the Newseum, the Duke Endowment and the Urban Institute. She is a former member of The Knight Foundation Commission on Intercollegiate Athletics.</p>
-        <p>Judy is a graduate of Duke University, where she is a trustee emerita.</p>
-        <p>She is the recent recipient of the Cine Lifetime Achievement award, a Duke Distinguished Alumni award, the Edward R. Murrow Lifetime Achievement Award in Broadcast Journalism/Television, the University of Southern California Walter Cronkite Award for Excellence in Journalism, the Al Neuharth/University of South Dakota Award for Excellence in Journalism and the Gaylord Prize for Excellence in Journalism and Mass Communications from the University of Oklahoma, among others.</p>
-        <p>She lives in Washington, DC, with her husband, journalist Al Hunt, and they are the parents of three children: Jeffrey, Benjamin and Lauren.</p>
-        <h2 id="past-council-members">Past Council Members</h2>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Alan_Brinkley.jpg" alt="Alan Brinkley" aria-hidden="true"/></p>
-        <h3 id="alan-brinkley">Alan Brinkley</h3>
-        <p>Alan Brinkley served on the AAPB Executive Advisory Council from 2015 – 2018. He passed away on June 17, 2019. Dr. Brinkley was the Allan Nevins Professor of American History at Columbia University. He specialized in the history of twentieth-century America. From 2003 to 2009, he was University Provost, and before that chair of the Department of History. In 1998-99, he was the Harmsworth Professor of American History at Oxford University, and in 2011-2012, he was the Pitt Professor of American History at the University of Cambridge. He joined the Columbia faculty in 1991.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/Bunch_photo.jpg" alt="Lonnie G. Bunch"/></p>
-        <h3 id="lonnie-g-bunch-iii">Lonnie G. Bunch III</h3>
-        <p>Lonnie G. Bunch III is the 14th Secretary of the Smithsonian. He assumed his position June 16, 2019. As Secretary, he oversees 19 museums, 21 libraries, the National Zoo, numerous research centers, and several education units and centers. 
-        Previously, Bunch was the director of the Smithsonian’s National Museum of African American History and Culture. When he started as director in July 2005, he had one staff member, no collections, no funding and no site for a museum. Driven by optimism, determination and a commitment to build “a place that would make America better,” Bunch transformed a vision into a bold reality. The museum has welcomed more than 6 million visitors since it opened in September 2016 and compiled a collection of 40,000 objects that are housed in the first “green building” on the National Mall. </p>
-        <p>Occupying a prominent location next to the Washington Monument, the nearly 400,000-square-foot National Museum of African American History and Culture is the nation’s largest and most comprehensive cultural destination devoted exclusively to exploring, documenting and showcasing the African American story and its impact on American and world history.
-        Before his appointment as director of the museum, Bunch served as the president of the Chicago Historical Society (2001–2005). There, he led a successful capital campaign to transform the Historical Society in celebration of its 150th anniversary, managed an institutional reorganization, initiated an unprecedented outreach initiative to diverse communities and launched a much-lauded exhibition and program on teenage life titled “Teen Chicago.”</p>
-        <p>A prolific and widely published author, Bunch has written on topics ranging from the black military experience, the American presidency and all-black towns in the American West to diversity in museum management and the impact of funding and politics on American museums. Lectures and presentations to museum professionals and scholars have taken him to major cities in the United States and many nations abroad, including Australia, China, England, Ghana, Italy, Japan, Scotland, South Africa and Sweden.</p>
-        <p>Bunch has worked at the Smithsonian in the past, holding a number of positions at its National Museum of American History from 1989 through 2000. As the museum’s associate director for curatorial affairs for six years (1994–2000), he oversaw the curatorial and collections management staff. He also led the team that developed a major permanent exhibition “The American Presidency: A Glorious Burden.” While serving as assistant director for curatorial affairs (1992–1994) at the museum, Bunch supervised the planning and implementation of the museum’s research and collection programs. He also developed “Smithsonian’s America” for the American Festival Japan 1994; this exhibition, which was presented in Japan, explored the history, culture and diversity of the United States. As a supervising curator for the museum from 1989 to 1992, Bunch oversaw several of the museum’s divisions, including Community Life. </p>
-        <p>Bunch served as the curator of history and program manager for the California African American Museum in Los Angeles from 1983 to 1989. While there, he organized several award-winning exhibitions, including “The Black Olympians, 1904–1950” and “Black Angelenos: The Afro-American in Los Angeles, 1850–1950.” He also produced several historical documentaries for public television.</p>
-        <p>Born in the Newark, New Jersey, area, Bunch has held numerous teaching positions at universities across the country, including American University in Washington, D.C., the University of Massachusetts in Dartmouth and George Washington University in Washington, D.C. </p>
-        <p>In service to the historical and cultural community, Bunch has served on the advisory boards of the American Association of Museums and the American Association for State and Local History.   Among his many awards, he was appointed by President George W. Bush to the Committee for the Preservation of the White House in 2002 and reappointed by President Barack Obama in 2010. In 2005, Bunch was named one of the 100 most influential museum professionals of the 20th century by the American Association of Museums.</p>
-        <p>Bunch received his undergraduate and graduate degrees from the American University in Washington, D.C. </p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Karen_Cator.jpg" alt="Karen Cator" aria-hidden="true"/></p>
-        <h3 id="karen-cator">Karen Cator</h3>
-        <p>Karen Cator is President and CEO of Digital Promise and a leading voice for transforming American education through technology, innovation and research. From 2009-2013, Karen was Director of the Office of Educational Technology at the U.S. Department of Education, where she led the development of the 2010 National Education Technology Plan and focused the Office’s efforts on teacher and leader support. Prior to joining the department, Cator directed Apple’s leadership and advocacy efforts in education. In this role, she focused on the intersection of education policy and research, emerging technologies, and the reality faced by teachers, students and administrators. She began her education career in Alaska as a teacher, ultimately leading technology planning and implementation. She also served as Special Assistant for Telecommunications for the Governor of Alaska. Cator holds a master’s in school administration from the University of Oregon and recently received the 2014 College of Education Distinguished Alumni award. The American Association of Publishers has awarded Cator with the 2014 Visionary Award. She received her bachelor’s in early childhood education from Springfield College, and she is a member of the Aspen Pahara Fellows. She is a past chair for the Partnership for 21st Century Skills and has served on boards including the Software &amp; Information Industry Association-Education.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Beth_Courtney.jpg" alt="Beth Courtney" aria-hidden="true"/></p>
-        <h3 id="beth-courtney">Beth Courtney</h3>
-        <p>Beth Courtney is President and CEO of Louisiana Public Broadcasting (LPB), serving as the leader of the statewide public media enterprise since 1985. LPB is also Louisiana’s educational technology resource center and is a supplier of cultural and educational programming for public television nationwide. During her tenure at LPB, the station has produced a number of award-winning documentaries including the six-part series Louisiana: A History, Uncle Earl, Kate Chopin: A Reawakening, and Frame After Frame: The Images of Herman Leonard. Recent productions have included Atchafalaya Houseboat, Washing Away: Losing Louisiana, Katrina’s Smallest Victims, Return to the Forest Where We Live and Louisiana War Stories.</p>
-        <p>Ms. Courtney is former Vice Chair of the Board of Directors for the Corporation for Public Broadcasting (CPB), which provides funding for America’s public television and radio stations. Among her many leadership positions, Courtney is Past Chair of the Association of Public Television Stations board and former Vice-Chair of the Board of the Public Broadcasting Service (PBS). Ms. Courtney has chaired numerous PBS task forces and currently serves on the Board of the Organization of State Broadcasting Executives, and the National Educational Telecommunications Association.</p>
-        <p>Ms. Courtney has testified before Congress on numerous occasions, including the House Appropriations and Commerce Committees, as an advocate and spokesperson for public broadcasting. She has appeared on William F. Buckley’s Firing Line, CBS’ Sunday Morning, CNN’s Crossfire, and the Freedom Forum. She continues to share her expertise as a broadcasting professional on numerous telecommunications technology advisory committees on national, state and local levels.</p>
-        <p>Prior to her appointment as CEO of LPB, she was LPB&#39;s Executive Producer. During her tenure, she oversaw the production of many award-winning programs that have been broadcast in Louisiana and around the world.</p>
-        <p>Ms. Courtney started her career in broadcasting as a capitol correspondent, reporting on state government and moderating numerous political debates. She was named Communicator of the Year in 1984, elected Broadcaster of the Year by American Women in Radio &amp; Television (AWRT) in 1988, and was one of the YWCA’s Women of Achievement in 1991. Ms. Courtney was inducted into the Louisiana Center for Women in Government Hall of Fame in 1999.</p>
-        <p>Ms. Courtney is married to Bob Courtney, President of Courtney Communications. She is the proud mother of one daughter, Julia who is an attorney and mother of Andrew and Virginia.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Joanne_Griffith.jpg" alt="Joanne Griffith" aria-hidden="true"/></p>
-        <h3 id="joanne-griffith">Joanne Griffith</h3>
-        <p>Joanne Griffith is the Chief Content Officer at APM Studios, the podcast division of American Public Media Group. In this role, she oversees the editorial vision and brand voice for APM Studios, and has creative oversight on original and acquired podcasts. </p>
-        <p>A self-proclaimed audiophile, Joanne has over 20 years of experience in the audio space, spanning roles that include executive producer, reporter, editor, audience engagement strategist and more. Storytelling is at the heart of all of Joanne’s work and has taken her around the world — from Malawi, where she looked at the innovative ways women tackle food insecurity, to Puerto Rico as the island sought economic recovery after Hurricane Maria. </p>
-        <p>Joanne began her career at the BBC as a journalist, editor and project manager. As one of the media organization’s first diversity change agents, Joanne created initiatives to expand the reporting and production pool, developed training programs to help staff understand the value of diversity, and experimented with online resources that reflected multicultural London.</p>
-        <p>Moving to the U.S. in 2007, Joanne was a reporter and host for BBC News, covering stories from the U.S. west coast. She also created a weekly show based on the historic material held in the Pacifica Radio Archives. In 2011, she joined Southern California Public Radio (SCPR), where she worked as a producer on several KPCC programs and served as editor on Take Two. During her time at SCPR, Joanne introduced audience engagement events to better understand listeners, an initiative that led to an award-winning live program marking the 50th anniversary of the Watts Rebellion. She later went on to work with American Public Media’s Marketplace Weekend, where she spearheaded efforts to successfully grow the program’s digital footprint through an audience engagement-focused approach. </p>
-        <p>As a journalist with an entrepreneurial heart, Joanne was the founding managing editor of The California Newsroom, one of NPR’s first collaborative regional news hubs. In 2020, she also launched En(title)d!, a conversation and training space for leaders of color in creative industries, an initiative born out of the turmoil of the year and a need to not only talk solutions, but put them into action.</p>
-        <p>In addition to her work in public media, Joanne is the author of Redefining Black Power: Reflections on the State of Black America and was the lead producer for The King of Crenshaw, a podcast from ESPN’s critically-acclaimed 30 for 30 Podcasts, exploring the intersection of hip-hop and basketball through the lens of LA rapper, Nipsey Hussle. </p>
-        <p>Joanne is based in Los Angeles.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Gwen_Ifill.jpg" alt="Gwen Ifill" aria-hidden="true"/></p>
-        <h3 id="gwen-ifill">Gwen Ifill</h3>
-        <p>Gwen Ifill, veteran journalist and newsanchor, served on the AAPB Executive Advisory Council from 2015 – 2016. She passed away on November 14, 2016, after battling cancer. </p>
-        <p>During her extensive career, Gwen was moderator and managing editor of &quot;Washington Week&quot; and co-anchor and managing editor of the &quot;PBS NewsHour.&quot;</p>
-        <p>She was also the best-selling author of &quot;The Breakthrough: Politics and Race in the Age of Obama.&quot; She covered seven Presidential campaigns and moderated the vice presidential debates in 2004 and 2008.</p>
-        <p>Before joining PBS in 1999, Gwen was chief congressional and political correspondent for NBC News, White House correspondent for The New York Times, and a local and national political reporter for The Washington Post. She also reported for the Baltimore Evening Sun and the Boston Herald American.</p>
-        <p>A native of New York City and a graduate of Simmons College in Boston, Ifill received more than twenty honorary doctorates. She was also honored for her work by the Radio and Television News Directors Association, Harvard&#39;s Joan Shorenstein Center, The National Association of Black Journalists, Ohio University, and was included in Ebony Magazine&#39;s list of 150 Most Influential African Americans. She received the Al Neuharth Award for Excellence in Journalism.</p>
-        <p>She also served on the board of the News Literacy Project, on the advisory board of the Committee to Protect Journalists and was a fellow of the American Academy of Arts and Sciences.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/lawson_photo.jpg" alt="Jennifer Lawson"/></p>
-        <h3 id="jennifer-lawson">Jennifer Lawson</h3>
-        <h4 id="former-vice-chair">Former Vice Chair</h4>
-        <p>Jennifer Lawson is a media consultant based in Washington, DC.  In 2016, she became the most recent recipient of the Ralph Lowell Award, public television’s highest honor.  The Lowell Award is issued by the Corporation for Public Broadcasting (CPB) for outstanding achievement.  Lawson, who retired from CPB in that year, was also presented with lifetime achievement awards from American Public Television and the Public Television Programmers’ Association.  She is currently an advisor to a civil rights oral history archival project under the auspices of Duke University and the SNCC Legacy Project. </p>
-        <p>From 2011 – 2016, Lawson was Senior Vice President, Television and Digital Video Content at the CPB.  She was general manager of WHUT-TV, Washington DC from 2004 -2011 and during that time she co-produced, “Security vs. Liberty: The Other War”, for a 2007 PBS series, “American at the Crossroads.”  During the same time period, she served as Vice Chair of the PBS Board, Chair of the American Public Television Board and was a member of the Advisory Board of Washington Women in Film and Video.  </p>
-        <p>From 1995 to 2004 Lawson headed Magic Box Mediaworks, a company she founded, which produced the critically acclaimed eight-part series “Africa”, in partnership with National Geographic and WNET.  The series aired nationally on PBS, premiering September 9, 2001, and internationally.  </p>
-        <p>In 1989, Lawson became the first chief programming executive at PBS, holding the title Executive Vice President, Programming and Promotional Services and served in that role until 1995.  During her time at PBS she was responsible for the scheduling and promotional strategies that resulted in PBS’ most successful series of that era, Ken Burns’ “The Civil War” and “Baseball.”  Lawson also developed award-winning children’s series, “Barney and Friends”, “Lamb Chop’s Play-Along”, and “Where in the World is Carmen Sandiego?”  In the 1990s she was named one of “101 Most Influential People in Entertainment Today,” by <em>Entertainment Weekly</em>, and was named to the Power 50 List by <em>The Hollywood Reporter</em>. </p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Norman_Lear.jpg" alt="Norman Lear" aria-hidden="true"/></p>
-        <h3 id="norman-lear">Norman Lear</h3>
-        <p>Norman Lear has enjoyed a long career in television and film, and as a political and social activist and philanthropist.</p>
-        <p>Mr. Lear began his television writing career in 1950 when he and his partner, Ed Simmons, were signed to write for The Ford Star Revue, starring Jack Haley. After only four shows, they were hired away by Jerry Lewis to write for him and Dean Martin on The Colgate Comedy Hour, where they worked until the end of 1953. They then spent two years on The Martha Raye Show, after which Mr. Lear worked on his own for The Tennessee Ernie Ford Show and The George Gobel Show.</p>
-        <p>In 1958, Mr. Lear teamed with director Bud Yorkin to form Tandem Productions. Together they produced several feature films, with Mr. Lear taking on roles as executive producer, writer, and director. He was nominated for an Academy Award in 1967 for his script for Divorce American Style. In 1970, CBS signed with Tandem to produce All in the Family, which first aired on January 12, 1971 and ran for nine seasons. It earned four Emmy Awards for Best Comedy series as well as the Peabody Award in 1977. All in the Family was followed by a succession of other television hit shows including Maude, Sanford and Son, Good Times, The Jeffersons, One Day at a Time, and Mary Hartman, Mary Hartman.</p>
-        <p>Concerned about the growing influence of radical religious evangelists, Mr. Lear decided to leave television in 1980 and formed People For the American Way, a non-profit organization designed to speak out for Bill of Rights guarantees and to monitor violations of constitutional freedoms. People For remains an influential and effective voice for freedom.</p>
-        <p>Mr. Lear’s business career continued in 1982, when Tandem Productions and his other company, T.A.T. Communications, were folded into Embassy Communications, which was sold in 1985. He then created and is currently chairman of Act III Communications, a multimedia holding company with interests in television, motion pictures, and licensing.</p>
-        <p>In addition to People for the American Way, Mr. Lear has founded other nonprofit organizations, including the Business Enterprise Trust (1989- 2000), which spotlighted exemplary social innovations in American business; the Norman Lear Center at the USC Annenberg School for Communication (2000-present), a multidisciplinary research and public policy center dedicated to exploring the convergence of entertainment, commerce and society; and with his wife, Lyn, co-founded the Environmental Media Association (1989-present), to mobilize the entertainment industry to become more environmentally responsible.</p>
-        <p>In 1999, President Clinton bestowed the National Medal of Arts on Mr. Lear, noting that “Norman Lear has held up a mirror to American society and changed the way we look at it.” He also has the distinction of being among the first seven television pioneers inducted in 1984 into the Television Academy Hall of Fame.</p>
-        <p>In 2001, Lyn and Norman Lear purchased one of the few surviving original copies of the Declaration of Independence. During the decade that they owned it, they shared it with the American people by touring it to all 50 states. As part of this Declaration of Independence Road Trip, Mr. Lear launched Declare Yourself, a nonpartisan youth voter initiative that registered well over four million new young voters in the 2004, 2006, and 2008 elections.</p>
-        <p>Mr. Lear is married to Lyn Davis Lear and resides in Los Angeles, California. He has six children: Ellen, Kate, Maggie, Benjamin, Brianna, and Madeline, and four grandchildren: Daniel, Noah, Griffin, and Zoe.</p>
-        <p>Mr. Lear’s memoir, Even This I Get To Experience, was published in October 2014 by The Penguin Press.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Deanna_Marcum.jpg" alt="Deanna Marcum" aria-hidden="true"/></p>
-        <h3 id="deanna-marcum">Deanna Marcum</h3>
-        <p>Deanna Marcum (1946-2002) was managing Director of Ithaka S+R and led the research and consulting services that assisted universities and colleges, libraries, publishers, and cultural institutions as they made the transition to the digital environment. From 2003 to 2011, Deanna served as associate librarian for Library Services at the Library of Congress. She managed 53 divisions and offices whose 1,600 employees were responsible for acquisitions, cataloging, public service, and preservation activities; services to the blind and physically handicapped; and network and bibliographic standards for America&#39;s national library. She was also responsible for integrating the emerging digital resources into the traditional artifactual library, the first step toward building a national digital library for the 21st century.</p>
-        <p>In 1995, Deanna was appointed president of the Council on Library Resources and president of the Commission on Preservation and Access. She oversaw the merger of these two organizations into the Council on Library and Information Resources (CLIR) in 1997 and served as president until August 2003. Deanna served as director of public service and collection management at the Library of Congress from 1993 to 2005. Before that she was dean of the School of Library and Information Science at The Catholic University of America. From 1980 to 1989, she was first a program office and then vice president of Council on Library Resources.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Newton_Minow.jpg" alt="Newton Minow" aria-hidden="true"/></p>
-        <h3 id="newton-minow">Newton Minow</h3>
-        <p>Newton N. Minow (1926-2023) was born and raised in Milwaukee, Wisconsin.  He served as a U.S. Army Sergeant in the China-Burma India Theater in World War II.  He was a graduate of Northwestern University, and has been awarded 14 honorary degrees, including Brandeis University, the University of Wisconsin, Northwestern University and the University of Notre Dame.</p>
-        <p>His career included service as Law Clerk to Chief Justice Fred M. Vinson of the U.S. Supreme Court and as Assistant Counsel to Governor Adlai E. Stevenson.  He was a partner in the law firm of Stevenson, Rifkind &amp; Wirtz when, in 1961, President John F. Kennedy appointed him Chairman of the Federal Communications Commission.  He served in the Kennedy Administration until 1963 when he became Executive Vice President and General Counsel of Encyclopaedia Britannica, Inc.  In 1965, he joined the law firm of Leibman, Williams, Bennett, Baird &amp; Minow, which merged with Sidley &amp; Austin in 1972.  Sidley &amp; Austin merged with Brown &amp; Wood in 2001. He served as Senior Counsel to the law firm of Sidley Austin LLP until his passing.</p>
-        <p>Mr. Minow was a director of many companies including Aon Corporation, CBS, Sara Lee Corporation, Foote, Cone &amp; Belding, Manpower Inc. and the Tribune Company.</p>
-        <p>In addition, he was a chairman of The RAND Corporation, trustee emeritus of the Mayo Clinic, a life trustee of Northwestern University and the University of Notre Dame, a former trustee and chairman of the Carnegie Corporation, and former Chairman of PBS (Public Broadcasting Service).</p>
-        <p>Mr. Minow wrote five books and numerous magazine articles. He received the Presidential Medal of Freedom in 2016.</p>
-        <p>Mr. Minow and his wife, Josephine (Jo) lived in Chicago. They had three daughters, Nell, Martha and Mary.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/morrisett_photo.jpg" alt="Lloyd Morrisett" aria-hidden="true"/></p>
-        <h3 id="lloyd-n-morrisett">Lloyd N. Morrisett</h3>
-        <p>Lloyd N. Morrisett (1929-2023) served as President of The John and Mary R. Markle Foundation from 1969 to 1998. He initiated the Foundation&#39;s program in communications and information technology. Morrisett was Vice President of the Carnegie Corporation of New York and of the Carnegie Foundation for the Advancement of Teaching before going to Markle. While at Carnegie he worked with Ralph Tyler to help start the National Assessment of Educational Progress (NAEP). More than three decades ago he helped found the Sesame Workshop, producers of Sesame Street and other educational television programs for children. He was chairman of the Workshop board from 1968 until 2000; he continues as a board member.</p>
-        <p>Morrisett was a board member of RAND (a research institute dealing with domestic public policy and national security issues) for thirty years and Chairman of the Board for nine years, 1986-1995.  He was a trustee, for many years, of Oberlin College and was Chairman of the Board from 1975 to 1981.</p>
-        <p>Dr. Morrisett received his B.A. at Oberlin College, did graduate work in psychology at U.C.L.A., and earned his Ph.D. in experimental psychology at Yale University.  Following his graduation from Yale he taught at the University of California at Berkeley for two years. </p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Cokie_Roberts.jpg" alt="Cokie Roberts" aria-hidden="true"/></p>
-        <h3 id="cokie-roberts">Cokie Roberts</h3>
-        <h4 id="former-vice-chair">Former Vice Chair</h4>
-        <p>Cokie Roberts, journalist and political commentator who was recognized by the American Women in Radio and Television as one of the 50 greatest women in the history of broadcasting, served on the AAPB Executive Advisory Council from 2015-2019 and served as Vice Chair from 2018-2019. She passed away on September 17, 2019 at the age of 75 after a battle with breast cancer.</p>
-        <p>Cokie Roberts was a political commentator for ABC News, providing analysis for all network news programming. From 1996-2002, she and Sam Donaldson co-anchored the weekly ABC interview program This Week. Roberts also served as Senior News Analyst for National Public Radio. In her more than 40 years in broadcasting, she won countless awards, including three Emmys. She was inducted into the Broadcasting and Cable Hall of Fame.</p>
-        <p>In addition to her appearances on the airwaves, Roberts, along with her husband, Steven V. Roberts, wrote a weekly column syndicated in newspapers around the country by United Media. Roberts was also contributing editor to USA Weekend Magazine, and in 2011 she and her husband Steven V. Roberts published Our Haggadah, Uniting Traditions for Interfaith Families. Their earlier collaboration, From This Day Forward, an account of their more than 40 year marriage and other marriages in American history, immediately went onto The New York Times bestseller list. All of Cokie Roberts’s other books have also been best-sellers, including the number one bestseller, We Are Our Mothers’ Daughters, an account of women’s roles and relationships throughout American history. Her other bestselling books — Founding Mothers, published in 2004 and Ladies of Liberty in 2008 — are histories of women in America’s founding era. In 2014, Cokie Roberts published a children’s version of Founding Mothers. Based on the original book, this version introduces young readers to the brave, brilliant, and enterprising women whose influence on the founding of our country was as instrumental as that of the men whose names are inked in history.</p>
-        <p>Cokie Roberts held more than 25 honorary degrees, served on the boards of several nonprofit institutions and was on the President Bush’s Commission on Service and Civic Participation. In 2008, the Library of Congress named her a “Living Legend,” one of the very few Americans to have attained that honor. She was the mother of two and grandmother of six.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Patricia_Steele.jpg" alt="Patricia Steele" aria-hidden="true"/></p>
-        <h3 id="patricia-steele">Patricia Steele</h3>
-        <p>Patricia Steele, former Dean of Libraries at Indiana University and more recently the University of Maryland, focused much of her career on integrating digital strategies into the collections, services and commitment of academic libraries. Guided by her understanding of the digital world and its impacts on the use of space, she was instrumental in establishing the information commons model in both libraries. At Maryland, ethnographic techniques informed broad space planning.</p>
-        <p>Steele has served on the executive board of the Kuali Foundation and, as a founding member, on the board of Kuali OLE. After helping found the HathiTrust Digital Library, she was elected to its board of governors. Within the Committee on Institutional Cooperation (CIC) libraries, Steele was one of the negotiators that fashioned a contract with Google to digitize CIC library holdings. She also was a founding member and board chair of the Academic Preservation Trust, a node in the Digital Preservation Network.</p>
-        <p><img class="img-circle pull-left" src="https://s3.amazonaws.com/americanarchive.org/advisory-council/Trevino_photo.jpg" alt="Jesús Salvador Treviño" aria-hidden="true"/></p>
-        <h3 id="jes-s-salvador-trevi-o">Jesús Salvador Treviño</h3>
-        <p>Jesús Salvador Treviño is writer/director whose television directing credits include LAW &amp; ORDER CRIMINAL INTENT, CRIMINAL MINDS, PRISON BREAK, BONES, ER, THIRD WATCH, NYPD BLUE, RESURRECTION BLVD, CROSSING JORDAN, THE PRACTICE, THE O.C., TRU CALLING, DAWSON’S CREEK, CHICAGO HOPE, NEW YORK UNDERCOVER, THE PRETENDER, NASH BRIDGES, MARTIAL LAW, BRIMSTONE, SEAQUEST, STAR TREK: VOYAGER, BABYLON FIVE, STAR TREK: DEEP SPACE NINE, THE BURNING ZONE and many others. </p>
-        <p>Mr. Treviño began his career in film and television as a student activist documenting the 1960s Chicano civil rights struggle with a super-8 camera. Throughout the late sixties and early nineteen seventies, he was both a participant and a chronicler of the events and issues of the day. In the 1970s and 1980s, his national PBS documentaries about Latinos include AMERICA TROPICAL, YO SOY CHICANO, LA RAZA UNIDA, CHICANO MORATORIUM, THE SALAZAR INQUEST and BIRTHWRITE. He was creator and executive producer of the 1975 PBS children’s series Infinity Factory produced at WGBH, Boston. He wrote and directed the Mexican feature film RAICES DE SANGRE (ROOTS OF BLOOD) in 1976, and SEGUIN (1980), a PBS American Playhouse drama of the Alamo saga told from a Mexican American point of view. In 1997, he was Co-Executive Producer of the four-part PBS documentary series, CHICANO! HISTORY OF THE MEXICAN AMERICAN CIVIL RIGHTS MOVEMENT. In 2000-2003 he served as Co-Executive Producer of the SHOWTIME drama series, RESURRECTION BLVD.</p>
-        <p>Mr. Treviño has won dozens of national and international awards and recognitions including (twice) the prestigious Directors Guild of America award and, twice, the Alma Award for Outstanding Director of a Prime-time Television Drama and an Alma Award as Co-Executive Producer of Resurrection Blvd, Best Prime Time Drama series. In 1991, his film, RAICES DE SANGRE (ROOTS OF BLOOD), was included in an anthology of the 25 Most Significant Films of Latin American Cinema at the 36th Annual International Film Festival of Valladolid, Spain. In 1993 he was honored with an homage at the Montevideo International Film Festival in Montevideo, Uruguay. </p>
-        <p>Mr. Treviño is also a writer. His collection of short stories, THE FABULOUS SINKHOLE AND OTHER STORIES was published in 1995. His memoir, EYEWITNESS - A FILMMAKER’S MEMOIR OF THE CHICANO MOVEMENT, was published in 2001. The book chronicles his experiences as an activist filmmaker during the turbulent 1960s and also addresses the status of Latinos in the United States. His second collection of short stories, THE SKYSCRAPER THAT FLEW was published in 2005 and is third collection RETURN TO ARROYO GRANDE was published in 2016 and won the Before Columbus Foundation’s American Book Award. For further information about Mr. Treviño visit his website: <a href="http://www.chuytrevino.com">www.chuytrevino.com</a>. He currently produces a Latino-themed website with more than 500 videos and an active blogsite: <a href="http://www.Latinopia.com">www.Latinopia.com</a>.      </p>
+      </ul>
+      <hr />
+      <SummaryBox title="Current Council Members" />
+      <div className="council-grid">
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/ayers_photo.jpg"
+          imgAlt="Edward Ayers"
+          name="Edward Ayers"
+          bio="Edward Ayers  has been named National Professor of the Year, received the National Humanities Medal from President Obama at the White House, won the Bancroft Prize and Beveridge Prize in American history, and was a finalist for the National Book Award and the Pulitzer Prize.  He has collaborated on major digital history projects including the Valley of the Shadow, American Panorama, and Bunk, and is one of the cohosts for BackStory, a popular podcast about American history.  He is Tucker-Boatwright Professor of the Humanities and president emeritus at the University of Richmond as well as former Dean of Arts and Sciences at the University of Virginia.  His most recent book is The Thin Light of Freedom:  The Civil War and Emancipation in the Heart of America, published in 2017 by W. W. Norton."
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Henry_Becton.jpg" imgAlt="Henry Becton"
+          name="Henry Becton"
+          bio="Henry Becton served as president of WGBH Educational Foundation from 1984 until October 2007, when he was named Vice Chairman. He served as WGBH&#39;s general manager from 1978 until 1999. He is a Director of Public Radio Exchange (PRX) and the Pew Charitable Trusts. Henry is a former chairman of the Association of Public Television Stations and a former member of the boards of directors of PBS, the PBS Foundation, the Public Radio International, American Documentary Inc. (POV), and The Belo Corporation where he served as lead director. He is a Director Emeritus of Becton Dickinson and Company where he has served as its lead director, and is past trustee or director of DWS Mutual Funds (formerly Deutsche). He is a former President of the Board of Concord Academy and a former Trustee of Connecticut College, the Boston Museum of Science, the New England Aquarium and the North Bennett Street School." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/Bitterman_photo.jpg" imgAlt="Mary G. F. Bitterman"
+          name="Mary G. F. Bitterman"
+          bio={
+            <>
+              <p>Mary G. F. Bitterman is President of The Bernard Osher Foundation, a 42-year-old philanthropic organization headquartered in San Francisco that supports higher education and the arts. The Foundation provides post-secondary scholarship funding to colleges and universities across the nation, with special attention to reentry students. It also benefits programs in integrative medicine in the United States and Sweden, including centers at the University of California, San Francisco; Harvard Medical School and Brigham and Women&#39;s Hospital in Boston; the Karolinska Institute in Stockholm, Sweden; Northwestern University; Vanderbilt University; the University of Miami; and the University of Washington. In addition, the Foundation supports a national network of lifelong learning programs for seasoned adults, the Osher Lifelong Learning Institutes, which currently operate on the campuses of 124 institutions of higher education from Maine to Alaska and Hawaii. Grants to select cultural and arts organizations are made in the San Francisco Bay Area and the State of Maine.</p>
+              <p>Previously, Bitterman served as President and CEO of The James Irvine Foundation and before that as President and CEO of KQED, a major American public broadcasting center. She has served as Director of the Hawaii Public Broadcasting Authority, the Voice of America, the Hawaii State Department of Commerce and Consumer Affairs, and the East-West Center&#39;s Institute of Culture and Communication. Bitterman currently is a director of Bank of Hawaii, Bay Area Council Economic Institute, The Bernard Osher Foundation, Commonwealth Club of California, and the Hawaii Community Foundation, and she chairs the PBS Foundation Board. She also is an Advisory Council member of the Stanford Institute for Economic Policy Research, the Public Policy Institute of California, and Pacific Forum/CSIS. She is an Honorary Member of the National Presswomen&#39;s Federation and a Fellow of the National Academy of Public Administration. Bitterman received her B.A. from Santa Clara University and her M.A. and Ph.D. from Bryn Mawr College."</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Ed_Markey.jpg" imgAlt="Ed Markey"
+          name="Senator Ed Markey"
+          bio="Senator Edward J. Markey (D-Mass.) is a national leader on telecommunications and technology policy and consumer protection. Having served for 20 years as Chair or Ranking Member of the Subcommittee on Telecommunications and the Internet, he was the principal author of many of the laws now governing our nation’s telephone, broadcasting, cable television, wireless and broadband communications systems. In Congress, Senator Markey has been a long-time and dedicated supporter of public media and has the photos with Big Bird and Arthur the Aardvark to prove it." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/minow_photo.jpg" imgAlt="Mary Minow"
+          name="Mary Minow -Vice Chair"
+          bio="Mary Minow is a Presidential Appointee to the National Museum and Library Services Board at the Institute of Museum and Library Services (IMLS). She is a Fellow at the Berkman Klein Center for Internet and Society at Harvard University, serves as a Board Member of the Digital Public Library of America (DPLA), and consultant to the American Library Association. Mary is an attorney, library law consultant, and former librarian." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/Sandie_Viquez_Pedlow.jpg" imgAlt="Sandie Viquez Pedlow"
+          name="Sandie Viquez Pedlow"
+          bio={
+            <>
+              <p>Sandie Viquez Pedlow, executive director of Latino Public Broadcasting (LPB), manages the operations of public media’s largest Latino-focused content developer and funder which provides programming to public television’s nearly 360 stations, multicast channels, and other media platforms.  Since its inception, Latino Public Broadcasting has awarded over thirteen million dollars to filmmakers nationwide and provided over 255 hours of programming to PBS. Pedlow is the executive producer of <em>VOCES</em>, the PBS series celebrating the rich diversity of the Latino cultural experience. She was also executive producer of <em>Latino Americans</em> which was honored with a George Foster Peabody Award and an IMAGEN Award.</p>
+              <p>Previously, Pedlow was Director of Programming Strategies, Associate Director of Cultural, Drama and Arts Programming, and Senior Program Officer at the Corporation for Public Broadcasting in Washington, D.C for 10 years. In this role, she led the development and funding of national public media programs which addressed history, the arts and all aspects of American culture.  At CPB, she worked with the US Public Television International Consortium and the Latin American Initiative to develop and fund co-productions for public media. </p>
+              <p>Sandie Pedlow also served as Director of Station Relations, PBS Education, working with stations in the marketing and promotion of PBS TeacherLine.  She began her career in public media as a writer/producer at South Carolina Educational Television (SCETV) where she developed cultural and arts programming and managed international initiatives.  Pedlow was the U.S. National Coordinator for INPUT, an international public television forum with more than 35 participating countries.  She led the first U.S. public television exchange with Gosteleradio in the former Soviet Union and U.S. producer workshops in Finland, Denmark and Norway. Pedlow served on the Vme Programming Advisory Council and has served on the boards of CINE, <em>The American Documentary</em>, <em>American Playhouse</em>, INPUT and LPB.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_John_Ptak.jpg" imgAlt="John Ptak"
+          name="John Ptak"
+          bio={
+            <>
+              <p>John Ptak was born in San Diego, California. He began his career in the entertainment industry in 1968 when, after graduating from the University of California, Los Angeles, he joined the staff of The American Film Institute, where he was part of the team that established AFI&#39;s Center for Advanced Studies in Los Angeles. He worked thereafter as a Hollywood talent agent for 35 years, first at ICM and thereafter at William Morris and CAA, with an emphasis on directors, producers and independent films. He left CAA in 2006 to form Arsenal, which provides advisory services to film production companies and financiers.</p>
+              <p>Early in his career, he was directly involved with setting up such films as Airplane, Close Encounters of the Third Kind, Coal Miner&#39;s Daughter, Jaws, National Lampoon&#39;s Vacation, and Taxi Driver. His personal clients included directors such as Bruce Beresford, Costa Gavras, Terry Gilliam, David Lynch, Wolfgang Peterson, Ridley Scott, Tony Scott and Peter Weir, as well as producers such as Miramax and National Lampoon. At CAA, he expanded the role of the talent agent by representing the financing and distribution arrangements of over 100 independent films, working with his own clients as well as with Woody Allen, Jane Campion, Kevin Costner, Paul Haggis and Anthony Minghella on such films as Crash, Dances with Wolves, Driving Miss Daisy, Fear and Loathing in Las Vegas, Hannibal, Lost Highway, The Piano, The Talented Mr. Ripley and True Romance.</p>
+              <p>He was a key executive in CAA’s corporate consultancy arrangements on such accounts as Coca-Cola, IMAX, and the French bank, Credit Lyonnais, with whom he participated in the restructuring of MGM and the rebirth of United Artists in 1993. Ptak was recently an Executive Producer of Peter Weir’s The Way Back, Matt Reeves’ Let Me In, and Terry Gilliam’s Dr. Parnassus.</p>
+              <p>Ptak is a member of the National Film Preservation Board of the Library of Congress, sits on the Board of Directors of The National Film Preservation Foundation, and is on the Foundation Committee of The Motion Picture &amp; Television Fund, where he played a key role in its alliance with the UCLA Health System. He also has served on advisory boards and panels for the Corporation for Public Broadcasting, The National Endowment for the Arts, UCLA, Loyola Marymount University and Chapman University."</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Bruce_Ramer.jpg" imgAlt="Bruce Ramer"
+          name="Bruce Ramer"
+          bio={
+            <>
+              <p>Bruce M. Ramer was appointed to the CPB Board of Directors by President Barack Obama and confirmed by the Senate in August 2013. This is Mr. Ramer&#39;s second term as a member of the CPB Board, having been previously appointed for his first term by President George W. Bush. He served as chair of the CPB Board of Directors from 2010 to 2012. He is an attorney and partner at Gang, Tyre, Ramer &amp; Brown, a firm specializing in entertainment and media matters.</p>
+              <p>Ramer has been active in public television since joining the board of KCET in Los Angeles in 1992. He served as chair from 2001 to 2003. He is a member of the board of trustees of the University of Southern California (USC). He is chair of the USC Institute on Entertainment Law and Business and a member of the board of councilors of the USC Annenberg School for Communication, the USC Gould School of Law, and the USC Shoah Foundation Institute for Visual History and Education. He is a member of the board of governors for the USC Center for the Digital Future, a member of the board of directors for the Foundation for the National Archives, and a member of the Peabody Board of Advisors. Ramer is founding chairman and member of the board of trustees of the Geffen Playhouse, a board member of the Southern California Committee for the Olympic Games and the Herrhausen Institute for International Dialogue, and a member of the Council on Foreign Relations and the Pacific Council on International Policy.</p>
+              <p>Ramer received the American Jewish Committee Community Service Award in 1987 and the Learned Hand Award in 2005. He has also received the Beverly Hills Bar Association Entertainment Lawyer of the Year Award in 1996; the Commanders Cross of the Order of Merit of the Federal Republic of Germany in 2000; the Medal of Honor of the Konrad Adenauer Foundation in 2001 and the Survivors of the Shoah Visual History Foundation Ambassador for Humanity Award in 2002. He was named one of the 100 most powerful lawyers in California by California Business Lawyer and one of the top 100 lawyers in California by the Daily Journal.</p>
+              <p>Ramer is a graduate of Princeton University and Harvard Law School. He is married to Madeline Ramer, with whom he has four children and five grandchildren.</p>
+            </>
+          }
+        />
+        <MemberCard
+          name="Kathryn Washington"
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/siemering_photo.jpg" imgAlt="Bill Siemering"
+          name="Bill Siemering"
+          bio="As a founding member of the NPR Board of Directors, Bill Siemering wrote NPR&#39;s original mission and goals. He was then hired to implement it as NPR’s first director of programming and led the development of <em>All Things Considered</em>. Later, Siemering developed <em>Fresh Air</em> with Terry Gross from a local into a national program while vice president for radio at WHYY in Philadelphia. He began working overseas in 1993 as a recipient of a MacArthur Foundation Fellowship. He worked with the Open Society Foundation, (Soros) for ten years, focused on Eastern Europe, Africa and Mongolia. In 2004, he founded Developing Radio Partners (DRP) to enrich the programing of local stations in Africa on climate change and health for women and youth.  He received a Lifetime Achievement Award from National Public Radio and an honorary doctorate from State University of New York at Buffalo and from Arcadia University, Glenside, Pennsylvania. Siemering currently serves as a Senior Fellow at the Wyncote Foundation." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/Waters_photo.jpg" imgAlt="Donald J. Waters"
+          name="Donald J. Waters"
+          bio="Donald J. Waters is an independent scholar and a management consultant offering strategic advice and operational analysis in the area scholarly communications. In 2019, he retired from The Andrew W. Mellon Foundation as the Senior Program Officer for Scholarly Communications after 20 years of service. Before joining the Foundation, he served as the founding Director of the Digital Library Federation (1997-1999), and as Associate University Librarian at Yale University (1993-1997). Don graduated with a Bachelor’s degree in American Studies from the University of Maryland, College Park in 1973. In 1982, he received his Ph.D. in Anthropology from Yale University. In 1995-96, he co-chaired the Task Force of the Commission on Preservation and Access and the Research Libraries Group on Archiving of Digital Information.  In 2005-2008, Don served on the Library of Congress Section 108 Study Group.  He currently serves on the Steering Committee of the Coalition for Networked Information and on the Executive Advisory Council of the American Archive of Public Broadcasting. Don is also a fellow of the American Association for the Advancement of Science. " />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/jacquie2_5858.jpg" imgAlt="Jacquie Gales Webb"
+          name="Jacquie Gales Webb"
+          bio={
+            <>
+              <p>Jacquie Gales Webb is Vice President of Radio for the Corporation for Public Broadcasting (CPB). She develops and implements funding strategies to strengthen the ability of America’s public radio stations to serve their communities with high-quality, multiplatform content. She manages grants that create content and initiatives that have touched the lives of many Americans, including <em>StoryCorps</em>, the Urban Alternative music format for millennials, and radio station outreach to communities around PBS television series. She helps to shape support for public media station collaborations and projects that help rural public radio stations increase their ability to produce content, engage with their communities, and achieve sustainability. </p>
+              <p>Before joining CPB, Jacquie was a senior producer whose national awards included the Peabody award for the Smithsonian radio series “Black Radio: Telling it Like it Was” hosted by Lou Rawls and six local Emmy Awards for her work producing a live television talk and variety show at the CBS television affiliate W*USA in Washington, DC. </p>
+              <p>Jacquie Gales Webb has hosted Sunday Gospel music programming on the commercial radio station 96.3 WHUR since 1990. The Magnolia Pictures documentary <em>Rejoice and Shout</em> featured her knowledge of the history of Gospel music and she was presented the Lifetime Achievement Award for continuous service and support of Gospel music by the National Convention of Gospel Choirs and Choruses.</p>
+              <p>Webb has served on the advisory boards of the John F. Kennedy Center for the Performing Arts, the Smithsonian Center for Folklife and Cultural Heritage, the Foundation for the Advancement of Music Education, and the American Archives of Public Broadcasting. She graduated cum laude with a Bachelor of Arts degree in speech and communication from Emerson College in Boston in 1977. </p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/woodruff_photo.jpg" imgAlt="Judy Woodruff"
+          name="Judy Woodruff"
+          bio={
+            <>
+              <p>Broadcast journalist Judy Woodruff is the Anchor and Managing Editor of the PBS NewsHour. She has covered politics and other news for more than four decades at CNN, NBC and PBS.</p>
+              <p>For 12 years, Woodruff served as anchor and senior correspondent for CNN, where her duties included anchoring the weekday program, &quot;Inside Politics.&quot; At PBS from 1983 to 1993, she was the chief Washington correspondent for The MacNeil/Lehrer NewsHour. From 1984-1990, she also anchored PBS&#39; award-winning weekly documentary series, &quot;Frontline with Judy Woodruff.&quot;
+                In 2011, Woodruff was the principal reporter for the PBS documentary &quot;Nancy Reagan: The Role of a Lifetime.&quot; And in 2007, she completed an extensive project on the views of young Americans called &quot;Generation Next: Speak Up. Be Heard.&quot; Two hour-long documentaries aired on PBS, along with a series of reports on the NewsHour with Jim Lehrer, NPR and in USA Today.
+                In 2006, Judy was a visiting professor at Duke University&#39;s Terry Sanford Institute of Public Policy. In 2005, she was a visiting fellow at Harvard University&#39;s Joan Shorenstein Center on the Press, Politics and Public Policy. From 2006-2013, she anchored a monthly program for Bloomberg Television, &quot;Conversations with Judy Woodruff.&quot; </p>
+              <p>At NBC News, Woodruff was White House correspondent from 1977 to 1982. For one year after that she served as NBC&#39;s Today Show Chief Washington Correspondent. She wrote the book, &quot;This is Judy Woodruff at the White House,&quot; published in 1982 by Addison-Wesley.</p>
+              <p>Woodruff is a founding co-chair of the International Women&#39;s Media Foundation, an organization dedicated to promoting and encouraging women in communication industries worldwide. She serves on the boards of trustee of the Freedom Forum, the Newseum, the Duke Endowment and the Urban Institute. She is a former member of The Knight Foundation Commission on Intercollegiate Athletics.</p>
+              <p>Judy is a graduate of Duke University, where she is a trustee emerita.</p>
+              <p>She is the recent recipient of the Cine Lifetime Achievement award, a Duke Distinguished Alumni award, the Edward R. Murrow Lifetime Achievement Award in Broadcast Journalism/Television, the University of Southern California Walter Cronkite Award for Excellence in Journalism, the Al Neuharth/University of South Dakota Award for Excellence in Journalism and the Gaylord Prize for Excellence in Journalism and Mass Communications from the University of Oklahoma, among others." </p>
+              <p>She lives in Washington, DC, with her husband, journalist Al Hunt, and they are the parents of three children: Jeffrey, Benjamin and Lauren.</p>
+            </>
+          }
+        />
+      </div>
+      <hr />
+      <SummaryBox title="Past Council Members" />
+      <div className="council-grid">
 
-        <h1 id="advisory-committees">Advisory Committees</h1>
-        <p>In 2018, the American Archive of Public Broadcasting established three advisory committees to help guide and direct the AAPB in the areas of education, scholarly, and station services and outreach. The committees and their members are listed below.</p>
-        <h2 id="education-advisory-committee-eduac-">Education Advisory Committee (EduAC)</h2>
-        <h3 id="purpose-and-mission">Purpose and Mission</h3>
-        <p>The AAPB EduAC is a group of individuals working in education who are passionate
-        about public media and its long-term preservation and access. The purpose of the EduAC
-        is to guide and assist the AAPB with regard to outreach and use of the AAPB,
-        particularly within k-12 and community college environments.</p>
-        <p>The EduAC provides guidance to the Project Team in the following ways: </p>
-        <ul>
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Alan_Brinkley.jpg" imgAlt="Alan Brinkley"
+          name="Alan Brinkley"
+          bio="Alan Brinkley served on the AAPB Executive Advisory Council from 2015 – 2018. He passed away on June 17, 2019. Dr. Brinkley was the Allan Nevins Professor of American History at Columbia University. He specialized in the history of twentieth-century America. From 2003 to 2009, he was University Provost, and before that chair of the Department of History. In 1998-99, he was the Harmsworth Professor of American History at Oxford University, and in 2011-2012, he was the Pitt Professor of American History at the University of Cambridge. He joined the Columbia faculty in 1991." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/Bunch_photo.jpg" imgAlt="Lonnie G. Bunch"
+          name="Lonnie G. Bunch III"
+          bio={
+            <>
+              <p>Lonnie G. Bunch III is the 14th Secretary of the Smithsonian. He assumed his position June 16, 2019. As Secretary, he oversees 19 museums, 21 libraries, the National Zoo, numerous research centers, and several education units and centers.
+                Previously, Bunch was the director of the Smithsonian’s National Museum of African American History and Culture. When he started as director in July 2005, he had one staff member, no collections, no funding and no site for a museum. Driven by optimism, determination and a commitment to build “a place that would make America better,” Bunch transformed a vision into a bold reality. The museum has welcomed more than 6 million visitors since it opened in September 2016 and compiled a collection of 40,000 objects that are housed in the first “green building” on the National Mall.</p>
+              <p>Occupying a prominent location next to the Washington Monument, the nearly 400,000-square-foot National Museum of African American History and Culture is the nation’s largest and most comprehensive cultural destination devoted exclusively to exploring, documenting and showcasing the African American story and its impact on American and world history.
+                Before his appointment as director of the museum, Bunch served as the president of the Chicago Historical Society (2001–2005). There, he led a successful capital campaign to transform the Historical Society in celebration of its 150th anniversary, managed an institutional reorganization, initiated an unprecedented outreach initiative to diverse communities and launched a much-lauded exhibition and program on teenage life titled “Teen Chicago.”</p>
+              <p>A prolific and widely published author, Bunch has written on topics ranging from the black military experience, the American presidency and all-black towns in the American West to diversity in museum management and the impact of funding and politics on American museums. Lectures and presentations to museum professionals and scholars have taken him to major cities in the United States and many nations abroad, including Australia, China, England, Ghana, Italy, Japan, Scotland, South Africa and Sweden.</p>
+              <p>Bunch has worked at the Smithsonian in the past, holding a number of positions at its National Museum of American History from 1989 through 2000. As the museum’s associate director for curatorial affairs for six years (1994–2000), he oversaw the curatorial and collections management staff. He also led the team that developed a major permanent exhibition “The American Presidency: A Glorious Burden.” While serving as assistant director for curatorial affairs (1992–1994) at the museum, Bunch supervised the planning and implementation of the museum’s research and collection programs. He also developed “Smithsonian’s America” for the American Festival Japan 1994; this exhibition, which was presented in Japan, explored the history, culture and diversity of the United States. As a supervising curator for the museum from 1989 to 1992, Bunch oversaw several of the museum’s divisions, including Community Life.</p>
+              <p>Bunch served as the curator of history and program manager for the California African American Museum in Los Angeles from 1983 to 1989. While there, he organized several award-winning exhibitions, including “The Black Olympians, 1904–1950” and “Black Angelenos: The Afro-American in Los Angeles, 1850–1950.” He also produced several historical documentaries for public television.</p>
+              <p>Born in the Newark, New Jersey, area, Bunch has held numerous teaching positions at universities across the country, including American University in Washington, D.C., the University of Massachusetts in Dartmouth and George Washington University in Washington, D.C.</p>
+              <p>In service to the historical and cultural community, Bunch has served on the advisory boards of the American Association of Museums and the American Association for State and Local History.   Among his many awards, he was appointed by President George W. Bush to the Committee for the Preservation of the White House in 2002 and reappointed by President Barack Obama in 2010. In 2005, Bunch was named one of the 100 most influential museum professionals of the 20th century by the American Association of Museums.</p>
+              <p>Bunch received his undergraduate and graduate degrees from the American University in Washington, D.C.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Karen_Cator.jpg" imgAlt="Karen Cator" aria-hidden="true"
+          name="Karen Cator"
+          bio="Karen Cator is President and CEO of Digital Promise and a leading voice for transforming American education through technology, innovation and research. From 2009-2013, Karen was Director of the Office of Educational Technology at the U.S. Department of Education, where she led the development of the 2010 National Education Technology Plan and focused the Office’s efforts on teacher and leader support. Prior to joining the department, Cator directed Apple’s leadership and advocacy efforts in education. In this role, she focused on the intersection of education policy and research, emerging technologies, and the reality faced by teachers, students and administrators. She began her education career in Alaska as a teacher, ultimately leading technology planning and implementation. She also served as Special Assistant for Telecommunications for the Governor of Alaska. Cator holds a master’s in school administration from the University of Oregon and recently received the 2014 College of Education Distinguished Alumni award. The American Association of Publishers has awarded Cator with the 2014 Visionary Award. She received her bachelor’s in early childhood education from Springfield College, and she is a member of the Aspen Pahara Fellows. She is a past chair for the Partnership for 21st Century Skills and has served on boards including the Software &amp; Information Industry Association-Education." />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Beth_Courtney.jpg" imgAlt="Beth Courtney" aria-hidden="true"
+          name="Beth Courtney"
+          bio={
+            <>
+              <p>Beth Courtney is President and CEO of Louisiana Public Broadcasting (LPB), serving as the leader of the statewide public media enterprise since 1985. LPB is also Louisiana’s educational technology resource center and is a supplier of cultural and educational programming for public television nationwide. During her tenure at LPB, the station has produced a number of award-winning documentaries including the six-part series Louisiana: A History, Uncle Earl, Kate Chopin: A Reawakening, and Frame After Frame: The Images of Herman Leonard. Recent productions have included Atchafalaya Houseboat, Washing Away: Losing Louisiana, Katrina’s Smallest Victims, Return to the Forest Where We Live and Louisiana War Stories.</p>
+              <p>Ms. Courtney is former Vice Chair of the Board of Directors for the Corporation for Public Broadcasting (CPB), which provides funding for America’s public television and radio stations. Among her many leadership positions, Courtney is Past Chair of the Association of Public Television Stations board and former Vice-Chair of the Board of the Public Broadcasting Service (PBS). Ms. Courtney has chaired numerous PBS task forces and currently serves on the Board of the Organization of State Broadcasting Executives, and the National Educational Telecommunications Association.</p>
+              <p>Ms. Courtney has testified before Congress on numerous occasions, including the House Appropriations and Commerce Committees, as an advocate and spokesperson for public broadcasting. She has appeared on William F. Buckley’s Firing Line, CBS’ Sunday Morning, CNN’s Crossfire, and the Freedom Forum. She continues to share her expertise as a broadcasting professional on numerous telecommunications technology advisory committees on national, state and local levels.</p>
+              <p>Prior to her appointment as CEO of LPB, she was LPB&#39;s Executive Producer. During her tenure, she oversaw the production of many award-winning programs that have been broadcast in Louisiana and around the world.</p>
+              <p>Ms. Courtney started her career in broadcasting as a capitol correspondent, reporting on state government and moderating numerous political debates. She was named Communicator of the Year in 1984, elected Broadcaster of the Year by American Women in Radio &amp; Television (AWRT) in 1988, and was one of the YWCA’s Women of Achievement in 1991. Ms. Courtney was inducted into the Louisiana Center for Women in Government Hall of Fame in 1999.</p>
+              <p>Ms. Courtney is married to Bob Courtney, President of Courtney Communications. She is the proud mother of one daughter, Julia who is an attorney and mother of Andrew and Virginia.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Joanne_Griffith.jpg" imgAlt="Joanne Griffith" aria-hidden="true"
+          name="Joanne Griffith"
+          bio={
+            <>
+              <p>Joanne Griffith is the Chief Content Officer at APM Studios, the podcast division of American Public Media Group. In this role, she oversees the editorial vision and brand voice for APM Studios, and has creative oversight on original and acquired podcasts.</p>
+              <p>A self-proclaimed audiophile, Joanne has over 20 years of experience in the audio space, spanning roles that include executive producer, reporter, editor, audience engagement strategist and more. Storytelling is at the heart of all of Joanne’s work and has taken her around the world — from Malawi, where she looked at the innovative ways women tackle food insecurity, to Puerto Rico as the island sought economic recovery after Hurricane Maria.</p>
+              <p>Joanne began her career at the BBC as a journalist, editor and project manager. As one of the media organization’s first diversity change agents, Joanne created initiatives to expand the reporting and production pool, developed training programs to help staff understand the value of diversity, and experimented with online resources that reflected multicultural London.</p>
+              <p>Moving to the U.S. in 2007, Joanne was a reporter and host for BBC News, covering stories from the U.S. west coast. She also created a weekly show based on the historic material held in the Pacifica Radio Archives. In 2011, she joined Southern California Public Radio (SCPR), where she worked as a producer on several KPCC programs and served as editor on Take Two. During her time at SCPR, Joanne introduced audience engagement events to better understand listeners, an initiative that led to an award-winning live program marking the 50th anniversary of the Watts Rebellion. She later went on to work with American Public Media’s Marketplace Weekend, where she spearheaded efforts to successfully grow the program’s digital footprint through an audience engagement-focused approach.</p>
+              <p>As a journalist with an entrepreneurial heart, Joanne was the founding managing editor of The California Newsroom, one of NPR’s first collaborative regional news hubs. In 2020, she also launched En(title)d!, a conversation and training space for leaders of color in creative industries, an initiative born out of the turmoil of the year and a need to not only talk solutions, but put them into action.</p>
+              <p>In addition to her work in public media, Joanne is the author of Redefining Black Power: Reflections on the State of Black America and was the lead producer for The King of Crenshaw, a podcast from ESPN’s critically-acclaimed 30 for 30 Podcasts, exploring the intersection of hip-hop and basketball through the lens of LA rapper, Nipsey Hussle.</p>
+              <p>Joanne is based in Los Angeles.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Gwen_Ifill.jpg" imgAlt="Gwen Ifill" aria-hidden="true"
+          name="Gwen Ifill"
+          bio=
+          {
+            <>
+              <p>Gwen Ifill, veteran journalist and newsanchor, served on the AAPB Executive Advisory Council from 2015 – 2016. She passed away on November 14, 2016, after battling cancer.</p>
+              <p>During her extensive career, Gwen was moderator and managing editor of &quot;Washington Week&quot; and co-anchor and managing editor of the &quot;PBS NewsHour.&quot;</p>
+              <p>She was also the best-selling author of &quot;The Breakthrough: Politics and Race in the Age of Obama.&quot; She covered seven Presidential campaigns and moderated the vice presidential debates in 2004 and 2008.</p>
+              <p>Before joining PBS in 1999, Gwen was chief congressional and political correspondent for NBC News, White House correspondent for The New York Times, and a local and national political reporter for The Washington Post. She also reported for the Baltimore Evening Sun and the Boston Herald American.</p>
+              <p>A native of New York City and a graduate of Simmons College in Boston, Ifill received more than twenty honorary doctorates. She was also honored for her work by the Radio and Television News Directors Association, Harvard&#39;s Joan Shorenstein Center, The National Association of Black Journalists, Ohio University, and was included in Ebony Magazine&#39;s list of 150 Most Influential African Americans. She received the Al Neuharth Award for Excellence in Journalism</p>
+              <p>She also served on the board of the News Literacy Project, on the advisory board of the Committee to Protect Journalists and was a fellow of the American Academy of Arts and Sciences.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/lawson_photo.jpg" imgAlt="Jennifer Lawson"
+          name="Jennifer Lawson - Former Vice Chair"
+          bio={
+            <>
+              <p>Jennifer Lawson is a media consultant based in Washington, DC.  In 2016, she became the most recent recipient of the Ralph Lowell Award, public television’s highest honor.  The Lowell Award is issued by the Corporation for Public Broadcasting (CPB) for outstanding achievement.  Lawson, who retired from CPB in that year, was also presented with lifetime achievement awards from American Public Television and the Public Television Programmers’ Association.  She is currently an advisor to a civil rights oral history archival project under the auspices of Duke University and the SNCC Legacy Project.</p>
+              <p>From 2011 – 2016, Lawson was Senior Vice President, Television and Digital Video Content at the CPB.  She was general manager of WHUT-TV, Washington DC from 2004 -2011 and during that time she co-produced, “Security vs. Liberty: The Other War”, for a 2007 PBS series, “American at the Crossroads.”  During the same time period, she served as Vice Chair of the PBS Board, Chair of the American Public Television Board and was a member of the Advisory Board of Washington Women in Film and Video.</p>
+              <p>From 1995 to 2004 Lawson headed Magic Box Mediaworks, a company she founded, which produced the critically acclaimed eight-part series “Africa”, in partnership with National Geographic and WNET.  The series aired nationally on PBS, premiering September 9, 2001, and internationally.</p>
+              <p>In 1989, Lawson became the first chief programming executive at PBS, holding the title Executive Vice President, Programming and Promotional Services and served in that role until 1995.  During her time at PBS she was responsible for the scheduling and promotional strategies that resulted in PBS’ most successful series of that era, Ken Burns’ “The Civil War” and “Baseball.”  Lawson also developed award-winning children’s series, “Barney and Friends”, “Lamb Chop’s Play-Along”, and “Where in the World is Carmen Sandiego?”  In the 1990s she was named one of “101 Most Influential People in Entertainment Today,” by <em>Entertainment Weekly</em>, and was named to the Power 50 List by <em>The Hollywood Reporter</em>.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Norman_Lear.jpg" imgAlt="Norman Lear" aria-hidden="true"
+          name="Norman Lear"
+          bio={
+            <>
+              <p>Norman Lear has enjoyed a long career in television and film, and as a political and social activist and philanthropist.</p>
+              <p>Mr. Lear began his television writing career in 1950 when he and his partner, Ed Simmons, were signed to write for The Ford Star Revue, starring Jack Haley. After only four shows, they were hired away by Jerry Lewis to write for him and Dean Martin on The Colgate Comedy Hour, where they worked until the end of 1953. They then spent two years on The Martha Raye Show, after which Mr. Lear worked on his own for The Tennessee Ernie Ford Show and The George Gobel Show.</p>
+              <p>In 1958, Mr. Lear teamed with director Bud Yorkin to form Tandem Productions. Together they produced several feature films, with Mr. Lear taking on roles as executive producer, writer, and director. He was nominated for an Academy Award in 1967 for his script for Divorce American Style. In 1970, CBS signed with Tandem to produce All in the Family, which first aired on January 12, 1971 and ran for nine seasons. It earned four Emmy Awards for Best Comedy series as well as the Peabody Award in 1977. All in the Family was followed by a succession of other television hit shows including Maude, Sanford and Son, Good Times, The Jeffersons, One Day at a Time, and Mary Hartman, Mary Hartman.</p>
+              <p>Concerned about the growing influence of radical religious evangelists, Mr. Lear decided to leave television in 1980 and formed People For the American Way, a non-profit organization designed to speak out for Bill of Rights guarantees and to monitor violations of constitutional freedoms. People For remains an influential and effective voice for freedom.</p>
+              <p>Mr. Lear’s business career continued in 1982, when Tandem Productions and his other company, T.A.T. Communications, were folded into Embassy Communications, which was sold in 1985. He then created and is currently chairman of Act III Communications, a multimedia holding company with interests in television, motion pictures, and licensing.</p>
+              <p>In addition to People for the American Way, Mr. Lear has founded other nonprofit organizations, including the Business Enterprise Trust (1989- 2000), which spotlighted exemplary social innovations in American business; the Norman Lear Center at the USC Annenberg School for Communication (2000-present), a multidisciplinary research and public policy center dedicated to exploring the convergence of entertainment, commerce and society; and with his wife, Lyn, co-founded the Environmental Media Association (1989-present), to mobilize the entertainment industry to become more environmentally responsible.</p>
+              <p>In 1999, President Clinton bestowed the National Medal of Arts on Mr. Lear, noting that “Norman Lear has held up a mirror to American society and changed the way we look at it.” He also has the distinction of being among the first seven television pioneers inducted in 1984 into the Television Academy Hall of Fame.</p>
+              <p>In 2001, Lyn and Norman Lear purchased one of the few surviving original copies of the Declaration of Independence. During the decade that they owned it, they shared it with the American people by touring it to all 50 states. As part of this Declaration of Independence Road Trip, Mr. Lear launched Declare Yourself, a nonpartisan youth voter initiative that registered well over four million new young voters in the 2004, 2006, and 2008 elections.</p>
+              <p>Mr. Lear is married to Lyn Davis Lear and resides in Los Angeles, California. He has six children: Ellen, Kate, Maggie, Benjamin, Brianna, and Madeline, and four grandchildren: Daniel, Noah, Griffin, and Zoe.</p>
+              <p>Mr. Lear’s memoir, Even This I Get To Experience, was published in October 2014 by The Penguin Press.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Deanna_Marcum.jpg" imgAlt="Deanna Marcum" aria-hidden="true"
+          name="Deanna Marcum"
+          bio=
+          {
+            <>
+              <p>Deanna Marcum (1946-2002) was managing Director of Ithaka S+R and led the research and consulting services that assisted universities and colleges, libraries, publishers, and cultural institutions as they made the transition to the digital environment. From 2003 to 2011, Deanna served as associate librarian for Library Services at the Library of Congress. She managed 53 divisions and offices whose 1,600 employees were responsible for acquisitions, cataloging, public service, and preservation activities; services to the blind and physically handicapped; and network and bibliographic standards for America&#39;s national library. She was also responsible for integrating the emerging digital resources into the traditional artifactual library, the first step toward building a national digital library for the 21st century.</p>
+              <p>In 1995, Deanna was appointed president of the Council on Library Resources and president of the Commission on Preservation and Access. She oversaw the merger of these two organizations into the Council on Library and Information Resources (CLIR) in 1997 and served as president until August 2003. Deanna served as director of public service and collection management at the Library of Congress from 1993 to 2005. Before that she was dean of the School of Library and Information Science at The Catholic University of America. From 1980 to 1989, she was first a program office and then vice president of Council on Library Resources.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Newton_Minow.jpg" imgAlt="Newton Minow" aria-hidden="true"
+          name="Newton Minow"
+          bio={
+            <>
+              <p>Newton N. Minow (1926-2023) was born and raised in Milwaukee, Wisconsin.  He served as a U.S. Army Sergeant in the China-Burma India Theater in World War II.  He was a graduate of Northwestern University, and has been awarded 14 honorary degrees, including Brandeis University, the University of Wisconsin, Northwestern University and the University of Notre Dame.</p>
+              <p>His career included service as Law Clerk to Chief Justice Fred M. Vinson of the U.S. Supreme Court and as Assistant Counsel to Governor Adlai E. Stevenson.  He was a partner in the law firm of Stevenson, Rifkind &amp; Wirtz when, in 1961, President John F. Kennedy appointed him Chairman of the Federal Communications Commission.  He served in the Kennedy Administration until 1963 when he became Executive Vice President and General Counsel of Encyclopaedia Britannica, Inc.  In 1965, he joined the law firm of Leibman, Williams, Bennett, Baird &amp; Minow, which merged with Sidley &amp; Austin in 1972.  Sidley &amp; Austin merged with Brown &amp; Wood in 2001. He served as Senior Counsel to the law firm of Sidley Austin LLP until his passing.</p>
+              <p>Mr. Minow was a director of many companies including Aon Corporation, CBS, Sara Lee Corporation, Foote, Cone &amp; Belding, Manpower Inc. and the Tribune Company.</p>
+              <p>In addition, he was a chairman of The RAND Corporation, trustee emeritus of the Mayo Clinic, a life trustee of Northwestern University and the University of Notre Dame, a former trustee and chairman of the Carnegie Corporation, and former Chairman of PBS (Public Broadcasting Service).</p>
+              <p>Mr. Minow wrote five books and numerous magazine articles. He received the Presidential Medal of Freedom in 2016.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/morrisett_photo.jpg" imgAlt="Lloyd Morrisett" aria-hidden="true"
+          name="Lloyd N. Morrisett"
+          bio={
+            <>
+              <p>Lloyd N. Morrisett (1929-2023) served as President of The John and Mary R. Markle Foundation from 1969 to 1998. He initiated the Foundation&#39;s program in communications and information technology. Morrisett was Vice President of the Carnegie Corporation of New York and of the Carnegie Foundation for the Advancement of Teaching before going to Markle. While at Carnegie he worked with Ralph Tyler to help start the National Assessment of Educational Progress (NAEP). More than three decades ago he helped found the Sesame Workshop, producers of Sesame Street and other educational television programs for children. He was chairman of the Workshop board from 1968 until 2000; he continues as a board member.</p>
+              <p>Morrisett was a board member of RAND (a research institute dealing with domestic public policy and national security issues) for thirty years and Chairman of the Board for nine years, 1986-1995.  He was a trustee, for many years, of Oberlin College and was Chairman of the Board from 1975 to 1981.</p>
+              <p>Dr. Morrisett received his B.A. at Oberlin College, did graduate work in psychology at U.C.L.A., and earned his Ph.D. in experimental psychology at Yale University.  Following his graduation from Yale he taught at the University of California at Berkeley for two years.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Cokie_Roberts.jpg" imgAlt="Cokie Roberts" aria-hidden="true"
+          name="Cokie Roberts - Former Vice Chair"
+          bio={
+            <>
+              <p>Cokie Roberts, journalist and political commentator who was recognized by the American Women in Radio and Television as one of the 50 greatest women in the history of broadcasting, served on the AAPB Executive Advisory Council from 2015-2019 and served as Vice Chair from 2018-2019. She passed away on September 17, 2019 at the age of 75 after a battle with breast cancer.</p>
+              <p>Cokie Roberts was a political commentator for ABC News, providing analysis for all network news programming. From 1996-2002, she and Sam Donaldson co-anchored the weekly ABC interview program This Week. Roberts also served as Senior News Analyst for National Public Radio. In her more than 40 years in broadcasting, she won countless awards, including three Emmys. She was inducted into the Broadcasting and Cable Hall of Fame.</p>
+              <p>In addition to her appearances on the airwaves, Roberts, along with her husband, Steven V. Roberts, wrote a weekly column syndicated in newspapers around the country by United Media. Roberts was also contributing editor to USA Weekend Magazine, and in 2011 she and her husband Steven V. Roberts published Our Haggadah, Uniting Traditions for Interfaith Families. Their earlier collaboration, From This Day Forward, an account of their more than 40 year marriage and other marriages in American history, immediately went onto The New York Times bestseller list. All of Cokie Roberts’s other books have also been best-sellers, including the number one bestseller, We Are Our Mothers’ Daughters, an account of women’s roles and relationships throughout American history. Her other bestselling books — Founding Mothers, published in 2004 and Ladies of Liberty in 2008 — are histories of women in America’s founding era. In 2014, Cokie Roberts published a children’s version of Founding Mothers. Based on the original book, this version introduces young readers to the brave, brilliant, and enterprising women whose influence on the founding of our country was as instrumental as that of the men whose names are inked in history.</p>
+              <p>Cokie Roberts held more than 25 honorary degrees, served on the boards of several nonprofit institutions and was on the President Bush’s Commission on Service and Civic Participation. In 2008, the Library of Congress named her a “Living Legend,” one of the very few Americans to have attained that honor. She was the mother of two and grandmother of six.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/EAC_Patricia_Steele.jpg" imgAlt="Patricia Steele" aria-hidden="true"
+          name="Patricia Steele"
+          bio={
+            <>
+              <p>Patricia Steele, former Dean of Libraries at Indiana University and more recently the University of Maryland, focused much of her career on integrating digital strategies into the collections, services and commitment of academic libraries. Guided by her understanding of the digital world and its impacts on the use of space, she was instrumental in establishing the information commons model in both libraries. At Maryland, ethnographic techniques informed broad space planning.</p>
+              <p>Steele has served on the executive board of the Kuali Foundation and, as a founding member, on the board of Kuali OLE. After helping found the HathiTrust Digital Library, she was elected to its board of governors. Within the Committee on Institutional Cooperation (CIC) libraries, Steele was one of the negotiators that fashioned a contract with Google to digitize CIC library holdings. She also was a founding member and board chair of the Academic Preservation Trust, a node in the Digital Preservation Network.</p>
+            </>
+          }
+        />
+        <MemberCard
+          imgSrc="https://s3.amazonaws.com/americanarchive.org/advisory-council/Trevino_photo.jpg" imgAlt="Jesús Salvador Treviño" aria-hidden="true"
+          name="Jesús Salvador Treviño"
+          bio={
+            <>
+              <p>Jesús Salvador Treviño is writer/director whose television directing credits include LAW &amp; ORDER CRIMINAL INTENT, CRIMINAL MINDS, PRISON BREAK, BONES, ER, THIRD WATCH, NYPD BLUE, RESURRECTION BLVD, CROSSING JORDAN, THE PRACTICE, THE O.C., TRU CALLING, DAWSON’S CREEK, CHICAGO HOPE, NEW YORK UNDERCOVER, THE PRETENDER, NASH BRIDGES, MARTIAL LAW, BRIMSTONE, SEAQUEST, STAR TREK: VOYAGER, BABYLON FIVE, STAR TREK: DEEP SPACE NINE, THE BURNING ZONE and many others.</p>
+              <p>Mr. Treviño began his career in film and television as a student activist documenting the 1960s Chicano civil rights struggle with a super-8 camera. Throughout the late sixties and early nineteen seventies, he was both a participant and a chronicler of the events and issues of the day. In the 1970s and 1980s, his national PBS documentaries about Latinos include AMERICA TROPICAL, YO SOY CHICANO, LA RAZA UNIDA, CHICANO MORATORIUM, THE SALAZAR INQUEST and BIRTHWRITE. He was creator and executive producer of the 1975 PBS children’s series Infinity Factory produced at WGBH, Boston. He wrote and directed the Mexican feature film RAICES DE SANGRE (ROOTS OF BLOOD) in 1976, and SEGUIN (1980), a PBS American Playhouse drama of the Alamo saga told from a Mexican American point of view. In 1997, he was Co-Executive Producer of the four-part PBS documentary series, CHICANO! HISTORY OF THE MEXICAN AMERICAN CIVIL RIGHTS MOVEMENT. In 2000-2003 he served as Co-Executive Producer of the SHOWTIME drama series, RESURRECTION BLVD.</p>
+              <p>Mr. Treviño has won dozens of national and international awards and recognitions including (twice) the prestigious Directors Guild of America award and, twice, the Alma Award for Outstanding Director of a Prime-time Television Drama and an Alma Award as Co-Executive Producer of Resurrection Blvd, Best Prime Time Drama series. In 1991, his film, RAICES DE SANGRE (ROOTS OF BLOOD), was included in an anthology of the 25 Most Significant Films of Latin American Cinema at the 36th Annual International Film Festival of Valladolid, Spain. In 1993 he was honored with an homage at the Montevideo International Film Festival in Montevideo, Uruguay.</p>
+              <p>Mr. Treviño is also a writer. His collection of short stories, THE FABULOUS SINKHOLE AND OTHER STORIES was published in 1995. His memoir, EYEWITNESS - A FILMMAKER’S MEMOIR OF THE CHICANO MOVEMENT, was published in 2001. The book chronicles his experiences as an activist filmmaker during the turbulent 1960s and also addresses the status of Latinos in the United States. His second collection of short stories, THE SKYSCRAPER THAT FLEW was published in 2005 and is third collection RETURN TO ARROYO GRANDE was published in 2016 and won the Before Columbus Foundation’s American Book Award. For further information about Mr. Treviño visit his website: <a href="http://www.chuytrevino.com">www.chuytrevino.com</a>. He currently produces a Latino-themed website with more than 500 videos and an active blogsite: <a href="http://www.Latinopia.com">www.Latinopia.com</a>.</p>
+            </>
+          }
+        />
+      </div>
+      <hr />
+      <SummaryBox title="Advisory Committees" text="In 2018, the American Archive of Public Broadcasting established three advisory committees to help guide and direct the AAPB in the areas of education, scholarly, and station services and outreach. The committees and their members are listed below." />
+      <h2>Education Advisory Committee (EduAC)</h2>
+      <h4>Purpose and Mission</h4>
+      <p>The AAPB EduAC is a group of individuals working in education who are passionate about public media and its long-term preservation and access. The purpose of the EduAC is to guide and assist the AAPB with regard to outreach and use of the AAPB, particularly within k-12 and community college environments.</p>
+      <p>The EduAC provides guidance to the Project Team in the following ways:</p>
+      <ul>
         <li>Provide advice and recommendations for online educational tools </li>
         <li>Collaborate on developing ways to engage with students K-12 </li>
         <li>Discuss how we can better support educators; K-12 </li>
         <li>Provide website feedback for K-12 use </li>
         <li>Assist in outreach to their networks and communities (other educators, students, school librarians, and leaders) and beyond </li>
-        </ul>
-        <h3 id="current-education-advisory-committee-members">Current Education Advisory Committee Members</h3>
-        <p><strong>Franky Abbott</strong>
-        Chief Content Strategist, Levine Museum of the New South, Charlotte, North Carolina</p>
-        <p><strong>Tom Bober (EduAC Co-Chair)</strong>
-        School Librarian, School District of Clayton, MO</p>
-        <blockquote>
-        <p>&quot;The American Archive of Public Broadcasting&#39;s Share a Segment feature makes the thousands of hours of programming and original materials accessible to students of all ages. Instead of sharing an hour-long program and asking students to find time-stamps, educators are able to share a link that targets students&#39; attention to a segment of any length specific to their curriculum.&quot;</p>
-        </blockquote>
-        <p><strong>Joel Breakstone (EduAC Co-Chair)</strong>
-        Co-Founder and Executive Director, Digital Inquiry Guide, and Former Director, Stanford History Education Group</p>
-        <blockquote>
-        <p>&quot;The American Archive of Public Broadcasting is an indispensable resource. Our team frequently turns to the AAPB&#39;s incredible collection of audio and visual sources when we are developing lesson plans. We also recommend it to teachers looking for materials for inquiry-based history instruction.&quot;</p>
-        </blockquote>
-        <p><strong>María Carreira</strong>
-        Executive Director, American Association of Teachers of Spanish &amp; Portuguese</p>
-        <p><strong>Andrew (A.J.) Chambers</strong>
-        Teacher and Media Advisor, Horse Creek Academy and Digital Media Committee Member, Journalism Education Association</p>
-        <p><strong>Justin Jakovac</strong>
-        Executive Director, Mountain-Plains Museums Association</p>
-        <p><strong>Benjamin Leff</strong>
-        Social Studies Teaching Associate, University Laboratory High School, University of Illinois, Urbana-Champaign</p>
-        <blockquote>
-        <p>&quot;As a high school history teacher, it&#39;s wonderful to be able to point students to trusted websites like the American Archive of Public Broadcasting. The <a href="/participating-orgs">national collection</a> of public radio and television content provide engaging primary sources, and the <a href="/exhibits">Curated Exhibits</a> contextualize these sources with historical and analytical analysis. Take for example the <a href="/exhibits/black-power">Televising Black Politics in the Black Power Era: Black Journal and Soul!</a> exhibit. It can be hard to find resources like this that provide students with accessible audiovisual content that efficiently contextualizes their importance. Sources like these provide the basis for stimulating classroom discussions, as well as a rich mine for student research projects.&quot;</p>
-        </blockquote>
-        <p><strong>Kristin Lehner</strong>
-        Senior Director of Content and Curriculum, PBS LearningMedia</p>
-        <p><strong>Joy D. Lindsey</strong>
-        Deputy Executive Director, National Council for the Social Studies</p>
-        <p><strong>Stephen Wesson</strong>
-        Manager of Professional Learning Products, Library of Congress</p>
-        <hr/>
-        <h2 id="scholar-advisory-committee-sac-">Scholar Advisory Committee (SAC)</h2>
-        <h3 id="purpose-and-mission">Purpose and Mission</h3>
-        <p>The AAPB SAC is a group of scholars who are passionate about public media and its
-        long-term preservation and access. The purpose of the SAC is to guide and assist the
-        AAPB with regard to outreach and use of the AAPB, particularly within higher education
-        and scholarly communities.</p>
-        <p>The SAC provides guidance to the Project Team in the following ways: </p>
-        <ul>
+      </ul>
+      
+      <h4>Current Education Advisory Committee Members</h4>
+      <strong>Franky Abbott </strong> Chief Content Strategist, Levine Museum of the New South, Charlotte, North Carolina
+      <strong>Tom Bober (EduAC Co-Chair) </strong> School Librarian, School District of Clayton, MO
+      <PullQuote text="The American Archive of Public Broadcasting&#39;s Share a Segment feature makes the thousands of hours of programming and original materials accessible to students of all ages. Instead of sharing an hour-long program and asking students to find time-stamps, educators are able to share a link that targets students&#39; attention to a segment of any length specific to their curriculum." />
+
+      <strong>Joel Breakstone (EduAC Co-Chair)</strong>
+      Co-Founder and Executive Director, Digital Inquiry Guide, and Former Director, Stanford History Education Group
+      <PullQuote text="The American Archive of Public Broadcasting is an indispensable resource. Our team frequently turns to the AAPB&#39;s incredible collection of audio and visual sources when we are developing lesson plans. We also recommend it to teachers looking for materials for inquiry-based history instruction." />
+      <strong>María Carreira </strong>
+      Executive Director, American Association of Teachers of Spanish &amp; Portuguese
+      <strong>Andrew (A.J.) Chambers </strong>
+      Teacher and Media Advisor, Horse Creek Academy and Digital Media Committee Member, Journalism Education Association
+      <strong>Justin Jakovac </strong>
+      Executive Director, Mountain-Plains Museums Association
+      <strong>Benjamin Leff </strong>
+      Social Studies Teaching Associate, University Laboratory High School, University of Illinois, Urbana-Champaign
+      <PullQuote text="As a high school history teacher, it&#39;s wonderful to be able to point students to trusted websites like the American Archive of Public Broadcasting. The national collection of public radio and television content provide engaging primary sources, and the Curated Exhibits contextualize these sources with historical and analytical analysis. Take for example the Televising Black Politics in the Black Power Era: Black Journal and Soul! exhibit. It can be hard to find resources like this that provide students with accessible audiovisual content that efficiently contextualizes their importance. Sources like these provide the basis for stimulating classroom discussions, as well as a rich mine for student research projects." />
+      <strong>Kristin Lehner</strong>
+      Senior Director of Content and Curriculum, PBS LearningMedia
+      <strong>Joy D. Lindsey</strong>
+      Deputy Executive Director, National Council for the Social Studies
+      <strong>Stephen Wesson</strong>
+      Manager of Professional Learning Products, Library of Congress
+      <hr />
+      <h2>Scholar Advisory Committee (SAC)</h2>
+      <h4>Purpose and Mission</h4>
+      The AAPB SAC is a group of scholars who are passionate about public media and its
+      long-term preservation and access. The purpose of the SAC is to guide and assist the
+      AAPB with regard to outreach and use of the AAPB, particularly within higher education
+      and scholarly communities.
+      <p>The SAC provides guidance to the Project Team in the following ways:</p>
+      <ul>
         <li>Collaborate on developing ways to engage with scholars and students </li>
         <li>Discuss how AAPB can better support scholars </li>
         <li>Provide website feedback on usability and accessibility </li>
         <li>Provide advice and recommendations on collections significant for preservation </li>
         <li>Assist in outreach to their networks and communities (other scholars, undergraduate and graduate students) and beyond </li>
-        </ul>
-        <h3 id="current-scholar-advisory-committee-members">Current Scholar Advisory Committee Members</h3>
-        <p><strong>Robert K. Avery</strong>
-        Emeritus Professor of Communication, University of Utah</p>
-        <p><strong>Kathryn Cramer Brownell</strong>
-        Associate Professor of History, Purdue University</p>
-        <p><strong>Dolores Inés Casillas</strong>
-        Associate Professor of Chicana and Chicano Studies and a Faculty Affiliate of Film &amp; Media Studies and Applied Linguistics, University of California, Santa Barbara</p>
-        <p><strong>Brenda J. Child</strong>
-        Northrop Professor of American Studies, University of Minnesota</p>
-        <p><strong>Mark Garrett Cooper</strong>
-        Professor of Film and Media Studies, University of South Carolina</p>
-        <p><strong>Sherman Dorn</strong>
-        Professor of Education, Arizona State University</p>
-        <blockquote>
-        <p>“The American Archive of Public Broadcasting (AAPB) is an important resource for my current project on postwar educational broadcasting. Among other materials, there is the <a href="https://americanarchive.org/catalog/cpb-aacip_120-70zpcgr3">1967 profile of Fred Rogers</a>, and the complete run of <em>Sesame Street</em> episodes over its first half-century. But AAPB is more than a collection of broadcasts and other holdings on famous shows. Its holdings of local broadcasts are invaluable, from television shows such as <em>Spectrum Hawaii</em>, produced by KHET in the 1980s, to radio programs, such as Vermont’s Legendary. I particularly adore the <a href="https://americanarchive.org/catalog/cpb-aacip_211-418kq334">1979 Legendary interview with radical Bread &amp; Puppet Theater founder Peter Schumann</a>, who was a challenging interview subject, and the conversation that resulted is fascinating and historically important.”</p>
-        </blockquote>
-        <p><strong>Scot French</strong>
-        Associate Professor of Digital &amp; Public History, University of Central Florida</p>
-        <p><strong>Joshua Glick</strong>
-        Assistant Professor of English, Film, and Media Studies, Hendrix College and Fellow at MIT&#39;s Open Documentary Lab</p>
-        <blockquote>
-        <p>”The American Archive of Public Broadcasting offers an invaluable resource of nonfiction media to help teach how national events, debates, and political struggles touched down locally. The holdings of <a href="https://americanarchive.org/special_collections/say-brother"><em>Say Brother</em></a> reveal Boston&#39;s relationship to the Black Power movement, and how communities of color in the area engaged with public media during a time of dynamic social change.”</p>
-        </blockquote>
-        <p><strong>Peter B. Kaufman</strong>
-        Strategic Initiatives, MIT Open Learning &amp; MIT Knowledge Futures Group; Executive Producer, Intelligent Television</p>
-        <p><strong>Dimitrios Latsis</strong>
-        Assistant Professor, Ryerson University, Toronto, ON</p>
-        <p><strong>Jeffrey W. McClurken</strong>
-        Professor of History and American Studies and Chief of Staff to the President at the University of Mary Washington, VA</p>
-        <p><strong>Ingrid Ockert</strong>
-        Post-Doctoral Fellow, Philadelphia Science History Institute</p>
-        <blockquote>
-        <p>”The American Archive of Public Broadcasting (AAPB) is an incredible research for those who care about science. Do you want to learn more about climate change? Check out their incredible documentaries, like James Burke’s <a href="https://americanarchive.org/catalog/cpb-aacip_394-65h9wd4r"><em>After the Warming</em></a>. Are you curious about space? The AAPB holds a number of NASA’s stellar <a href="https://americanarchive.org/catalog/cpb-aacip_513-x639z91q83">public relations films</a>, as well as television series like <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Doctors+in+Space&amp;f[access_types][]=online"><em>Doctors in Space</em></a>. The more I find in the AAPB, the more I understand how science was communicated to and trusted by Americans in the 20th century.”</p>
-        </blockquote>
-        <p><strong>Kathryn Ostrofsky (SAC Co-Chair)</strong>
-        Archivist/Librarian, Dedham Historical Society &amp; Museum</p>
-        <blockquote>
-        <p>”Through public investment and massive intellectual and creative labor, public broadcasting takes a powerful medium that primarily is used to sell audience ears and eyes to advertisers, and makes it work for the people. For instance, this WGBH radio coverage of from the <a href="https://americanarchive.org/catalog/cpb-aacip_15-47dr85g2"><em>United States Civil Rights Commission Hearings on Boston School Desegregation</em></a> was an important contribution to Bostonians&#39; understanding of public affairs in 1975, but it still has much to teach us today. The American Archive of Public Broadcasting rescues these resources and makes them accessible to the people once again for new uses in classrooms, humanities research, civic engagement, and lifelong learning.”</p>
-        </blockquote>
-        <p><strong>Allison Perlman (SAC Co-Chair)</strong>
-        Associate Professor of Film and Media Studies and History, University of California, Irvine</p>
-        <blockquote>
-        <p>”The American Archive of Public Broadcasting (AAPB) is the most important resource to emerge over the last decade for historians of US media. In making discoverable and accessible thousands of public radio and TV shows, it has provided us with an exceptional archive to script more thorough histories of public media and to understand how people made sense of political and social transformations across the 20th century. My exhibit on <a href="https://americanarchive.org/exhibits/conservatism">National Educational Television</a> programs on modern conservatism, for example, was illuminating for the interviews telecast of key figures in the conservative movement and for how the programs collectively mapped the significance of conservatism in a period in which its impact was still uncertain.”</p>
-        </blockquote>
-        <p><strong>Bernard F. Reilly</strong>
-        President Emeritus, Center for Research Libraries</p>
-        <p><strong>Neil Verma</strong>
-        Assistant Professor of Sound Studies in the Department of Radio/Television/Film, Northwestern University</p>
-        <hr/>
-        <h2 id="stations-and-producers-advisory-committee-spac-">Stations and Producers Advisory Committee (SPAC)</h2>
-        <h3 id="purpose-and-mission">Purpose and Mission</h3>
-        <p>The AAPB SPAC is a group of individuals working in the public media
-        community who are passionate about the long-term preservation and access of historic
-        public broadcasting. The purpose of the SPAC is to guide and assist the AAPB with
-        outreach within public media communities, especially with regard to preserving and
-        making public media content more accessible.</p>
-        <p>The SPAC provides guidance to the Project Team in the following ways: </p>
-        <ul>
+      </ul>
+      <h4>Current Scholar Advisory Committee Members</h4>
+      <strong>Robert K. Avery</strong>
+      Emeritus Professor of Communication, University of Utah
+      <strong>Kathryn Cramer Brownell</strong>
+      Associate Professor of History, Purdue University
+      <strong>Dolores Inés Casillas</strong>
+      Associate Professor of Chicana and Chicano Studies and a Faculty Affiliate of Film &amp; Media Studies and Applied Linguistics, University of California, Santa Barbara
+     <strong>Brenda J. Child</strong>
+      Northrop Professor of American Studies, University of Minnesota
+      <strong>Mark Garrett Cooper</strong>
+      Professor of Film and Media Studies, University of South Carolina
+      <strong>Sherman Dorn</strong>
+      Professor of Education, Arizona State University
+      <PullQuote text="The American Archive of Public Broadcasting (AAPB) is an important resource for my current project on postwar educational broadcasting. Among other materials, there is the profile of Fred Rogers, and the complete run of <em>Sesame Street</em> episodes over its first half-century. But AAPB is more than a collection of broadcasts and other holdings on famous shows. Its holdings of local broadcasts are invaluable, from television shows such as <em>Spectrum Hawaii</em>, produced by KHET in the 1980s, to radio programs, such as Vermont’s Legendary. I particularly adore the 1979 Legendary interview with radical Bread &amp; Puppet Theater founder Peter Schumann, who was a challenging interview subject, and the conversation that resulted is fascinating and historically important." />
+      <strong>Scot French</strong>
+      Associate Professor of Digital &amp; Public History, University of Central Florida
+      <strong>Joshua Glick</strong>
+      Assistant Professor of English, Film, and Media Studies, Hendrix College and Fellow at MIT&#39;s Open Documentary Lab
+      <PullQuote text="The American Archive of Public Broadcasting offers an invaluable resource of nonfiction media to help teach how national events, debates, and political struggles touched down locally. The holdings of <em>Say Brother</em> reveal Boston&#39;s relationship to the Black Power movement, and how communities of color in the area engaged with public media during a time of dynamic social change." />
+      <strong>Peter B. Kaufman</strong>
+      Strategic Initiatives, MIT Open Learning &amp; MIT Knowledge Futures Group; Executive Producer, Intelligent Television
+     <strong>Dimitrios Latsis</strong>
+      Assistant Professor, Ryerson University, Toronto, ON
+      <strong>Jeffrey W. McClurken</strong>
+      Professor of History and American Studies and Chief of Staff to the President at the University of Mary Washington, VA
+      <strong>Ingrid Ockert</strong>
+      Post-Doctoral Fellow, Philadelphia Science History Institute
+      <blockquote>
+       ”The American Archive of Public Broadcasting (AAPB) is an incredible research for those who care about science. Do you want to learn more about climate change? Check out their incredible documentaries, like James Burke’s <a href="https://americanarchive.org/catalog/cpb-aacip_394-65h9wd4r"><em>After the Warming</em></a>. Are you curious about space? The AAPB holds a number of NASA’s stellar <a href="https://americanarchive.org/catalog/cpb-aacip_513-x639z91q83">public relations films</a>, as well as television series like <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Doctors+in+Space&amp;f[access_types][]=online"><em>Doctors in Space</em></a>. The more I find in the AAPB, the more I understand how science was communicated to and trusted by Americans in the 20th century.”
+      </blockquote>
+      <strong>Kathryn Ostrofsky (SAC Co-Chair)</strong>
+      Archivist/Librarian, Dedham Historical Society &amp; Museum
+      <blockquote>
+        ”Through public investment and massive intellectual and creative labor, public broadcasting takes a powerful medium that primarily is used to sell audience ears and eyes to advertisers, and makes it work for the people. For instance, this WGBH radio coverage of from the <a href="https://americanarchive.org/catalog/cpb-aacip_15-47dr85g2"><em>United States Civil Rights Commission Hearings on Boston School Desegregation</em></a> was an important contribution to Bostonians&#39; understanding of public affairs in 1975, but it still has much to teach us today. The American Archive of Public Broadcasting rescues these resources and makes them accessible to the people once again for new uses in classrooms, humanities research, civic engagement, and lifelong learning.”
+      </blockquote>
+      <strong>Allison Perlman (SAC Co-Chair)</strong>
+      Associate Professor of Film and Media Studies and History, University of California, Irvine
+      <blockquote>
+        ”The American Archive of Public Broadcasting (AAPB) is the most important resource to emerge over the last decade for historians of US media. In making discoverable and accessible thousands of public radio and TV shows, it has provided us with an exceptional archive to script more thorough histories of public media and to understand how people made sense of political and social transformations across the 20th century. My exhibit on <a href="https://americanarchive.org/exhibits/conservatism">National Educational Television</a> programs on modern conservatism, for example, was illuminating for the interviews telecast of key figures in the conservative movement and for how the programs collectively mapped the significance of conservatism in a period in which its impact was still uncertain.”
+      </blockquote>
+      <strong>Bernard F. Reilly</strong>
+      President Emeritus, Center for Research Libraries
+      <strong>Neil Verma</strong>
+      Assistant Professor of Sound Studies in the Department of Radio/Television/Film, Northwestern University
+      <hr />
+      <h2>Stations and Producers Advisory Committee (SPAC)</h2>
+      <h4>Purpose and Mission</h4>
+      The AAPB SPAC is a group of individuals working in the public media
+      community who are passionate about the long-term preservation and access of historic
+      public broadcasting. The purpose of the SPAC is to guide and assist the AAPB with
+      outreach within public media communities, especially with regard to preserving and
+      making public media content more accessible.
+      <p>The SPAC provides guidance to the Project Team in the following ways:</p>
+      <ul>
         <li>Gather input on how the AAPB can support stations and producers of public broadcasting with preserving and making public media more accessible </li>
         <li>Help develop ideas on what types of services we can offer </li>
         <li>Address the needs of stations in regard to archiving </li>
         <li>Provide advice and recommendations on significant collections for preservation </li>
         <li>Collaborate on developing ways to engage with various user groups </li>
         <li>Provide website feedback </li>
-        <li>Assist in outreach to their networks and communities (other public media 
-        organizations, producers and leaders) and beyond </li>
-        </ul>
-        <h3 id="current-stations-and-producers-advisory-committee-members">Current Stations and Producers Advisory Committee Members</h3>
-        <p><strong>Ernesto Aguilar (SPAC Co-Chair)</strong>
-        Executive Director, National Federation of Community Broadcasters</p>
-        <p><strong>Joanne Archer</strong>
-        Head of Access and Outreach Services, University of Maryland</p>
-        <p><strong>Katie Basile</strong>
-        Multimedia Director/Producer, KYUK</p>
-        <blockquote>
-        <p>”The American Archive of Public Broadcasting (AAPB) gives communities access to the recorded history of their region. In Southwest Alaska so much of the history is shared through oral storytelling. By making <a href="https://americanarchive.org/participating-orgs/1703">KYUK&#39;s</a> archive accessible to the public, people are able to go back and see Elders who have passed away and hear the stories that might have otherwise been lost. With the AAPB&#39;s dedication to preserving our audio/visual history, culture thrives as well. - Gabby Hiestand Salgado and Katie Basile&quot;</p>
-        </blockquote>
-        <p><strong>Leslie Bourgeois (SPAC Co-Chair)</strong>
-        Archivist, Louisiana Public Broadcasting</p>
-        <blockquote>
-        <p>&quot;The AAPB is a wonderful collaborator that is helping close the gap between preservation efforts and audience awareness. <a href="http://ladigitalmedia.org/">The Louisiana Digital Media Archive</a> has applied for grants with the AAPB to preserve content in the LDMA collection and now master copies of the programs are preserved for posterity at the Library of Congress and links-out to LDMA&#39;s website are provided on the AAPB. Having this kind of cross-reference only benefits the historic series such as <a href="https://americanarchive.org/special_collections/en-francais"><em>En Français</em></a>, <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Louisiana%3A+The+State+We%27re+In&amp;f[access_types][]=online"><em>Louisiana: The State We&#39;re In</em></a>, and <a href="https://americanarchive.org/catalog?utf8=%E2%9C%93&amp;f%5Baccess_types%5D%5B%5D=online&amp;f%5Bcontributing_organizations%5D%5B%5D=Louisiana+Public+Broadcasting+%28LA%29&amp;q=%22A+Taste+of+Louisiana+with+Chef+John+Folse%22"><em>A Taste of Louisiana with Chef John Folse</em></a>.&quot;</p>
-        </blockquote>
-        <p><strong>Jack Brighton</strong>
-        Archivist/Developer, Illinois Public Media</p>
-        <blockquote>
-        <p>”Like other public radio stations who first went on the air some 100 years ago, <a href="https://americanarchive.org/participating-orgs/1760">WILL</a> has many thousands of historical records in the form of audiovisual archives. These recordings reflect the power of broadcasting as an educational medium, and document both the momentous and the mundane events of the 20th century. These records of the past help us understand who we are today and how we got here. The AAPB has become the center-point for preserving this history and making it accessible now and in the future. WILL is proud to contribute everything we can to the project.”</p>
-        </blockquote>
-        <p><strong>Robert Chehoski</strong>
-        Manager, Media Management and Archives, KQED</p>
-        <p><strong>Kevin Crane</strong>
-        President and CEO, Nashville Public Television</p>
-        <p><strong>Maureen Harlow</strong>
-        Director, Media Library, PBS</p>
-        <p><strong>Terry Gildea</strong>
-        Executive Director, Public Media Journalists Association</p>
-        <p><strong>Abby Goldstein</strong>
-        President &amp; Executive Director, Public Radio Program Directors Association</p>
-        <p><strong>Christopher Holmes</strong>
-        Vice President, Production &amp; Digital Studios, Alabama Public Television</p>
-        <p><strong>Julie Rogers</strong>
-        Public Historian, NPR’s Research, Archives, and Data Strategy Team</p>
-        <p><strong>Laura Sampson</strong>
-        Board Trustee for National Friends of Public Broadcasting (NFPB); Founder and Board Member of Station’s Archived Memories (SAM), Rocky Mountain Public Media</p>
-        <blockquote>
-        <p>”Since 2010, Rocky Mountain PBS (RMPBS) and its volunteer-driven archive project known as <a href="https://www.rmpbs.org/volunteer/sam/">Station’s Archived Memories (SAM)</a> have proudly participated and benefited from our ongoing relationship with the American Archive of Public Broadcasting (AAPB). In 2018, RMPBS volunteer leaders generated a new level of community engagement around the RMPBS collection through the <a href="https://americanarchivepb.wordpress.com/2018/10/22/aapbs-transcribe-to-digitize-challenge-with-george-blood/">Transcribe to Digitize Challenge</a>, a preservation effort co-hosted by George Blood L.P. This challenge resulted in the correction of more than 120 computer-generated in FIX IT+ and additional tapes digitized by Blood. I continue to participate in the AAPB as a member of the <a href="https://americanarchive.org/about-the-american-archive/advisory-committees">Stations and Producers Advisory Committee</a> and have shared AAPB’s massive collection of historic programs with our RMPBS producers, volunteers, and viewers. Thank you, American Archive of Public Broadcasting!”</p>
-        </blockquote>
-        <p><strong>Winter Shanck</strong>
-        Archivist, Thirteen/WNET</p>
-        <blockquote>
-        <p>&quot;There is tremendous value in the America Archive of Public Broadcasting. Its <a href="https://americanarchive.org/about-the-american-archive/vision-and-mission">mission</a> allows the public, who were instrumental in funding the creation of these materials, the opportunity to gain access to primary materials that give an aural and visual snapshot into the early 19th century. It&#39;s reassuring to know that historic series like <a href="https://americanarchive.org/special_collections/black-journal"><em>Black Journal</em></a>, produced by WNET as the first nationally televised public affairs program produced for, about, and by African-Americans, is preserved at the Library of Congress for posterity and made available online to future generations at <a href="https://americanarchive.org/">americanarchive.org</a>.”</p>
-        </blockquote>
-        <p><strong>Alana Stone</strong>
-        Project Coordinator, Vision Maker Media</p>
-        <p><strong>Ann Wilkens</strong>
-        Archivist, Wisconsin Public Television</p>
-        <blockquote>
-        <p>”<a href="https://americanarchive.org/participating-orgs/1896">PBS Wisconsin</a> is incredibly honored to participate in the American Archive of Public Broadcasting (AAPB). The support and direction they have provided has allowed us to strengthen our preservation work, to make our broadcast history widely accessible, and has created a vibrant platform for collaboration amongst stations. Because of AAPB’s leadership and enthusiastic commitment, I feel we have a steadfast partner in preserving the broadcast legacy of PBS Wisconsin.”</p>
-        </blockquote>
-
-      </div>
-
-      <div className="skinny-body-container">
-        <a className="back-link martop marbot" href="/about">&lt; Back To About the AAPB</a>
-      </div>
+        <li>Assist in outreach to their networks and communities (other public media
+          organizations, producers and leaders) and beyond </li>
+      </ul>
+      <h4>Current Stations and Producers Advisory Committee Members</h4>
+      <strong>Ernesto Aguilar (SPAC Co-Chair) </strong>
+      Executive Director, National Federation of Community Broadcasters
+      <strong>Joanne Archer</strong>
+      Head of Access and Outreach Services, University of Maryland
+      <strong>Katie Basil e</strong>
+      Multimedia Director/Producer, KYUK
+      <blockquote>
+       ”The American Archive of Public Broadcasting (AAPB) gives communities access to the recorded history of their region. In Southwest Alaska so much of the history is shared through oral storytelling. By making <a href="https://americanarchive.org/participating-orgs/1703">KYUK&#39;s</a> archive accessible to the public, people are able to go back and see Elders who have passed away and hear the stories that might have otherwise been lost. With the AAPB&#39;s dedication to preserving our audio/visual history, culture thrives as well. - Gabby Hiestand Salgado and Katie Basile&quot;
+      </blockquote>
+      <strong>Leslie Bourgeois (SPAC Co-Chair)</strong>
+      Archivist, Louisiana Public Broadcasting
+      <blockquote>
+       &quot;The AAPB is a wonderful collaborator that is helping close the gap between preservation efforts and audience awareness. <a href="http://ladigitalmedia.org/">The Louisiana Digital Media Archive</a> has applied for grants with the AAPB to preserve content in the LDMA collection and now master copies of the programs are preserved for posterity at the Library of Congress and links-out to LDMA&#39;s website are provided on the AAPB. Having this kind of cross-reference only benefits the historic series such as <a href="https://americanarchive.org/special_collections/en-francais"><em>En Français</em></a>, <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Louisiana%3A+The+State+We%27re+In&amp;f[access_types][]=online"><em>Louisiana: The State We&#39;re In</em></a>, and <a href="https://americanarchive.org/catalog?utf8=%E2%9C%93&amp;f%5Baccess_types%5D%5B%5D=online&amp;f%5Bcontributing_organizations%5D%5B%5D=Louisiana+Public+Broadcasting+%28LA%29&amp;q=%22A+Taste+of+Louisiana+with+Chef+John+Folse%22"><em>A Taste of Louisiana with Chef John Folse</em></a>.&quot;
+      </blockquote>
+      <strong>Jack Brighton </strong>
+      Archivist/Developer, Illinois Public Media
+      <blockquote>
+        ”Like other public radio stations who first went on the air some 100 years ago, <a href="https://americanarchive.org/participating-orgs/1760">WILL</a> has many thousands of historical records in the form of audiovisual archives. These recordings reflect the power of broadcasting as an educational medium, and document both the momentous and the mundane events of the 20th century. These records of the past help us understand who we are today and how we got here. The AAPB has become the center-point for preserving this history and making it accessible now and in the future. WILL is proud to contribute everything we can to the project.”
+      </blockquote>
+      <strong>Robert Chehoski </strong>
+      Manager, Media Management and Archives, KQED
+      <strong>Kevin Crane </strong>
+      President and CEO, Nashville Public Television
+      <strong>Maureen Harlow</strong>
+      Director, Media Library, PBS
+      <strong>Terry Gildea</strong>
+      Executive Director, Public Media Journalists Associatio
+      <strong>Abby Goldstein </strong>
+      President &amp; Executive Director, Public Radio Program Directors Association
+      <strong>Christopher Holmes </strong>
+      Vice President, Production &amp; Digital Studios, Alabama Public Television
+      <strong>Julie Rogers </strong>
+      Public Historian, NPR’s Research, Archives, and Data Strategy Team
+      <strong>Laura Sampson </strong>
+      Board Trustee for National Friends of Public Broadcasting (NFPB); Founder and Board Member of Station’s Archived Memories (SAM), Rocky Mountain Public Media
+      <blockquote>
+        ”Since 2010, Rocky Mountain PBS (RMPBS) and its volunteer-driven archive project known as <a href="https://www.rmpbs.org/volunteer/sam/">Station’s Archived Memories (SAM)</a> have proudly participated and benefited from our ongoing relationship with the American Archive of Public Broadcasting (AAPB). In 2018, RMPBS volunteer leaders generated a new level of community engagement around the RMPBS collection through the <a href="https://americanarchivepb.wordpress.com/2018/10/22/aapbs-transcribe-to-digitize-challenge-with-george-blood/">Transcribe to Digitize Challenge</a>, a preservation effort co-hosted by George Blood L.P. This challenge resulted in the correction of more than 120 computer-generated in FIX IT+ and additional tapes digitized by Blood. I continue to participate in the AAPB as a member of the <a href="https://americanarchive.org/about-the-american-archive/advisory-committees">Stations and Producers Advisory Committee</a> and have shared AAPB’s massive collection of historic programs with our RMPBS producers, volunteers, and viewers. Thank you, American Archive of Public Broadcasting!”
+      </blockquote>
+      <strong>Winter Shanck </strong>
+      Archivist, Thirteen/WNET
+      <blockquote>
+      &quot;There is tremendous value in the America Archive of Public Broadcasting. Its <a href="https://americanarchive.org/about-the-american-archive/vision-and-mission">mission</a> allows the public, who were instrumental in funding the creation of these materials, the opportunity to gain access to primary materials that give an aural and visual snapshot into the early 19th century. It&#39;s reassuring to know that historic series like <a href="https://americanarchive.org/special_collections/black-journal"><em>Black Journal</em></a>, produced by WNET as the first nationally televised public affairs program produced for, about, and by African-Americans, is preserved at the Library of Congress for posterity and made available online to future generations at <a href="https://americanarchive.org/">americanarchive.org</a>.”
+      </blockquote>
+      <strong>Alana Stone </strong>
+      Project Coordinator, Vision Maker Media
+      bio="<strong>Ann Wilkens </strong>
+      Archivist, Wisconsin Public Television
+      <PullQuote text="PBS Wisconsin is incredibly honored to participate in the American Archive of Public Broadcasting (AAPB). The support and direction they have provided has allowed us to strengthen our preservation work, to make our broadcast history widely accessible, and has created a vibrant platform for collaboration amongst stations. Because of AAPB’s leadership and enthusiastic commitment, I feel we have a steadfast partner in preserving the broadcast legacy of PBS Wisconsin." />
+      <LinkBankFooter />
     </div>
   )
 }

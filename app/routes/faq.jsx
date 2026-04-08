@@ -3,7 +3,7 @@ export default function FrequentlyAskedQuestions() {
     <div className="page-container">
       <div className="skinny-body-container marbot">
         <h1 className="marbot">FAQ</h1>
-        
+
         <h3>What is the American Archive of Public Broadcasting (AAPB)?</h3>
         <p className="marbot">
           The AAPB is an initiative to digitally preserve and make accessible public radio and television programming, ensuring its collection, management, preservation, and access. In August 2013, the Corporation for Public Broadcasting selected GBH and the Library of Congress as the permanent stewards of the AAPB collection. To date, over 100,000 historic public broadcasting radio and television programs and original materials have been digitized and preserved. The AAPB Online Reading Room provides online access to some of the content that has been digitized by the AAPB. The entire AAPB collection is available for research <a href="/on-location">on location</a> at GBH and the Library of Congress. The AAPB also maintains metadata records documenting the existence of 2.5 million assets at public broadcasting organizations, most of which have not been digitized.
@@ -51,17 +51,17 @@ export default function FrequentlyAskedQuestions() {
         <h3>What is the Online Reading Room?</h3>
         <p className="marbot">
           The AAPB Online Reading Room provides accesss to digitized video and audio archival materials in the collection for private research, educational, and informational purposes. Patron uses will be restricted to those permitted under copyright law.
-        </p> 
+        </p>
 
         <h3>If I would like to license or reuse content in the archive, whom do I contact?</h3>
         <p className="marbot">
           It is your responsibility to determine and satisfy all copyright and other use restrictions before using content in the AAPB. If you have selected an item or items that you want to license for reuse, you should contact the contributing organization that is listed in the metadata record. All organizations have a website URL provided in their organization page.
-        </p> 
+        </p>
 
         <h3>If I found an item on the AAPB website that I would like to view/listen to that wasn't digitized, how can I gain access to it?</h3>
         <p className="marbot">
           If the item you found was not digitized, you can contact the contributing organization listed in the metadata record to find out if and how it can be accessed.
-        </p> 
+        </p>
 
         <h3>What should I do if I have concerns about a metadata record or transcript?</h3>
         <p className="marbot">
@@ -72,26 +72,22 @@ export default function FrequentlyAskedQuestions() {
           Transcripts created using speech-to-text tools often yields inaccuracies, in particular for lower quality audio, programs that contain a variety of different types of non-speech sounds, and those featuring speakers with regional or cultural accents or dialects.
 
           If you have concerns about a metadata record or transcript, please contact aapb_notifications@wgbh.org so that we can review the metadata record or transcript and make needed corrections.
-        </p> 
+        </p>
 
         <h3>Who is eligible to contribute to the AAPB collection?</h3>
         <p className="marbot">
           Public TV or radio stations (or joint licensees); national public media organizations; producers for public media (e.g. PRI, ITVS); and repositories holding public media content are all eligible to contribute to the AAPB collection.
-        </p> 
+        </p>
 
         <h3>How can my organization get involved in the AAPB?</h3>
         <p className="marbot">
           Contact AAPB Project Staff at aapb_notifications@wgbh.org, and we can schedule a call to discuss how your organization can get involved in the AAPB. More information about contributing content is available on our <a href="/contribute">Contribute Content</a> page.
-        </p> 
+        </p>
 
         <h3>I work at a participating organization. How can my station access our digital files and metadata records?</h3>
         <p className="marbot">
           Participating organizations can use the Archival Management System (AMS), to view their records and digitized proxy files. We have created guides for navigating the AMS and obtaining copies of your organization's improved metadata.
-        </p> 
-      </div>
-
-      <div className="skinny-body-container">
-        <a className="back-link martop marbot" href="/">&lt; Back To The AAPB</a>
+        </p>
       </div>
     </div>
   )
