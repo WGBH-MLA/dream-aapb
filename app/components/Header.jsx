@@ -99,7 +99,7 @@ export default function Header(props) {
           onMouseLeave={() => setHovered(false)}
         >
           <span style={{transform: hovered ? 'translateY(3px)' : 'translateY(0)'}}>
-            CELEBRATING AMERICA 250 >
+            CELEBRATING AMERICA 250 {'>'}
           </span>
         </div>
       </a>
