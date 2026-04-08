@@ -1,16 +1,7 @@
-import { Suspense, lazy, useEffect, useState } from "react"
+import { Suspense, lazy } from "react"
+import ClientOnly from "./ClientOnly"
 
-// because leaflet looooooooooooooooooooooves window and therefore will only load on the client
 let ClientMap = lazy(() => import("./ClientMap"));
-
-export function ClientOnly({children}){
-  let [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-  return mounted ? <>{children}</> : null
-}
-
 export default function Mappy(props){
   return (
     <>

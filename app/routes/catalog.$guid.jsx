@@ -183,7 +183,6 @@ export default function ShowRecord() {
             <Viewer label="PBCore Metadata" content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
           </div>
         </div>
-
         <div className="skinny-body-container">
           <a className="back-link martop marbot" href={ `/catalog${yourQuery}` }>&lt; Back To Search</a>
         </div>
