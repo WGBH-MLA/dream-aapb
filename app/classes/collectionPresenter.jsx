@@ -68,54 +68,53 @@ let leftBlocks = renderBlocks(collection.content.filter(block =>
     ["background"].includes(block.type)
   ))
 
-  return (
-    <div>
-      <div className="page-container">
+return (
+  <div className="page-container collection-page-container">
 
-        <div className="collection-header">
-          <h2>{ dangerousDiv(collection.title, false) }</h2>
-          <a className="top-back-link" href="/collections">&lt; Back To Special Collections</a>
-        </div>
-        <div className="collection-main-grid">
-
-          <div className="collection-left">
-            <div className="collection-image-container">
-              <img src={ collection.hero_image.full_url } />
-            </div>
-
-            <div className="skinny-body-container collection-search marbot">
-              { collectionSearch }
-            </div>
-
-            <div className="skinny-body-container">
-              <div className="page-body">
-                { leftBlocks }
-              </div>
-            </div>
-          </div>
-
-          <div className="collection-right">
-            <div className="skinny-body-container">
-              <h2 className="smarbot">Collection Summary</h2>
-              <div className="page-body">
-                { dangerousDiv(collection.introduction) }
-              </div>
-              <hr />
-            </div>
-
-            <div className="skinny-body-container">
-              <div className="page-body">
-                { rightBlocks }
-              </div>
-              <hr />
-            </div>
-
-            { niceItemsContainer }
-          </div>
-
-        </div>
-
-      </div>
+    <div className="collection-header">
+      <h2>{ dangerousDiv(collection.title, false) }</h2>
+      <a className="top-back-link" href="/collections">&lt; Back To Special Collections</a>
     </div>
-  )
+
+    <div className="collection-main-grid">
+
+      <div className="collection-left">
+        <div className="collection-image-container">
+          <img src={ collection.hero_image.full_url } />
+        </div>
+
+        <div className="collection-section collection-search marbot">
+          { collectionSearch }
+        </div>
+
+        <div className="collection-section">
+          <div className="page-body">
+            { leftBlocks }
+          </div>
+        </div>
+      </div>
+
+      <div className="collection-right">
+        <div className="collection-section">
+          <h2 className="smarbot">Collection Summary</h2>
+          <div className="page-body">
+            { dangerousDiv(collection.introduction) }
+          </div>
+          <hr />
+        </div>
+
+        <div className="collection-section">
+          <div className="page-body">
+            { rightBlocks }
+          </div>
+          <hr />
+        </div>
+
+        { niceItemsContainer }
+      </div>
+
+    </div>
+
+  </div>
+)
 }

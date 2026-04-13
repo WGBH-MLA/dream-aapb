@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 import DrawerMenu from "./DrawerMenu"
 import LayoutSearch from "./LayoutSearch"
+import DonateButton from "./DonateButton"
 
 const drawerItems = {
   explore: [
@@ -113,6 +114,9 @@ export default function Header(props) {
         <DrawerMenu label="Participate" items={drawerItems.participate} />
         <DrawerMenu label="About" items={drawerItems.about} />
         { layoutSearch }
+        {props.isHomepage && (
+          <DonateButton />
+        )}
       </div>
       <div className="header-bar marbot">
         {!props.isHomepage && (

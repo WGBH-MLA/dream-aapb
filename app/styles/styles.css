@@ -452,6 +452,8 @@ div.footer-bar div.footer-branding button, div.footer-bar div.footer-branding im
 div.footer-bar div.footer-branding button.donate {
   margin-left: 0;
   margin-right: 0;
+  width: 6.8em;
+  height: 2.4em;
 }
 
 div.footer-bar div.footer-title {
@@ -747,8 +749,8 @@ div.homepage-search div.layout-search button {
 
 div.layout-search.wide input {
   flex: 1;
-  width: 30em;
-  height: 3.6em;
+  width: 48em;
+  height: 4.3em;
   font-size: .8em;
 }
 
@@ -1975,7 +1977,6 @@ a.exhibit-top-back-link {
   font-size: 0.65em;
 }
 
-
 div.collection-header {
   text-align: left;
   margin-left: 2em;
@@ -1990,30 +1991,45 @@ div.collection-main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
-  column-gap: .1em;
+  min-width: 0;
 }
 
 div.collection-left {
   display: flex;
   flex-direction: column;
-  margin-left: 12em;
+  padding-left: 2em;
+  padding-right: 2em;
+  margin: 0;
+  min-width: 0;
 }
 
 div.collection-right {
   display: flex;
   flex-direction: column;
-  margin-right: 6em;
+  padding-right: 2em;
+  margin: 0;
+  min-width: 0;
 }
 
-div.collection-image-container {
+div.collection-right .skinny-body-container {
+  margin-left: 0em;
+}
+
+div.collection-right h2 {
+font-size: 28.8px;
+margin-bottom: 0em;
+}
+
+div.collection-section {
   width: 100%;
+  padding: 0;
+  margin-bottom: 0em;
 }
 
 div.collection-image-container img {
-  width: 600px;
+  width: 100%;
+  max-width: 800px;
   height: auto;
-  height: auto;
-  display: block;
 }
 
 div.page-container h2 a, div.page-container h2 a:visited {
@@ -2217,6 +2233,7 @@ div.page-body div.basic-block img.right {
 div.help-block {
   font-size: .8em;
   border-radius: 8px;
+  margin-top: 2.5em;
   padding: .5em;
   padding-right: .5em;
   background-color: #D3BCDB;
