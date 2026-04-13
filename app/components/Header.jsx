@@ -103,7 +103,7 @@ export default function Header(props) {
           </span>
         </div>
       </a>
-      
+
       <div className="header-bar marbot">
         <a href="/">
           <img src="/aapb.png" className="header-logo" />
@@ -115,9 +115,11 @@ export default function Header(props) {
         { layoutSearch }
       </div>
       <div className="header-bar marbot">
-        <a href="/">
+        {!props.isHomepage && (
+          <a href="/">
           <img src="/corner-squares.png" className="header-squares" />
         </a>
+        )}
       </div>
     </div>
   )
