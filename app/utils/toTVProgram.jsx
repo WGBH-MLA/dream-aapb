@@ -27,22 +27,15 @@ export function recordToTVProgram(record){
 }
 
 export function collectionToTVProgram(collection){
-
-  console.log( 'the collection', collection )
   let title,subtitle,thumbnail,url
 
   if(collection.title && collection.title.length > 0){
     title = collection.title
   } else {
-    title = "Untitled collection"
+    title = "Untitled Collection"
   }
 
-  // if(collection.pbcoreDescriptionDocument && collection.pbcoreDescriptionDocument.pbcoreDescription && collection.pbcoreDescriptionDocument.pbcoreDescription.length > 0 && collection.pbcoreDescriptionDocument.pbcoreDescription[0].text){
-  //   subtitle = collection.pbcoreDescriptionDocument.pbcoreDescription[0].text.slice(0,128)
-  // }
-
   url = `/collections/${collection.meta.slug}`
-  console.log( 'collection', collection )
   return {
     key: collection.meta.slug,
     title: title,
@@ -61,12 +54,7 @@ export function exhibitToTVProgram(exhibit){
     title = "Untitled Exhibit"
   }
 
-  // if(exhibit.pbcoreDescriptionDocument && exhibit.pbcoreDescriptionDocument.pbcoreDescription && exhibit.pbcoreDescriptionDocument.pbcoreDescription.length > 0 && exhibit.pbcoreDescriptionDocument.pbcoreDescription[0].text){
-  //   subtitle = exhibit.pbcoreDescriptionDocument.pbcoreDescription[0].text.slice(0,128)
-  // }
-
   url = `/exhibits/${exhibit.meta.slug}`
-
   return {
     key: exhibit.meta.slug,
     title: title,

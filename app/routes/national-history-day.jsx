@@ -5,20 +5,14 @@ export default function HistoryDay() {
     <div className="skinny-body-container marbot">
       <h1 className="marbot">National History Day</h1>
       <h2 className="marbot">Communication in History: The Key to Understanding</h2>
-      <a href="https://nhd.org" target="_blank" rel="noreferrer">
+      <a className="floating-link" href="https://nhd.org" target="_blank" rel="noreferrer">
         <img
           src="https://s3.amazonaws.com/americanarchive.org/override/NHD_2021ThemeLogo_colorbg.png"
           alt="National History Day 2021 Theme Logo"
-          style={{ float: 'right', marginLeft: '1rem', marginBottom: '1rem' }} />
+        />
       </a>
-      <p>Each year, National History Day frames students’ research within a historical theme. The 2020-2021 theme is
-        Communication in History: The Key to Understanding. National History Day (NHD) and students are exploring topics related to
-        the ways that people have exchanged information throughout the past, how these methods and modes have changed over time, and
-        how they have affected life today. Public broadcasting has been an influential form of communication for the past seven decades,
-        and students can use the American Archive of Public Broadcasting (AAPB) to explore how public media has communicated important
-        issues to the American public through television and radio. More than 55,000 programs from the late 1930s to the present day
-        are streaming online, including interviews with leading political and cultural figures and ordinary people, national newscasts
-        and news from diverse communities across the nation, revealing documentaries, and live coverage of events as they occurred.</p>
+      <p>Each year, National History Day frames students’ research within a historical theme. The 2020-2021 theme is Communication in History: The Key to Understanding. National History Day (NHD) and students are exploring topics related to the ways that people have exchanged information throughout the past, how these methods and modes have changed over time, and how they have affected life today. Public broadcasting has been an influential form of communication for the past seven decades, and students can use the American Archive of Public Broadcasting (AAPB) to explore how public media has communicated important issues to the American public through television and radio. More than 55,000 programs from the late 1930s to the present day are streaming online, including interviews with leading political and cultural figures and ordinary people, national newscasts and news from diverse communities across the nation, revealing documentaries, and live coverage of events as they occurred.
+      </p>
       <p>For more information on this theme, visit <a href="https://www.nhd.org/">National History Day</a>.
         To contact AAPB staff, email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a></p>
       <p style={{ marginBottom: '3rem' }}></p>
@@ -40,15 +34,14 @@ export default function HistoryDay() {
         <li>Sort by relevance, date (newest), date (oldest), or title</li>
       </ul>
       <p style={{ marginBottom: '3rem' }}></p>
-      <figure style={{ float: 'right', marginLeft: '1rem', marginBottom: '1rem', width: 480 }}>
+      <figure className="captioned">
         <a href="https://americanarchive.org/exhibits/black-power" target="_blank" rel="noreferrer">
           <img
             src="https://s3.amazonaws.com/americanarchive.org/exhibits/black_power/b_greaves_and_house_option_2.png"
             alt="Black Journal hosts William Greaves and Lou House"
-            style={{ width: '100%', height: 'auto' }}
           />
         </a>
-        <figcaption style={{ fontSize: 12, color: '#555', marginTop: 6 }}>
+        <figcaption>
           Black Journal hosts William Greaves and Lou House from the Televising Black Politics in the Black Power Era exhibit.
         </figcaption>
       </figure>
@@ -67,15 +60,14 @@ export default function HistoryDay() {
       <p>The AAPB offers programming contributed by more than <a href="https://americanarchive.org/organizations" target="_blank" rel="noreferrer">130 organizations</a> across the country. Their materials include
         local programs, raw interviews, news reports, documentaries, newsmagazines, and more created over the past 70+ years.</p>
 
-      <figure style={{ float: 'right', marginLeft: '1rem', marginBottom: '1rem', width: 480 }}>
+      <figure className="captioned">
         <a href="https://americanarchive.org/catalog/cpb-aacip-507-154dn40c26#at_682.533511_s" target="_blank" rel="noreferrer">
           <img
             src="https://s3.amazonaws.com/americanarchive.org/override/Judy_AIDS.png"
             alt="Coping With AIDS, episode headline from a 1985 episode of The MacNeil/Lehrer NewsHour."
-            style={{ width: '100%', height: 'auto' }}
           />
         </a>
-        <figcaption style={{ fontSize: 12, color: '#555', marginTop: 6 }}>
+        <figcaption>
           Coping With AIDS, episode headline from a 1985 episode of The MacNeil/Lehrer NewsHour.
         </figcaption>
       </figure>
@@ -98,15 +90,14 @@ export default function HistoryDay() {
         See the <a href="https://americanarchive.org/special_collections/backstory">BackStory</a> collection, <a href="https://americanarchive.org/exhibits/civil-rights">Voices from the Southern Civil Rights Movement</a> exhibit, or the <a href="https://americanarchive.org/exhibits/conservatism" target="_blank" rel="noreferrer">On the Right: NET and
         Modern Conservatism </a>exhibit.</p>
       <p style={{ marginBottom: '3rem' }}></p>
-      <figure style={{ float: 'right', marginLeft: '1rem', marginBottom: '1rem', width: 480 }}>
+      <figure className="captioned">
         <a href="https://americanarchive.org/catalog/cpb-aacip-516-t72794201n#at_1818.566075_s" target="_blank" rel="noreferrer">
           <img
             src="https://s3.amazonaws.com/americanarchive.org/override/NET_MrRogers.png"
             alt="Fred Rogers advocating for educational television in 1969."
-            style={{ width: '100%', height: 'auto' }}
           />
         </a>
-        <figcaption style={{ fontSize: 12, color: '#555', marginTop: 6 }}>
+        <figcaption>
           In an NET Special featuring the Public Television Hearings in 1969, Fred Rogers, star of "Mister Rogers' Neighborhood",
           successfully advocates for the government to financially support educational television.
         </figcaption>
@@ -128,15 +119,14 @@ export default function HistoryDay() {
         <li><a href="https://americanarchive.org/special_collections/outcasting">OutCasting</a> collection</li>
         <li><a href="https://americanarchive.org/special_collections/say-brother">Say Brother</a> collection</li>
       </ul>
-      <figure style={{ float: 'right', marginLeft: '1rem', marginBottom: '1rem', width: 480 }}>
+      <figure className="captioned">
         <a href="https://americanarchive.org/special_collections/outcasting" target="_blank" rel="noreferrer">
           <img
             src="https://s3.amazonaws.com/americanarchive.org/override/OutCasting.png"
             alt="OutCasting public radio image."
-            style={{ width: '100%', height: 'auto' }}
           />
         </a>
-        <figcaption style={{ fontSize: 12, color: '#555', marginTop: 6 }}>
+        <figcaption>
           OutCasting is created by and for LGBTQ youth and straight allies, and is intended for a general listening audience
           that is open to learning about LGBTQ issues but may not know much about them.
         </figcaption>

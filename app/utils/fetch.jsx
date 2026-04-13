@@ -8,7 +8,7 @@ export async function getExhibits() {
       headers: {"Host": "aapb-api"},
     },
     res => {
-      console.log('exs', res)
+      // console.log('exs', res)
     }
   )
 

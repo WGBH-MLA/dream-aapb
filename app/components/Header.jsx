@@ -73,26 +73,52 @@ const drawerItems = {
 
 export default function Header(props) {
   let navigateHook = useNavigate()
-  const [search, setSearch] = useState("")
-  const handleLayoutSearch = (val) => {
-    setSearch(val)
-  }
+  const [hovered, setHovered] = useState(false)
+  let layoutSearch
+  if(!props.isHomepage){
+    const [search, setSearch] = useState("")
+    const handleLayoutSearch = (val) => {
+      setSearch(val)
+    }
 
-  return (
-    <div className="header-bar marbot">
-      <a href="/" className="header-logo">
-        <img src="/aapb.png" />
-      </a>
-      <div className="header-spacer" />
-      <DrawerMenu label="Explore" items={ drawerItems.explore } />
-      <DrawerMenu label="Participate" items={ drawerItems.participate } />
-      <DrawerMenu label="About" items={ drawerItems.about } />
+    layoutSearch = (
       <LayoutSearch
         navigateHook={ navigateHook }
         esIndex={ props.esIndex }
         handleChange={ handleLayoutSearch }
         searchQuery={ search }
       />
+    )
+  }
+
+  return (
+    <div>
+      <a className="america-250" href="/america250">
+        <div
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          <span style={{transform: hovered ? 'translateY(3px)' : 'translateY(0)'}}>
+            CELEBRATING AMERICA 250 {'>'}
+          </span>
+        </div>
+      </a>
+      
+      <div className="header-bar marbot">
+        <a href="/">
+          <img src="/aapb.png" className="header-logo" />
+        </a>
+        <div className="header-spacer" />
+        <DrawerMenu label="Explore" items={drawerItems.explore} />
+        <DrawerMenu label="Participate" items={drawerItems.participate} />
+        <DrawerMenu label="About" items={drawerItems.about} />
+        { layoutSearch }
+      </div>
+      <div className="header-bar marbot">
+        <a href="/">
+          <img src="/corner-squares.png" className="header-squares" />
+        </a>
+      </div>
     </div>
   )
 }

@@ -12,9 +12,9 @@ export const loader = async () => {
   let exhibits
   exhibits = await getExhibits()
   let programs = []
-  console.log( 'Eckuso', exhibits )
-  if(exhibits){
-    programs = exhibits.map((exhibit) => exhibitToTVProgram(exhibit) )
+  console.log('Eckuso', exhibits)
+  if (exhibits) {
+    programs = exhibits.map((exhibit) => exhibitToTVProgram(exhibit))
   }
 
   let data
@@ -34,19 +34,12 @@ export default function Index() {
   }
 
   return (
-    <div className='page-container'>
-      <div className="skinny-body-container">
-        <SummaryBox title="Scholarly Exhibits" text="American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance." />
+    <div className='body-container'>
+      <h1>Scholarly Exhibits</h1>
+      <p>American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance.</p>
 
-      </div>
-      <div className="skinny-body-container">
-      
-        <TVMenu title="" programs={ data.exhibits } />
-      </div>
-
-      <div>
-        <QuickPagination baseURL={ "/exhibits" } currentPage={ currentPage } handleChangePage={ handleChangePage } />
-      </div>
+      <TVMenu title="" programs={data.exhibits} />
+      <QuickPagination baseURL={"/exhibits"} currentPage={currentPage} handleChangePage={handleChangePage} />
     </div>
   )
 }
