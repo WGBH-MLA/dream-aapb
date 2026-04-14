@@ -21,7 +21,10 @@ export const loader = async ({params, request}) => {
     record: record,
     esIndex: esIndex
   }
-  if(data && data.record && data.record.ciID && data.record.media_type){
+
+  console.log( 'hey!!!!', record )
+  console.log( 'whoaa!!!!', record.hasPlayableMedia() )
+  if( record.hasPlayableMedia() ){
 
     // retrieve ci media url
     let ciConfig = {
@@ -38,7 +41,11 @@ export const loader = async ({params, request}) => {
     data.mediaURL = mediaURL
     return data
   } else {
-    return null
+    return {
+      record: record,
+      mediaURL: null,
+      esIndex: esIndex
+    }
   }
 }
 
@@ -58,17 +65,11 @@ export default function ShowRecord() {
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
   if(data){
+    // console.log( 'please?', data.record.description() )
+    title = data.record.title
 
-    title = niceTitle(data.record.pbcoreDescriptionDocument.pbcoreTitle)
-
-    if(data?.record?.pbcoreDescriptionDocument?.pbcoreDescription && data?.record?.pbcoreDescriptionDocument?.pbcoreDescription[0]){
-      if(data.record.pbcoreDescriptionDocument.pbcoreDescription[0]?.text){
-        // aapb currently takes the first description only, obv we can show more if we ant
-        description = data.record.pbcoreDescriptionDocument.pbcoreDescription[0].text
-      } else {
-        description = "No Description Available"
-      }
-
+    // description = data.record.description()
+    if(description){
       description = <ShowBox label="Description" text={ description } />
     }
 
@@ -91,37 +92,28 @@ export default function ShowRecord() {
     }
 
     // people
-    if(data.record.pbcoreDescriptionDocument.pbcoreCreator && data.record.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-      creators = data.record.pbcoreDescriptionDocument.pbcoreCreator.map((pbc, i) => {
-        if(pbc.creator && pbc.creatorRole && pbc.creatorRole.text && pbc.creatorRole.text != "Producing Organization"){
-          return <ShowBox key={i} label={ pbc.creatorRole.text } text={ pbc.creator.text } />
-        }
-      })
+    creators = data.record.creators()
+    if(creators && creators.length > 0){
+      creators = creators.map((pbc) => <ShowBox key={i} label={ pbc.creatorRole.text } text={ pbc.creator.text } />)
 
-      creators = creators.filter((cre) => cre != undefined)
+      if(creators && creators.length > 0){
+        people = (
+          <>
+            <div className="show-metadata-header">People</div>
+            { creators }
+          </>
+        )
+      }
     }
-
-    if(creators){
-      people = (
-        <>
-          <div className="show-metadata-header">People</div>
-          { creators }
-        </>
-
-      )
-    }
-
 
     if(data.record.pbcoreDescriptionDocument.pbcoreCoverage && data.record.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
-      coverages = data.record.pbcoreDescriptionDocument.pbcoreCoverage.map((pbc, i) => {
-        if(pbc.creatorRole && pbc.creatorRole.text != "Producing Organization"){
-          return (
-            <>
-              <div className="show-metadata-header">Locations</div>
-              <ShowBox key={i} label={ pbc.coverageType.text } text={ pbc.coverage.text } />
-            </>
-          )  
-        }
+      coverages = data.record.pbcoreDescriptionDocument.pbcoreCoverage.map((cov, i) => {
+        return (
+          <>
+            <div className="show-metadata-header">Locations</div>
+            <ShowBox key={i} label={ cov.coverageType.text } text={ cov.coverage.text } />
+          </>
+        )  
       })
     }
 
