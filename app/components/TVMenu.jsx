@@ -9,6 +9,7 @@ export default function TVMenu(props){
         return program
       })
     }
+    programs = programs.slice(0,4)
     programs = programs.map((program) => TVProgram(program))
   }
 
@@ -19,12 +20,14 @@ export default function TVMenu(props){
   let classes = "tv-menu-container bmarbot"
   if(programs.length == 3){
     classes += " three"
+       } else {
+    classes += " four"
   }
   return (
     <div className={ classes }>
       { seeAll }
       <h2>{props.title}</h2>
-      
+
       <div className="tv-menu-body">
         { programs }
       </div>
