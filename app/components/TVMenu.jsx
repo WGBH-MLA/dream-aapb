@@ -9,7 +9,9 @@ export default function TVMenu(props){
         return program
       })
     }
-    programs = programs.slice(0,4)
+    if (props.limit !== undefined) {
+      programs = programs.slice(0, props.limit)
+    }
     programs = programs.map((program) => TVProgram(program))
   }
 

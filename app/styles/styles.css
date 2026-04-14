@@ -747,9 +747,16 @@ div.homepage-search div.layout-search button {
   box-shadow: 0 2px 8px #e4e5ef;
 }
 
+div.layout-search.wide {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
 div.layout-search.wide input {
   flex: 1;
-  width: 48em;
+  min-width: 0;
+  max-width: 49em;
   height: 4.3em;
   font-size: .8em;
 }
@@ -2017,7 +2024,7 @@ div.collection-right .skinny-body-container {
 
 div.collection-right h2 {
 font-size: 28.8px;
-margin-bottom: 0em;
+margin-bottom: .5em;
 }
 
 div.collection-section {
@@ -2586,7 +2593,6 @@ figure.captioned figcaption {
   div.tv-menu-container div.tv-menu-program {
     margin-right: 1.125em;
     height: 20em;
-
     overflow: hidden;
     position: relative;
   }

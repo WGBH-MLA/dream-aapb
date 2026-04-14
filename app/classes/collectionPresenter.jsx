@@ -35,9 +35,9 @@ export function renderCollection(collection, esConfig) {
 
   if(niceItems.length > 0){
     niceItemsContainer = (
-
-      <div className="skinny-body-container">
-        <h2 className="smarbot">Featured Items</h2>
+    <div className="collection-right">
+      <div className="collection-section"></div>
+      <h2 className="smarbot">Featured Items</h2>
         <div className="page-body marbot">
           {/* for baby <div className="items-search smarbot"></div>*/}
           <div className="nice-items-container marbot">
