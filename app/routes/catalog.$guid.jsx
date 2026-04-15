@@ -16,14 +16,14 @@ export const loader = async ({params, request}) => {
   let esURL = process.env.ES_URL
   let esAPIKey = process.env.ES_API_KEY
 
-  let record = new Record( await getRecord(params.guid, esURL, esIndex, esAPIKey) )
+  let recordData = await getRecord(params.guid, esURL, esIndex, esAPIKey)
   let data = {
-    record: record,
+    recordData: recordData,
+    mediaURL: null,
     esIndex: esIndex
   }
 
-  console.log( 'hey!!!!', record )
-  console.log( 'whoaa!!!!', record.hasPlayableMedia() )
+  let record = new Record(data.recordData)
   if( record.hasPlayableMedia() ){
 
     // retrieve ci media url
@@ -36,21 +36,18 @@ export const loader = async ({params, request}) => {
       ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
     }
 
-    let videoHound = new VideoHound(ciConfig)
-    let mediaURL = await videoHound.findMedia(data.record.ciID, data.record.isVideo())
+    let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
     data.mediaURL = mediaURL
-    return data
-  } else {
-    return {
-      record: record,
-      mediaURL: null,
-      esIndex: esIndex
-    }
   }
+
+  return data
 }
 
 export default function ShowRecord() {
   const data = useLoaderData()
+
+  // class instance cant survive ssr serialization, so do it again
+  let record = new Record(data.recordData)
 
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
@@ -65,21 +62,21 @@ export default function ShowRecord() {
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
   if(data){
-    // console.log( 'please?', data.record.description() )
-    title = data.record.title
 
-    // description = data.record.description()
+    title = record.title
+
+    description = record.description()
     if(description){
       description = <ShowBox label="Description" text={ description } />
     }
 
-    if(data.record.media_type){
-      mediaType = <ShowBox label="Media Type" text={ data.record.media_type } />
+    if(record.media_type){
+      mediaType = <ShowBox label="Media Type" text={ record.media_type } />
     }
 
     // orgs
-    if(data.record.producing_org){
-      producingOrg = <ShowBox label="Producing Organization" text={ data.record.producing_org } />
+    if(record.producing_org){
+      producingOrg = <ShowBox label="Producing Organization" text={ record.producing_org } />
     }
 
     if(producingOrg){
@@ -92,7 +89,7 @@ export default function ShowRecord() {
     }
 
     // people
-    creators = data.record.creators()
+    creators = record.creators()
     if(creators && creators.length > 0){
       creators = creators.map((pbc) => <ShowBox key={i} label={ pbc.creatorRole.text } text={ pbc.creator.text } />)
 
@@ -106,8 +103,8 @@ export default function ShowRecord() {
       }
     }
 
-    if(data.record.pbcoreDescriptionDocument.pbcoreCoverage && data.record.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
-      coverages = data.record.pbcoreDescriptionDocument.pbcoreCoverage.map((cov, i) => {
+    if(record.pbcoreDescriptionDocument.pbcoreCoverage && record.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
+      coverages = record.pbcoreDescriptionDocument.pbcoreCoverage.map((cov, i) => {
         return (
           <>
             <div className="show-metadata-header">Locations</div>
@@ -117,8 +114,8 @@ export default function ShowRecord() {
       })
     }
 
-    if(data.record.pbcoreDescriptionDocument.pbcoreIdentifier && data.record.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
-      eachId = data.record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
+    if(record.pbcoreDescriptionDocument.pbcoreIdentifier && record.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
+      eachId = record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
         return <ShowBox key={i} label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
 
@@ -132,30 +129,34 @@ export default function ShowRecord() {
       }
     }
 
-    if(data.record.pbcoreDescriptionDocument.pbcoreAssetDate && data.record.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
+    if(record.pbcoreDescriptionDocument.pbcoreAssetDate && record.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
       dates = (
         <>
           <div className="show-metadata-header">Dates</div>
-          { data.record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ pbad.dateType } text={ pbad.text } />) }
+          { record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ dateTypeName(pbad.dateType) } text={ pbad.text } />) }
         </>
       )
     }
 
-    if(data.record.pbcoreDescriptionDocument){
-      pbCore = JSON.stringify(data.record.pbcoreDescriptionDocument, null, 4)
+    if(record.pbcoreDescriptionDocument){
+      pbCore = JSON.stringify(record.pbcoreDescriptionDocument, null, 4)
     }
   }
   
   return (
     <>
       <div className="page-container">
-        <div className="skinny-body-container bmarbot">
+        <div className="skinnier-body-container">
           <HeaderBar title={ title } />
+        </div>
+
+        <div className="skinnier-body-container bmarbot martop video-area">
+          
   
           <div className="show-media marbot martop">
             <VideoPlayer
-              guid={ data.record.guid }
-              title={ data.record.title }
+              guid={ record.guid }
+              title={ record.title }
               mediaURL={ data.mediaURL }
             />
           </div>
@@ -175,7 +176,7 @@ export default function ShowRecord() {
             <Viewer label="PBCore Metadata" content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
           </div>
         </div>
-        <div className="skinny-body-container">
+        <div className="skinnier-body-container">
           <a className="back-link martop marbot" href={ `/catalog${yourQuery}` }>&lt; Back To Search</a>
         </div>
       </div>

@@ -993,7 +993,7 @@ export default function Catalog() {
 
         </div>
 
-        <div className="top-refinements-bar smarbot bmarleft bmarright">
+        <div className="top-refinements-bar smarbot bmarleft">
           <div className="stats-container">
             <CustomStats />
           </div>
@@ -1003,7 +1003,7 @@ export default function Catalog() {
               transformItems={prettyCurrentRefinements}
             />
           </div>
-          <div className="clear-refinements-container">
+          <div className="clear-refinements-container marright">
             <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
@@ -1139,7 +1139,6 @@ export default function Catalog() {
         </div>
 
         <div className="page-maincolumn bmarright">
-
           <div className="pagination-bar">
             { pagination }
           </div>

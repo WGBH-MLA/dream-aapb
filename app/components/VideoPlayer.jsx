@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useState } from "react"
 import ClientOnly from "./ClientOnly"
 
 let ClientVideoPlayer = lazy(() => import("./ClientVideoPlayer"));
-export default function Mappy(props){
+export default function VideoPlayer(props){
   return (
     <>
       <ClientOnly>

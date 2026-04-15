@@ -1,4 +1,3 @@
-import { Italic } from "lucide-react"
 import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
 import LinkBankFooter from '../components/LinkBankFooter';

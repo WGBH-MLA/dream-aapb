@@ -30,7 +30,6 @@ span.ais-RefinementList-count {
   margin-left: 1em;
 }
 
-
 body {
   overscroll-behavior: auto;
   margin: 0;
@@ -40,7 +39,6 @@ body {
 
 /*universal*/
 div, span, h1, h2, h3, h4, h5, a, ul, ol, pre {
-  color: #000;
   margin: 0;
   padding: 0;
   font-weight: normal;
@@ -92,6 +90,7 @@ div.viewer.show {
 }
 
 div.viewer div.viewer-controls {
+  position: relative;
   padding-inline-start: 0;
   padding: 1em;
   background-color: #d2d5e2;
@@ -318,6 +317,13 @@ div.sidey-sidebar ul li a, div.sidey-sidebar ul li a:visited {
 div.sidey-sidebar h2:hover, div.sidey-sidebar ul li a:hover {
   font-weight: bold;
   color: #2B2F6E;
+}
+
+div.skinnier-body-container {
+  font-size: 1.5em;
+  width: 75%;
+  margin-left: 14%;
+  text-align: left;
 }
 
 div.skinny-body-container {
@@ -594,7 +600,8 @@ div.biglink a {
 }
 
 /* compononents  */
-div.view-select-button {
+div.options-container div.view-select-button {
+  width: 75%;
   margin-left: 1em;
 }
 
@@ -1271,14 +1278,6 @@ div.ais-ClearRefinements button {
 }
 
 /*show page*/
-div.show-title {
-  text-align: left;
-}
-
-div.show-title h2 {
-  margin-left: 1em;
-}
-
 div.show-description {
   min-height: 2em;
   margin-left: 25%;
@@ -1305,10 +1304,23 @@ div.show-media div.show-thumbnail img {
   object-fit: contain;
 }
 
+div.show-title {
+  padding: 1em;
+  color: #fff;
+  background-color: #292A72;
+  text-align: left;
+}
+
+div.show-title h2 {
+  margin-left: 1em;
+}
+
 div.show-header-bar {
-  margin-left: 4em;
-  margin-right: 4em;
-  width: 90%;
+  width: 100%;
+}
+
+div.show-header-bar hr {
+  width: 50%;
 }
 
 div.show-box {
@@ -1335,6 +1347,7 @@ div.show-metadata-container div.show-metadata-header {
 }
 
 div.video-player-container {
+  color: #fff;
   background-color: #000;
   width: 100%;
 }
@@ -1342,6 +1355,10 @@ div.video-player-container {
 div.video-player-container video {
   width: 100%;
   vertical-align: middle;
+}
+
+div.video-area {
+  background-color: #f9f9f9;
 }
 
 /*search result*/
@@ -1668,7 +1685,9 @@ div.sort-container.per-page svg {
 
 div.current-refinements-container {
   display: inline-flex;
-  width: 60%;
+  min-width: 53%;
+  max-width: 60%;
+
 }
 
 div.current-refinements-container.closed {

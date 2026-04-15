@@ -5,8 +5,7 @@ export default class Record {
     this.data = data
 
     if(!this.data || !this.data.guid){
-      console.log( 'problemsss', props )
-      // throw "Input data invalid for Record!!"
+      throw "Input data invalid for Record!!"
     }
 
     // accessors that actually get used in this class (keep the properties limited to stuff getting called on the view for cleanness)
@@ -34,7 +33,7 @@ export default class Record {
   }
 
   hasPlayableMedia(){
-    return (this.isVideo() || this.isAudio()) && this.ciID && this.ciID.length > 0
+    return ( this.isVideo() || this.isAudio() ) && this.ciID && this.ciID.length > 0
   }
   
   description(){
@@ -53,4 +52,3 @@ export default class Record {
     }
   }
 }
-
