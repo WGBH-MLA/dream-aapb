@@ -19,12 +19,17 @@ export default function TVMenu(props){
   if(props.seeAllURL){
     seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
   }
+
   let classes = "tv-menu-container bmarbot"
+  if(props.classes){
+    classes += " " + props.classes
+  }
   if(programs.length == 3){
     classes += " three"
-       } else {
+  } else {
     classes += " four"
   }
+
   return (
     <div className={ classes }>
       { seeAll }

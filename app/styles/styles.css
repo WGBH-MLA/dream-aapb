@@ -860,6 +860,7 @@ div.tv-menu-container a.see-all {
 div.tv-menu-container div.tv-menu-body {
   max-width: 100%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
   box-sizing: border-box;
@@ -911,6 +912,13 @@ div.tv-menu-container div.tv-menu-program h4 {
 div.tv-menu-container div.tv-menu-program h5 {
   font-size: 1em;
    margin-top: 0.2em;
+}
+
+/* .many variant */
+div.tv-menu-container.many div.tv-menu-program,
+div.tv-menu-container.many div.tv-menu-program img {
+  width: calc(25% - 12px);
+  min-width: calc(25% - 12px);
 }
 
 /* .three variant */

@@ -29,6 +29,11 @@ export default function Index() {
   let data = useLoaderData()
   const [currentPage, setCurrentPage] = useState(0)
 
+  /* to do - decide if we should set pagination for exhibits */
+  const PAGE_SIZE = 27
+  const numPages = Math.ceil(data.exhibits.length / PAGE_SIZE)
+  const pagedExhibits = data.exhibits.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE)
+
   var handleChangePage = (pageNumber) => {
     setCurrentPage(pageNumber)
   }
@@ -38,8 +43,13 @@ export default function Index() {
       <h1>Scholarly Exhibits</h1>
       <p>American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance.</p>
 
-      <TVMenu title="" programs={data.exhibits} />
-      <QuickPagination baseURL={"/exhibits"} currentPage={currentPage} handleChangePage={handleChangePage} />
+      <TVMenu title="" programs={pagedExhibits} classes="many" />
+      <QuickPagination
+        baseURL="/exhibits"
+        currentPage={currentPage}
+        numPages={numPages}
+        handleChangePage={handleChangePage}
+      />
     </div>
   )
 }

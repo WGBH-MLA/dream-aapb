@@ -12,5 +12,12 @@ export default function QuickPagination(props){
 }
 
 function PageLink(props){
-  return <a href={ `/${props.baseURL}?page=${props.pageNumber}` } onClick={ props.handleChangePage }>{ props.pageNumber+1 }</a>
+  return (
+    <a
+      href={`/${props.baseURL}?page=${props.pageNumber}`}
+      onClick={(e) => { e.preventDefault(); props.handleChangePage(props.pageNumber) }}
+    >
+      {props.pageNumber + 1}
+    </a>
+  )
 }
