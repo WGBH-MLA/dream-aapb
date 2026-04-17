@@ -1,6 +1,6 @@
 import ScoreLight from "../components/ScoreLight"
 import Thumbnail from "../components/Thumbnail"
-import { niceTitle } from "../utils/niceTitle"
+import { niceTitle } from "../utils/helpers"
 
 function aapbGuid(descdoc){
   if(descdoc && descdoc.pbcoreIdentifier && descdoc.pbcoreIdentifier.length > 0){

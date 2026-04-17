@@ -5,7 +5,7 @@ export default class Record {
     this.data = data
 
     if(!this.data || !this.data.guid){
-      throw "Input data invalid for Record!!"
+      throw `Input data invalid for Record!! ${data}`
     }
 
     // accessors that actually get used in this class (keep the properties limited to stuff getting called on the view for cleanness)

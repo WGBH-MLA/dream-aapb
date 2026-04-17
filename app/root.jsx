@@ -52,7 +52,7 @@ export default function App() {
 
         <div className="rotation-helper" onClick={ () => { setPleaseRotate(!pleaseRotate) }} />
 
-        <span className={ pleaseRotate ? "rotate" : "" }>
+        <span className={ pleaseRotate ? "main-span rotate" : "main-span" }>
           <Header isHomepage={ isHomepage } esIndex={ data.esIndex } />
           <Outlet />
           <Footer />

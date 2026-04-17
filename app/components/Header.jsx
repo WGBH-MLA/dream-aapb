@@ -92,7 +92,7 @@ export default function Header(props) {
   }
 
   return (
-    <div>
+    <div className="header-container">
       <a className="america-250" href="/america250">
         <div
           onMouseEnter={() => setHovered(true)}
@@ -105,8 +105,8 @@ export default function Header(props) {
       </a>
       
       <div className="header-bar marbot">
-        <a href="/">
-          <img src="/aapb.png" className="header-logo" />
+        <a href="/" className="header-logo">
+          <img src="/aapb.png" />
         </a>
         <div className="header-spacer" />
         <DrawerMenu label="Explore" items={drawerItems.explore} />

@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
+
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle } from '../utils/niceTitle'
-
+import { niceTitle, dateTypeName } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
+import { getAD, getCaption } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
 
 export const loader = async ({params, request}) => {
@@ -22,7 +23,6 @@ export const loader = async ({params, request}) => {
     mediaURL: null,
     esIndex: esIndex
   }
-
   let record = new Record(data.recordData)
   if( record.hasPlayableMedia() ){
 
@@ -38,6 +38,18 @@ export const loader = async ({params, request}) => {
 
     let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
     data.mediaURL = mediaURL
+
+    // check for audio description
+    let adHLSURL = await getAD(record.guid)
+    if(adHLSURL){
+      data.adHLSURL = adHLSURL
+    }
+
+    // check for caption file
+    let captionURL = await getCaption(record.guid)
+    if(captionURL){
+      data.captionURL = captionURL
+    }
   }
 
   return data
@@ -146,18 +158,18 @@ export default function ShowRecord() {
   return (
     <>
       <div className="page-container">
-        <div className="skinnier-body-container">
+        <div className="skinnier-body-container page-title">
           <HeaderBar title={ title } />
         </div>
 
         <div className="skinnier-body-container bmarbot martop video-area">
-          
   
           <div className="show-media marbot martop">
             <VideoPlayer
               guid={ record.guid }
               title={ record.title }
               mediaURL={ data.mediaURL }
+              adHLSURL={ data.adHLSURL }
             />
           </div>
 
@@ -180,33 +192,6 @@ export default function ShowRecord() {
           <a className="back-link martop marbot" href={ `/catalog${yourQuery}` }>&lt; Back To Search</a>
         </div>
       </div>
-
     </>
   )
 }
-
-function dateTypeName(type){
-  switch(type){
-    case "broadcast":
-      return "Broadcast"
-    case "air":
-      return "Broadcast"
-    case "issue":
-      return "Broadcast"
-    case "published":
-      return "Broadcast"
-    case "release":
-      return "Broadcast"
-    case "created":
-      return "Created"
-    case "recorded":
-      return "Created"
-    case "performance":
-      return "Created"
-    case "revised":
-      return "Revised"
-    case "copyright":
-      return "Copyright Date"
-  }
-}
-

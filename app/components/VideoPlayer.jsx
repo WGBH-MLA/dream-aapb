@@ -11,6 +11,7 @@ export default function VideoPlayer(props){
             guid={ props.guid }
             title={ props.title }
             mediaURL={ props.mediaURL }
+            adHLSURL={ props.adHLSURL }
           />
         </Suspense>
       </ClientOnly>

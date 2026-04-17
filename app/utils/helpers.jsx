@@ -28,3 +28,28 @@ export function niceTitle(titles){
 
   return displayTitles.join("; ")
 }
+
+export function dateTypeName(type){
+  switch(type){
+    case "broadcast":
+      return "Broadcast"
+    case "air":
+      return "Broadcast"
+    case "issue":
+      return "Broadcast"
+    case "published":
+      return "Broadcast"
+    case "release":
+      return "Broadcast"
+    case "created":
+      return "Created"
+    case "recorded":
+      return "Created"
+    case "performance":
+      return "Created"
+    case "revised":
+      return "Revised"
+    case "copyright":
+      return "Copyright Date"
+  }
+}

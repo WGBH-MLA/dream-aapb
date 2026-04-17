@@ -22,7 +22,6 @@ export async function getRecords(guids, esURL, esIndex, esAPIKey){
 
   if(data && data.hits && data.hits.hits ){
     if(data.hits.hits[0] && data.hits.hits[0]._source){
-      // console.log( 'hey bumba', data.hits.hits[0]._source )
       return data.hits.hits.map((hit) => hit._source)
     } else {
       return []
