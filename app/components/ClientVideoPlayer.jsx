@@ -44,9 +44,9 @@ export default function ClientVideoPlayer(props){
           }
         }
 
+        // always add em
         addSkipButtons(videojs)
 
-        // How about an event listener?
         // this.on('ended', function() {
           // videojs.log('whoa mama!!')
         // });
@@ -54,7 +54,6 @@ export default function ClientVideoPlayer(props){
     }
   })
   
-
   if(props.mediaURL){
     return (
       <div className="video-player-container">
