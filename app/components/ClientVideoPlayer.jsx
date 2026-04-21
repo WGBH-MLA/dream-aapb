@@ -3,6 +3,7 @@ import Thumbnail from "../components/Thumbnail"
 import Captions from "../components/Captions"
 import thumbnailURL from "../utils/thumbnailURL"
 import addADButton from "../utils/addADButton"
+import addSkipButtons from "../utils/addSkipButtons"
 import videojs from "video.js"
 import "../styles/video-js.min.css"
 
@@ -43,8 +44,8 @@ export default function ClientVideoPlayer(props){
           }
         }
 
-        // In this context, `this` is the player that was created by Video.js.
-        // this.play()
+        addSkipButtons(videojs)
+
         // How about an event listener?
         // this.on('ended', function() {
           // videojs.log('whoa mama!!')
