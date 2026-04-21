@@ -1,3 +1,3 @@
 export default function Captions(props){
-  return <track kind="captions" srclang="en" label="English" default="default" src={ props.captionURL } />
+  return <track kind="captions" srcLang="en" label="English" default="default" src={ props.src } />
 }

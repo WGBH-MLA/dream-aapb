@@ -6,12 +6,13 @@ export default function VideoPlayer(props){
   return (
     <>
       <ClientOnly>
-        <Suspense fallback="FAIL">
+        <Suspense fallback="Loading...">
           <ClientVideoPlayer
             guid={ props.guid }
             title={ props.title }
             mediaURL={ props.mediaURL }
             adHLSURL={ props.adHLSURL }
+            captionURL={ props.captionURL }
           />
         </Suspense>
       </ClientOnly>

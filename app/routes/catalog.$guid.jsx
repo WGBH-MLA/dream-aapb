@@ -170,6 +170,7 @@ export default function ShowRecord() {
               title={ record.title }
               mediaURL={ data.mediaURL }
               adHLSURL={ data.adHLSURL }
+              captionURL={ data.captionURL }
             />
           </div>
 
