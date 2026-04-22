@@ -44,7 +44,7 @@ export default function ClientVideoPlayer(props){
           }
         }
 
-        // always add em
+        // always add em, never dont
         addSkipButtons(videojs)
 
         // this.on('ended', function() {

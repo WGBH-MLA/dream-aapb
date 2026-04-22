@@ -70,3 +70,8 @@ async function ciRequest(ciAPIHost, ciResource, ciToken, params){
   var data = await response.json()
   return data
 }
+
+export function cuePlayer(vjs, time){
+  // its seconds baby
+  vjs.players["vjs-player"].currentTime( time )
+}

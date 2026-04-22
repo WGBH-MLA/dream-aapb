@@ -1,15 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from "react"
 import { useLoaderData, useSearchParams } from 'react-router'
 
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
+import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
 import { niceTitle, dateTypeName } from '../utils/helpers'
-import { getCiToken, getCiMediaURL } from '../utils/media'
-import { getAD, getCaption } from '../utils/sidecarFetchers'
+import { getCiToken, getCiMediaURL, cuePlayer } from '../utils/media'
+import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
 
 export const loader = async ({params, request}) => {
@@ -17,6 +18,7 @@ export const loader = async ({params, request}) => {
   let esURL = process.env.ES_URL
   let esAPIKey = process.env.ES_API_KEY
 
+  // get record from es
   let recordData = await getRecord(params.guid, esURL, esIndex, esAPIKey)
   let data = {
     recordData: recordData,
@@ -26,7 +28,6 @@ export const loader = async ({params, request}) => {
   let record = new Record(data.recordData)
   if( record.hasPlayableMedia() ){
 
-    // retrieve ci media url
     let ciConfig = {
       ciAPIHost: process.env.SONY_CI_API_HOST,
       ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
@@ -36,6 +37,7 @@ export const loader = async ({params, request}) => {
       ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
     }
 
+    // retrieve media url from ci
     let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
     data.mediaURL = mediaURL
 
@@ -50,6 +52,13 @@ export const loader = async ({params, request}) => {
     if(captionURL){
       data.captionURL = captionURL
     }
+
+    // check for transcript file
+    let transcriptURL = await getTranscript(record.guid)
+    if(transcriptURL){
+      // url returned only if its there
+      data.transcriptURL = transcriptURL
+    }
   }
 
   return data
@@ -58,8 +67,24 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
 
+  // hoo hoo ha ha
+  const [transcriptData, setTranscriptData] = useState(false)
+
+  useEffect(() => {
+    if(data.transcriptURL && !transcriptData){
+      getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines), (err) => console.log( 'failed fetching transcript data!!!', err ) )
+      
+    }
+  }, [])
+
+
   // class instance cant survive ssr serialization, so do it again
   let record = new Record(data.recordData)
+
+  let transcriptViewer
+  if(transcriptData){
+    transcriptViewer = <TranscriptViewer cuePlayer={ cuePlayer } lines={ transcriptData } />
+  }
 
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
@@ -172,6 +197,10 @@ export default function ShowRecord() {
               adHLSURL={ data.adHLSURL }
               captionURL={ data.captionURL }
             />
+          </div>
+
+          <div className="transcript-viewer-container">
+            { transcriptViewer }
           </div>
 
           <div className="show-metadata-container bmarbot">
