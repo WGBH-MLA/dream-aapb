@@ -9,7 +9,7 @@ import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
 import { niceTitle, dateTypeName } from '../utils/helpers'
-import { getCiToken, getCiMediaURL, cuePlayer } from '../utils/media'
+import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
 
@@ -83,7 +83,7 @@ export default function ShowRecord() {
 
   let transcriptViewer
   if(transcriptData){
-    transcriptViewer = <TranscriptViewer cuePlayer={ cuePlayer } lines={ transcriptData } />
+    transcriptViewer = <TranscriptViewer lines={ transcriptData } />
   }
 
   // toggle show of raw pbcore json
