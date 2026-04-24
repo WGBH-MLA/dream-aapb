@@ -7,11 +7,13 @@ export default function ClientTranscriptViewer(props){
   useEffect(() => {
     let player = videojs.players["vjs-player"]
     if(player){
-      player.on("timeupdate", () => {
-        // every time the playhead moves...
-        setCurrentTime( player.currentTime() )
-
-      })  
+      player.on("canplay", () => {
+        player.on("timeupdate", () => {
+          // every time the playhead moves...
+          setCurrentTime( player.currentTime() )
+        })
+      })
+      
     }  
   }, [])
 
