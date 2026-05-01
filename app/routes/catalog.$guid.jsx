@@ -73,7 +73,6 @@ export default function ShowRecord() {
   useEffect(() => {
     if(data.transcriptURL && !transcriptData){
       getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines), (err) => console.log( 'failed fetching transcript data!!!', err ) )
-      
     }
   }, [])
 

@@ -53,3 +53,35 @@ export function dateTypeName(type){
       return "Copyright Date"
   }
 }
+
+export function secondsToHMS(seconds){
+  return new Date(seconds * 1000).toISOString().slice(11, 19)
+}
+
+export function visible(el){
+  // pop out player if not visible
+  var rect = el.getBoundingClientRect()
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  )
+}
+
+export function truth(val){
+  // lmao who made this language
+  return val || typeof val === "number" || typeof val === "string"
+}
+
+export function scrollToAnchor(anchorId) {
+  var page = document.querySelector('body')
+  var scrollable = document.getElementById('transcript-viewer')
+  var scrolled = document.getElementById(anchorId)
+  if(scrolled){
+    page.scrollTop = scrollable.offsetTop-page.offsetTop
+    // 24px to push it down off the top of viewer a little
+    scrollable.scrollTop = scrolled.offsetTop-scrollable.offsetTop - 24
+  }
+}
+
