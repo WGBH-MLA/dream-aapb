@@ -1364,7 +1364,12 @@ div.video-player-container video {
 }
 
 /*transcript viewer*/
+div.transcript-viewer.open {
+  display: block;
+}
+
 div.transcript-viewer {
+  display: none;
   font-size: 0.75em;
   background-color: #eee;
   padding-left: 1em;
@@ -1427,10 +1432,14 @@ div.transcript-viewer div.transcript-line mark.hot {
 }
 
 div.transcript-viewer-container div.transcript-search {
-  margin-left: 21%;
+  margin-left: 3%;
   font-size: 0.75em;
-  display: inline;
   padding: 1em;
+  display: none;
+}
+
+div.transcript-viewer-container div.transcript-search.open {
+  display: inline;
 }
 
 div.transcript-viewer-container div.transcript-search input {
@@ -1441,20 +1450,53 @@ div.transcript-viewer-container div.transcript-search input {
   width: 40%;
 }
 
-div.transcript-viewer-container div.transcript-search svg {
+div.transcript-viewer-container div.transcript-search a.transcript-search-button {
+  display: inline-block;
+
+  width: 2%;
+  min-width: 2%;
   margin-left: 0.5em;
+}
+
+div.transcript-viewer-container div.transcript-search a.transcript-search-button:hover {
+  cursor: pointer;
+}
+
+div.transcript-viewer-container div.transcript-search a.transcript-search-button svg {
+  color: #000;
   vertical-align: middle;
-  width: 3%;
-  min-width: 3%;
 }
 
 div.transcript-viewer-container div.transcript-search label {
   display: inline-block;
-  min-width: 7%;
-  width: 7%;
+  min-width: 10%;
+  width: 10%;
   margin-left: 1em;
   font-size: 0.5;
 }
+
+div.transcript-viewer-container div.transcript-viewer-header b {
+  margin-left: 2em;
+  color: #3C439B;
+  font-size: 0.6em;
+}
+
+div.transcript-viewer-container div.transcript-viewer-header.open b {
+  margin-left: 2em;
+  color: #aaa;
+}
+
+div.transcript-viewer-container div.transcript-search a.transcript-search-button.disable svg {
+  color: #aaa;
+}
+
+div.transcript-viewer-header svg.transcript-chevy {
+  position: relative;
+  vertical-align: middle;
+  top: 0;
+  margin-left: 1em;
+}
+
 
 /*search result*/
 div.search-result, div.baby-result {
@@ -2920,7 +2962,6 @@ figure.captioned figcaption {
     object-fit: cover;
     object-position: center;
     aspect-ratio: 1 / 1;
-
   }
 
   div.tv-menu-container div.tv-menu-program img {
@@ -2932,7 +2973,6 @@ figure.captioned figcaption {
     object-position: center;
     overflow: hidden;
   }
-
 
   div.tv-menu-container div.tv-menu-program h4 {
     width: 100%;
@@ -2947,28 +2987,28 @@ figure.captioned figcaption {
   }
 
   div.tv-menu-container div.tv-menu-program.four {
-  height: auto;
-  max-height: none;
-  overflow: visible;
-  margin-right: 1.125em;
-  flex-shrink: 0;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    margin-right: 1.125em;
+    flex-shrink: 0;
   }
 
   div.tv-menu-container div.tv-menu-program.four img {
-  display: block;
-  width: 100%;
-  min-width: 14.125em;
-  height: auto;
-  object-fit: cover;
-  object-position: center;
-  aspect-ratio: 1 / 1;   /* enforces square */
+    display: block;
+    width: 100%;
+    min-width: 14.125em;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1 / 1;
   }
 
   div.tv-menu-container.four div.tv-menu-program h4 {
-  display: block;
-  margin-top: 0.5em;
-  width: 100%;
-  max-width: 100%;
+    display: block;
+    margin-top: 0.5em;
+    width: 100%;
+    max-width: 100%;
   }
 
   /* search ui */
@@ -2994,7 +3034,10 @@ figure.captioned figcaption {
     max-width: 9.3%;
   }
 
-
+  /*bigtviewer*/
+  div.transcript-viewer-container div.transcript-search {
+    margin-left: 13%;
+  }
 
 }
 

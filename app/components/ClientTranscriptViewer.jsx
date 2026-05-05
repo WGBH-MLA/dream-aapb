@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Play, ChevronUp, ChevronDown, X } from "lucide-react"
+import { Play, ChevronUp, ChevronDown, ChevronRight, X } from "lucide-react"
 import videojs from "video.js"
 import { scrollToAnchor, secondsToHMS, visible, truth } from "../utils/helpers"
 
@@ -11,15 +11,18 @@ export default function ClientTranscriptViewer(props){
   const [matchIndexes, setMatchIndexes] = useState([])
   const [numMatches, setNumMatches] = useState(null)
 
-  
-  const handleChange = (e) => {
-    let val = e.target.value
-    if(e.target.value && e.target.value !== query){
-      // always lowcase the stored query
-      setQuery(e.target.value.toLowerCase())
 
-      setNumMatches( getNumMatches(props.lines, query) )
-    }
+  const clearQuery = (e) => {
+    setQuery(null)
+    let input = document.getElementById("transcript-search-input")
+    // hacky but otherwise doesnt get properly updated by state change, because of weird handling of input with defaultValue
+    input.value = ""
+  }
+
+  const handleChange = (e) => {
+    let queryValue = e.target.value
+    setQuery(queryValue)
+    setNumMatches( getNumMatches(props.lines, queryValue) )
   }
   
   const handleMatchChange = (next) => {
@@ -49,8 +52,23 @@ export default function ClientTranscriptViewer(props){
   }, [])
 
   let lines = props.lines
-  // little hokey
   let counta = 0
+
+  let classes = "transcript-viewer marbot"
+  let headerClasses = "transcript-viewer-header show-metadata-header"
+  let toggleMessage = props.viewerOpen ? "(Click to close)" : "(Click to expand)"
+  
+  let chevy
+  if(props.viewerOpen){
+    classes += " open"
+    headerClasses += " open"
+    chevy = <ChevronDown className="transcript-chevy" />
+  } else {
+   chevy = <ChevronRight className="transcript-chevy"/>
+  }
+  let toggler = <b onClick={ props.handleViewerToggle }>{ toggleMessage }{ chevy }</b>
+
+  let transcriptSearch, transcriptViewer
   if(lines){
 
     lines = lines.map((line,i) => {
@@ -66,9 +84,6 @@ export default function ClientTranscriptViewer(props){
         // to mark the query in the displayed text
         query={ query }
         selectedMatch={ selectedMatch }
-        numMatches={ numMatchesInThisLine }
-        // use counta to drop the expected number of anchors -> we dont care where they are, just how many!!
-        
         // this is what anchor num to start at for this line only
         matchAnchorStart={ numMatchesInThisLine > 0 ? counta : null }
       />
@@ -78,28 +93,36 @@ export default function ClientTranscriptViewer(props){
       return line
     })
 
-    return (
-      <>
-        <div className="transcript-viewer-header show-metadata-header">
-          Transcript
-          <TranscriptSearch
-            handleChange={ handleChange }
-            handleMatchChange={ handleMatchChange }
-            query={ query }
-            clearQuery={ () => setQuery(null) }
-            selectedMatch={ selectedMatch }
-            numMatches={ numMatches }
-          />
-        </div>
-        
-        <div id="transcript-viewer" className="transcript-viewer marbot">
-          { lines }
-        </div>
-      </>
+    transcriptSearch = (
+      <TranscriptSearch
+        open={ props.viewerOpen }
+        handleChange={ handleChange }
+        handleMatchChange={ handleMatchChange }
+        query={ query }
+        clearQuery={ clearQuery }
+        selectedMatch={ selectedMatch }
+        numMatches={ numMatches }
+      />
     )
-  } else if(props.guid) {
-    return "Transcript Not Available"
+
+    transcriptViewer = (
+      <div id="transcript-viewer" className={ classes }>
+        { lines }
+      </div>
+    )
   }
+
+  return (
+    <>
+      <div className={ headerClasses }>
+        Transcript
+        { toggler }
+        { transcriptSearch }
+      </div>
+      
+        { transcriptViewer }
+    </>
+  )
 }
 
 function TranscriptLine(props){
@@ -124,28 +147,38 @@ function TranscriptLine(props){
 }
 
 function TranscriptSearch(props){
-  let matchLabel, upVal, downVal, matchX
-  if(props.numMatches){
+  let matchLabel, matchX
+  let buttonClass, upClass, downClass
+  buttonClass = upClass = downClass = "transcript-search-button"
+  if(props.query && props.numMatches > 0 && truth(props.selectedMatch)){
     // we always get a props.selectedMatch, even when tehres no query
     matchLabel = `${props.selectedMatch+1} of ${props.numMatches}`
     matchX = <X />
+  } else {
+    matchLabel = `0 matches`
+    upClass += " disable"
+    downClass += " disable"
   }
 
-  let viewer = document.getElementById("transcript-viewer")
-
+  let classes = "transcript-search"
+  if(props.open){
+    classes += " open"
+  }
   return (
-    <div className="transcript-search">
+    <div className={ classes } >
       {/*Search the transcript*/}
       <input
+        id="transcript-search-input"
+        key="transcript-tommy"
         type="text"
-        onChange={ props.handleChange }
+        onKeyUp={ props.handleChange }
         defaultValue={ props.query }
         placeholder="Search the transcript..."
       />
       <label>{ matchLabel }</label>
-      <a onClick={ props.clearQuery }>{ matchX }</a>
-      <a onClick={ (e) => props.handleMatchChange(false) }><ChevronUp /></a>
-      <a onClick={ (e) => props.handleMatchChange(true) }><ChevronDown /></a>
+      <a className={ buttonClass } onClick={ props.clearQuery }>{ matchX }</a>
+      <a className={ upClass } onClick={ (e) => props.handleMatchChange(false) }><ChevronUp /></a>
+      <a className={ downClass } onClick={ (e) => props.handleMatchChange(true) }><ChevronDown /></a>
     </div>
   )
 }
@@ -170,7 +203,8 @@ function increment(val, current, numItems){
 
 function transcriptMatches(lines, query){
   return lines.map((line) => {
-    return line.text.toLowerCase().includes(query) ? line.text : null
+    // return line.text.toLowerCase().includes(query) ? line.text : null
+    return hasMatch(line.text, query)
   }).filter((line) => line)
 }
 
@@ -188,6 +222,10 @@ function numOccurrences(string, substring){
   return (string.match( queryRegex(substring) ) || []).length
 }
 
+function hasMatch(string, substring) {
+  return string.search( queryRegex(substring) )
+}
+
 function queryRegex(query) {
   // all occurences, case insensitive
   return new RegExp(`(${query})`, "gi")
@@ -195,7 +233,7 @@ function queryRegex(query) {
 
 function matchAnchor(num){
   return `m${num}`
-}
+} 
 
 function mark(matchText, anchorNum, hotAnchor){
   return `<mark class="${ hotAnchor ? "hot" : "" }" id="${ matchAnchor(anchorNum) }">${ matchText }</mark>`
@@ -203,15 +241,38 @@ function mark(matchText, anchorNum, hotAnchor){
 
 function addAnchorsToLine(string, query, anchorStart, hotAnchor){
   let currentAnchor = anchorStart
-  let pieces = string.split(query)
-  let result = ""
-  pieces.forEach((piece,i) => {
-    result += piece
-    if(i !== pieces.length-1){
-      result += mark(query, currentAnchor, currentAnchor == hotAnchor)
-    }
-    currentAnchor += 1
-  })
+  let thatReggie = queryRegex(query)
 
-  return result
+  // split on case insensitive query matches, result contains the query parts too
+  return string.split( thatReggie ).map((piece) => {
+    if(piece.search( thatReggie ) > -1){
+      // do it match?
+      piece = mark(piece, currentAnchor, currentAnchor == hotAnchor)
+      currentAnchor += 1
+    }
+
+    // next!
+    return piece
+  }).join("")
+}
+
+function piecefulString(string, pieces, pieceIndex, queryLength){
+  let start = indexThroughEndOfPiece(pieces, pieceIndex, queryLength)
+  let end = start + pieces[pieceIndex].length
+  return string.slice(start, end)
+}
+
+function piecefulQuery(string, pieces, pieceIndex, queryLength ){
+  let start = indexThroughEndOfPiece(pieces, pieceIndex, queryLength)
+  let end = start + queryLength
+  return string.slice(start, end)
+}
+
+function indexThroughEndOfPiece(pieces, pieceIndex, queryLength){
+  let start = 0
+  for(var i=0; i<pieceIndex; i++){
+    start += pieces[i].length
+    start += queryLength
+  }
+  return start
 }

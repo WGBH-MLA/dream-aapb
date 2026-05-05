@@ -66,24 +66,31 @@ export const loader = async ({params, request}) => {
 
 export default function ShowRecord() {
   const data = useLoaderData()
+  const [viewerOpen, setViewerOpen] = useState(false)
 
-  // hoo hoo ha ha
   const [transcriptData, setTranscriptData] = useState(false)
 
+  const handleViewerToggle = (e) => {
+    setViewerOpen(!viewerOpen)
+  }
+  
   useEffect(() => {
-    if(data.transcriptURL && !transcriptData){
-      getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines), (err) => console.log( 'failed fetching transcript data!!!', err ) )
+    if(viewerOpen && data.transcriptURL && !transcriptData){
+      getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines) )
     }
-  }, [])
-
+  })
 
   // class instance cant survive ssr serialization, so do it again
   let record = new Record(data.recordData)
 
   let transcriptViewer
-  if(transcriptData){
-    transcriptViewer = <TranscriptViewer lines={ transcriptData } />
-  }
+  transcriptViewer = (
+    <TranscriptViewer
+      lines={ transcriptData }
+      viewerOpen={ viewerOpen }
+      handleViewerToggle={ handleViewerToggle }
+    />
+  )
 
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
@@ -198,7 +205,7 @@ export default function ShowRecord() {
             />
           </div>
 
-          <div className="transcript-viewer-container">
+          <div className="transcript-viewer-container marbot">
             { transcriptViewer }
           </div>
 

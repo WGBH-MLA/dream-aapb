@@ -9,6 +9,8 @@ export default function TranscriptViewer(props){
         <Suspense fallback="Loading...">
           <ClientTranscriptViewer
             lines={ props.lines }
+            viewerOpen={ props.viewerOpen }
+            handleViewerToggle={ props.handleViewerToggle }
           />
         </Suspense>
       </ClientOnly>
