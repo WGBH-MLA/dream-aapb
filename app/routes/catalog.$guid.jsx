@@ -84,13 +84,16 @@ export default function ShowRecord() {
   let record = new Record(data.recordData)
 
   let transcriptViewer
-  transcriptViewer = (
-    <TranscriptViewer
-      lines={ transcriptData }
-      viewerOpen={ viewerOpen }
-      handleViewerToggle={ handleViewerToggle }
-    />
-  )
+  if(data.transcriptURL){
+    transcriptViewer = (
+      <TranscriptViewer
+        lines={ transcriptData }
+        viewerOpen={ viewerOpen }
+        handleViewerToggle={ handleViewerToggle }
+      />
+    )  
+  }
+  
 
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)

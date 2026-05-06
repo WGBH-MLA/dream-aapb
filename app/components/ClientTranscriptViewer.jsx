@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import { Play, ChevronUp, ChevronDown, ChevronRight, X } from "lucide-react"
+import { Play, ChevronUp, ChevronDown, ChevronRight, X, CircleArrowOutUpRight } from "lucide-react"
 import videojs from "video.js"
 import { scrollToAnchor, secondsToHMS, visible, truth } from "../utils/helpers"
 
 export default function ClientTranscriptViewer(props){
   const [currentTime, setCurrentTime] = useState(null)
   const [query, setQuery] = useState(null)
+  const [sideBySide, setSideBySide] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState(0)
   
   const [matchIndexes, setMatchIndexes] = useState([])
@@ -20,9 +21,10 @@ export default function ClientTranscriptViewer(props){
   }
 
   const handleChange = (e) => {
-    let queryValue = e.target.value
-    setQuery(queryValue)
+    // filter out empty strangs
+    let queryValue = truth(e.target.value) && e.target.value.length > 0 ? e.target.value : null
     setNumMatches( getNumMatches(props.lines, queryValue) )
+    setQuery(queryValue)
   }
   
   const handleMatchChange = (next) => {

@@ -1400,7 +1400,7 @@ div.transcript-viewer div.transcript-line div {
 }
 
 div.transcript-viewer div.transcript-line span {
-  display: none;
+  opacity: 0;
   font-size: 0.7em;
   color: #aaa;
 }

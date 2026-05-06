@@ -223,10 +223,10 @@ if(ctx.pbcoreDescriptionDocument.pbcoreIdentifier != null && ctx.pbcoreDescripti
       if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length > 0){
 
         // look for a level of user access annotation
-        for(int z=0; z < ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length; z++){
+        for(int u=0; u < ctx.pbcoreDescriptionDocument.pbcoreAnnotation.length; u++){
 
-          if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z] != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z].annotationType == "Level of User Access"){
-            ctx.access_level = ctx.pbcoreDescriptionDocument.pbcoreAnnotation[z].text;
+          if(ctx.pbcoreDescriptionDocument.pbcoreAnnotation[u] != null && ctx.pbcoreDescriptionDocument.pbcoreAnnotation[u].annotationType == "Level of User Access"){
+            ctx.access_level = ctx.pbcoreDescriptionDocument.pbcoreAnnotation[u].text;
           }
         }
       }
