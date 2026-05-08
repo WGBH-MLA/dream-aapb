@@ -58,15 +58,15 @@ export function secondsToHMS(seconds){
   return new Date(seconds * 1000).toISOString().slice(11, 19)
 }
 
-export function visible(el){
-  // pop out player if not visible
-  var rect = el.getBoundingClientRect()
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  )
+export function checkVisible(ele) {
+  if(!ele){
+    // element was missing somewhere during render cycle oopsie!!
+    return false
+  }
+
+  var rect = ele.getBoundingClientRect()
+  var viewHeight = Math.max(document.documentElement.clientHeight*0.7, window.innerHeight*0.7)
+  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }
 
 export function truth(val){

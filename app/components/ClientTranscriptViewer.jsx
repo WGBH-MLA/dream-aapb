@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react"
 import { Play, ChevronUp, ChevronDown, ChevronRight, X, CircleArrowOutUpRight } from "lucide-react"
 import videojs from "video.js"
-import { scrollToAnchor, secondsToHMS, visible, truth } from "../utils/helpers"
+import { scrollToAnchor, secondsToHMS, truth } from "../utils/helpers"
 
 export default function ClientTranscriptViewer(props){
   const [currentTime, setCurrentTime] = useState(null)
   const [query, setQuery] = useState(null)
-  const [sideBySide, setSideBySide] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState(0)
   
   const [matchIndexes, setMatchIndexes] = useState([])
@@ -15,6 +14,7 @@ export default function ClientTranscriptViewer(props){
 
   const clearQuery = (e) => {
     setQuery(null)
+    setSelectedMatch(0)
     let input = document.getElementById("transcript-search-input")
     // hacky but otherwise doesnt get properly updated by state change, because of weird handling of input with defaultValue
     input.value = ""
@@ -51,6 +51,7 @@ export default function ClientTranscriptViewer(props){
         })
       })
     }
+
   }, [])
 
   let lines = props.lines
@@ -278,3 +279,4 @@ function indexThroughEndOfPiece(pieces, pieceIndex, queryLength){
   }
   return start
 }
+

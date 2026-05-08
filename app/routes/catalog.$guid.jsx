@@ -198,7 +198,7 @@ export default function ShowRecord() {
 
         <div className="skinnier-body-container bmarbot martop video-area">
   
-          <div className="show-media marbot martop">
+          <div id="show-media" className="bbmarbot martop">
             <VideoPlayer
               guid={ record.guid }
               title={ record.title }

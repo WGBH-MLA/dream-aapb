@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import thumbnailURL from "../utils/thumbnailURL"
 import { getRecord } from "../utils/getRecord"
+import { checkVisible } from "../utils/helpers"
 
 // exists
 const UNKNOWN = -1
@@ -84,15 +85,4 @@ export default function Thumbnail(props) {
       { babyTitle }
     </div>
   )
-}
-
-function checkVisible(ele) {
-  if(!ele){
-    // element was missing somewhere during render cycle oopsie!!
-    return false
-  }
-
-  var rect = ele.getBoundingClientRect()
-  var viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight)
-  return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }

@@ -222,6 +222,10 @@ a:hover {
   margin-top: 4em;
 }
 
+.bbmarbot {
+  margin-bottom: 8em;
+}
+
 /*general page layout*/
 div.body-container {
   width: 96%;
@@ -1290,22 +1294,23 @@ div.show-description {
   width: 50%;
 }
 
-div.show-media {
+div#show-media {
   background-color: #f9f9f9;
   margin-left: 20%;
+  height: 14em;
   width: 60%;
 }
 
-div.show-media div.show-thumbnail {
+div#show-media div.show-thumbnail {
   position: relative;
   border: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  width: 100%2;
+  width: 100%;
 }
 
-div.show-media div.show-thumbnail img {
+div#show-media div.show-thumbnail img {
   width: 100%;
   object-fit: contain;
 }
@@ -1356,12 +1361,32 @@ div.video-player-container {
   color: #fff;
   background-color: #000;
   width: 100%;
+
+  transition: height 0.8s, width 0.8s;
 }
 
 div.video-player-container video {
   width: 100%;
   vertical-align: middle;
 }
+
+div.video-player-container.mini {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 20%;
+  height: auto;
+
+  animation-name: video-transition;
+  animation-duration: 2s;
+}
+
+
+@keyframes video-transition {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+}
+
 
 /*transcript viewer*/
 div.transcript-viewer.open {
@@ -2871,7 +2896,7 @@ figure.captioned figcaption {
     width: 100%;
   }
 
-  div.show-media {
+  div#show-media {
     margin-left: 1em;
     width: 94%;
     background-color: #ff0;
