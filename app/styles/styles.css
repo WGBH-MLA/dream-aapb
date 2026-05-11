@@ -97,16 +97,23 @@ div.viewer div.viewer-controls {
   font-weight: bold;
 }
 
-div.viewer div.viewer-controls:hover:after {
+div.viewer div.viewer-controls b {
+  margin-left: 2em;
+  color: #3C439B;
+  font-size: 0.8em;
+}
+
+/*
+div.viewer div.viewer-controls:after {
   margin-left: 2em;
   color: #3C439B;
   font-size: 0.8em;
   content: "(Click to toggle full PBCore view)";
 }
-
+*/
 div.viewer div.viewer-controls svg {
-  position: absolute;
-  right: 1em;
+  margin-left: 1em;
+  vertical-align: middle;
 }
 
 div.viewer div.viewer-content pre {
@@ -522,7 +529,7 @@ div.social-icon {
 
 div.social-icon img {
   margin: 0;
-  z-index: 200;
+  z-index: 0;
   position: relative;
   width: 2em;
   height: 2em;
@@ -1160,7 +1167,7 @@ div.drawermenu-container {
   align-items: flex-start;
   margin-top: 2em;
   margin-right: 5em;
-  z-index: 100;
+  z-index: 1000;
 }
 
 div.drawermenu-container svg.lucide-chevron-down {
@@ -1361,8 +1368,8 @@ div.video-player-container {
   color: #fff;
   background-color: #000;
   width: 100%;
-
   transition: height 0.8s, width 0.8s;
+  z-index: 100;
 }
 
 div.video-player-container video {
@@ -1381,12 +1388,55 @@ div.video-player-container.mini {
   animation-duration: 2s;
 }
 
-
 @keyframes video-transition {
   0% { opacity: 0 }
   100% { opacity: 1 }
 }
 
+/*videojs custom styles*/
+vjs-audio-description-button {
+  color: #fff; /* white icon */
+}
+
+.vjs-audio-description-button .vjs-icon-placeholder:before {
+  content: "AD";          /* simple text icon */
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.vjs-audio-description-button:hover,
+.vjs-audio-description-button:focus {
+  color: #fff;
+  background-color: rgba(255,255,255,0.15);
+}
+
+.vjs-audio-description-button.vjs-ad-active {
+  color: #fff;
+  background-color: #007cba;
+  border-radius: 2px;
+}
+
+.vjs-menu .vjs-menu-content {
+  background-color: #111;
+}
+
+.vjs-menu .vjs-menu-item {
+  color: #ccc;
+  padding: 0.5em 1em;
+}
+
+.vjs-menu .vjs-menu-item:hover,
+.vjs-menu .vjs-menu-item:focus {
+  background-color: #333;
+  color: #fff;
+}
+
+.vjs-menu .vjs-menu-item.vjs-selected {
+  background-color: #007cba;
+  color: #fff;
+  font-weight: 600;
+}
 
 /*transcript viewer*/
 div.transcript-viewer.open {

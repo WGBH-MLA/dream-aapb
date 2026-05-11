@@ -21,10 +21,19 @@ export default function ClientTranscriptViewer(props){
   }
 
   const handleChange = (e) => {
-    // filter out empty strangs
-    let queryValue = truth(e.target.value) && e.target.value.length > 0 ? e.target.value : null
-    setNumMatches( getNumMatches(props.lines, queryValue) )
-    setQuery(queryValue)
+    if(e.key === "Enter"){
+      // use enter to cycle through matches
+
+      // shift held: go up, else: go down
+      handleMatchChange(!e.shiftKey)
+    } else {
+      // otherwise filter normally
+      // filter out empty strangs
+      let queryValue = truth(e.target.value) && e.target.value.length > 0 ? e.target.value : null
+      setNumMatches( getNumMatches(props.lines, queryValue) )
+      setQuery(queryValue)
+    }
+    
   }
   
   const handleMatchChange = (next) => {
@@ -174,14 +183,14 @@ function TranscriptSearch(props){
         id="transcript-search-input"
         key="transcript-tommy"
         type="text"
-        onKeyUp={ props.handleChange }
+        onKeyUp={ (e) => props.handleChange(e) }
         defaultValue={ props.query }
         placeholder="Search the transcript..."
       />
       <label>{ matchLabel }</label>
       <a className={ buttonClass } onClick={ props.clearQuery }>{ matchX }</a>
-      <a className={ upClass } onClick={ (e) => props.handleMatchChange(false) }><ChevronUp /></a>
-      <a className={ downClass } onClick={ (e) => props.handleMatchChange(true) }><ChevronDown /></a>
+      <a className={ upClass } onClick={ (e) => props.handleMatchChange(false,) }><ChevronUp /></a>
+      <a className={ downClass } onClick={ (e) => props.handleMatchChange(true,) }><ChevronDown /></a>
     </div>
   )
 }

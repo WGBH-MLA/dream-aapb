@@ -26,7 +26,7 @@ export default function addADButton(vjs, adURL){
       }
       
       const button = player.getChild('controlBar').getChild('ADMenuButton')
-      if (button) {
+      if (button){
         button.toggleClass('vjs-ad-active', player.adActive_)
       }
       

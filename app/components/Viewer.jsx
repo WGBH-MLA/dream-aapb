@@ -12,12 +12,13 @@ export default function Viewer(props){
     chevy = <ChevronRight />
   }
 
+  let toggler = <b onClick={ () => props.setShowContent(!props.showContent) }>(Click to toggle full PBCore view){ chevy }</b>
   return (
 
     <div className={ classes } >
-      <div className="viewer-controls" onClick={ () => props.setShowContent(!props.showContent) }>
+      <div className="viewer-controls">
         { props.label }
-        { chevy }
+        { toggler }
       </div>
       <div className="viewer-content">
         <pre>
