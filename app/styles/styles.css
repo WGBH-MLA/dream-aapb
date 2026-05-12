@@ -31,6 +31,7 @@ span.ais-RefinementList-count {
 }
 
 body {
+  position: relative;
   overscroll-behavior: auto;
   margin: 0;
   font-family: Inter, helvetica;
@@ -130,7 +131,7 @@ div.rotation-helper {
 }
 
 span.main-span {
-  z-index: 100000;
+  position: relative;
 }
 
 span.rotate * {
@@ -1167,7 +1168,6 @@ div.drawermenu-container {
   align-items: flex-start;
   margin-top: 2em;
   margin-right: 5em;
-  z-index: 1000;
 }
 
 div.drawermenu-container svg.lucide-chevron-down {
@@ -1256,6 +1256,7 @@ div.drawermenu-container div.drawermenu-items:before {
 }
 
 div.drawermenu-items {
+  z-index: 10000;
   min-width: fit-content;
   white-space: nowrap;
   padding-right: 2em;
@@ -1306,7 +1307,9 @@ div#show-media {
   margin-left: 20%;
   height: 14em;
   width: 60%;
+  margin-bottom: 8em;
 }
+
 
 div#show-media div.show-thumbnail {
   position: relative;
@@ -1760,7 +1763,6 @@ div.hit-details {
 
 div.top-search-bar * {
   position: relative;
-  z-index: 100;
 }
 
 hr.top-bar-divider {
@@ -1849,7 +1851,7 @@ div.options-container div * {
 
 div.options-container select {
   background-color: transparent;
-  z-index: 100;
+  z-index: 5;
   height: 2em;
   width: 12rem;
   top: 0.2em;
@@ -1868,7 +1870,7 @@ div.options-container div.sort-container {
 
 div.sort-container svg {
   position: relative;
-  z-index: 99;
+  z-index: 4;
   top: 0.55em;
 }
 
@@ -2748,6 +2750,7 @@ figure.captioned figcaption {
 
   /*header*/
   div.header-container {
+    position: relative;
     width: 100%;
   }
 
@@ -2759,12 +2762,93 @@ figure.captioned figcaption {
     object-fit: contain;
     height: 8em;
     max-width: 95%;
-
   }
 
   div.header-bar {
+    position: relative;
     display: block;
   }
+
+  div.header-bar img.header-squares {
+    /*display: none;*/
+
+    /*object-fit: cover;
+    width: 100%;
+    height: 4em;
+    margin-top: -2em;
+    z-index: 0;
+    display: block;*/
+
+    position: absolute;
+    right: 0;
+    width: 100%;
+    top: 4em;
+    z-index: -10;
+  }
+
+
+  /*drawer menu*/
+  div.drawermenu-container {
+    position: relative;
+    margin-left: 1em;
+    font-size: 2em;
+    display: block;
+  }
+
+  div.drawermenu-container div.drawermenu-items {
+    display: none;
+    position: relative;
+  }
+
+  div.drawermenu-container:hover > div.drawermenu-items {
+    position: absolute;
+    display: block;
+    width: 80%;
+    right: 1em;
+    font-size: 1.2em;
+    margin-top: 0em;
+    z-index: 2000;
+  }
+
+  div.drawermenu-container div.drawermenu-items {
+    margin-top: 0;
+  }
+
+  div.drawermenu-container div.drawermenu-trigger {
+    width: 30%;
+    position: relative;
+    display: block;
+    z-index: 1000;
+  }
+
+  div.header-bar div.layout-search {
+    display: block;
+    height: 3em;
+    margin-top: 3em;
+    margin-bottom: 6em;
+  }
+
+
+  div.header-bar div.layout-search input, div.header-bar div.layout-search button {
+    font-size: 2em;
+    position: relative;
+    z-index: 10;
+  }
+
+  div.header-bar div.layout-search button {
+    height: 3.2em;
+    margin-top: -0.4em;
+  }
+
+  div.header-bar div.layout-search input {
+    background: transparent;
+    height: 3em;
+    position: relative;
+    z-index: 10;
+    margin-left: 2em;
+    width: 70%;
+  }
+
 
   /*show page*/
   div.page-title {
@@ -2780,7 +2864,6 @@ figure.captioned figcaption {
   div.pull-quote-group-container.bmarleft.bmarright {
     margin-left: 0;
     margin-right: 0;
-
   }
 
   div.pull-quote-group-quote {
@@ -2920,8 +3003,39 @@ figure.captioned figcaption {
     display: none;
   }
 
+  div.options-container div {
+    height: auto;
+    display: block;
+    width: 100%;
+  }
+
+  div.options-container select {
+    width: 60%;
+  }
+
+  div.options-container div.sort-container {
+    display: block;
+    width: 100%;
+    font-size: 4em;
+  }
+
+  div.options-container div.sort-container div {
+    width: 55%;
+    display: inline-block;
+  }
+
+  div.options-container div.sort-container svg {
+    display: none;
+  }
+
+  div.options-container div.sort-container div.ais-SortBy select, div.options-container div.sort-container div.ais-HitsPerPage select {
+    /*agh it burns!!*/
+    position: relative;
+    vertical-align: middle;
+    top: -0.2em;
+  }
+
   div.sort-container div.view-select div {
-/*    display: inline-block;*/
   }
 
   div.options-container, div.sort-container.per-page, div.sort-container.sort, div.sort-container.view-select {
@@ -2934,10 +3048,21 @@ figure.captioned figcaption {
     width: 10%;
   }
 
+  div.sort-container.view-select div.view-select-button {
+    margin-left: 1em;
+    height: 2em;
+    display: inline-block;
+    width: 20%;
+    margin-bottom: 1em;
+  }
+
+  div.sort-container.view-select div.view-select-button img {
+    width: 50%;
+  }
+
   div.options-container {
-    display: inline-flex;
+    display: block;
     vertical-align: middle;
-    height: 2rem;
     font-weight: bold;
     line-height: 2.4em;
   }
@@ -2949,7 +3074,12 @@ figure.captioned figcaption {
   div#show-media {
     margin-left: 1em;
     width: 94%;
-    background-color: #ff0;
+    margin-bottom: 14em;
+  }
+
+  div.video-player-container.mini {
+    right: -2em;
+    width: 32%;
   }
 
   a.back-link {
@@ -2967,18 +3097,6 @@ figure.captioned figcaption {
     padding-bottom: 1.2em;
   }
 
-
-/*  div.show-header-bar {
-    position: absolute;
-    width: 110%;
-    left: -2em;
-  }
-
-  div.page-title {
-    margin-bottom: 6em;
-    overflow-x: hidden;
-  }
-*/
   div.page-title h2 {
     font-size: 2em;
   }

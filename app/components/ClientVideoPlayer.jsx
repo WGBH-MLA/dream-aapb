@@ -70,7 +70,6 @@ export default function ClientVideoPlayer(props){
               setBlockPippy(true)
               // upon pippying we must restrain ourselves from pippying
               setTimeout(() => {
-                console.log( 'repip!' )
                 // lest we pippy too much
                 setBlockPippy(false)
               }, 200)

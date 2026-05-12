@@ -179,7 +179,7 @@ export default function ShowRecord() {
       dates = (
         <>
           <div className="show-metadata-header">Dates</div>
-          { record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad) => <ShowBox label={ dateTypeName(pbad.dateType) } text={ pbad.text } />) }
+          { record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad, i) => <ShowBox key={i} label={ dateTypeName(pbad.dateType) } text={ pbad.text } />) }
         </>
       )
     }
@@ -198,7 +198,7 @@ export default function ShowRecord() {
 
         <div className="skinnier-body-container bmarbot martop video-area">
   
-          <div id="show-media" className="bbmarbot martop">
+          <div id="show-media" className="martop">
             <VideoPlayer
               guid={ record.guid }
               title={ record.title }

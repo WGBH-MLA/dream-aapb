@@ -113,11 +113,10 @@ export default function Header(props) {
         <DrawerMenu label="Participate" items={drawerItems.participate} />
         <DrawerMenu label="About" items={drawerItems.about} />
         { layoutSearch }
-      </div>
-      <div className="header-bar marbot">
-        <a href="/">
+
+        <div>
           <img src="/corner-squares.png" className="header-squares" />
-        </a>
+        </div>
       </div>
     </div>
   )
