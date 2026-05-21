@@ -9,7 +9,6 @@ import LayoutSearch from "../components/LayoutSearch"
 // import BabySearch from "../components/BabySearch"
 //<BabySearch esIndex={ esConfig.esIndex } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
 
-
 export function renderCollection(collection, esConfig) {
   // console.log("rendering collection", collection)
   let specialCollectionTag = collection.tag || "peabody"
@@ -17,6 +16,7 @@ export function renderCollection(collection, esConfig) {
   let navigateHook = useNavigate()
 
   const [search, setSearch] = useState("")
+  const [helpOpen, setHelpOpen] = useState(false)
 
   const handleCollectionSearch = (val) => {
     setSearch(val)
@@ -49,8 +49,11 @@ export function renderCollection(collection, esConfig) {
       </div>
     )
   }
+let viewCollectionURL = `/search?${esConfig.esIndex}[refinementList][special_collections][0]=${specialCollectionTag}`
 
-  let collectionSearch = (<LayoutSearch
+let collectionSearch = (
+  <div className="search-box-container">
+    <LayoutSearch
       navigateHook={ navigateHook }
       esIndex={ esConfig.esIndex }
       handleChange={ handleCollectionSearch }
@@ -58,29 +61,40 @@ export function renderCollection(collection, esConfig) {
       searchFilter={ `&${ esConfig.esIndex }[refinementList][special_collections][0]=${ specialCollectionTag }` }
       wide={ true }
       placeholder={ "Search the collection..." }
-    />)
-
-let leftBlocks = renderBlocks(collection.content.filter(block =>
-    ["help", "resources"].includes(block.type)
-  ))
-
+    />
+    <div className="search-meta">
+      <a href="/help-page" target="_blank" rel="noreferrer" className="help-link">
+        Need Help Searching?
+      </a>
+      <a className="view-all-shadow" href={ viewCollectionURL }>
+        View the collection
+      </a>
+    </div>
+  </div>
+)
+let leftBlocks = (
+  <div className="collection-resources">
+    { renderBlocks(collection.content.filter(block =>
+      ["resources"].includes(block.type)
+    )) }
+  </div>
+)
   let rightBlocks = renderBlocks(collection.content.filter(block =>
     ["background"].includes(block.type)
   ))
 
 return (
   <div className="page-container collection-page-container">
-
     <div className="collection-header">
       <h2>{ dangerousDiv(collection.title, false) }</h2>
-      <a className="top-back-link" href="/collections">&lt; Back To Special Collections</a>
     </div>
+    <a className="top-back-link" href="/collections">&lt; Back To Special Collections</a>
 
     <div className="collection-main-grid">
 
       <div className="collection-left">
         <div className="collection-image-container">
-          <img src={ collection.hero_image.full_url } />
+          <img src={ collection.cover_medium.full_url } />
         </div>
 
         <div className="collection-section collection-search marbot">
@@ -114,7 +128,6 @@ return (
       </div>
 
     </div>
-
   </div>
 )
 }
