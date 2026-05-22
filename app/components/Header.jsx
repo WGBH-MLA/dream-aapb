@@ -12,7 +12,7 @@ const drawerItems = {
 
     },
     {
-      label: "Scholarly Exhibits",
+      label: "Exhibits",
       url: "/exhibits",
       external: false,
 
@@ -23,11 +23,6 @@ const drawerItems = {
       external: false,
 
     },
-    {
-      label: "National History Day",
-      url: "/national-history-day",
-      external: false,
-    },
   ],
   participate: [
     {
@@ -37,38 +32,18 @@ const drawerItems = {
 
     },
     {
-      label: "Fix Transcripts",
-      url: "/fixitplus",
-      external: false,
-
-    },
-  ],
-  about: [
-    {
-      label: "About the AAPB",
-      url: "/about",
-      external: false,
-
-    },
-    {
-      label: "Participating Organizations",
+      label: "Contributing Organizations",
       url: "/organizations",
       external: false,
 
     },
     {
-      label: "Visit",
-      url: "/visit",
+      label: "Volunteer",
+      url: "/volunteer",
       external: false,
 
     },
-    {
-      label: "FAQ",
-      url: "/faq",
-      external: false,
-
-    },
-  ]
+  ],
 }
 
 export default function Header(props) {
@@ -103,7 +78,7 @@ export default function Header(props) {
           </span>
         </div>
       </a>
-      
+
       <div className="header-bar marbot">
         <a href="/" className="header-logo">
           <img src="/aapb.png" />
@@ -111,7 +86,7 @@ export default function Header(props) {
         <div className="header-spacer" />
         <DrawerMenu label="Explore" items={drawerItems.explore} />
         <DrawerMenu label="Participate" items={drawerItems.participate} />
-        <DrawerMenu label="About" items={drawerItems.about} />
+        <a href="/about" className="drawer-label">About</a>
         { layoutSearch }
       </div>
       <div className="header-row">

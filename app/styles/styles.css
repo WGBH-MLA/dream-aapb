@@ -595,17 +595,18 @@ div.link-bank hr {
 
 div.biglink svg {
   display: inline-block;
+  margin-left: 2em;
   width: 4em;
   height: 4em;
   color: #fff;
-  background-color: #808;
+  background-color: #3c4399;
   border-radius: 4px;
   padding: 1em;
 }
 
 div.biglink div {
   display: inline-block;
-  margin-left: 2em;
+  margin-left: 8em;
   width: 70%;
   font-size: 1em;
 }
@@ -614,6 +615,12 @@ div.biglink h3 {
   margin-left: 0;
   font-weight: bold;
   font-size: 1em;
+}
+
+div.biglink p {
+  margin-left: 0;
+  font-size: 1em;
+  color: #000000;
 }
 
 div.biglink a {
@@ -1271,6 +1278,21 @@ div.drawermenu-items {
 
 }
 
+a.drawer-label {
+  text-decoration: none;
+  font-size: 1.3em;
+  color: rgba(74, 78, 156);
+  padding: 0 .1em;
+  margin-right: 5em;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  align-self: center;
+}
+
+a.drawer-label:hover {
+  font-weight: normal;
+}
 
 div.page-sidebar {
   vertical-align: top;

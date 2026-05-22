@@ -1,3 +1,9 @@
+import SummaryBox from "../components/SummaryBox"
+import PullQuote from "../components/PullQuote"
+import PullQuoteGroup from "../components/PullQuoteGroup"
+import LinkBankFooter from '../components/LinkBankFooter';
+
+
 export default function FrequentlyAskedQuestions() {
   return (
     <div className="page-container">
@@ -88,7 +94,10 @@ export default function FrequentlyAskedQuestions() {
         <p className="marbot">
           Participating organizations can use the Archival Management System (AMS), to view their records and digitized proxy files. We have created guides for navigating the AMS and obtaining copies of your organization's improved metadata.
         </p>
+        <div>
+          <LinkBankFooter />
+        </div>
       </div>
-    </div>
+        </div>
   )
 }

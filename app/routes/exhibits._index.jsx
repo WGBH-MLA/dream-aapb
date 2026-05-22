@@ -35,7 +35,7 @@ export default function Index() {
 
   return (
     <div className='body-container'>
-      <h1>Scholarly Exhibits</h1>
+      <h1>Exhibits</h1>
       <p>American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance.</p>
 
       <TVMenu title="" programs={data.exhibits} />

@@ -15,6 +15,8 @@ export default function ToeNail(props){
         <SocialIcon url="https://www.youtube.com/channel/UCni4awAToTQjg9d1vW9w-8w" icon="/yt.png" />
         <SocialIcon url="https://www.instagram.com/amarchivepub/" icon="/ig.png" />
         <SocialIcon url="https://www.facebook.com/amarchivepub" icon="/fb.png" />
+        <SocialIcon url="https://mastodon.social/@amarchivepub" icon="/mast.png" />
+        <SocialIcon url="https://www.reddit.com/r/amarchivepub/" icon="/reddit.png" />
       </div>
     </div>
   )
