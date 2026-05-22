@@ -3,6 +3,11 @@ ul.ais-Pagination-list {
   display: block;
 }
 
+input[type="checkbox"].ais-RefinementList-checkbox {
+  border: 12px solid red;
+  background-color: #ff0;
+}
+
 ul.ais-Pagination-list li {
  display: inline-flex;
  min-width: 1em;
@@ -2013,13 +2018,14 @@ div.search-accordion-container svg {
 div.ais-SearchBox form button.ais-SearchBox-submit, div.ais-SearchBox form button.ais-SearchBox-reset {
 
 }
-
+ 
 div.ais-SearchBox form, div.ais-SearchBox form input {
   position: relative;
   left: -0.1em;
   width: 80%;
   padding: 0.25em;
  }
+
  div.ais-SearchBox form button {
   display: none;
  }
@@ -2739,8 +2745,6 @@ figure.captioned figcaption {
   /* layout */
   div.page-container {
     width: 94%;
-    margin-left: 2em;
-    margin-right: 0;
   }
 
   div.skinny-body-container, div.skinnier-body-container {
@@ -2766,6 +2770,12 @@ figure.captioned figcaption {
 
   div.header-bar {
     position: relative;
+    display: block;
+  }
+
+  div.header-row {
+    left: 0;
+    position: absolute;
     display: block;
   }
 
@@ -2828,7 +2838,6 @@ figure.captioned figcaption {
     margin-bottom: 6em;
   }
 
-
   div.header-bar div.layout-search input, div.header-bar div.layout-search button {
     font-size: 2em;
     position: relative;
@@ -2846,14 +2855,91 @@ figure.captioned figcaption {
     position: relative;
     z-index: 10;
     margin-left: 2em;
-    width: 70%;
+    width: 75%;
   }
 
+  /*footah*/
+  div.footer-bar {
+  }
+
+  div.toenail-bar {
+  }
 
   /*show page*/
   div.page-title {
     overflow-x: visible;
   }
+
+  div.show-metadata-container, div.transcript-viewer-container {
+    width: 94%;
+    word-break: break-word;
+    font-size: 2em;
+  }
+
+  div.viewer {
+    font-size: 1.5em;
+  }
+
+  div.viewer pre {
+    overflow-x: auto;
+  }
+
+  div.show-metadata-container label {
+    display: block;
+    margin-bottom: 0.5em;
+  }
+
+  div.show-metadata-container div.show-box {
+    margin-right: 1em;
+  }
+
+  div.show-header-bar {
+    width: 94%;
+  }
+
+  /*tviewer*/
+
+  div.transcript-viewer-container div.transcript-search {
+    margin-left: 0;
+    font-size: 1em;
+    padding: 0.5em;
+    margin-left: 0;
+    display: none;
+  }
+
+
+  div.transcript-viewer-container div.transcript-search input {
+    margin-top: 1em;
+    font-size: 1em;
+    width: 80%;
+    height: 2em;
+  }
+
+  div.transcript-viewer-container div.transcript-search label {
+    margin-top: 1em;
+    width: 40%;
+  }
+
+  div.transcript-viewer-container div.transcript-search a.transcript-search-button {
+    width: 14%;
+  }
+
+  div.transcript-viewer-container div.transcript-search a.transcript-search-button svg {
+    width: 64px;
+    height: 64px;
+  }
+
+  div.transcript-viewer div.transcript-line {
+    font-size: 1.2em;
+  }
+
+  div.transcript-viewer div.transcript-line svg {
+    vertical-align: super;
+    margin-right: 1em;
+    width: 48px;
+    height: 48px;
+  }
+
 
   /* static pages */
   div.pull-quote-group-container {
@@ -2911,34 +2997,7 @@ figure.captioned figcaption {
     margin-left: 0;
   }
 
-  div.ais-Hits {
-    display: block;
-  }
-
-  div.page-sidebar {
-    min-width: 100%;
-    width: 100%;
-    display: block;
-  }
-
-  div.layout-search {
-    margin-left: 2em;
-  }
-
-  div.current-refinements-container {
-    margin-left: 2em;
-    display: block;
-    width: 100%;
-  }
-
-  div.stats-container {
-    width: 100%;
-    display: block;
-  }
-
-
-
-  /* search ui */
+  /* mobile search ui */
   div.pagination-bar {
     overflow: hidden;
     width: 90%;
@@ -2950,8 +3009,14 @@ figure.captioned figcaption {
     margin-bottom: 4em;
   }
 
+  input.sidebar-search  {
+    margin-top: 0.5em;
+    font-size: 1.2em;
+    padding: 0.25em;
+  }
+
   div.page-sidebar.bmarleft {
-    margin-left: 2em;
+    margin-left: 1em;
   }
 
   div.page-maincolumn {
@@ -2981,16 +3046,94 @@ figure.captioned figcaption {
     margin-right: 2em;
   }
 
+  div#mobile-sidebar-toggler {
+    display: none;
+  }
+
   div.top-search-bar {
     margin-left: 2em;
   }
 
   div.top-refinements-bar {
     width: 100%;
-    padding-left: 2em;
+    padding-left: 1em;
+    padding-right: 1em;
     padding-top: 2em;
     margin-left: 0;
     margin-right: 0;
+    font-size: 2em;
+  }
+
+  div.ais-Hits {
+    display: block;
+  }
+
+  div.page-sidebar {
+    min-width: 100%;
+    width: 100%;
+    display: block;
+    font-size: 3em;
+  }
+
+  div.clear-refinements-container {
+    width: 100%;
+    display: flex;
+    padding-bottom: 2em;
+  }
+
+  div.clear-refinements-container div {
+    font-size: 1.2em;
+  }
+
+  div.ais-ClearRefinements button, div.more-refinements button {
+    height: 2em;
+    width: 100%;
+  }
+
+  div.current-refinements-container {
+    margin-left: 2em;
+    display: block;
+    width: 100%;
+  }
+
+  div.ais-RefinementList {
+    margin-right: 1em;
+    width: 90%;
+  }
+
+  div.ais-RefinementList ul.ais-RefinementList-list {
+
+  }
+  div.search-accordion-container div.search-accordion-content input[type="radio"], input[type="checkbox"].ais-RefinementList-checkbox {
+    -ms-transform: scale(3);
+    -moz-transform: scale(3);
+    -webkit-transform: scale(3);
+    -o-transform: scale(3);
+    transform: scale(3);
+  }
+
+  div.search-accordion-container div.search-accordion-content input[type="radio"] {
+    margin-left: 4em;
+    position: relative;
+    top: -0.75em;
+  }
+
+  input[type="checkbox"].ais-RefinementList-checkbox {
+    margin-left: 1em;
+    margin-right: 2em;
+  }
+
+  div.ais-SearchBox form, div.ais-SearchBox form input, div.search-accordion-container input[type="date"], div.search-accordion-container div.date-text {
+    font-size: 1.2em;
+    height: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+
+  div.stats-container {
+    width: 100%;
+    margin-left: 1em;
+    display: block;
   }
 
   div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
@@ -3007,6 +3150,47 @@ figure.captioned figcaption {
     height: auto;
     display: block;
     width: 100%;
+  }
+
+  div#mobile-sidebar-toggler {
+    margin-left: 3em;
+    font-weight: bold;
+    line-height: 2.4em;
+
+    height: auto;
+    color: #3C439B;
+    position: sticky;
+    display: block;
+    z-index: 25000;
+    top: 20px;
+    padding: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 3em;
+    width: 60%;
+    background-color: #eee;
+    vertical-align: middle;
+    border-radius: 12px;
+  }
+
+  div#mobile-sidebar-toggler svg {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    top: 0.25em;
+  }
+
+  div#mobile-sidebar-toggler span {
+    margin-left: 1em;
+  }
+
+  /*affects mobile only: hide the search UI elements unless the toggler applies .open*/
+  div.page-sidebar, div.top-refinements-bar {
+    display: none;
+  }
+
+  div.page-sidebar.open, div.top-refinements-bar.open {
+    display: block;
   }
 
   div.options-container select {
@@ -3067,31 +3251,34 @@ figure.captioned figcaption {
     line-height: 2.4em;
   }
 
+  div.search-accordion-container svg {
+    width: 64px;
+    height: 64px;
+  }
+
   div.feature-video-container iframe {
     width: 100%;
   }
 
   div#show-media {
-    margin-left: 1em;
+    margin-left: 0;
     width: 94%;
-    margin-bottom: 14em;
+    margin-bottom: 16em;
+  }
+  
+  div.video-player-container {
   }
 
   div.video-player-container.mini {
-    right: -2em;
     width: 32%;
   }
 
   a.back-link {
-    width: 92%;
-  }
-
-  div.video-player-container {
-    margin-right: 2em;
+    font-size: 1.5em;
+    width: 78%;
   }
 
   div.show-box {
-    font-size: 1.2em;
     margin-left: 1em;
     padding-top: 1em;
     padding-bottom: 1.2em;
@@ -3204,7 +3391,7 @@ figure.captioned figcaption {
     max-width: 100%;
   }
 
-  /* search ui */
+  /* big search ui */
   div.current-refinements-container {
     width: 63%;
   }

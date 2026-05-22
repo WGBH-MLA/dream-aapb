@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
 
 const OR_FIELDS = [
   "producing_org",
@@ -131,6 +131,22 @@ export default function Catalog() {
 
   // config viewed refinements
   const [showingRefinements, setShowingRefinements] = useState(false)
+  
+  // toggle searchy UI on mobile only
+  const [showSearchy, setShowSearchy] = useState(false)
+
+  let sidebarClasses = "page-sidebar bmarleft"
+  let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
+  let mobileSidebarToggler = <LayoutPanelLeft />
+  let toggleMessage
+  if(showSearchy){
+    sidebarClasses += " open"
+    topRefinementsBarClasses += " open"
+    toggleMessage = "Hide"
+  } else {
+    toggleMessage = "Show"
+
+  }
 
   function handleCustomQuery(type, value, refine){
     // ohh la la
@@ -946,7 +962,6 @@ export default function Catalog() {
     return result
   }
 
-
   return (
     <div className="body-container">
       <InstantSearch
@@ -954,6 +969,10 @@ export default function Catalog() {
         searchClient={ searchClient }
         routing={ true }
       >
+        <div id="mobile-sidebar-toggler" onClick={ () => setShowSearchy(!showSearchy) }>
+          { mobileSidebarToggler }
+          <span>{ toggleMessage } Search UI</span>
+        </div>
 
         <div className="top-search-bar bmarleft smarbot smarright">
           <div className="options-container martop">
@@ -988,12 +1007,12 @@ export default function Catalog() {
                 <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
               </div>
             </div>
-          </div>
-          
 
+            
+          </div>
         </div>
 
-        <div className="top-refinements-bar smarbot bmarleft">
+        <div className={ topRefinementsBarClasses }>
           <div className="stats-container">
             <CustomStats />
           </div>
@@ -1011,7 +1030,7 @@ export default function Catalog() {
           </div>
         </div>
 
-        <div className="page-sidebar bmarleft">
+        <div className={ sidebarClasses }>
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
@@ -1034,6 +1053,7 @@ export default function Catalog() {
             <>
               <div>
                 <input id="startDate" type="date" name="startDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
+                <div className="date-text">to</div>
                 <input id="endDate" type="date" name="endDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
               </div>
             </>
