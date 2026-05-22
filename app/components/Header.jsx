@@ -86,7 +86,9 @@ export default function Header(props) {
         <div className="header-spacer" />
         <DrawerMenu label="Explore" items={drawerItems.explore} />
         <DrawerMenu label="Participate" items={drawerItems.participate} />
-        <a href="/about" className="drawer-label">About</a>
+        <div className="drawermenu-container">
+          <a href="/about" className="drawer-label">About</a>
+        </div>
         { layoutSearch }
       </div>
       <div className="header-row">
