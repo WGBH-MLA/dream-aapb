@@ -59,7 +59,7 @@ export default function Index() {
       <div className='body-container'>
         <TVMenu title="Featured Collections" programs={data.featured_collections.slice(0, 3)} />
         <TVMenu title="Radio and Television Programs" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
-        <TVMenu title="Scholarly Exhibits" programs={data.exhibits.slice(0, 4)} seeAllURL="/exhibits" />
+        <TVMenu title="Exhibits" programs={data.exhibits.slice(0, 4)} seeAllURL="/exhibits" />
         <TVMenu title="Stations and Organizations" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
       </div>
       <div className="body-container">

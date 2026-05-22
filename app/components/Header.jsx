@@ -12,7 +12,7 @@ const drawerItems = {
 
     },
     {
-      label: "Scholarly Exhibits",
+      label: "Exhibits",
       url: "/exhibits",
       external: false,
 
@@ -23,11 +23,6 @@ const drawerItems = {
       external: false,
 
     },
-    {
-      label: "National History Day",
-      url: "/national-history-day",
-      external: false,
-    },
   ],
   participate: [
     {
@@ -37,8 +32,14 @@ const drawerItems = {
 
     },
     {
-      label: "Fix Transcripts",
-      url: "/fixitplus",
+      label: "Contributing Organizations",
+      url: "/organizations",
+      external: false,
+
+    },
+    {
+      label: "Volunteer",
+      url: "/volunteer",
       external: false,
 
     },
@@ -51,20 +52,8 @@ const drawerItems = {
 
     },
     {
-      label: "Participating Organizations",
-      url: "/organizations",
-      external: false,
-
-    },
-    {
-      label: "Visit",
-      url: "/visit",
-      external: false,
-
-    },
-    {
-      label: "FAQ",
-      url: "/faq",
+      label: "Contact Us",
+      url: "/contact-us",
       external: false,
 
     },
