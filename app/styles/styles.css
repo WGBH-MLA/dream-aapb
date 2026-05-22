@@ -567,17 +567,18 @@ div.link-bank hr {
 
 div.biglink svg {
   display: inline-block;
+  margin-left: 2em;
   width: 4em;
   height: 4em;
   color: #fff;
-  background-color: #808;
+  background-color: #3c4399;
   border-radius: 4px;
   padding: 1em;
 }
 
 div.biglink div {
   display: inline-block;
-  margin-left: 2em;
+  margin-left: 8em;
   width: 70%;
   font-size: 1em;
 }
@@ -586,6 +587,12 @@ div.biglink h3 {
   margin-left: 0;
   font-weight: bold;
   font-size: 1em;
+}
+
+div.biglink p {
+  margin-left: 0;
+  font-size: 1em;
+  color: #000000;
 }
 
 div.biglink a {
