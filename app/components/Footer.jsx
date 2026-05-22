@@ -14,15 +14,11 @@ export default function Footer(props) {
         },
         {
           url: "/exhibits",
-          text: "Scholarly Exhibits"
+          text: "Exhibits"
         },
         {
           url: "/resources",
           text: "Educator Resources"
-        },
-        {
-          url: "/national-history-day",
-          text: "National History Day"
         },
       ]
     },
@@ -35,12 +31,12 @@ export default function Footer(props) {
           text: "Contribute Content"
         },
         {
-          url: "/volunteer",
-          text: "Vounteer"
+          url: "/organizations",
+          text: "Contributing Organizations"
         },
         {
-          url: "/fixitplus",
-          text: "Fix Transcripts"
+          url: "/volunteer",
+          text: "Vounteer"
         },
       ]
     },
@@ -53,21 +49,35 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
-          url: "/organizations",
-          text: "Participating Orgs"
+          url: "/our-history",
+          text: "Our History"
         },
         {
-          url: "/visit",
-          text: "Visit"
+          url: "/access",
+          text: "Access"
+        },
+        {
+          url: "/projects",
+          text: "Projects and Funding"
+        },
+        {
+          url: "/policies",
+          text: "Policies"
+        },
+        {
+          url: "/advisory-boards",
+          text: "Advisory Boards"
         },
         {
           url: "/faq",
           text: "FAQ"
         },
         {
-          url: "/contact",
+          url: "/contact-us",
           text: "Contact Us"
         },
+
+
       ]
     },
     last: {
@@ -81,18 +91,6 @@ export default function Footer(props) {
         {
           url: "/feedback",
           text: "Feedback"
-        },
-        {
-          url: "/content-statement",
-          text: "Content Statement"
-        },
-        {
-          url: "/terms",
-          text: "Terms of Use"
-        },
-        {
-          url: "/privacy",
-          text: "Privacy Policy"
         },
       ]
     },

@@ -2,20 +2,19 @@ export default function LinkBankFooter() {
   return (
     <>
       <div className="link-bank">
-        <a href="/our-story">Our Story</a>
+        <a href="/our-history">Our History</a>
         <hr />
-        <a href="/vision-and-mission">Vision and Mission</a>
+        <a href="/access">Access</a>
         <hr />
-        <a href="/history">History</a>
+        <a href="/projects">Projects and Funding</a>
         <hr />
-        <a href="/council-and-committee">Council and Committee Members</a>
-      </div>
-      <div className="link-bank">
-        <a href="/projects">Projects</a>
+        <a href="/policies">Policies</a>
         <hr />
-        <a href="/funding">Funding</a>
+        <a href="/advisory-boards">Advisory Boards</a>
         <hr />
-        <a href="/collaborators">Library and Education Collaborators</a>
+        <a href="/faq">FAQ</a>
+        <hr />
+        <a href="/contact-us">Contact Us</a>
       </div>
     </>
   )
