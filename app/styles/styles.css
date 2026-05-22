@@ -2761,6 +2761,9 @@ figure.captioned figcaption {
   margin-top: 6px;
 }
 
+div#mobile-sidebar-toggler {
+  display: none;
+}
 
 /*leetle*/
 @media only screen and (max-width: 992px) {
@@ -3066,10 +3069,6 @@ figure.captioned figcaption {
   div.options-container h2 {
     font-size: 2em;
     margin-right: 2em;
-  }
-
-  div#mobile-sidebar-toggler {
-    display: none;
   }
 
   div.top-search-bar {
