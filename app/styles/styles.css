@@ -1249,6 +1249,21 @@ div.drawermenu-items {
 
 }
 
+a.drawer-label {
+  text-decoration: none;
+  font-size: 1.3em;
+  color: rgba(74, 78, 156);
+  padding: 0 .1em;
+  margin-right: 5em;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  align-self: center;
+}
+
+a.drawer-label:hover {
+  font-weight: normal;
+}
 
 div.page-sidebar {
   vertical-align: top;

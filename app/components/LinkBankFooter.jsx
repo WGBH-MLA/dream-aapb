@@ -13,6 +13,8 @@ export default function LinkBankFooter() {
         <a href="/advisory-boards">Advisory Boards</a>
         <hr />
         <a href="/faq">FAQ</a>
+        <hr />
+        <a href="/contact-us">Contact Us</a>
       </div>
     </>
   )

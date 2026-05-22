@@ -49,8 +49,24 @@ export default function Footer(props) {
           text: "About the AAPB"
         },
         {
+          url: "/our-history",
+          text: "Our History"
+        },
+        {
           url: "/access",
           text: "Access"
+        },
+        {
+          url: "/projects",
+          text: "Projects and Funding"
+        },
+        {
+          url: "/policies",
+          text: "Policies"
+        },
+        {
+          url: "/advisory-boards",
+          text: "Advisory Boards"
         },
         {
           url: "/faq",
@@ -60,14 +76,8 @@ export default function Footer(props) {
           url: "/contact-us",
           text: "Contact Us"
         },
-        {
-          url: "/advisory-boards",
-          text: "Advisory Boards"
-        },
-        {
-          url: "/policies",
-          text: "Policies"
-        }
+
+
       ]
     },
     last: {

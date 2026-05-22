@@ -44,20 +44,6 @@ const drawerItems = {
 
     },
   ],
-  about: [
-    {
-      label: "About the AAPB",
-      url: "/about",
-      external: false,
-
-    },
-    {
-      label: "Contact Us",
-      url: "/contact-us",
-      external: false,
-
-    },
-  ]
 }
 
 export default function Header(props) {
@@ -92,7 +78,7 @@ export default function Header(props) {
           </span>
         </div>
       </a>
-      
+
       <div className="header-bar marbot">
         <a href="/">
           <img src="/aapb.png" className="header-logo" />
@@ -100,7 +86,7 @@ export default function Header(props) {
         <div className="header-spacer" />
         <DrawerMenu label="Explore" items={drawerItems.explore} />
         <DrawerMenu label="Participate" items={drawerItems.participate} />
-        <DrawerMenu label="About" items={drawerItems.about} />
+        <a href="/about" className="drawer-label">About</a>
         { layoutSearch }
       </div>
       <div className="header-bar marbot">
