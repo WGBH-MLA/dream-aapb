@@ -1,3 +1,5 @@
+import LinkBankFooter from '../components/LinkBankFooter';
+
 export default function OnLocation() {
   return (
     <div className="page-container">
@@ -144,11 +146,9 @@ export default function OnLocation() {
         <div className="marbot">
           To facilitate applying for a card and reaching the reading room, please navigate to this URL: http://www.loc.gov/visit/maps-and-floor-plans/
         </div>
+                  <LinkBankFooter />
       </div>
 
-      <div className="skinny-body-container">
-        <a className="back-link martop marbot" href="/">&lt; Back To The AAPB</a>
       </div>
-    </div>
   )
 }

@@ -1,3 +1,5 @@
+import LinkBankFooter from "../components/LinkBankFooter"
+
 export default function Terms() {
   return (
     <div className="page-container">
@@ -465,6 +467,7 @@ judgment and we’ll use ours.</li>
 </ol>
 
 <p>GBH will not publish comments that don’t meet these guidelines.</p>
+                  <LinkBankFooter />
   </div>
     </div>
   )

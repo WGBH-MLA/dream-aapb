@@ -1,5 +1,6 @@
 import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
+import LinkBankFooter from "../components/LinkBankFooter";
 
 export default function ContactUs() {
   return (
@@ -24,7 +25,9 @@ export default function ContactUs() {
           <li>One Guest Street</li>
           <li>Boston, Massachusetts 02135</li>
         </ul>
+                        <LinkBankFooter />
       </div>
+
     </div>
   )
 }
