@@ -8,6 +8,7 @@ export default function FrequentlyAskedQuestions() {
   return (
     <div className="page-container">
       <div className="skinny-body-container marbot">
+          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <h1 className="marbot">FAQ</h1>
 
         <h3>What is the American Archive of Public Broadcasting (AAPB)?</h3>

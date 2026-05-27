@@ -571,8 +571,10 @@ div.link-bank {
   text-align: left;
   margin-top: 2em;
   margin-bottom: 2em;
-  display: inline-block;
-  width: 40%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2rem;
+  width: 80%;
   margin-left: 13.2%;
   margin-right: -10%;
 }
@@ -587,10 +589,10 @@ div.link-bank a {
 }
 
 div.link-bank hr {
-  width: 105%;
+  width: 100%;
   margin-bottom: .7em;
   margin-top: .3em;
-  color: #b3b3b3;
+  color: #b3b3b3
 }
 
 div.biglink svg {
@@ -2118,8 +2120,6 @@ div.page-container {
   position: relative;
   z-index: 5;
 }
-
-
 
 /*nice item*/
 div.nice-items-container {
