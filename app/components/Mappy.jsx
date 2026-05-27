@@ -6,7 +6,7 @@ export default function Mappy(props){
   return (
     <>
       <ClientOnly>
-        <Suspense fallback="FAIL">
+        <Suspense fallback="Loading...">
           <ClientMap />
         </Suspense>
       </ClientOnly>
