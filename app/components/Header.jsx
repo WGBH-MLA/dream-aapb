@@ -92,7 +92,9 @@ export default function Header(props) {
         { layoutSearch }
       </div>
       <div className="header-row">
-        <img src="/corner-squares.png" className="header-squares" />
+        {!props.isHomepage && (
+          <img src="/corner-squares.png" className="header-squares" />
+        )}
       </div>
     </div>
   )
