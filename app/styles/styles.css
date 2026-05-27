@@ -247,13 +247,14 @@ div.body-container {
 
 div.body-container h1 {
   margin-left: 2.8em;
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
 }
 
 div.body-container p {
-  width: 60%;
+  width: 90%;
   margin-left: 4.5em;
   font-size: 20px;
+  margin-bottom: 2em;
 }
 
 ul.blank-list {
@@ -364,8 +365,7 @@ font-weight: 700;
 
 div.skinny-body-container p {
   font-size: .80em;
-  width: 85%;
-  margin-left: 14%;
+  width: 95%;
 }
 
 div.skinny-body-container ul {
@@ -864,16 +864,16 @@ div.tv-menu-container a {
 }
 
 div.tv-menu-container h2 {
-  padding-left: 3.8em;
-  padding-bottom: .2em;
+  padding-left: 4.5em;
+  padding-bottom: .4em;
   font-weight: bold;
-  font-size: 1.6em;
+  font-size: 20px;
 }
 
 div.tv-menu-container a.see-all {
   position: absolute;
   top: 0;
-  right: 2em;
+  right: 3em;
   font-weight: bold;
   color: #4b4fa5;
 }
@@ -927,6 +927,8 @@ div.tv-menu-container div.tv-menu-program h4 {
   display: block;
   overflow-x: hidden;
   white-space: wrap;
+  color: #000;
+  font-size: 230px;
 }
 
 /* h5 base */
@@ -945,7 +947,7 @@ div.tv-menu-container.three {
 
 div.tv-menu-container.three div.tv-menu-body {
   padding: 0 2em;
-  margin-left: 4em;
+  margin-left: 3.6em;
   overflow: visible;
 }
 
@@ -973,7 +975,7 @@ div.tv-menu-container.four {
 
 div.tv-menu-container.four div.tv-menu-body {
   padding: 0 2em;
-  margin-left: 4em;
+  margin-left: 3.6em;
 }
 
 div.tv-menu-container.four div.tv-menu-program img {
@@ -986,7 +988,7 @@ div.tv-menu-container.four div.tv-menu-program img {
 }
 
 div.tv-menu-container.four div.tv-menu-program h4 {
-  font-size: 1em;
+  font-size: 20px;
   margin-top: 0.5em;
   display: block;
 }
