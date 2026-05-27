@@ -192,7 +192,7 @@ a:hover {
 }
 
 .marbot {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 .smartop {
@@ -571,7 +571,7 @@ div.welcome-video-container iframe div {
 div.link-bank {
   vertical-align: top;
   text-align: left;
-  margin-top: 2em;
+  margin-top: 4em;
   margin-bottom: 2em;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1089,6 +1089,73 @@ div.pull-quote-group-bubble.fill {
   background-color: #3c429b;
 }
 
+/* FAQ */
+
+.faq-item {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.faq-button {
+  font-family: inherit;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9e2164;
+  padding: 1rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-question {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  font-weight: bold;
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+
+  border-radius: 50%;
+  border: 1px solid #ccc;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 300;
+
+  margin-top: 2px;
+
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+}
+
+.faq-icon.open {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  padding-bottom: 1rem;
+
+  font-size: 1.25rem;
+  line-height: 1.7;
+
+  color: #000;
+}
+
+.faq-answer li {
+  font-size: .8em;
+  margin-left: 2.5em;
+}
+
 /*council and committee images*/
 .img-circle {
   width: 150px;
@@ -1316,11 +1383,6 @@ div.blog-post-item {
   flex: 1;
   padding: 0 1em;
   border-left: 4px solid #a01f64;
-}
-
-div.blog-post-item:first-child {
-  border-left: none;
-  padding-left: 0;
 }
 
 span.blog-post-date {
