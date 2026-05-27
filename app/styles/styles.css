@@ -1094,18 +1094,26 @@ div.pull-quote-group-bubble.fill {
 /* FAQ */
 
 .faq-item {
-  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+
+.faq-item::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: #e0e0e0;
+  margin-left: 7em;
 }
 
 .faq-button {
   font-family: inherit;
   width: 100%;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   color: #9e2164;
-  padding: 1rem 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -1114,28 +1122,20 @@ div.pull-quote-group-bubble.fill {
 
 .faq-question {
   font-size: 1.25rem;
-  line-height: 1.7;
   font-weight: bold;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .faq-icon {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-
-  border-radius: 50%;
-  border: 1px solid #ccc;
-
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 18px;
-  line-height: 1;
+  font-size: 28px;
   font-weight: 300;
-
-  margin-top: 2px;
-
   transition: transform 0.2s;
   transform: rotate(0deg);
 }
@@ -1146,16 +1146,14 @@ div.pull-quote-group-bubble.fill {
 
 .faq-answer {
   padding-bottom: 1rem;
-
   font-size: 1.25rem;
   line-height: 1.7;
-
+  padding-left: 8em;
   color: #000;
 }
 
 .faq-answer li {
   font-size: .8em;
-  margin-left: 2.5em;
 }
 
 /*council and committee images*/
