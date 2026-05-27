@@ -479,8 +479,10 @@ div.footer-bar div.footer-branding button, div.footer-bar div.footer-branding im
 }
 
 div.footer-bar div.footer-branding button.donate {
-  margin-left: 0;
-  margin-right: 0;
+  width: 8em;
+  height: 2.4em;
+  margin-right: 0em;
+  margin-top: 1em;
 }
 
 div.footer-bar div.footer-title {
@@ -496,7 +498,7 @@ div.footer-bar div.footer-stack a {
 }
 
 div.footer-bar div.footer-branding img {
-  width: 16rem;
+  width: 22rem;
 }
 
 div.toenail-bar {
