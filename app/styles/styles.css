@@ -1294,6 +1294,47 @@ a.drawer-label:hover {
   font-weight: normal;
 }
 
+/*bloggy*/
+
+div.blog-posts-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin-left: 7em;
+}
+
+div.blog-posts-outer h2 {
+  margin-bottom: 1em;
+  margin-left: 4.5em;
+}
+
+div.blog-post-item {
+  flex: 1;
+  padding: 0 1em;
+  border-left: 4px solid #a01f64;
+}
+
+div.blog-post-item:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+span.blog-post-date {
+  display: block;
+  font-size: 0.75em;
+  margin-bottom: 1em;
+}
+
+h3.blog-post-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+h3.blog-post-title a {
+  text-decoration: none;
+  color: black;
+}
+
 div.page-sidebar {
   vertical-align: top;
   display: inline-block;
@@ -2040,7 +2081,7 @@ div.search-accordion-container svg {
 div.ais-SearchBox form button.ais-SearchBox-submit, div.ais-SearchBox form button.ais-SearchBox-reset {
 
 }
- 
+
 div.ais-SearchBox form, div.ais-SearchBox form input {
   position: relative;
   left: -0.1em;
@@ -3286,7 +3327,7 @@ div#mobile-sidebar-toggler {
     width: 94%;
     margin-bottom: 16em;
   }
-  
+
   div.video-player-container {
   }
 
