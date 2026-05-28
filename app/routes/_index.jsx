@@ -77,13 +77,12 @@ export default function Index() {
               <div key={i} className="blog-post-item">
                 <span className="blog-post-date">
                   {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                  </span>
-                  <h3 className="blog-post-title">
-                    <a href={post.link} target="_blank" rel="noreferrer"
-                    dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-                    />
-                  </h3>
-                </div>
+                </span>
+                <h3 className="blog-post-title">
+                  <a href={post.link} target="_blank" rel="noreferrer"
+                  dangerouslySetInnerHTML={{ __html: post.title.rendered }}/>
+                </h3>
+              </div>
             ))}
           </div>
         </div>
