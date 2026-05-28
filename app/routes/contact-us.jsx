@@ -1,12 +1,14 @@
 import LayoutSearch from "../components/LayoutSearch"
 import SummaryBox from "../components/SummaryBox"
+import LinkBankFooter from "../components/LinkBankFooter";
 
 export default function ContactUs() {
   return (
     <div className="page-container">
       <div className="skinny-body-container">
+          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <SummaryBox title="Contact Us" text={ 'We would love to hear from you! If you have general questions or comments about the website and collection, or want to share information on the stories you find in the collection, you can reach us at <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a> or by mail.' } />
-        
+
         <p><a href="/subscribe">Stay up to date with the AAPB by subscribing to our mailing list</a>.</p>
         <h3 className="smarbot">Library of Congress Mailing Address:</h3>
         <ul className="clean marbot">
@@ -23,7 +25,9 @@ export default function ContactUs() {
           <li>One Guest Street</li>
           <li>Boston, Massachusetts 02135</li>
         </ul>
+        <LinkBankFooter />
       </div>
+
     </div>
   )
 }

@@ -1,7 +1,10 @@
-export default function OnLocation() {
+import LinkBankFooter from '../components/LinkBankFooter';
+
+export default function Access() {
   return (
     <div className="page-container">
       <div className="skinny-body-container marbot static-logos">
+          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <h2 className="marbot">On Location Research</h2>
         <div className="marbot">
           Approximately 30% of the American Archive of Public Broadcasting (AAPB) collection is accessible anywhere in the United States through the Online Reading Room on the AAPB website. Members of the general public may access the entire collection within the GBH Archives offices and at the Library of Congress Moving Image and Recorded Sound Research Centers. Content is accessible as proxy files, or low-resolution viewing/listening copies provided through the AAPB website. Users accessing AAPB materials at the on-site research locations must agree to abide by AAPB Access Policies.
@@ -76,7 +79,7 @@ export default function OnLocation() {
         </div>
         <div className="marbot">
           The Library holds public media material other than the American Archive of Public Broadcasting Collection; these materials, if not already digitized, will take at least two weeks for engineers to digitize for listening appointments. Special arrangements are required for requests of more than five items needing digitization at one time. Certain audio formats will require more time to digitize and will necessitate a longer wait. Please contact the Research Center as soon as possible with large requests or to identify previously digitized recordings.
-        </div>            
+        </div>
         <div className="marbot">
           Patrons may use the Research Center without appointment to access catalogs, in-house databases, reference books, archival manuscript collections, microfiche, microfilm, and other reference sources.
         </div>
@@ -143,11 +146,9 @@ export default function OnLocation() {
         <div className="marbot">
           To facilitate applying for a card and reaching the reading room, please navigate to this URL: http://www.loc.gov/visit/maps-and-floor-plans/
         </div>
+                  <LinkBankFooter />
       </div>
 
-      <div className="skinny-body-container">
-        <a className="back-link martop marbot" href="/">&lt; Back To The AAPB</a>
       </div>
-    </div>
   )
 }
