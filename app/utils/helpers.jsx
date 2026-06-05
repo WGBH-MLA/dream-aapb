@@ -74,7 +74,8 @@ export function truth(val){
   return val || typeof val === "number" || typeof val === "string"
 }
 
-export function scrollToAnchor(anchorId) {
+
+export function scrollToAnchorTranscript(anchorId) {
   var page = document.querySelector('body')
   var scrollable = document.getElementById('transcript-viewer')
   var scrolled = document.getElementById(anchorId)
@@ -85,3 +86,16 @@ export function scrollToAnchor(anchorId) {
   }
 }
 
+export function scrollToAnchor(anchorId) {
+  var page = document.querySelector('body')
+  var scrolled = document.getElementById(anchorId)
+  if(scrolled){
+
+    page.scrollTop = scrolled.offsetTop-page.offsetTop
+    // 24px to push it down off the top of viewer a little
+  }
+}
+
+export function scrollToTop() {
+  window.scrollTo(0, 0)
+}

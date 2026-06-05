@@ -3,6 +3,8 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
+import { scrollToTop }  from '../utils/helpers'
+
 
 const OR_FIELDS = [
   "producing_org",
@@ -74,7 +76,7 @@ function CustomSearchBox(props) {
         <h4>Search for</h4>
         <input
           id="query"
-          className="sidebar-search smarbot"
+          className="sidebar-search"
           ref={inputRef}
           defaultValue={ props.query }
           onKeyUp={(e) => {
@@ -83,11 +85,11 @@ function CustomSearchBox(props) {
         />
 
         <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>This title</h4>
-        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <div>
           <button className="sidebar-search-button">Update</button>
         </div>
@@ -133,13 +135,14 @@ export default function Catalog() {
   const [showingRefinements, setShowingRefinements] = useState(false)
   
   // toggle searchy UI on mobile only
-  const [showSearchy, setShowSearchy] = useState(false)
+  const [hideSearchy, setHideSearchy] = useState(true)
+  const [searchyPosition, setSearchyPosition] = useState(0)
 
   let sidebarClasses = "page-sidebar bmarleft"
   let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
   let mobileSidebarToggler = <LayoutPanelLeft />
   let toggleMessage
-  if(showSearchy){
+  if(hideSearchy){
     sidebarClasses += " open"
     topRefinementsBarClasses += " open"
     toggleMessage = "Hide"
@@ -962,6 +965,16 @@ export default function Catalog() {
     return result
   }
 
+  function handleHideSearchy(newHideSearchy){
+    setHideSearchy(newHideSearchy)
+    if(newHideSearchy){
+      window.scroll(0, searchyPosition)
+    } else {
+      setSearchyPosition(window.scrollY)
+      scrollToTop()
+    }
+  }
+
   return (
     <div className="body-container">
       <InstantSearch
@@ -969,7 +982,7 @@ export default function Catalog() {
         searchClient={ searchClient }
         routing={ true }
       >
-        <div id="mobile-sidebar-toggler" onClick={ () => setShowSearchy(!showSearchy) }>
+        <div id="mobile-sidebar-toggler" onClick={ () => handleHideSearchy(!hideSearchy) }>
           { mobileSidebarToggler }
           <span>{ toggleMessage } Search UI</span>
         </div>
@@ -1030,7 +1043,7 @@ export default function Catalog() {
           </div>
         </div>
 
-        <div className={ sidebarClasses }>
+        <div id="search-sidebar" className={ sidebarClasses }>
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
@@ -1166,6 +1179,7 @@ export default function Catalog() {
           <hr/>
 
           <Hits hitComponent={ searchResultComponent } />
+          
           <div className="pagination-bar marbot">
             { pagination }
           </div>

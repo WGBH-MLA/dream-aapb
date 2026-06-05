@@ -2160,9 +2160,12 @@ div.ais-SearchBox form, div.ais-SearchBox form input {
  }
 
 input.sidebar-search  {
+  border-radius: 4px;
+  border: 2px solid #ddd;
   width: 90%;
   height: 1em;
   padding: 0.25em;
+  margin-bottom: 1em;
 }
 
 div.score-light {
@@ -2874,6 +2877,13 @@ div#mobile-sidebar-toggler {
 
 /*leetle*/
 @media only screen and (max-width: 992px) {
+  /*block mobile double click zoom*/
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
   /* layout */
   div.page-container {
     width: 94%;
@@ -2992,10 +3002,76 @@ div#mobile-sidebar-toggler {
 
   /*footah*/
   div.footer-bar {
+    display: block;
+  }
+
+  div.footer-bar div.footer-stack {
+    width: 100%;
+    font-size: 3em;
+    display: block;
+    margin-bottom: 2em;
+    margin-left: 2em;
+  }
+
+  div.footer-bar div.footer-branding {
+    width: 100%;
+    display: block;
+  }
+
+  div.footer-bar div.footer-branding img {
+    width: 100%;
+    display: block;
+  }
+
+  div.footer-bar div.footer-branding a {
+    font-size: 3em;
+    margin-left: 5em;
+    display: block;
+    width: 50%;
   }
 
   div.toenail-bar {
+    margin-left: 2em;
+    font-size: 3em;
+    display: block;
   }
+
+  div.toenail-bar div.toenail-logos img {
+    object-fit: contain;
+    height: 3em;
+    margin-left: 0;
+    margin-bottom: 1em;
+    width: 100%;
+  }
+
+  div.toenail-bar div.toenail-socials a {
+    display: inline-block;
+  } 
+
+  div.newsletter-bar {
+    font-size: 3em;
+    margin-top: 0;
+  }
+
+div.newsletter-bar div {
+  display: block;
+  margin-left: 1em;
+}
+
+div.newsletter-bar input {
+  font-size: 1.2em;
+  padding: 1em;
+  border: none;
+}
+
+div.newsletter-bar input[type="text"] {
+  width: 70%;
+}
+
+div.newsletter-bar input[type="submit"] {
+  margin-top: 1em;
+}
+
 
   /*show page*/
   div.page-title {
@@ -3131,7 +3207,8 @@ div#mobile-sidebar-toggler {
 
   /* mobile search ui */
   div.pagination-bar {
-    overflow: hidden;
+    font-size: 2.4em;
+    overflow: visible;
     width: 90%;
     padding-left: 1em;
     padding-right: 1em;
@@ -3145,6 +3222,7 @@ div#mobile-sidebar-toggler {
     margin-top: 0.5em;
     font-size: 1.2em;
     padding: 0.25em;
+    margin-bottom: 0.5em;
   }
 
   div.page-sidebar.bmarleft {
@@ -3156,23 +3234,78 @@ div#mobile-sidebar-toggler {
     margin-right: 0;
   }
 
-  div.hit-info-container {
-    width: 65%;
-    margin-left: 2em;
-  }
-
-  div.hit-info-container div.martop,  div.hit-info-container div.martop h3.martop {
-    margin-top: 0;
-  }
-
   div.sort-container.view-select.marright {
     margin-right: 4em;
+  }
+
+  /*search result*/
+  div.search-result {
+    display: block;
+    font-size: 2.4em;
+  }
+
+  div.search-result a {
+    display: block;
+    width: 100%;
+  }
+
+  div.search-result a div.hit-thumbnail-container {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  div.search-result div.hit-info-container {
+    display: block;
+  }
+
+  div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail, div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img {
+    min-width: 22em;
+    width: 22em;
+    min-height: 22em;
+    height: 22em;
+  }
+
+  div.hit-thumbnail img {
+    width: 22em;
+  }
+
+  div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
+    width: 22em;
+    height: 22em;
+  }
+
+  div.hit-thumbnail img.thumbnail-bar {
+    height: 3.5em;
   }
 
   h2.search-result-label {
     display: none;
   }
 
+  div.hit-info-container {
+    width: 90%;
+    max-width: 90%;
+    margin-left: 2em;
+  }
+
+  div.hit-info-container div {
+  }
+
+  div.hit-info-container div.martop,  div.hit-info-container div.martop h3.martop {
+    margin-top: 0;
+  }
+
+  div.hit-info-container h3.hit-title {
+    white-space: normal;
+    width: 100%;
+  }
+
+  ol.ais-Hits-list {
+    list-style-type: none;
+    margin-left: 4em;
+  }
+
+  /*sorting etc*/
   div.options-container h2 {
     font-size: 2em;
     margin-right: 2em;
@@ -3262,11 +3395,6 @@ div#mobile-sidebar-toggler {
     width: 100%;
     margin-left: 1em;
     display: block;
-  }
-
-  div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
-    width: 8rem;
-    height: 8rem;
   }
 
   div.header-bar div.header-spacer, div.options-container div.header-spacer {
