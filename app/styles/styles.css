@@ -3415,9 +3415,10 @@ div.newsletter-bar input[type="submit"] {
 
     height: auto;
     color: #3C439B;
-    position: sticky;
+    /*position: sticky;*/
+    position: fixed;
     display: block;
-    z-index: 25000;
+    z-index: 1000001;
     top: 20px;
     padding: 0.5em;
     padding-left: 1em;
@@ -3445,7 +3446,22 @@ div.newsletter-bar input[type="submit"] {
     display: none;
   }
 
-  div.page-sidebar.open, div.top-refinements-bar.open {
+  div.page-sidebar.open {
+    z-index: 1000000;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    height: 105vh;
+    max-height: 105vh;
+    margin-left: 0;
+    position: fixed;
+    overflow-y: scroll;
+    display: block;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+
+  div.top-refinements-bar.open {
     display: block;
   }
 

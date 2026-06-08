@@ -106,15 +106,6 @@ export default function Catalog() {
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // useEffect(() => {
-  //   // check for if we're here from layoutsearch, and run thru recatalog if so
-  //   if(searchParams.get("reload") !== null){
-  //     console.log( 'i go!', searchParams.get("reload") )
-  //     // setSearchParams(searchParams, {shitass: "bitch"})
-  //     window.location.search = "?shit=woppalooba"
-  //   }
-  // }, [])
-
   const [customQuery, setCustomQuery] = useState({
     query: searchParams.get(`${data.esIndex}[query]`) || "",
     all: searchParams.get("all") || "",
@@ -135,7 +126,7 @@ export default function Catalog() {
   const [showingRefinements, setShowingRefinements] = useState(false)
   
   // toggle searchy UI on mobile only
-  const [hideSearchy, setHideSearchy] = useState(true)
+  const [hideSearchy, setHideSearchy] = useState(false)
   const [searchyPosition, setSearchyPosition] = useState(0)
 
   let sidebarClasses = "page-sidebar bmarleft"
@@ -143,12 +134,11 @@ export default function Catalog() {
   let mobileSidebarToggler = <LayoutPanelLeft />
   let toggleMessage
   if(hideSearchy){
+    toggleMessage = "Show"
+  } else {
     sidebarClasses += " open"
     topRefinementsBarClasses += " open"
     toggleMessage = "Hide"
-  } else {
-    toggleMessage = "Show"
-
   }
 
   function handleCustomQuery(type, value, refine){
@@ -967,12 +957,17 @@ export default function Catalog() {
 
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
-    if(newHideSearchy){
-      window.scroll(0, searchyPosition)
-    } else {
-      setSearchyPosition(window.scrollY)
-      scrollToTop()
-    }
+    // if(newHideSearchy){
+    //   // hide it
+    //   let sidebar = document.getElementById("search-sidebar")
+    //   console.log( 'hiding that stupid', searchyPosition )
+    //   window.scroll(0, searchyPosition)
+    // } else {
+    //   // show it
+    //   console.log( 'showing, i like to go to', window.scrollY )
+    //   setSearchyPosition(window.scrollY)
+    //   scrollToTop()
+    // }
   }
 
   return (
