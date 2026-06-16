@@ -4,7 +4,7 @@ export default function Access() {
   return (
     <div className="page-container">
       <div className="skinny-body-container marbot static-logos">
-          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+        <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <h2 className="marbot">On Location Research</h2>
         <div className="marbot">
           Approximately 30% of the American Archive of Public Broadcasting (AAPB) collection is accessible anywhere in the United States through the Online Reading Room on the AAPB website. Members of the general public may access the entire collection within the GBH Archives offices and at the Library of Congress Moving Image and Recorded Sound Research Centers. Content is accessible as proxy files, or low-resolution viewing/listening copies provided through the AAPB website. Users accessing AAPB materials at the on-site research locations must agree to abide by AAPB Access Policies.

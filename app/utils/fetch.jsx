@@ -67,6 +67,5 @@ export async function getPageBySlug(type, slug) {
 
 export async function getLatestBlogPosts() {
   const response = await fetch('https://blog.americanarchive.org/wp-json/wp/v2/posts?per_page=4&page=1&orderby=date&order=desc')
-  const posts = await response.json()
-  return posts
+  return await response.json()
 }

@@ -4,7 +4,7 @@ export default function Terms() {
   return (
     <div className="page-container">
       <div className="skinny-body-container marbot">
-          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+        <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <h2 className="marbot">AAPB Terms of Use</h2>
         <div className="marbot">THE FOLLOWING TERMS AND CONDITIONS GOVERN YOUR USE OF THE SITE. PLEASE READ THESE TERMS OF USE CAREFULLY BEFORE USING THIS SITE.</div>
 
