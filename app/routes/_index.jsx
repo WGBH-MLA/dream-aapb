@@ -43,6 +43,21 @@ export default function Index() {
     setSearch(val)
   }
 
+  let blog_posts
+  if(data.blog_posts){
+    blog_posts = data.blog_posts.map((post, i) => (
+      <div key={i} className="blog-post-item">
+        <span className="blog-post-date">
+          {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </span>
+        <h3 className="blog-post-title">
+          <a href={post.link} target="_blank" rel="noreferrer"
+          dangerouslySetInnerHTML={{ __html: post.title.rendered }}/>
+        </h3>
+      </div>
+    ))
+  }
+
   return (
     <>
       <div className="homepage-search">
@@ -73,17 +88,7 @@ export default function Index() {
         <div className="blog-posts-outer">
           <h2>Blog</h2>
           <div className="blog-posts-container">
-            {data.blog_posts && data.blog_posts.map((post, i) => (
-              <div key={i} className="blog-post-item">
-                <span className="blog-post-date">
-                  {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </span>
-                <h3 className="blog-post-title">
-                  <a href={post.link} target="_blank" rel="noreferrer"
-                  dangerouslySetInnerHTML={{ __html: post.title.rendered }}/>
-                </h3>
-              </div>
-            ))}
+            { blog_posts }
           </div>
         </div>
       </div>

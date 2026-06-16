@@ -146,7 +146,7 @@ export default function Access() {
         <div className="marbot">
           To facilitate applying for a card and reaching the reading room, please navigate to this URL: http://www.loc.gov/visit/maps-and-floor-plans/
         </div>
-                  <LinkBankFooter />
+        <LinkBankFooter />
       </div>
 
       </div>
