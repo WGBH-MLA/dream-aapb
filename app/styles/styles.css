@@ -1950,6 +1950,7 @@ div.ais-HitsPerPage, div.ais-SortBy {
 }
 
 div.stats-container {
+  max-width: 50%;
   font-size: 1.2em;
   text-align: top;
   display: inline-flex;
@@ -2876,7 +2877,8 @@ div#mobile-sidebar-toggler {
 }
 
 /*leetle*/
-@media only screen and (max-width: 992px) {
+/*@media only screen and (max-width: 768px) {*/
+@media (max-width: 568px) {
   /*block mobile double click zoom*/
   * {
     -webkit-tap-highlight-color: transparent;
@@ -3219,6 +3221,7 @@ div.newsletter-bar input[type="submit"] {
   }
 
   input.sidebar-search  {
+    width: 77%;
     margin-top: 0.5em;
     font-size: 1.2em;
     padding: 0.25em;
@@ -3227,6 +3230,13 @@ div.newsletter-bar input[type="submit"] {
 
   div.page-sidebar.bmarleft {
     margin-left: 1em;
+  }
+
+  div.page-sidebar hr {
+    position: relative;
+    width: 110%;
+    left: -4em;
+
   }
 
   div.page-maincolumn {

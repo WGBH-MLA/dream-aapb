@@ -221,6 +221,14 @@ export default function Catalog() {
       case "series_titles":
         return "Series Title"
         break
+      case "people":
+        return "People"
+        break
+      case "contributors":
+        return "Contributors"
+        break
+      default:
+        return "Unmapped Facet"
     }
   }
 
@@ -293,9 +301,6 @@ export default function Catalog() {
               query={ customQuery.query }
               defaultQuery={ customQuery.query }
             />
-
-
-
   //////////
 
   
@@ -717,7 +722,17 @@ export default function Catalog() {
           attribute: "series_titles",
           field: "series_titles",
           type: "string"
-        }
+        },
+        {
+          attribute: "people",
+          field: "people",
+          type: "string"
+        },
+        {
+          attribute: "contributors",
+          field: "contributors",
+          type: "string"
+        }        
       ],
 
       sorting: {
@@ -1157,13 +1172,36 @@ export default function Catalog() {
               <RefinementList
                 attribute="series_titles"
                 searchable={true}
-
                 // transformItems={ producingOrganization }
               />
             </>
           }/>
 
-          <hr />          
+          <hr />
+
+          <SearchAccordion title="Contributors" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="contributors"
+                searchable={true}
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Orgs & People" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="people"
+                searchable={true}
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
         </div>
 
         <div className="page-maincolumn bmarright">
