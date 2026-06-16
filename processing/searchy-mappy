@@ -1,6 +1,6 @@
-curl -X DELETE -H "Authorization: ApiKey TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw==" "http://localhost:9200/aapb-chill-platinum"
-curl -v -X PUT "localhost:9200/aapb-chill-platinum/" \
--H "Authorization: ApiKey "TEVYNHZwd0J1OVR4SUpIR2k4TlQ6NzJBdlF6UFdUVldQb3RLZFhQMXl5Zw=="" \
+curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/aapb-freezing-osmium"
+curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
+-H "Authorization: ApiKey "XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw=="" \
 -H "Content-Type: application/json" \
 -d'{
   "settings": {
@@ -56,6 +56,11 @@ curl -v -X PUT "localhost:9200/aapb-chill-platinum/" \
       "raw_footage_titles": { "type": "keyword" },
       "promo_titles": { "type": "keyword" },
       "clip_titles": { "type": "keyword" },
+
+      "contributors": { "type": "keyword" },
+      "creators": { "type": "keyword" },
+      "publishers": { "type": "keyword" },
+      "people": { "type": "keyword" },
 
       "title_keyword": { "type": "keyword" },
 

@@ -64,3 +64,8 @@ export async function getPageBySlug(type, slug) {
   var fetchResp = await fetch(`${wagHost}/pages/${body.items[0].id}`)
   return await fetchResp.json()
 }
+
+export async function getLatestBlogPosts() {
+  const response = await fetch('https://blog.americanarchive.org/wp-json/wp/v2/posts?per_page=4&page=1&orderby=date&order=desc')
+  return await response.json()
+}

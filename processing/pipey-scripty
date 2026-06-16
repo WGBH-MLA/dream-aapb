@@ -193,8 +193,9 @@ ctx.producing_org = null;
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
 
   for (int i = 0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length > 0)
     for (int s = 0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
-      if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s].text == "Producing Organization"){
+      if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s].text == "Producing Organization"){
         if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
           ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
         }
@@ -448,5 +449,61 @@ if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDoc
     }
   }
 }
+
+
+ctx.people = new ArrayList();
+
+// contributors
+ctx.contributors = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreContributor != null && ctx.pbcoreDescriptionDocument.pbcoreContributor.length > 0){
+
+  for(int n=0; n < ctx.pbcoreDescriptionDocument.pbcoreContributor.length; n++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreContributor[n] != null && ctx.pbcoreDescriptionDocument.pbcoreContributor[n].contributor != null){
+      ctx.contributors.add(ctx.pbcoreDescriptionDocument.pbcoreContributor[n].contributor.text);
+
+      // brave index with such people in it
+      ctx.people.add(ctx.pbcoreDescriptionDocument.pbcoreContributor[n].contributor.text);
+    }
+  }
+}
+
+// creators
+ctx.creators = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
+
+  for(int o=0; o < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; o++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreCreator[o] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[o].creator != null){
+      ctx.creators.add(ctx.pbcoreDescriptionDocument.pbcoreCreator[o].creator.text);
+
+      // brave index with such people in it
+      ctx.people.add(ctx.pbcoreDescriptionDocument.pbcoreCreator[o].creator.text);
+    }
+  }
+}
+
+
+// publishers
+ctx.publishers = new ArrayList();
+if(ctx.pbcoreDescriptionDocument.pbcorePublisher != null && ctx.pbcoreDescriptionDocument.pbcorePublisher.length > 0){
+
+  for(int p=0; p < ctx.pbcoreDescriptionDocument.pbcorePublisher.length; p++){
+    if(ctx.pbcoreDescriptionDocument.pbcorePublisher[p] != null && ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher != null){
+      ctx.publishers.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher.text);
+
+      // brave index with such people in it
+      ctx.people.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher.text);
+    }
+  }
+}
+
+
+// uniq the people list
+if(ctx.people != null && ctx.people.length > 0){
+  ctx.people = ctx.people.stream().distinct().collect(Collectors.toList())
+}
+
+
+
+
 
 

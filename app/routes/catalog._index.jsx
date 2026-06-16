@@ -3,6 +3,8 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
+import { scrollToTop }  from '../utils/helpers'
+
 
 const OR_FIELDS = [
   "producing_org",
@@ -74,7 +76,7 @@ function CustomSearchBox(props) {
         <h4>Search for</h4>
         <input
           id="query"
-          className="sidebar-search smarbot"
+          className="sidebar-search"
           ref={inputRef}
           defaultValue={ props.query }
           onKeyUp={(e) => {
@@ -83,11 +85,11 @@ function CustomSearchBox(props) {
         />
 
         <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>This title</h4>
-        <input id="title"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search smarbot" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
         <div>
           <button className="sidebar-search-button">Update</button>
         </div>
@@ -103,15 +105,6 @@ export default function Catalog() {
 
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
-
-  // useEffect(() => {
-  //   // check for if we're here from layoutsearch, and run thru recatalog if so
-  //   if(searchParams.get("reload") !== null){
-  //     console.log( 'i go!', searchParams.get("reload") )
-  //     // setSearchParams(searchParams, {shitass: "bitch"})
-  //     window.location.search = "?shit=woppalooba"
-  //   }
-  // }, [])
 
   const [customQuery, setCustomQuery] = useState({
     query: searchParams.get(`${data.esIndex}[query]`) || "",
@@ -133,19 +126,19 @@ export default function Catalog() {
   const [showingRefinements, setShowingRefinements] = useState(false)
   
   // toggle searchy UI on mobile only
-  const [showSearchy, setShowSearchy] = useState(false)
+  const [hideSearchy, setHideSearchy] = useState(false)
+  const [searchyPosition, setSearchyPosition] = useState(0)
 
   let sidebarClasses = "page-sidebar bmarleft"
   let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
   let mobileSidebarToggler = <LayoutPanelLeft />
   let toggleMessage
-  if(showSearchy){
+  if(hideSearchy){
+    toggleMessage = "Show"
+  } else {
     sidebarClasses += " open"
     topRefinementsBarClasses += " open"
     toggleMessage = "Hide"
-  } else {
-    toggleMessage = "Show"
-
   }
 
   function handleCustomQuery(type, value, refine){
@@ -228,6 +221,14 @@ export default function Catalog() {
       case "series_titles":
         return "Series Title"
         break
+      case "people":
+        return "People"
+        break
+      case "contributors":
+        return "Contributors"
+        break
+      default:
+        return "Unmapped Facet"
     }
   }
 
@@ -300,9 +301,6 @@ export default function Catalog() {
               query={ customQuery.query }
               defaultQuery={ customQuery.query }
             />
-
-
-
   //////////
 
   
@@ -724,7 +722,17 @@ export default function Catalog() {
           attribute: "series_titles",
           field: "series_titles",
           type: "string"
-        }
+        },
+        {
+          attribute: "people",
+          field: "people",
+          type: "string"
+        },
+        {
+          attribute: "contributors",
+          field: "contributors",
+          type: "string"
+        }        
       ],
 
       sorting: {
@@ -962,6 +970,21 @@ export default function Catalog() {
     return result
   }
 
+  function handleHideSearchy(newHideSearchy){
+    setHideSearchy(newHideSearchy)
+    // if(newHideSearchy){
+    //   // hide it
+    //   let sidebar = document.getElementById("search-sidebar")
+    //   console.log( 'hiding that stupid', searchyPosition )
+    //   window.scroll(0, searchyPosition)
+    // } else {
+    //   // show it
+    //   console.log( 'showing, i like to go to', window.scrollY )
+    //   setSearchyPosition(window.scrollY)
+    //   scrollToTop()
+    // }
+  }
+
   return (
     <div className="body-container">
       <InstantSearch
@@ -969,7 +992,7 @@ export default function Catalog() {
         searchClient={ searchClient }
         routing={ true }
       >
-        <div id="mobile-sidebar-toggler" onClick={ () => setShowSearchy(!showSearchy) }>
+        <div id="mobile-sidebar-toggler" onClick={ () => handleHideSearchy(!hideSearchy) }>
           { mobileSidebarToggler }
           <span>{ toggleMessage } Search UI</span>
         </div>
@@ -1030,7 +1053,7 @@ export default function Catalog() {
           </div>
         </div>
 
-        <div className={ sidebarClasses }>
+        <div id="search-sidebar" className={ sidebarClasses }>
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
@@ -1149,13 +1172,36 @@ export default function Catalog() {
               <RefinementList
                 attribute="series_titles"
                 searchable={true}
-
                 // transformItems={ producingOrganization }
               />
             </>
           }/>
 
-          <hr />          
+          <hr />
+
+          <SearchAccordion title="Contributors" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="contributors"
+                searchable={true}
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
+
+          <SearchAccordion title="Orgs & People" startClosed={false} content={
+            <>
+              <RefinementList
+                attribute="people"
+                searchable={true}
+                // transformItems={ producingOrganization }
+              />
+            </>
+          }/>
+
+          <hr />
         </div>
 
         <div className="page-maincolumn bmarright">
@@ -1166,6 +1212,7 @@ export default function Catalog() {
           <hr/>
 
           <Hits hitComponent={ searchResultComponent } />
+          
           <div className="pagination-bar marbot">
             { pagination }
           </div>

@@ -192,6 +192,7 @@ a:hover {
 }
 
 .marbot {
+  /*use smarbot, rather than changing marbot*/
   margin-bottom: 2em;
 }
 
@@ -247,13 +248,14 @@ div.body-container {
 
 div.body-container h1 {
   margin-left: 2.8em;
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
 }
 
 div.body-container p {
-  width: 60%;
+  width: 90%;
   margin-left: 4.5em;
   font-size: 20px;
+  margin-bottom: 2em;
 }
 
 ul.blank-list {
@@ -363,9 +365,8 @@ font-weight: 700;
 }
 
 div.skinny-body-container p {
-  font-size: .80em;
-  width: 85%;
-  margin-left: 14%;
+  font-size: 0.80em;
+  width: 95%;
 }
 
 div.skinny-body-container ul {
@@ -479,8 +480,10 @@ div.footer-bar div.footer-branding button, div.footer-bar div.footer-branding im
 }
 
 div.footer-bar div.footer-branding button.donate {
-  margin-left: 0;
-  margin-right: 0;
+  width: 8em;
+  height: 2.4em;
+  margin-right: 0em;
+  margin-top: 1em;
 }
 
 div.footer-bar div.footer-title {
@@ -496,7 +499,7 @@ div.footer-bar div.footer-stack a {
 }
 
 div.footer-bar div.footer-branding img {
-  width: 16rem;
+  width: 22rem;
 }
 
 div.toenail-bar {
@@ -569,10 +572,12 @@ div.welcome-video-container iframe div {
 div.link-bank {
   vertical-align: top;
   text-align: left;
-  margin-top: 2em;
+  margin-top: 4em;
   margin-bottom: 2em;
-  display: inline-block;
-  width: 40%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2rem;
+  width: 80%;
   margin-left: 13.2%;
   margin-right: -10%;
 }
@@ -587,7 +592,7 @@ div.link-bank a {
 }
 
 div.link-bank hr {
-  width: 105%;
+  width: 100%;
   margin-bottom: .7em;
   margin-top: .3em;
   color: #b3b3b3;
@@ -860,16 +865,16 @@ div.tv-menu-container a {
 }
 
 div.tv-menu-container h2 {
-  padding-left: 3.8em;
-  padding-bottom: .2em;
+  padding-left: 4.5em;
+  padding-bottom: 0.4em;
   font-weight: bold;
-  font-size: 1.6em;
+  font-size: 20px;
 }
 
 div.tv-menu-container a.see-all {
   position: absolute;
   top: 0;
-  right: 2em;
+  right: 3em;
   font-weight: bold;
   color: #4b4fa5;
 }
@@ -923,6 +928,8 @@ div.tv-menu-container div.tv-menu-program h4 {
   display: block;
   overflow-x: hidden;
   white-space: wrap;
+  color: #000;
+  font-size: 230px;
 }
 
 /* h5 base */
@@ -941,7 +948,7 @@ div.tv-menu-container.three {
 
 div.tv-menu-container.three div.tv-menu-body {
   padding: 0 2em;
-  margin-left: 4em;
+  margin-left: 3.6em;
   overflow: visible;
 }
 
@@ -969,7 +976,7 @@ div.tv-menu-container.four {
 
 div.tv-menu-container.four div.tv-menu-body {
   padding: 0 2em;
-  margin-left: 4em;
+  margin-left: 3.6em;
 }
 
 div.tv-menu-container.four div.tv-menu-program img {
@@ -982,7 +989,7 @@ div.tv-menu-container.four div.tv-menu-program img {
 }
 
 div.tv-menu-container.four div.tv-menu-program h4 {
-  font-size: 1em;
+  font-size: 20px;
   margin-top: 0.5em;
   display: block;
 }
@@ -1083,6 +1090,71 @@ div.pull-quote-group-bubble {
 }
 div.pull-quote-group-bubble.fill {
   background-color: #3c429b;
+}
+
+/* FAQ */
+
+.faq-item {
+  position: relative;
+}
+
+
+.faq-item::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: #e0e0e0;
+  margin-left: 7em;
+}
+
+.faq-button {
+  font-family: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9e2164;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-question {
+  font-size: 1.25rem;
+  font-weight: bold;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.faq-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 300;
+  transition: transform 0.2s;
+  transform: rotate(0deg);
+}
+
+.faq-icon.open {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  padding-bottom: 1rem;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  padding-left: 8em;
+  color: #000;
+}
+
+.faq-answer li {
+  font-size: .8em;
 }
 
 /*council and committee images*/
@@ -1292,6 +1364,41 @@ a.drawer-label {
 
 a.drawer-label:hover {
   font-weight: normal;
+}
+
+/*bloggy*/
+div.blog-posts-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin-left: 7em;
+}
+
+div.blog-posts-outer h2 {
+  margin-bottom: 1em;
+  margin-left: 4.5em;
+}
+
+div.blog-post-item {
+  flex: 1;
+  padding: 0 1em;
+  border-left: 4px solid #a01f64;
+}
+
+span.blog-post-date {
+  display: block;
+  font-size: 0.75em;
+  margin-bottom: 1em;
+}
+
+h3.blog-post-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+h3.blog-post-title a {
+  text-decoration: none;
+  color: black;
 }
 
 div.page-sidebar {
@@ -1843,6 +1950,7 @@ div.ais-HitsPerPage, div.ais-SortBy {
 }
 
 div.stats-container {
+  max-width: 50%;
   font-size: 1.2em;
   text-align: top;
   display: inline-flex;
@@ -2053,9 +2161,12 @@ div.ais-SearchBox form, div.ais-SearchBox form input {
  }
 
 input.sidebar-search  {
+  border-radius: 4px;
+  border: 2px solid #ddd;
   width: 90%;
   height: 1em;
   padding: 0.25em;
+  margin-bottom: 1em;
 }
 
 div.score-light {
@@ -2766,7 +2877,15 @@ div#mobile-sidebar-toggler {
 }
 
 /*leetle*/
-@media only screen and (max-width: 992px) {
+/*@media only screen and (max-width: 768px) {*/
+@media (max-width: 568px) {
+  /*block mobile double click zoom*/
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
   /* layout */
   div.page-container {
     width: 94%;
@@ -2885,10 +3004,76 @@ div#mobile-sidebar-toggler {
 
   /*footah*/
   div.footer-bar {
+    display: block;
+  }
+
+  div.footer-bar div.footer-stack {
+    width: 100%;
+    font-size: 3em;
+    display: block;
+    margin-bottom: 2em;
+    margin-left: 2em;
+  }
+
+  div.footer-bar div.footer-branding {
+    width: 100%;
+    display: block;
+  }
+
+  div.footer-bar div.footer-branding img {
+    width: 100%;
+    display: block;
+  }
+
+  div.footer-bar div.footer-branding a {
+    font-size: 3em;
+    margin-left: 5em;
+    display: block;
+    width: 50%;
   }
 
   div.toenail-bar {
+    margin-left: 2em;
+    font-size: 3em;
+    display: block;
   }
+
+  div.toenail-bar div.toenail-logos img {
+    object-fit: contain;
+    height: 3em;
+    margin-left: 0;
+    margin-bottom: 1em;
+    width: 100%;
+  }
+
+  div.toenail-bar div.toenail-socials a {
+    display: inline-block;
+  } 
+
+  div.newsletter-bar {
+    font-size: 3em;
+    margin-top: 0;
+  }
+
+div.newsletter-bar div {
+  display: block;
+  margin-left: 1em;
+}
+
+div.newsletter-bar input {
+  font-size: 1.2em;
+  padding: 1em;
+  border: none;
+}
+
+div.newsletter-bar input[type="text"] {
+  width: 70%;
+}
+
+div.newsletter-bar input[type="submit"] {
+  margin-top: 1em;
+}
+
 
   /*show page*/
   div.page-title {
@@ -3024,7 +3209,8 @@ div#mobile-sidebar-toggler {
 
   /* mobile search ui */
   div.pagination-bar {
-    overflow: hidden;
+    font-size: 2.4em;
+    overflow: visible;
     width: 90%;
     padding-left: 1em;
     padding-right: 1em;
@@ -3035,13 +3221,22 @@ div#mobile-sidebar-toggler {
   }
 
   input.sidebar-search  {
+    width: 77%;
     margin-top: 0.5em;
     font-size: 1.2em;
     padding: 0.25em;
+    margin-bottom: 0.5em;
   }
 
   div.page-sidebar.bmarleft {
     margin-left: 1em;
+  }
+
+  div.page-sidebar hr {
+    position: relative;
+    width: 110%;
+    left: -4em;
+
   }
 
   div.page-maincolumn {
@@ -3049,23 +3244,78 @@ div#mobile-sidebar-toggler {
     margin-right: 0;
   }
 
-  div.hit-info-container {
-    width: 65%;
-    margin-left: 2em;
-  }
-
-  div.hit-info-container div.martop,  div.hit-info-container div.martop h3.martop {
-    margin-top: 0;
-  }
-
   div.sort-container.view-select.marright {
     margin-right: 4em;
+  }
+
+  /*search result*/
+  div.search-result {
+    display: block;
+    font-size: 2.4em;
+  }
+
+  div.search-result a {
+    display: block;
+    width: 100%;
+  }
+
+  div.search-result a div.hit-thumbnail-container {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  div.search-result div.hit-info-container {
+    display: block;
+  }
+
+  div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail, div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img {
+    min-width: 22em;
+    width: 22em;
+    min-height: 22em;
+    height: 22em;
+  }
+
+  div.hit-thumbnail img {
+    width: 22em;
+  }
+
+  div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
+    width: 22em;
+    height: 22em;
+  }
+
+  div.hit-thumbnail img.thumbnail-bar {
+    height: 3.5em;
   }
 
   h2.search-result-label {
     display: none;
   }
 
+  div.hit-info-container {
+    width: 90%;
+    max-width: 90%;
+    margin-left: 2em;
+  }
+
+  div.hit-info-container div {
+  }
+
+  div.hit-info-container div.martop,  div.hit-info-container div.martop h3.martop {
+    margin-top: 0;
+  }
+
+  div.hit-info-container h3.hit-title {
+    white-space: normal;
+    width: 100%;
+  }
+
+  ol.ais-Hits-list {
+    list-style-type: none;
+    margin-left: 4em;
+  }
+
+  /*sorting etc*/
   div.options-container h2 {
     font-size: 2em;
     margin-right: 2em;
@@ -3157,11 +3407,6 @@ div#mobile-sidebar-toggler {
     display: block;
   }
 
-  div.hit-thumbnail, div.hit-thumbnail img.thumbnail {
-    width: 8rem;
-    height: 8rem;
-  }
-
   div.header-bar div.header-spacer, div.options-container div.header-spacer {
     flex-grow: 0;
     display: none;
@@ -3180,9 +3425,10 @@ div#mobile-sidebar-toggler {
 
     height: auto;
     color: #3C439B;
-    position: sticky;
+    /*position: sticky;*/
+    position: fixed;
     display: block;
-    z-index: 25000;
+    z-index: 1000001;
     top: 20px;
     padding: 0.5em;
     padding-left: 1em;
@@ -3210,7 +3456,22 @@ div#mobile-sidebar-toggler {
     display: none;
   }
 
-  div.page-sidebar.open, div.top-refinements-bar.open {
+  div.page-sidebar.open {
+    z-index: 1000000;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    height: 105vh;
+    max-height: 105vh;
+    margin-left: 0;
+    position: fixed;
+    overflow-y: scroll;
+    display: block;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+
+  div.top-refinements-bar.open {
     display: block;
   }
 

@@ -27,6 +27,8 @@ export default function ClientVideoPlayer(props){
     if(props.mediaURL){
       videojs('vjs-player', {
         fluid: true,
+        controls: true,
+        responsive: true,
         width: 640,
         height: 480,
         controlBar: {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Play, ChevronUp, ChevronDown, ChevronRight, X, CircleArrowOutUpRight } from "lucide-react"
 import videojs from "video.js"
-import { scrollToAnchor, secondsToHMS, truth } from "../utils/helpers"
+import { scrollToAnchorTranscript, secondsToHMS, truth } from "../utils/helpers"
 
 export default function ClientTranscriptViewer(props){
   const [currentTime, setCurrentTime] = useState(null)
@@ -46,7 +46,7 @@ export default function ClientTranscriptViewer(props){
       newAnchorIndex = increment(-1, selectedMatch, numMatches)
     }
 
-    scrollToAnchor( matchAnchor( newAnchorIndex ) )
+    scrollToAnchorTranscript( matchAnchor( newAnchorIndex ) )
     setSelectedMatch( newAnchorIndex )
   }
 
