@@ -67,54 +67,179 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
       "pbcoreDescriptionDocument": {
         "type": "nested",
         "properties": {
-          "pbcoreDescription": {
-            "type": "nested",
-            "properties": {
-              "descriptionType": {"type": "text"},
-              "text": {"type": "text"}
-            }
-          },
-          "pbcoreTitle": {
-            "type": "nested",
-            "properties": {
-              "titleType": { "type": "text" },
-              "text": { "type": "text" }
-            }
-          },
           "pbcoreAssetType": {
             "type": "nested",
             "properties": {
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
               "text": { "type": "keyword" }
             }
           },
-          "pbcoreGenre": {
+         "pbcoreAssetDate": {
             "type": "nested",
             "properties": {
-              "annotation": { "type": "text" },
-              "source": { "type": "text" },
-              "text": { "type": "keyword" }
-            }
-          },
-          "pbcoreAnnotation": {
-            "type": "nested",
-            "properties": {
-              "annotationType": { "type": "text" },
-              "text": { "type": "text" }
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" },
+              "dateType": {"type": "text"}
             }
           },
           "pbcoreIdentifier": {
             "type": "nested",
             "properties": {
-              "source": { "type": "text" },
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
               "text": { "type": "text" }
             }
           },
-
-          "pbcoreAssetDate": {
+          "pbcoreTitle": {
             "type": "nested",
             "properties": {
-              "dateType": {"type": "text"},
-              "text": {"type": "text"}
+              "titleType" : {"type": "text"},
+              "titleTypeSource" : {"type": "text"},
+              "titleTypeRef" : {"type": "text"},
+              "titleTypeVersion" : {"type": "text"},
+              "titleTypeAnnotation" : {"type": "text"},
+              "startTime" : {"type": "text"},
+              "endTime" : {"type": "text"},
+              "timeAnnotation" : {"type": "text"},
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreSubject": {
+            "type": "nested",
+            "properties": {
+              "subjectType": { "type": "text" },
+              "subjectTypeSource": { "type": "text" },
+              "subjectTypeRef": { "type": "text" },
+              "subjectTypeVersion": { "type": "text" },
+              "subjectTypeAnnotation": { "type": "text" },
+              "startTime": { "type": "text" },
+              "endTime": { "type": "text" },
+              "timeAnnotation": { "type": "text" },
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreDescription": {
+            "type": "nested",
+            "properties": {
+              "descriptionType": {"type": "text"},
+              "descriptionTypeSource": {"type": "text"},
+              "descriptionTypeRef": {"type": "text"},
+              "descriptionTypeVersion": {"type": "text"},
+              "descriptionTypeAnnotation": {"type": "text"},
+              "segmentType": {"type": "text"},
+              "segmentTypeSource": {"type": "text"},
+              "segmentTypeRef": {"type": "text"},
+              "segmentTypeVersion": {"type": "text"},
+              "segmentTypeAnnotation": {"type": "text"},
+              "startTime": {"type": "text"},
+              "endTime": {"type": "text"},
+              "timeAnnotation": {"type": "text"},
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreGenre": {
+            "type": "nested",
+            "properties": {
+            "startTime": {"type": "text"},
+            "endTime": {"type": "text"},
+            "timeAnnotation": {"type": "text"},
+            "source" : {"type": "text"},
+            "ref" : {"type": "text"},
+            "version" : {"type": "text"},
+            "annotation" : {"type": "text"},
+            "text": { "type": "text" }
+          },
+          "pbcoreRelation": {
+            "type": "nested",
+            "properties": {
+              "pbcoreRelationType": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              },
+              "pbcoreRelationType": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              }
+            }
+          },
+          "pbcoreCoverage": {
+            "type": "nested",
+            "properties": {
+              "coverage": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                  "startTime": { "type": "text" },
+                  "endTime": { "type": "text" },
+                  "timeAnnotation": { "type": "text" }
+                }
+              },
+              "coverageType": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              }
+            }
+          },
+          "pbcoreAudienceLevel": {
+            "type": "nested",
+            "properties": {
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
+            }
+          },
+          "pbcoreAudienceRating": {
+            "type": "nested",
+            "properties": {
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
             }
           },
           "pbcoreCreator": {
@@ -124,33 +249,28 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                 "type": "nested",
                 "properties": {
                   "affiliation": {"type": "text"},
-                  "ref": {"type": "text"},
-                  "text": {"type": "text"}
+                  "affiliationSource": {"type": "text"},
+                  "affiliationRef": {"type": "text"},
+                  "affiliationVersion": {"type": "text"},
+                  "affiliationAnnotation": {"type": "text"},
+                  "startTime": {"type": "text"},
+                  "endTime": {"type": "text"},
+                  "timeAnnotation": {"type": "text"},
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
                 }
               },
               "creatorRole": {
                 "type": "nested",
                 "properties": {
-                  "text": {"type": "text"}
-                }
-              }
-            }
-          },
-          "pbcorePublisher": {
-            "type": "nested",
-            "properties": {
-              "publisher": {
-                "type": "nested",
-                "properties": {
-                  "affiliation": {"type": "text"},
-                  "ref": {"type": "text"},
-                  "text": {"type": "keyword"}
-                }
-              },
-              "publisherRole": {
-                "type": "nested",
-                "properties": {
-                  "text": {"type": "text"}
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
                 }
               }
             }
@@ -162,15 +282,113 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                 "type": "nested",
                 "properties": {
                   "affiliation": {"type": "text"},
-                  "text": {"type": "text"}
+                  "affiliationSource": {"type": "text"},
+                  "affiliationRef": {"type": "text"},
+                  "affiliationVersion": {"type": "text"},
+                  "affiliationAnnotation": {"type": "text"},
+                  "startTime": {"type": "text"},
+                  "endTime": {"type": "text"},
+                  "timeAnnotation": {"type": "text"},
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
                 }
               },
               "contributorRole": {
                 "type": "nested",
                 "properties": {
-                  "text": {"type": "text"}
+                  "portrayal": {"type": "text"},
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
                 }
               }
+            }
+          },
+          "pbcorePublisher": {
+            "type": "nested",
+            "properties": {
+              "publisher": {
+                "type": "nested",
+                "properties": {
+                  "affiliation": {"type": "text"},
+                  "affiliationSource": {"type": "text"},
+                  "affiliationRef": {"type": "text"},
+                  "affiliationVersion": {"type": "text"},
+                  "affiliationAnnotation": {"type": "text"},
+                  "startTime": {"type": "text"},
+                  "endTime": {"type": "text"},
+                  "timeAnnotation": {"type": "text"},
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              },
+              "publisherRole": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              }
+            }
+          },
+          "pbcoreRightsSummary": {
+            "type": "nested",
+            "properties": {
+              "startTime": {"type": "text"},
+              "endTime": {"type": "text"},
+              "timeAnnotation": {"type": "text"},
+              "rightsSummary": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              },
+              "rightsLink": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              },
+              "rightsEmbedded": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" }
+                }
+              },
+            }
+          },
+          "pbcoreAnnotation": {
+            "type": "nested",
+            "properties": {
+              "annotationType": { "type": "text" },
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
             }
           },
           "pbcoreInstantiation": {
@@ -179,26 +397,16 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
               "instantiationMediaType": {
                 "type": "nested",
                 "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": {"type": "keyword"}
                 }
               },
               "instantiationDuration": {
                 "type": "nested",
                 "properties": {
-                  "text": {"type": "text"}
-                }
-              },
-              "instantiationDate": {
-                "type": "nested",
-                "properties": {
-                  "dateType": {"type": "text"},
-                  "text": {"type": "text"}
-                }
-              },
-              "instantiationFilesize": {
-                "type": "nested",
-                "properties": {
-                  "unitsOfMeasure" : {"type": "text"},
                   "source" : {"type": "text"},
                   "ref" : {"type": "text"},
                   "version" : {"type": "text"},
@@ -206,28 +414,159 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                   "text": {"type": "text"}
                 }
               },
+              "instantiationStandard": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"},
+                  "profile": {"type": "text"}
+                }
+              },
+              "instantiationGenerations": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },              
+              "instantiationDate": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"},
+                  "dateType": {"type": "text"}
+                }
+              },
+              "instantiationFilesize": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"},
+                  "unitsOfMeasure" : {"type": "text"}
+                }
+              },
+              "instantiationDataRate": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"},
+                  "unitsOfMeasure" : {"type": "text"}
+                }
+              },
+              "instantiationColors": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationTracks": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationChannelConfiguration": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },              
+              "instantiationLanguage": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+              "instantiationAlternativeModes": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": {"type": "text"}
+                }
+              },
+
               "instantiationIdentifier": {
                 "type": "nested",
                 "properties": {
-                  "source": { "type": "text" },
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
               },
+              "instantiationDimensions": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
+                  "text": { "type": "text" },
+                  "unitsOfMeasure": {"type": "text"}
+                }
+              },              
               "instantiationPhysical": {
                 "type": "nested",
                 "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
               },
               "instantiationDigital": {
                 "type": "nested",
                 "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
               },
               "instantiationLocation": {
                 "type": "nested",
                 "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
               },
@@ -235,6 +574,16 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                 "type": "nested",
                 "properties": {
                   "annotationType": { "type": "text" },
+                  "text": { "type": "text" }
+                }
+              },
+              "instantiationTimeStart": {
+                "type": "nested",
+                "properties": {
+                  "source" : {"type": "text"},
+                  "ref" : {"type": "text"},
+                  "version" : {"type": "text"},
+                  "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
               }

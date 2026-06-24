@@ -12,6 +12,8 @@ import { niceTitle, dateTypeName } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
+import Access from '../classes/Access'
+import Location from '../classes/Location'
 
 export const loader = async ({params, request}) => {
   let esIndex = process.env.ES_INDEX
@@ -25,8 +27,17 @@ export const loader = async ({params, request}) => {
     mediaURL: null,
     esIndex: esIndex
   }
+
+  // fill presenter model with record data
   let record = new Record(data.recordData)
-  if( record.hasPlayableMedia() ){
+  // check location from IP
+  let location = new Location(request)
+  // get access level based on record and location
+  let access = new Access(record, location)
+
+console.log( 'and like duh its', access.canPlay(), record.hasPlayableMedia() )
+
+  if( access.canPlay() && record.hasPlayableMedia() ){
 
     let ciConfig = {
       ciAPIHost: process.env.SONY_CI_API_HOST,

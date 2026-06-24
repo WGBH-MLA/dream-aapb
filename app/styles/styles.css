@@ -3696,6 +3696,12 @@ div.newsletter-bar input[type="submit"] {
     max-width: 9.3%;
   }
 
+  /*show page*/
+
+  div#show-media {
+    margin-bottom: 12em;
+  }
+
   /*bigtviewer*/
   div.transcript-viewer-container div.transcript-search {
     margin-left: 13%;
