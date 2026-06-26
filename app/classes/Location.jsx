@@ -1,9 +1,17 @@
 import { AccessTypes } from "../utils/AccessTypes"
+import { Geocoding } from "../classes/Geocoding"
 
 export default class Location {
   constructor(request){
     this.request = request
-    this.region = fakeGeocoding(this.request.ip)
+
+    let ip = this.request.ip
+    if(process.env.NODE_ENV === "development"){
+      this.region = AccessTypes.LOCATION_ONSITE
+    } else {
+      this.region = new Geocoding(ip)
+    }
+
   }
 }
 

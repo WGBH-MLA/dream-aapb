@@ -20,12 +20,18 @@ export const loader = async ({params, request}) => {
   let esURL = process.env.ES_URL
   let esAPIKey = process.env.ES_API_KEY
 
+  let data = {}
+  let guid = params.guid
+
   // get record from es
-  let recordData = await getRecord(params.guid, esURL, esIndex, esAPIKey)
-  let data = {
-    recordData: recordData,
-    mediaURL: null,
-    esIndex: esIndex
+  let recordData = await getRecord(guid, esURL, esIndex, esAPIKey)
+  
+  if(!recordData){
+    throw `Asset ${guid} was not found!!`
+  } else {
+    data.recordData = recordData
+    data.mediaURL = null
+    data.esIndex = esIndex  
   }
 
   // fill presenter model with record data
@@ -35,7 +41,8 @@ export const loader = async ({params, request}) => {
   // get access level based on record and location
   let access = new Access(record, location)
 
-console.log( 'and like duh its', access.canPlay(), record.hasPlayableMedia() )
+  // console.log( 'and like duh its', access.canPlay(), record.hasPlayableMedia() )
+
 
   if( access.canPlay() && record.hasPlayableMedia() ){
 
@@ -77,6 +84,7 @@ console.log( 'and like duh its', access.canPlay(), record.hasPlayableMedia() )
 
 export default function ShowRecord() {
   const data = useLoaderData()
+
   const [viewerOpen, setViewerOpen] = useState(false)
 
   const [transcriptData, setTranscriptData] = useState(false)
@@ -243,7 +251,7 @@ export default function ShowRecord() {
           </div>
 
           <div className="pbcore-viewer-container">
-            <Viewer label="PBCore Metadata" content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
+            <Viewer label="PBCore Metadata" guid={ record.guid } content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
           </div>
         </div>
         <div className="skinnier-body-container">

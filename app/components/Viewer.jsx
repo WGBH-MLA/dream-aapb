@@ -12,7 +12,12 @@ export default function Viewer(props){
     chevy = <ChevronRight />
   }
 
-  let toggler = <b onClick={ () => props.setShowContent(!props.showContent) }>(Click to toggle full PBCore view){ chevy }</b>
+  let toggler = <>
+    <b onClick={ () => props.setShowContent(!props.showContent) }>
+      (Click to toggle full PBCore view){ chevy }
+    </b>
+    <a className="viewer-rawlink marright" href={`/catalog/${props.guid}.pbcore`}>View Raw</a>
+  </>
   return (
 
     <div className={ classes } >

@@ -128,6 +128,14 @@ div.viewer div.viewer-content pre {
   overflow-x: scroll;
 }
 
+div.viewer a.viewer-rawlink {
+  color: #aaa;
+  display: inline-flex;
+  position: absolute;
+  right: 0;
+  font-size: 0.8em;
+}
+
 div.rotation-helper {
   min-height: 1em;
   min-width: 1em;

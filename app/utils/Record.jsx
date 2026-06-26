@@ -1,3 +1,4 @@
+import { AccessTypes } from "../utils/AccessTypes"
 import { notEmpty } from "../utils/helpers"
 
 export default class Record {
@@ -5,7 +6,6 @@ export default class Record {
   constructor(data){
     // this is the entire es document v
     this.data = data
-
     if(!this.data || !this.data.guid){
       throw `Input data invalid for Record!! ${data}`
     }
@@ -19,16 +19,20 @@ export default class Record {
 
 
     this.access_level = "private"
-    if(this.data.pbcoreDescriptionDocument.pbcoreAnnotation && this.data.pbcoreDescriptionDocument.pbcoreAnnotation.length > 0){
+    if(notEmpty(this.data.pbcoreDescriptionDocument.pbcoreAnnotation)){
       let levelAnnotation = this.data.pbcoreDescriptionDocument.pbcoreAnnotation.find((pba) => pba.annotationType === "Level of User Access")
       if(levelAnnotation && levelAnnotation.text){
+
         switch(levelAnnotation.text){
           case "Online Reading Room":
-            this.access_level = "online"
+            this.access_level = AccessTypes.ACCESS_ONLINE
+            break
           case "On Location":
-            this.access_level ="onlocation"
+            this.access_level = AccessTypes.ACCESS_ONLOCATION
+            break
           case "Private":
-            this.access_level = "private"
+            this.access_level = AccessTypes.ACCESS_RESTRICTED
+            break
         }
       }
     }
@@ -36,6 +40,7 @@ export default class Record {
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreIdentifier)){
       let ciIDNode = this.pbcoreDescriptionDocument.pbcoreIdentifier.find((pbi) => pbi.source === "Sony Ci")
       if(ciIDNode){
+
         this.ciID = ciIDNode.text
       }
     }
@@ -65,7 +70,6 @@ export default class Record {
 
   creators(){
     // all creators other than producing organization
-    console.log( 'and i must emphasize ', this.pbcoreDescriptionDocument.pbcoreCreator )
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
       return this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
     }
@@ -77,8 +81,6 @@ export default class Record {
     }
   }
 }
-
-
 
 class Instantiation {
   constructor(instantiation){

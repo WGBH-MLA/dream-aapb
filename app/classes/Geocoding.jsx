@@ -4,11 +4,11 @@ export default class Geocoding {
     this.country_code = locationByIP(ip)
   }
 
-  // async locationByIP(ip){
-  //   fetch(`http://ip-api.com/json/${ip}`, (resp) => {
+  async locationByIP(ip){
+    fetch(`http://ip-api.com/json/${ip}`, (resp) => {
       
-  //   })
-  // }
+    })
+  }
 }
 
 
