@@ -8,7 +8,7 @@ import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
@@ -117,7 +117,7 @@ export default function ShowRecord() {
   }
 
   let people, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore
+  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
   if(data){
 
     title = record.title
@@ -147,20 +147,18 @@ export default function ShowRecord() {
 
     // people
     creators = record.creators()
-    if(creators && creators.length > 0){
-      creators = creators.map((pbc) => <ShowBox key={i} label={ pbc.creatorRole.text } text={ pbc.creator.text } />)
+    if(creators){
 
-      if(creators && creators.length > 0){
-        people = (
-          <>
-            <div className="show-metadata-header">People</div>
-            { creators }
-          </>
-        )
-      }
+      creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
+      people = (
+        <>
+          <div className="show-metadata-header">People</div>
+          { creators }
+        </>
+      )
     }
 
-    if(record.pbcoreDescriptionDocument.pbcoreCoverage && record.pbcoreDescriptionDocument.pbcoreCoverage.length > 0){
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreCoverage)){
       coverages = record.pbcoreDescriptionDocument.pbcoreCoverage.map((cov, i) => {
         return (
           <>
@@ -171,7 +169,7 @@ export default function ShowRecord() {
       })
     }
 
-    if(record.pbcoreDescriptionDocument.pbcoreIdentifier && record.pbcoreDescriptionDocument.pbcoreIdentifier.length > 0){
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreIdentifier)){
       eachId = record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
         return <ShowBox key={i} label={ pbi.source || "Unknown ID" } text={ pbi.text } />
       })
@@ -186,7 +184,7 @@ export default function ShowRecord() {
       }
     }
 
-    if(record.pbcoreDescriptionDocument.pbcoreAssetDate && record.pbcoreDescriptionDocument.pbcoreAssetDate.length > 0){
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetDate)){
       dates = (
         <>
           <div className="show-metadata-header">Dates</div>
@@ -197,6 +195,11 @@ export default function ShowRecord() {
 
     if(record.pbcoreDescriptionDocument){
       pbCore = JSON.stringify(record.pbcoreDescriptionDocument, null, 4)
+    }
+
+    instantiations = record.instantiations()
+    if(instantiations){
+      instantiations = instantiations.map((inst) => inst.blurb() )
     }
   }
   
@@ -232,6 +235,11 @@ export default function ShowRecord() {
             { people }
             { coverages }
             { dates }
+          </div>
+
+          <div className="show-metadata-container bmarbot">
+            <div className="show-metadata-header">Instantiations</div>
+            { instantiations }
           </div>
 
           <div className="pbcore-viewer-container">

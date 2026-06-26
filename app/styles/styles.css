@@ -1436,6 +1436,22 @@ div.show-description {
   width: 50%;
 }
 
+div.instantiation-blurb {
+  padding: 1em;
+  background-color: #ddf;
+  font-size: 0.8em;
+
+}
+
+div.instantiation-blurb ul {
+  display: inline;
+  list-style-type: none;
+}
+
+div.instantiation-blurb ul li {
+  display: inline;
+}
+
 div#show-media {
   background-color: #f9f9f9;
   margin-left: 20%;
@@ -1443,7 +1459,6 @@ div#show-media {
   width: 60%;
   margin-bottom: 8em;
 }
-
 
 div#show-media div.show-thumbnail {
   position: relative;

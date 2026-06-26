@@ -17,7 +17,7 @@ import { truth } from "../utils/helpers"
 export default class Access {
   constructor(record, location){
     this.record = record
-    this.location.region = location
+    this.location = location
   }
 
   canPlay() {
@@ -26,12 +26,12 @@ export default class Access {
       console.log( 'its true, access!' )
 
       if(this.location.region >= AccessTypes.LOCATION_USA){
-        console.log( 'usa, usa, usa' )
+        console.log( 'its usa' )
         if(this.record.access_level === AccessTypes.ACCESS_ONLINE){
-          console.log( 'its ORR bitch' )
+          console.log( 'its ORR' )
           return true
         } else if(this.record.access_level === AccessTypes.ACCESS_ONLOCATION && this.location.region === AccessTypes.LOCATION_ONSITE){
-          console.log( 'its onsite bitch' )
+          console.log( 'its onsite' )
           return true
         }
       }

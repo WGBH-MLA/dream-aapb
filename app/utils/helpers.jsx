@@ -74,6 +74,11 @@ export function truth(val){
   return val || typeof val === "number" || typeof val === "string"
 }
 
+export function notEmpty(array){
+  // console.log( 'when i test it i find taht', array, array.length, array.length > 0 )
+  return array && array.length > 0
+}
+
 
 export function scrollToAnchorTranscript(anchorId) {
   var page = document.querySelector('body')

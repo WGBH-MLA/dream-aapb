@@ -10,5 +10,7 @@ export default class Location {
 function fakeGeocoding(ip){
   if(ip){
     return AccessTypes.LOCATION_USA
+  } else {
+    return AccessTypes.LOCATION_GLOBAL    
   }
 }
