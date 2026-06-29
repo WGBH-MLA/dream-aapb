@@ -234,7 +234,7 @@ export default function ShowRecord() {
             { transcriptViewer }
           </div>
 
-          <div className="show-metadata-container bmarbot">
+          <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>
             { mediaType }
             { description }
