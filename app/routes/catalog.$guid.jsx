@@ -41,9 +41,6 @@ export const loader = async ({params, request}) => {
   // get access level based on record and location
   let access = new Access(record, location)
 
-  // console.log( 'and like duh its', access.canPlay(), record.hasPlayableMedia() )
-
-
   if( access.canPlay() && record.hasPlayableMedia() ){
 
     let ciConfig = {
@@ -85,7 +82,7 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
 
-  const [viewerOpen, setViewerOpen] = useState(false)
+  const [viewerOpen, setViewerOpen] = useState(true)
 
   const [transcriptData, setTranscriptData] = useState(false)
 
@@ -220,19 +217,23 @@ export default function ShowRecord() {
 
         <div className="skinnier-body-container bmarbot martop video-area">
   
-          <div id="show-media" className="martop">
-            <VideoPlayer
-              guid={ record.guid }
-              title={ record.title }
-              mediaURL={ data.mediaURL }
-              adHLSURL={ data.adHLSURL }
-              captionURL={ data.captionURL }
-            />
+          <div id="show-media" className="bmarbot">
+            <div className="media-area-container"> 
+              <VideoPlayer
+                guid={ record.guid }
+                title={ record.title }
+                mediaURL={ data.mediaURL }
+                adHLSURL={ data.adHLSURL }
+                captionURL={ data.captionURL }
+              />
+            </div>
+            <div className="media-area-container"> 
+              <div className="transcript-viewer-container">
+                { transcriptViewer }
+              </div>
+            </div>
           </div>
 
-          <div className="transcript-viewer-container marbot">
-            { transcriptViewer }
-          </div>
 
           <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>

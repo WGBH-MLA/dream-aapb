@@ -1462,10 +1462,10 @@ div.instantiation-blurb ul li {
 
 div#show-media {
   background-color: #f9f9f9;
-  margin-left: 20%;
   height: 14em;
-  width: 60%;
-  margin-bottom: 8em;
+  width: 100%;
+
+  display: inline-flex;
 }
 
 div#show-media div.show-thumbnail {
@@ -1480,6 +1480,10 @@ div#show-media div.show-thumbnail {
 div#show-media div.show-thumbnail img {
   width: 100%;
   object-fit: contain;
+}
+
+div.media-area-container {
+  width: 50%;
 }
 
 div.show-title {
@@ -1545,7 +1549,7 @@ div.video-player-container.mini {
   height: auto;
 
   animation-name: video-transition;
-  animation-duration: 2s;
+  animation-duration: 1s;
 }
 
 @keyframes video-transition {
@@ -1605,20 +1609,18 @@ div.transcript-viewer.open {
 
 div.transcript-viewer {
   display: none;
-  font-size: 0.75em;
+  font-size: 0.65em;
   background-color: #eee;
   padding-left: 1em;
-  padding-right: 1em;
   padding-top: 2em;
   padding-bottom: 1.2em;
-  height: 24em;
+  height: 15.72em;
   overflow-y: scroll;
 }
 
 div.transcript-line {
-  padding-top: 0.5em;
-  padding-bottom: 0.6em;
   display: block;
+  padding-bottom: 0.25em;
 }
 
 div.transcript-viewer div.transcript-line svg {
@@ -1631,11 +1633,13 @@ div.transcript-viewer div.transcript-line svg {
 
 div.transcript-viewer div.transcript-line div {
   display: inline-block;
-  width: 80%;
+  width: 85%;
 }
 
 div.transcript-viewer div.transcript-line span {
+  display: block;
   opacity: 0;
+  margin-left: 4em;
   font-size: 0.7em;
   color: #aaa;
 }
@@ -1668,7 +1672,7 @@ div.transcript-viewer div.transcript-line mark.hot {
 
 div.transcript-viewer-container div.transcript-search {
   margin-left: 3%;
-  font-size: 0.75em;
+  font-size: 1em;
   padding: 1em;
   display: none;
 }
@@ -1688,9 +1692,14 @@ div.transcript-viewer-container div.transcript-search input {
 div.transcript-viewer-container div.transcript-search a.transcript-search-button {
   display: inline-block;
 
-  width: 2%;
-  min-width: 2%;
+  width: 3%;
+  min-width: 3%;
+  min-height: 1px;
   margin-left: 0.5em;
+}
+
+div.transcript-viewer-container div.transcript-search a.transcript-search-button.transcript-search-button-first {
+  /*margin-left: 0.2em;*/
 }
 
 div.transcript-viewer-container div.transcript-search a.transcript-search-button:hover {
@@ -1698,22 +1707,26 @@ div.transcript-viewer-container div.transcript-search a.transcript-search-button
 }
 
 div.transcript-viewer-container div.transcript-search a.transcript-search-button svg {
-  color: #000;
   vertical-align: middle;
 }
 
 div.transcript-viewer-container div.transcript-search label {
+  text-align: center;
   display: inline-block;
   min-width: 10%;
   width: 10%;
   margin-left: 1em;
-  font-size: 0.5;
+  font-size: 0.75em;
+}
+
+div.transcript-viewer-container div.transcript-viewer-header {
+  font-size: 0.7em;
 }
 
 div.transcript-viewer-container div.transcript-viewer-header b {
   margin-left: 2em;
   color: #3C439B;
-  font-size: 0.6em;
+  font-size: 0.7em;
 }
 
 div.transcript-viewer-container div.transcript-viewer-header.open b {
@@ -2900,7 +2913,8 @@ div#mobile-sidebar-toggler {
 }
 
 /*leetle*/
-/*@media only screen and (max-width: 768px) {*/
+/*for local mobile dev v*/
+/*@media (max-width: 1200px) {*/
 @media (max-width: 568px) {
   /*block mobile double click zoom*/
   * {
@@ -3103,8 +3117,15 @@ div.newsletter-bar input[type="submit"] {
     overflow-x: visible;
   }
 
-  div.show-metadata-container, div.transcript-viewer-container {
+  div.transcript-viewer-container {
+    width: 100%;
+  }
+
+  div.show-metadata-container {
     width: 94%;
+  }
+
+  div.show-metadata-container, div.transcript-viewer-container {
     word-break: break-word;
     font-size: 2em;
   }
@@ -3134,7 +3155,6 @@ div.newsletter-bar input[type="submit"] {
 
   div.transcript-viewer-container div.transcript-search {
     margin-left: 0;
-    font-size: 1em;
     padding: 0.5em;
     margin-left: 0;
     display: none;
@@ -3566,9 +3586,15 @@ div.newsletter-bar input[type="submit"] {
   }
 
   div#show-media {
+    display: block;
     margin-left: 0;
     width: 94%;
-    margin-bottom: 16em;
+    height: inherit;
+  }
+
+  div.media-area-container {
+    display: block;
+    width: 100%;
   }
   
   div.video-player-container {
@@ -3729,7 +3755,9 @@ div.newsletter-bar input[type="submit"] {
   div.transcript-viewer-container div.transcript-search {
     margin-left: 13%;
   }
-
+  div.transcript-viewer {
+    height: 24em; 
+  }
 }
 
 

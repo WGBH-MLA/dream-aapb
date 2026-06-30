@@ -23,7 +23,6 @@ export default function ClientTranscriptViewer(props){
   const handleChange = (e) => {
     if(e.key === "Enter"){
       // use enter to cycle through matches
-
       // shift held: go up, else: go down
       handleMatchChange(!e.shiftKey)
     } else {
@@ -66,7 +65,7 @@ export default function ClientTranscriptViewer(props){
   let lines = props.lines
   let counta = 0
 
-  let classes = "transcript-viewer marbot"
+  let classes = "transcript-viewer"
   let headerClasses = "transcript-viewer-header show-metadata-header"
   let toggleMessage = props.viewerOpen ? "(Click to close)" : "(Click to expand)"
   
@@ -82,7 +81,6 @@ export default function ClientTranscriptViewer(props){
 
   let transcriptSearch, transcriptViewer
   if(lines){
-
     lines = lines.map((line,i) => {
       let numMatchesInThisLine = numOccurrences(line.text, query)
 
@@ -128,7 +126,6 @@ export default function ClientTranscriptViewer(props){
     <>
       <div className={ headerClasses }>
         Transcript
-        { toggler }
         { transcriptSearch }
       </div>
       
@@ -162,6 +159,8 @@ function TranscriptSearch(props){
   let matchLabel, matchX
   let buttonClass, upClass, downClass
   buttonClass = upClass = downClass = "transcript-search-button"
+  upClass += " transcript-search-button-first"
+
   if(props.query && props.numMatches > 0 && truth(props.selectedMatch)){
     // we always get a props.selectedMatch, even when tehres no query
     matchLabel = `${props.selectedMatch+1} of ${props.numMatches}`
@@ -189,8 +188,8 @@ function TranscriptSearch(props){
       />
       <label>{ matchLabel }</label>
       <a className={ buttonClass } onClick={ props.clearQuery }>{ matchX }</a>
-      <a className={ upClass } onClick={ (e) => props.handleMatchChange(false,) }><ChevronUp /></a>
-      <a className={ downClass } onClick={ (e) => props.handleMatchChange(true,) }><ChevronDown /></a>
+      <a className={ upClass } onClick={ (e) => props.handleMatchChange(false) }><ChevronUp /></a>
+      <a className={ downClass } onClick={ (e) => props.handleMatchChange(true) }><ChevronDown /></a>
     </div>
   )
 }
