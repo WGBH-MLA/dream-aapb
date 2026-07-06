@@ -6,14 +6,9 @@ import NiceItem from "../components/NiceItem"
 import thumbnailURL from "../utils/thumbnailURL"
 import LayoutSearch from "../components/LayoutSearch"
 
-// import BabySearch from "../components/BabySearch"
-//<BabySearch esIndex={ esConfig.esIndex } esURL={ esConfig.esURL } apiKey={ esConfig.apiKey } specialCollectionTag={ specialCollectionTag } />
-
-
 export function renderCollection(collection, esConfig) {
   // console.log("rendering collection", collection)
   let specialCollectionTag = collection.tag || "peabody"
-
   let navigateHook = useNavigate()
 
   const [search, setSearch] = useState("")
@@ -67,7 +62,7 @@ export function renderCollection(collection, esConfig) {
 
         <div className="skinny-body-container collection-title smarbot">
           <div className="collection-image-container">
-            <img src={ collection.hero_image.full_url } />
+            <img src={ collection.cover_medium.full_url } />
           </div>
           
           <div className="collection-title-container">

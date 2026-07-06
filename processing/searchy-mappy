@@ -160,14 +160,15 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
           "pbcoreGenre": {
             "type": "nested",
             "properties": {
-            "startTime": {"type": "text"},
-            "endTime": {"type": "text"},
-            "timeAnnotation": {"type": "text"},
-            "source" : {"type": "text"},
-            "ref" : {"type": "text"},
-            "version" : {"type": "text"},
-            "annotation" : {"type": "text"},
-            "text": { "type": "text" }
+              "startTime": {"type": "text"},
+              "endTime": {"type": "text"},
+              "timeAnnotation": {"type": "text"},
+              "source" : {"type": "text"},
+              "ref" : {"type": "text"},
+              "version" : {"type": "text"},
+              "annotation" : {"type": "text"},
+              "text": { "type": "text" }
+            }
           },
           "pbcoreRelation": {
             "type": "nested",
@@ -182,7 +183,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                   "text": { "type": "text" }
                 }
               },
-              "pbcoreRelationType": {
+              "pbcoreRelationIdentifier": {
                 "type": "nested",
                 "properties": {
                   "source" : {"type": "text"},
@@ -204,7 +205,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                   "ref" : {"type": "text"},
                   "version" : {"type": "text"},
                   "annotation" : {"type": "text"},
-                  "text": { "type": "text" }
+                  "text": { "type": "text" },
                   "startTime": { "type": "text" },
                   "endTime": { "type": "text" },
                   "timeAnnotation": { "type": "text" }
@@ -377,7 +378,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
                   "annotation" : {"type": "text"},
                   "text": { "type": "text" }
                 }
-              },
+              }
             }
           },
           "pbcoreAnnotation": {

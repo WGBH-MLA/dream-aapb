@@ -8,23 +8,30 @@ import { getCollections, getExhibits, getFeatured, getLatestBlogPosts } from "..
 
 export const loader = async () => {
 
-  let collections = await getCollections()
+  let radio_and_tv = await getCollections()
   let featured_collections = await getFeatured()
   let exhibits = await getExhibits()
   let blog_posts = await getLatestBlogPosts()
 
-  if(collections){
-    collections = collections.map((collection) => collectionToTVProgram(collection) )
+  if(radio_and_tv){
+    radio_and_tv = radio_and_tv.map((collection) => collectionToTVProgram(collection) )
+  } else {
+    radio_and_tv = []
   }
+
   if(featured_collections){
     featured_collections = featured_collections.map((collection) => collectionToTVProgram(collection) )
+  } else {
+    featured_collections = []
   }
   if(exhibits) {
     exhibits = exhibits.map((exhibit) => exhibitToTVProgram(exhibit) )
+  } else {
+    exhibits = []
   }
 
   let data = {
-     radio_and_tv: collections,
+     radio_and_tv: radio_and_tv,
      featured_collections: featured_collections,
      exhibits: exhibits,
      blog_posts: blog_posts,
@@ -73,10 +80,10 @@ export default function Index() {
         />
       </div>
       <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={data.featured_collections.slice(0, 3)} />
-        <TVMenu title="Program Collections" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
-        <TVMenu title="Exhibits" programs={data.exhibits.slice(0, 4)} seeAllURL="/exhibits" />
-        <TVMenu title="Stations and Organizations" programs={data.radio_and_tv.slice(0, 4)} seeAllURL="/collections" />
+        <TVMenu title="Featured Collections" programs={ data.featured_collections } />
+        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <TVMenu title="Exhibits" programs={ data.exhibits } seeAllURL="/exhibits" />
+        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/collections" />
       </div>
       <div className="body-container">
         <a href="/organizations">

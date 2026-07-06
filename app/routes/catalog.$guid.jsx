@@ -123,6 +123,9 @@ export default function ShowRecord() {
 
   let people, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
+  let transcript
+  let videoPlayerClasses = "media-area-container"
+
   if(data){
 
     title = record.title
@@ -206,6 +209,19 @@ export default function ShowRecord() {
     if(instantiations){
       instantiations = instantiations.map((inst) => inst.blurb() )
     }
+
+    if(transcriptData){
+      transcript = <>
+        <div className="media-area-container"> 
+          <div className="transcript-viewer-container">
+            { transcriptViewer }
+          </div>
+        </div>
+      </>  
+    } else {
+      videoPlayerClasses += " full"
+    }
+    
   }
   
   return (
@@ -217,8 +233,8 @@ export default function ShowRecord() {
 
         <div className="skinnier-body-container bmarbot martop video-area">
   
-          <div id="show-media" className="bmarbot">
-            <div className="media-area-container"> 
+          <div id="show-media" className="marbot">
+            <div className={ videoPlayerClasses }> 
               <VideoPlayer
                 guid={ record.guid }
                 title={ record.title }
@@ -227,11 +243,7 @@ export default function ShowRecord() {
                 captionURL={ data.captionURL }
               />
             </div>
-            <div className="media-area-container"> 
-              <div className="transcript-viewer-container">
-                { transcriptViewer }
-              </div>
-            </div>
+            { transcript }
           </div>
 
 

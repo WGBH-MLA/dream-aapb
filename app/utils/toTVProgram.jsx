@@ -35,13 +35,18 @@ export function collectionToTVProgram(collection){
     title = "Untitled Collection"
   }
 
+  let imgURL = "Placeholder.jpg"
+  if(collection.cover_image && collection.cover_image.full_url){
+    imgURL = collection.cover_image.full_url
+  }
+
   url = `/collections/${collection.meta.slug}`
   return {
     key: collection.meta.slug,
     title: title,
     // subtitle: subtitle,
     // TODO: need thumbnail url in collections/ serializer
-    thumbnailURL: "Placeholder.jpg",
+    thumbnailURL: imgURL,
     url: url
   }
 }
@@ -54,12 +59,16 @@ export function exhibitToTVProgram(exhibit){
     title = "Untitled Exhibit"
   }
 
+  let imgURL = "Placeholder.jpg"
+  if(exhibit.cover_image && exhibit.cover_image.full_url){
+    imgURL = exhibit.cover_image.full_url
+  }
   url = `/exhibits/${exhibit.meta.slug}`
   return {
     key: exhibit.meta.slug,
     title: title,
     // subtitle: subtitle,
-    thumbnailURL: "Placeholder.jpg",
+    thumbnailURL: imgURL,
     url: url
   }
 }
