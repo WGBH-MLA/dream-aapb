@@ -23,14 +23,16 @@ function producingOrganization(creators){
 }
 
 export default function SearchResult({hit}){
-  let guid = aapbGuid(hit.pbcoreDescriptionDocument)
-  let description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
-  let recordDate
+  let guid, description, recordDate, date, producingOrg
+  guid = aapbGuid(hit.pbcoreDescriptionDocument)
+    console.log( 'is it possible', hit )
+  if(hit.pbcoreDescriptionDocument){
+    description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
 
-  let date, producingOrg
-  if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
-    // aapb convention is just first stored assetDate
-    date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
+    if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
+      // aapb convention is just first stored assetDate
+      date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
+    }
   }
 
   if(hit.producing_org){

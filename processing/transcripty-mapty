@@ -34,9 +34,19 @@ curl -v -X PUT "localhost:9200/transcript-freezing-osmium/" \
    },
 
   "mappings": {
+    "runtime": {
+      "asset_data": {
+        "type": "lookup",
+        "target_index": "aapb-freezing-osmium",
+        "input_field": "guid",
+        "target_field": "guid",
+        "fetch_fields": ["title", "pbcoreDescriptionDocument", "pbcoreDescriptionDocument.pbcoreDescription"]
+      }
+    },
     "properties": {
       "guid": { "type": "text" },
-      "transcript_text": { "type": "text" }
+      "transcript_text": { "type": "text" },
+      "@asset_data": {"type": "lookup"}
     }
   }
 }'

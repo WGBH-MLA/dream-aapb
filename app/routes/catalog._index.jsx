@@ -125,6 +125,11 @@ export default function Catalog() {
 
 // include transcript in search or not
   const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+  // store actual index names in state so it changes with the radio button
+  console.log( 'but fucking here its', searchSet )
+  const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
+
+
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -148,16 +153,22 @@ export default function Catalog() {
     toggleMessage = "Hide"
   }
 
-  function indicesToUse(asset_index, transcript_index){
-    // until ts querying fully implemented
-    return asset_index
-    if(searchSet === SEARCH_RECORD){
+  function indicesToUse(search_set, asset_index, transcript_index){
+    if(search_set === SEARCH_RECORD){
+      console.log( "RECORD" )
       return asset_index
-    } else if(searchSet === SEARCH_TRANSCRIPT){
+    } else if(search_set === SEARCH_TRANSCRIPT){
+      console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
+      console.log( "BOPH" )
       return `${asset_index},${transcript_index}`
     }
+  }
+
+  function handleSearchSet(search_set, asset_index, transcript_index){
+    setSearchSet(search_set)
+    setCurrentIndexes( indicesToUse(search_set, asset_index, transcript_index) )
   }
 
   function handleCustomQuery(type, value, refine){
@@ -657,7 +668,14 @@ export default function Catalog() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
+      result_attributes: ["guid",
+        "title",
+        "broadcast_date",
+        "pbcoreDescriptionDocument",
+        "media_type",
+        "producing_org",
+        "asset_data",
+      ],
 
       // // maybe used in concert with filter range frontend
       // filter_attributes: [
@@ -1007,7 +1025,7 @@ export default function Catalog() {
   return (
     <div className="body-container">
       <InstantSearch
-        indexName={ encode(indicesToUse(data.esIndex, data.tsIndex)) }
+        indexName={ currentIndexes }
         searchClient={ searchClient }
         routing={ true }
       >
@@ -1085,9 +1103,9 @@ export default function Catalog() {
           <SearchAccordion title="Options" content ={
             <>
               <div>Include</div>
-              <div><label>All Sources<input onChange={ () => setSearchSet(SEARCH_BOTH) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => setSearchSet(SEARCH_RECORD) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => setSearchSet(SEARCH_TRANSCRIPT) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>All Sources<input onChange={ () => handleSearchSet(SEARCH_BOTH, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => handleSearchSet(SEARCH_RECORD, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => handleSearchSet(SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 
