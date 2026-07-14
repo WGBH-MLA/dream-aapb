@@ -1,0 +1,43 @@
+curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/transcript-freezing-osmium"
+curl -v -X PUT "localhost:9200/transcript-freezing-osmium/" \
+-H "Authorization: ApiKey "XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw=="" \
+-H "Content-Type: application/json" \
+-d'{
+  "settings": {
+     "analysis": {
+       "analyzer": {
+         "default": {
+           "type": "custom",
+           "tokenizer": "sweet_tokenizer",
+           "char_filter": [
+             "html_strip"
+           ],
+           "filter": [
+             "lowercase",
+             "asciifolding",
+             "classic"
+           ]
+         }
+       },
+       "tokenizer": {
+         "sweet_tokenizer": {
+           "type": "edge_ngram",
+           "min_gram": 3,
+           "max_gram": 12,
+           "token_chars": [
+             "letter",
+             "digit"
+           ]
+         }
+       }
+     }
+   },
+
+  "mappings": {
+    "properties": {
+      "guid": { "type": "text" },
+      "transcript_text": { "type": "text" }
+    }
+  }
+}'
+

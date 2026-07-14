@@ -6,7 +6,9 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation
+  useLocation,
+  useRouteError,
+  isRouteErrorResponse
 } from "react-router"
 
 export const meta = () => {
@@ -68,3 +70,32 @@ export default function App() {
     </html>
   )
 }
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <h1>
+          <b>We've encountered some setbacks:</b>
+          <i>
+            {isRouteErrorResponse(error)
+            ? `${error.status} ${error.statusText}`
+            : error instanceof Error
+            ? error.message
+            : "Unknown Serious Error"}
+          </i>
+        </h1>
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+
+

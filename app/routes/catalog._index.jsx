@@ -1,3 +1,4 @@
+import { encode } from "html-entities"
 import { useState, useEffect, useRef } from 'react'
 import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
@@ -5,6 +6,9 @@ import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
 import { scrollToTop }  from '../utils/helpers'
 
+const SEARCH_RECORD = 0
+const SEARCH_TRANSCRIPT = 1
+const SEARCH_BOTH = 2
 
 const OR_FIELDS = [
   "producing_org",
@@ -37,10 +41,13 @@ import ViewSelect from "../components/ViewSelect"
 export const loader = async ({params, request}) => {
   return {
     esIndex: process.env.ES_INDEX,
+    tsIndex: process.env.ES_TS_INDEX,
     apiKey: process.env.ES_API_KEY,
     esURL: process.env.ES_URL
   }
 }
+
+// aapb-freezing-osmium,transcript-freezing-osmium
 
 function CustomStats() {
   const {
@@ -117,7 +124,7 @@ export default function Catalog() {
 
 
 // include transcript in search or not
-  const [searchSet, setSearchSet] = useState("both")
+  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -139,6 +146,18 @@ export default function Catalog() {
     sidebarClasses += " open"
     topRefinementsBarClasses += " open"
     toggleMessage = "Hide"
+  }
+
+  function indicesToUse(asset_index, transcript_index){
+    // until ts querying fully implemented
+    return asset_index
+    if(searchSet === SEARCH_RECORD){
+      return asset_index
+    } else if(searchSet === SEARCH_TRANSCRIPT){
+      return transcript_index
+    } else {
+      return `${asset_index},${transcript_index}`
+    }
   }
 
   function handleCustomQuery(type, value, refine){
@@ -334,7 +353,7 @@ export default function Catalog() {
   }
 
   function titleQueryExact(tQuery){
-    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
+    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle, exact match
     return {
       bool: {
         should: [
@@ -988,7 +1007,7 @@ export default function Catalog() {
   return (
     <div className="body-container">
       <InstantSearch
-        indexName={ data.esIndex }
+        indexName={ encode(indicesToUse(data.esIndex, data.tsIndex)) }
         searchClient={ searchClient }
         routing={ true }
       >
@@ -1065,10 +1084,10 @@ export default function Catalog() {
 
           <SearchAccordion title="Options" content ={
             <>
-              <div style={{ color: "#ddd" }}>Include</div>
-              <div style={{ color: "#ddd" }}><label>All Sources<input onChange={ () => setSearchSet("both") } disabled type="radio" value="both" checked={ searchSet == "both" ? "checked" : "" } name="search_set" /></label></div>
-              <div style={{ color: "#ddd" }}><label>Records<input onChange={ () => setSearchSet("records") } disabled type="radio" value="records" checked={ searchSet == "records" ? "checked" : "" } name="search_set" /></label></div>
-              <div style={{ color: "#ddd" }}><label>Transcripts<input onChange={ () => setSearchSet("transcripts") } disabled type="radio" value="transcripts" checked={ searchSet == "transcripts" ? "checked" : "" } name="search_set" /></label></div>
+              <div>Include</div>
+              <div><label>All Sources<input onChange={ () => setSearchSet(SEARCH_BOTH) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => setSearchSet(SEARCH_RECORD) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => setSearchSet(SEARCH_TRANSCRIPT) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 

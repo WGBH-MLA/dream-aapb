@@ -3,7 +3,7 @@ import { redirect } from 'react-router';
 export async function getExhibits() {
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
-    wagHost + '/pages/?type=aapb_exhibits.AAPBExhibit&limit=999999',
+    wagHost + '/exhibits',
     {
       headers: {"Host": "aapb-api"},
     },
@@ -21,7 +21,7 @@ export async function getExhibits() {
 export async function getCollections() {
   let wagHost = process.env.AAPB_API_URL
   let resp =  await fetch(
-    wagHost + `/pages/?type=aapb_collections.AAPBCollection&limit=999999`,
+    wagHost + `/collections?limit=999999`,
     {
       headers: {Host: "aapb-api"},
     },
@@ -33,7 +33,7 @@ export async function getCollections() {
 export async function getFeatured() {
   let wagHost = process.env.AAPB_API_URL
   let resp =  await fetch(
-    wagHost + `/pages/?type=aapb_collections.AAPBCollection&limit=3`,
+    wagHost + `/collections?limit=3`,
     {
       headers: {Host: "aapb-api"},
     },

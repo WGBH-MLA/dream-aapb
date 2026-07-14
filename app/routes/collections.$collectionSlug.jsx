@@ -24,6 +24,9 @@ export const loader = async ({
 
     // get some records they said
     let records = await getRecords(featured_guids, esURL, esIndex, apiKey)
+    if(!records){
+      records = []
+    }
 
     // make a freakin dictionary they said
     records.forEach((record) => featuredRecords[record.guid] = record)
