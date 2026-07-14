@@ -23,11 +23,11 @@ export default function TVMenu(props){
        } else {
     classes += " four"
   }
+
   return (
     <div className={ classes }>
       { seeAll }
       <h2>{props.title}</h2>
-
       <div className="tv-menu-body">
         { programs }
       </div>
@@ -49,7 +49,7 @@ function TVProgram(props){
       <a href={props.url} >
         { thumb }
         <h4>{ props.title }</h4>
-        <h5>{ props.subtitle }</h5>
+        <h5 className="tv-menu-program-desc">{ props.desc }</h5>
       </a>
     </div>
   )

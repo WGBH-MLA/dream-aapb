@@ -1,0 +1,47 @@
+POST test/_update/1
+{
+  "script" : {
+    "source": "ctx._source.counter += params.count",
+    "lang": "painless",
+    "params" : {
+      "transcript_text" : transcript_text
+    }
+  }
+}
+
+
+UPDATE THIS TRANSCRIPT IMMEIDATELY 
+---
+-find eid by guid
+-download transcript
+-strip ts to text only
+-post to es/indexname/_doc/eid with transcript_text
+-now its on da rekkid
+
+
+
+curl -X POST localhost:9200/aapb-freezing-osmium/_doc/gDnMzJ4BLeflqhNUEXrr -d '{
+  transcript_text: transcript_text
+}'
+
+
+
+if you need script
+
+curl -X POST localhost:9200/aapb-freezing-osmium/_update/gDnMzJ4BLeflqhNUEXrr -d '{
+  "script" : {
+    "source": "ctx._source.counter += params.count",
+    "lang": "painless",
+    "params" : {
+      "transcript_text" : transcript_text
+    }
+  }
+}'
+
+
+
+
+
+
+
+

@@ -1002,6 +1002,12 @@ div.tv-menu-container.four div.tv-menu-program h4 {
   display: block;
 }
 
+
+div.tv-menu-container div.tv-menu-program h5.tv-menu-program-desc {
+  color: #000;
+  font-size: 0.85em;
+}
+
 /*summary box*/
 div.summary-box-container {
   margin-bottom: 2em;
