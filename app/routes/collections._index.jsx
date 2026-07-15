@@ -36,7 +36,7 @@ export default function Collections() {
     <div className="body-container">
       <h1>Collections</h1>
       <p>The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below.</p>
-      <TVMenu title="Featured Collections" programs={ data.featured_collections } />
+      <TVMenu title="Featured Collections" programs={ data.featured_collections} showDesc={true} />
       <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/collections"/>
       <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/collections"/>
       <TVMenu title="Historical Events and Interviews" programs={ data.radio_and_tv } seeAllURL="/collections"/>
