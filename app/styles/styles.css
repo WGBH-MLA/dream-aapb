@@ -266,6 +266,13 @@ div.body-container p {
   margin-bottom: 2em;
 }
 
+div.body-container .back-link-nav {
+  color: #3d439c;
+  font-size: .8em;
+  margin-left: 6em;
+  text-decoration: none;
+}
+
 ul.blank-list {
   display: inline-block;
  list-style: none;

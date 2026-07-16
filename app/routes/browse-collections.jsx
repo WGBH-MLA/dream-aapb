@@ -27,9 +27,10 @@ export const loader = async () => {
 export default function Collections() {
   let data = useLoaderData()
   return (
-    <div className="body-container">
-      <h1>All Collections</h1>
-      <TVMenu programs={ data.radio_and_tv }/>
+  <div className="body-container">
+    <a className="back-link-nav" href="/collections">&lt; Back to Collections</a>
+    <h1>Browse All</h1>
+    <TVMenu programs={ data.radio_and_tv }/>
     </div>
   )
 }
