@@ -8,9 +8,9 @@ import { getCollections, getExhibits, getFeatured, getLatestBlogPosts } from "..
 
 export const loader = async () => {
 
-  let radio_and_tv = await getCollections()
+  let radio_and_tv = await getCollections("limit=4&order=random")
   let featured_collections = await getFeatured()
-  let exhibits = await getExhibits()
+  let exhibits = await getExhibits("limit=4&order=random")
   let blog_posts = await getLatestBlogPosts()
 
   if(radio_and_tv){
