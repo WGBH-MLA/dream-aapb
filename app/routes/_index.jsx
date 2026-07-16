@@ -81,9 +81,9 @@ export default function Index() {
       </div>
       <div className='body-container'>
         <TVMenu title="Featured Collections" programs={ data.featured_collections} showDesc={true} />
-        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/program-collections" />
         <TVMenu title="Exhibits" programs={ data.exhibits } seeAllURL="/exhibits" />
-        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-collections" />
       </div>
       <div className="body-container">
         <a href="/organizations">
