@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import DrawerMenu from "./DrawerMenu"
+import DonateButton from "./DonateButton"
 import LayoutSearch from "./LayoutSearch"
 
 const drawerItems = {
@@ -49,22 +50,20 @@ const drawerItems = {
 export default function Header(props) {
   let navigateHook = useNavigate()
   const [hovered, setHovered] = useState(false)
-  let layoutSearch
-  if(!props.isHomepage){
-    const [search, setSearch] = useState("")
-    const handleLayoutSearch = (val) => {
-      setSearch(val)
-    }
+  const [search, setSearch] = useState("")
 
-    layoutSearch = (
-      <LayoutSearch
-        navigateHook={ navigateHook }
-        esIndex={ props.esIndex }
-        handleChange={ handleLayoutSearch }
-        searchQuery={ search }
-      />
-    )
+  const handleLayoutSearch = (val) => {
+    setSearch(val)
   }
+
+  const layoutSearch = !props.isHomepage && (
+    <LayoutSearch
+      navigateHook={ navigateHook }
+      esIndex={ props.esIndex }
+      handleChange={ handleLayoutSearch }
+      searchQuery={ search }
+    />
+  )
 
   return (
     <div className="header-container">
@@ -89,6 +88,7 @@ export default function Header(props) {
         <div className="drawermenu-container">
           <a href="/about" className="drawer-label">About</a>
         </div>
+        {props.isHomepage && <DonateButton />}
         { layoutSearch }
       </div>
       <div className="header-row">
