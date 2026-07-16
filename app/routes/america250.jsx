@@ -73,7 +73,7 @@ export const loader = async () => {
 
 export default function America250() {
   let data = useLoaderData()
-  
+
   return (
     <div className="body-container">
       <h1>Celebrating 250 Years of American Stories</h1>
@@ -83,7 +83,7 @@ export default function America250() {
       <p>From groundbreaking political moments to the everyday experiences of communities across the country, these programs capture the spirit of the nation as told through public media organizations from the 1950s to today. Discover the stories that define America - then, now, and for the future.</p>
 
       <div className="welcome-video-container">
-        <iframe src="https://player.vimeo.com/video/870294335?badge=0&autopause=0&player_id=0&app_id=58479"></iframe>
+        <iframe src="https://www.youtube.com/embed/tWcRbP-FEg8?si=OPg1ev7V-CP8N0rF"></iframe>
       </div>
       <hr />
       <Carousel title="Key Historical Events" items={ data.key_events } />
