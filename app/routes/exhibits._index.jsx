@@ -10,7 +10,7 @@ import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
   let exhibits
-  exhibits = await getExhibits()
+  exhibits = await getExhibits("limit=9999&order=random")
   let programs = []
   console.log('Eckuso', exhibits)
   if (exhibits) {
