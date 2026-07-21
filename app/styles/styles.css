@@ -390,6 +390,7 @@ div.skinny-body-container ul {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  font-size: 0.8em;
 }
 
 div.skinny-body-container div.blue-box h3 {
@@ -615,7 +616,7 @@ div.link-bank hr {
 
 div.biglink svg {
   display: inline-block;
-  margin-left: 2em;
+  margin-left: 4em;
   width: 4em;
   height: 4em;
   color: #fff;
@@ -1249,19 +1250,22 @@ background: #EEEDFE;
 div.contribute-list ul {
   margin-bottom: 4em;
   list-style-type: none;
-  margin-left: 5em;
+  margin-top: 1em;
 }
 
 div.contribute-list ul li {
   margin-bottom: 1em;
+  margin-left: 2em;
+
 }
 
 div.contribute-list ul li svg {
   margin-right: 1em;
+  margin-left: -1.5em;
 }
 
 div.contribute-list ul li b, div.contribute-list ul li {
-  margin-right: 0.5em;
+  margin-right: 1.3em;
 }
 
 div.blue-box {
@@ -2344,6 +2348,7 @@ div.items-search input {
 
 div.skinny-body-container h2 {
   font-size: 1.2em;
+  font-weight: 700;
 }
 
 div.page-container div.sidey-body-container.exhibit-title {
