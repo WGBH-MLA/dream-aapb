@@ -826,8 +826,25 @@ div.header-bar div.layout-search button {
   border-radius: 0 3px 3px 0;
 }
 
+div.layout-search.wide {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+div.layout-search.wide input {
+  flex: 1;
+  min-width: 0;
+  max-width: 49em;
+  height: 4.3em;
+  font-size: .8em;
+}
+
 div.layout-search.wide button {
-  width: 10%;
+  width: 4.5em;
+  height: 4.5em;
+  padding: 0 1em;;
+  flex-shrink: 0;
 }
 
 div.feature-video-container iframe{
@@ -2254,44 +2271,61 @@ div.nice-items-container {
 }
 
 div.nice-items-wrapper {
-  display: inline-flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1em;
 }
-
-
 
 div.nice-item {
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
 }
 
 div.nice-item:hover {
   outline: 2px solid rgba(53, 59, 144);
 }
 
+div.nice-items-wrapper div.nice-item h2 {
+  font-size: .8em;
+}
+
 div.nice-item h2 {
   color: #fff;
   min-height: 2em;
-  font-size: 1em;
   padding-top: 0.5em;
-  background-color: #000;
+  background: linear-gradient(to right, rgba(106, 13, 173, 0.7), rgba(53, 59, 144, 0.7));
   text-align: center;
   position: absolute;
   width: 100%;
   bottom: 0;
 }
 
-div.nice-item, div.nice-item img {
-  width: 11.9em;
-  min-height: 11.9em;
-  height: 11.9em;
-}
-
 div.nice-item img {
+  width: 100%;
+  height: 100%;
   background-position: center;
   object-fit: cover;
+  display: block;
+}
+
+div.nice-item div.show-thumbnail {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+div.nice-item div.show-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 div.items-search input {
@@ -2374,16 +2408,45 @@ a.exhibit-top-back-link {
   display: block;
   font-size: 0.65em;
 }
-
-
-div.page-container div.skinny-body-container.collection-title {
-  display: inline-flex;
+.collection-header {
+  background-color: #66328f;
+  border-radius: 8px;
+  width: 85vw;
+  position: relative;
+  margin-left: 2em;
+  padding: 18px 32px;
+  box-sizing: border-box;
 }
 
-div.page-container div.skinny-body-container.collection-search div {
-  margin-left: auto;
-  margin-right: auto;
-  width: 75%;
+.collection-header h2 div {
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.collection-page-container .top-back-link {
+  text-decoration: none;
+  margin-left: 2em;
+  margin-top: .5em;
+  padding: 1em;
+  display: block;
+  font-size: 0.75em;
+}
+
+div.collection-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  min-width: 0;
+}
+
+div.collection-left {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2em;
+  padding-right: 2em;
+  margin: 0;
+  min-width: 0;
 }
 
 div.collection-right {
@@ -2411,20 +2474,6 @@ div.collection-section {
 
 div.collection-section.collection-search{
   margin-bottom: 2.5em;
-}
-
-div.collection-image-container, div.collection-title-container {
-  width: 50%;
-  aspect-ratio: 1/1;
-  text-align: center;
-  vertical-align: middle;
-  overflow: hidden;
-}
-
-div.collection-title-container h2 {
-  width: 100%;
-  padding-top: 40%;
-  margin-left: 2em;
 }
 
 div.collection-image-container img {
@@ -2669,15 +2718,6 @@ div.page-body div.basic-block img.right {
 }
 
 /*special blocks*/
-div.help-block {
-  font-size: .8em;
-  border-radius: 8px;
-  margin-top: 2.5em;
-  padding: .5em;
-  padding-right: .5em;
-  background-color: #D3BCDB;
-}
-
 div.terms-block {
   border-radius: 8px;
 }
