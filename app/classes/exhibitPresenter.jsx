@@ -1,8 +1,7 @@
 import { decode } from "html-entities"
-import { useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { renderBlocks } from "./contentHelpers"
 import Author from "../components/Author"
-import InvitingSidebar from "../components/InvitingSidebar"
 
 export function renderExhibit(exhibit) {
   let blocks = renderBlocks(exhibit.body)
@@ -12,7 +11,7 @@ export function renderExhibit(exhibit) {
   if(authors.length > 0){
     authorsBlock = (
       <>
-        <h2 className="smarbot">Authors</h2>
+        <h2 className="smarbot">Curators</h2>
         <div className="authors-container">
           { authors }
         </div>
@@ -20,38 +19,17 @@ export function renderExhibit(exhibit) {
     )
   }
 
-
-  let titleURL, titleText
-  // hack, doesnt work for top level pages
-  if(exhibit.meta.parent.title !== "AAPB"){
-    titleURL = exhibit.meta.parent.meta.html_url.replace("http://aapb/", "/exhibits/") 
-    titleText = exhibit.meta.parent.title
-  } else {
-    titleURL = exhibit.meta.html_url
-    titleText = exhibit.title
-  }
-
   return (
     <div>
-
       <div className="page-container">
-        <div className="sidey-container">
-          {/* todo: corrected exhibit main page link */}
-          <InvitingSidebar titleText={ titleText } titleURL={ titleURL } links={ exhibit.sections } />
 
+        <ExploreExhibitDropdown links={ exhibit.sections } />
+
+        <div className="sidey-container">
           <div className="sidey-body marleft">
             <div className="sidey-body-container exhibit-title marbot">
-              <div className="exhibit-top-slice-container"></div>
-              <div className="exhibit-top-container">
-                <h2>
-                  { exhibit.title }
-                </h2>
-                <img src={ exhibit.cover_image.full_url } />
-              </div>
-
-              <div className="exhibit-top-back-link-container">
-                <a className="exhibit-top-back-link" href="/exhibits">&lt; Back To Exhibits</a>
-              </div>
+              <h1>{ exhibit.title }</h1>
+              <ExhibitBreadcrumbs exhibit={ exhibit } />
             </div>
 
             <div className="sidey-body-container">
@@ -60,9 +38,11 @@ export function renderExhibit(exhibit) {
               </div>
             </div>
 
-            <div className="sidey-body-container">
-              { authorsBlock }
-            </div>
+            { authorsBlock && (
+              <div className="sidey-body-container">
+                { authorsBlock }
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -70,42 +50,67 @@ export function renderExhibit(exhibit) {
   )
 }
 
-// copied from OV front
-export function renderSidebarSection(title, id, key) {
+function ExhibitBreadcrumbs({ exhibit }) {
+  const parent = exhibit.meta.parent
+  const isSubsection = parent && parent.title !== "AAPB"
+
+  const topTitle = isSubsection ? parent.title : exhibit.title
+  const topURL = isSubsection
+    ? parent.meta.html_url.replace("http://aapb/", "/exhibits/")
+    : exhibit.meta.html_url.replace("http://aapb/", "/exhibits/")
+
   return (
-    <div key={key} className='page-sidebar-link'>
-      <a
-        onClick={() => {
-          scrollSectionIntoView(id)
-        }}
-        dangerouslySetInnerHTML={{ __html: decode(title) }}
-      />
-    </div>
+    <nav className="exhibit-breadcrumbs" aria-label="breadcrumb">
+      <a href="/exhibits">All Exhibits</a>
+      <span className="exhibit-breadcrumb-sep"> / </span>
+
+      {isSubsection ? (
+        <>
+          <a href={ topURL }>{ topTitle }</a>
+          <span className="exhibit-breadcrumb-sep"> / </span>
+          <span className="exhibit-breadcrumb-current">{ exhibit.title }</span>
+        </>
+      ) : (
+        <span className="exhibit-breadcrumb-current">{ topTitle }</span>
+      )}
+    </nav>
   )
 }
 
-function scrollSectionIntoView(sectionId) {
-  let ele = document.getElementById(sectionId)
-  ele.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
-}
+function ExploreExhibitDropdown({ links }) {
+  const [open, setOpen] = useState(false)
+  const wrapperRef = useRef(null)
 
-function scrollToAnchor(anchorId) {
-  // erase backbutton entry for anchor click
-  // location.replace(document.referrer)
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
-  let ele = document.getElementById(anchorId)
+  return (
+    <div className="explore-exhibit-dropdown" ref={wrapperRef}>
+      <button
+        type="button"
+        className="explore-exhibit-toggle"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        Explore the Exhibit <span className="explore-exhibit-caret">{ open ? '▼' : '▼' }</span>
+      </button>
 
-  // where we goin
-  var destination = ele.getBoundingClientRect().y
-  // where ah we
-  var currentScrollPosition = window.scrollY
-
-  // just a little extra
-  var offset = -96
-
-  // alright bye bye
-  window.scrollTo({
-    top: destination + currentScrollPosition + offset,
-    behavior: 'smooth',
-  })
+      {open && (
+        <div className="explore-exhibit-menu">
+          {links.map((section, i) => (
+            <div key={i} className="page-sidebar-link">
+              <a href={section.url}>{section.text}</a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
 }
