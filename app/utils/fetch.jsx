@@ -4,7 +4,10 @@ export async function getExhibits(options = "") {
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
     wagHost + `/exhibits/?` + options,
-  )
+  ).catch((error) => {
+    console.log("Error fetching exhibits", error)
+    return []
+  })
 
   let body = await resp.json()
   // TODO REMOVE ->> real top level exhibits via top_exhibit field

@@ -9,20 +9,10 @@ import { exhibitToTVProgram } from "../utils/toTVProgram"
 import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
-  let exhibits
-  exhibits = await getExhibits("limit=9999&order=random")
-  let programs = []
-  console.log('Eckuso', exhibits)
-  if (exhibits) {
-    programs = exhibits.map((exhibit) => exhibitToTVProgram(exhibit))
-  }
+  let data = await getExhibits("limit=9999&order=random")
+  let exhibits = data.map((exhibit) => exhibitToTVProgram(exhibit))
 
-  let data
-  data = {
-    exhibits: programs,
-  }
-
-  return data
+  return exhibits
 }
 
 export default function Index() {
