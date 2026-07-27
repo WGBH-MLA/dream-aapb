@@ -1,13 +1,27 @@
 import { PBCoreDescriptionDocument } from "./pbcore"
 
+type Image = {
+    full_url: string
+    url: string
+    width: number
+    height: number
+    alt?: string
+}
+
+type Author = {
+    id: number
+    name: string
+    image?: Image
+    bio?: string
+}
+
 type Page = {
     meta: {
         slug: string
     }
     title: string
-    cover_image?: {
-        full_url: string
-    }
+    cover_image?: Image
+    cover_thumb?: Image
 }
 
 export type Exhibit = Page & {
@@ -16,6 +30,7 @@ export type Exhibit = Page & {
     tags?: string[]
     url?: string
     key?: string
+    authors?: Author[]
 }
 
 export type Record = {

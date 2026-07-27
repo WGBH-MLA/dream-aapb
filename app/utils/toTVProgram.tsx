@@ -28,8 +28,8 @@ export function collectionToTVProgram(collection) {
   }
 
   let imgURL = "Placeholder.jpg"
-  if (collection.cover_image && collection.cover_image.full_url) {
-    imgURL = collection.cover_image.full_url
+  if (collection.cover_thumb?.full_url) {
+    imgURL = collection.cover_thumb.full_url
   }
 
   if (collection.introduction) {
