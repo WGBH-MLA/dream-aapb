@@ -1,5 +1,5 @@
-curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/aapb-freezing-osmium"
-curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
+curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/aapb-cold-gold"
+curl -v -X PUT "localhost:9200/aapb-cold-gold/" \
 -H "Authorization: ApiKey "XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw=="" \
 -H "Content-Type: application/json" \
 -d'{
@@ -34,6 +34,15 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
    },
 
   "mappings": {
+    "runtime": {
+      "transcript": {
+        "type": "lookup",
+        "target_index": "transcript-cold-gold",
+        "input_field": "guid",
+        "target_field": "guid",
+        "fetch_fields": ["transcript_text"]
+      }
+    },
     "properties": {
 
       "producing_org": { "type": "keyword" },
@@ -45,7 +54,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
       "topics": { "type": "keyword" },
       "broadcast_date": { "type": "date" },
       "broadcast_date_numeric": { "type": "long" },
-      "guid": { "type": "text" },
+      "guid": { "type": "keyword" },
       
       "title": { "type": "text" },
       "series_titles": { "type": "keyword" },

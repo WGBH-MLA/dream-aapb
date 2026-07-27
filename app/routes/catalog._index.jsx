@@ -126,7 +126,6 @@ export default function Catalog() {
 // include transcript in search or not
   const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
   // store actual index names in state so it changes with the radio button
-  console.log( 'but fucking here its', searchSet )
   const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
 
 
@@ -653,7 +652,33 @@ export default function Catalog() {
     },
 
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
+      // runtime_mappings: {
+      //   asset_data: {
+      //     type: "lookup",
+      //     target_index: data.esIndex,
+      //     input_field: "guid",
+      //     target_field: "guid",
+      //     fetch_fields: ["title","pbcoreDescriptionDocument"]
+      //   },
+      //   transcript: {
+      //     type: "lookup",
+      //     target_index: data.tsIndex,
+      //     input_field: "guid",
+      //     target_field: "guid",
+      //     fetch_fields: ["transcript_text"]
+      //   }
+      // },
+
+      // runtime_mappings: {
+      //   scripto: {
+      //     type: 'keyword',
+      //     script: {
+      //       source: "emit(doc['title'].value)"
+      //     }
+      //   }
+      // },
+
+      // highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
 
       search_attributes: [
         // "guid",
@@ -668,13 +693,16 @@ export default function Catalog() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid",
+      result_attributes: [
+        "guid",
         "title",
         "broadcast_date",
         "pbcoreDescriptionDocument",
         "media_type",
         "producing_org",
-        "asset_data",
+        "transcript",
+        "asset",
+        "transcript_text"
       ],
 
       // // maybe used in concert with filter range frontend
