@@ -1,6 +1,8 @@
 import Thumbnail from "./Thumbnail"
 
 export default function TVMenu(props){
+  let classes = "tv-menu-container bmarbot"
+
   let programs = props.programs
   if(props.programs){
 
@@ -9,16 +11,14 @@ export default function TVMenu(props){
         program.classes = " three"
         return program
       })
-    }
-    programs = programs.slice(0,4)
-    programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
 
-    let classes = "tv-menu-container bmarbot"
-    if(programs.length == 3){
       classes += " three"
-         } else {
+    } else {
       classes += " four"
     }
+
+    programs = programs.slice(0,4)
+    programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
   }
 
   let seeAll
