@@ -1,6 +1,8 @@
 import Thumbnail from "./Thumbnail"
 
 export default function TVMenu(props){
+  let classes = "tv-menu-container bmarbot"
+
   let programs = props.programs
   if(props.programs){
     if(programs.length == 3){
@@ -8,7 +10,12 @@ export default function TVMenu(props){
         program.classes = " three"
         return program
       })
+
+      classes += " three"
+    } else {
+      classes += " four"
     }
+
     programs = programs.slice(0,4)
     programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
   }
@@ -17,13 +24,7 @@ export default function TVMenu(props){
   if(props.seeAllURL){
     seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
   }
-  let classes = "tv-menu-container bmarbot"
-  if(programs.length == 3){
-    classes += " three"
-       } else {
-    classes += " four"
-  }
-
+ 
   return (
     <div className={ classes }>
       { seeAll }
