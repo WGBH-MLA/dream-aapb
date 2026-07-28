@@ -3,18 +3,10 @@ import Thumbnail from "./Thumbnail"
 
 export default function TVMenu({ programs, seeAllURL, title }: { programs: AAPBRecord[], seeAllURL?: string, title?: string }, limit: number = 0) {
 
-  // if(programs){
-  //   if(programs.length == 3){
-  //     programs = programs.map( (program) => {
-  //       program.classes = " three"
-  //       return program
-  //     })
-  //   }
   if (limit > 0) {
     programs = programs.slice(0, limit)
   }
   programs = programs.map((program) => TVProgram(program))
-
 
   let seeAllLink
   if (seeAllURL) {
