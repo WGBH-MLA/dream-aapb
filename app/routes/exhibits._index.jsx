@@ -11,7 +11,6 @@ import { getExhibits } from "../utils/fetch"
 export const loader = async () => {
   let data = await getExhibits("limit=9999&order=random")
   let exhibits = data.map((exhibit) => exhibitToTVProgram(exhibit))
-
   return exhibits
 }
 
