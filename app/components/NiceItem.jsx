@@ -1,3 +1,4 @@
+import { decode } from "html-entities"
 import Thumbnail from "../components/Thumbnail"
 
 export default function NiceItem(props){
@@ -13,7 +14,7 @@ export default function NiceItem(props){
     <div className="nice-item marbot">
       <a href={ props.itemURL } >
         { thumbnail }
-        <h2>{props.title}</h2>
+        <h2 suppressHydrationWarning={true} dangerouslySetInnerHTML={{ __html: decode(props.title) }} />
       </a>
     </div>
   )  

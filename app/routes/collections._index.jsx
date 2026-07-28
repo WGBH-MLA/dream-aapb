@@ -1,9 +1,5 @@
 import { useLoaderData } from 'react-router'
-import shuffle from '../utils/shuffle'
 import TVMenu from "../components/TVMenu"
-import SummaryBox from "../components/SummaryBox"
-import randomThumb from "../utils/randomThumb"
-import randomRecords from "../utils/randomRecords"
 import { collectionToTVProgram } from "../utils/toTVProgram"
 import { getCollections, getFeatured } from "../utils/fetch"
 
@@ -12,14 +8,13 @@ export const loader = async () => {
   let featured = await getFeatured()
   let programs = []
   let proggys = []
-  console.log( 'lecto', collections )
+  // console.log( 'lecto', collections )
   if(collections){
     programs = collections.map((collection) => collectionToTVProgram(collection) )
   }
   if(featured){
     featured = featured.map((collection) => collectionToTVProgram(collection) )
   }
-
 
   let data
   data = {
@@ -36,12 +31,12 @@ export default function Collections() {
     <div className="body-container">
       <h1>Collections</h1>
       <p>The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below.</p>
-      <TVMenu title="Featured Collections" programs={ data.featured_collections } />
-      <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/collections"/>
-      <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/collections"/>
-      <TVMenu title="Historical Events and Interviews" programs={ data.radio_and_tv } seeAllURL="/collections"/>
-      <TVMenu title="Topics and Themes" programs={ data.radio_and_tv } seeAllURL="/collections"/>
-      <TVMenu title="Browse All" programs={ data.radio_and_tv } seeAllURL="/collections"/>
+      <TVMenu title="Featured Collections" programs={ data.featured_collections} showDesc={true} />
+      <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/program-collections"/>
+      <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-collections"/>
+      <TVMenu title="Historical Events and Interviews" programs={ data.radio_and_tv } seeAllURL="/events-interviews-collections"/>
+      <TVMenu title="Topics and Themes" programs={ data.radio_and_tv } seeAllURL="/topics-themes-collections"/>
+      <TVMenu title="Browse All" programs={ data.radio_and_tv } seeAllURL="/browse-collections"/>
     </div>
   )
 }
