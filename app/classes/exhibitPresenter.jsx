@@ -28,7 +28,7 @@ export function renderExhibit(exhibit) {
         <div className="sidey-container">
           <div className="sidey-body marleft">
             <div className="sidey-body-container exhibit-title marbot">
-              <h1>{ exhibit.title }</h1>
+              <h1 suppressHydrationWarning={true} dangerouslySetInnerHTML={{ __html: decode(exhibit.title) }} />
               <ExhibitBreadcrumbs exhibit={ exhibit } />
             </div>
 

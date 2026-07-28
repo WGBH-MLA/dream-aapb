@@ -2293,7 +2293,9 @@ div.nice-item:hover {
 }
 
 div.nice-items-wrapper div.nice-item h2 {
-  font-size: .8em;
+  margin-bottom: 0;
+  padding-bottom: 0.6em;
+  font-size: 0.8em;
 }
 
 div.nice-item h2 {
