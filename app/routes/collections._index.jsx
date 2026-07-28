@@ -8,14 +8,13 @@ export const loader = async () => {
   let featured = await getFeatured()
   let programs = []
   let proggys = []
-  console.log( 'lecto', collections )
+  // console.log( 'lecto', collections )
   if(collections){
     programs = collections.map((collection) => collectionToTVProgram(collection) )
   }
   if(featured){
     featured = featured.map((collection) => collectionToTVProgram(collection) )
   }
-
 
   let data
   data = {

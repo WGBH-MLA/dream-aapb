@@ -64,15 +64,8 @@ export function renderCollection(collection, esConfig) {
     </div>
   )
 
-  let leftBlocks = (
-    <div className="collection-resources">
-      { renderBlocks(collection.content.filter(block =>
-        ["resources"].includes(block.type)
-      )) }
-    </div>
-  )
-
-  let rightBlocks = renderBlocks(collection.content.filter(block => ["background"].includes(block.type) ))
+  let leftBlocks = <div className="collection-resources">{ renderBlocks(collection.content.filter(block => block.type === "resources")) }</div>
+  let rightBlocks = renderBlocks(collection.content.filter(block => block.type === "background"))
 
   return (
     <div className="page-container collection-page-container">
