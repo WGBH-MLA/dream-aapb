@@ -10,7 +10,7 @@ export default function TVMenu(props){
       })
     }
     programs = programs.slice(0,4)
-    programs = programs.map((program) => TVProgram(program))
+    programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
   }
 
   let seeAll
@@ -49,7 +49,7 @@ function TVProgram(props){
       <a href={props.url} >
         { thumb }
         <h4>{ props.title }</h4>
-        <h5 className="tv-menu-program-desc">{ props.desc }</h5>
+        {props.showDesc && <h5 className="tv-menu-program-desc">{ props.desc }</h5> }
       </a>
     </div>
   )

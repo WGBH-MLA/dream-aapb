@@ -1,16 +1,13 @@
 import { redirect } from 'react-router';
 
-export async function getExhibits() {
+export async function getExhibits(options = "") {
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
-    wagHost + '/exhibits',
-    {
-      headers: {"Host": "aapb-api"},
-    },
-    res => {
-      // console.log('exs', res)
-    }
-  )
+    wagHost + `/exhibits/?` + options,
+  ).catch((error) => {
+    console.log("Error fetching exhibits", error)
+    return []
+  })
 
   let body = await resp.json()
   // TODO REMOVE ->> real top level exhibits via top_exhibit field
@@ -18,13 +15,10 @@ export async function getExhibits() {
   return body.items
 }
 
-export async function getCollections() {
+export async function getCollections(options = "") {
   let wagHost = process.env.AAPB_API_URL
-  let resp =  await fetch(
-    wagHost + `/collections?limit=999999`,
-    {
-      headers: {Host: "aapb-api"},
-    },
+  let resp = await fetch(
+    wagHost + `/collections/?` + options,
   )
   let body = await resp.json()
   return body.items
@@ -32,11 +26,8 @@ export async function getCollections() {
 
 export async function getFeatured() {
   let wagHost = process.env.AAPB_API_URL
-  let resp =  await fetch(
-    wagHost + `/collections?limit=3`,
-    {
-      headers: {Host: "aapb-api"},
-    },
+  let resp = await fetch(
+    wagHost + `/collections/?limit=3&order=random`,
   )
   let body = await resp.json()
   return body.items
@@ -44,12 +35,12 @@ export async function getFeatured() {
 
 export async function getPageBySlug(type, slug) {
   let wagHost = process.env.AAPB_API_URL
-  var resp = await fetch(`${wagHost}/pages?type=${type}&slug=${slug}`, {headers: {"Host": "aapb-api"}} )
+  var resp = await fetch(`${wagHost}/pages/?type=${type}&slug=${slug}`)
   var body
   try {
     body = await resp.json()
-  } catch(error){
-    console.log( 'Invalid JSON...', body, error )
+  } catch (error) {
+    console.log('Invalid JSON...', body, error)
   }
 
   if (!body || body?.meta?.total_count === 0) {

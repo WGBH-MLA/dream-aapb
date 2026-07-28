@@ -8,9 +8,9 @@ import { getCollections, getExhibits, getFeatured, getLatestBlogPosts } from "..
 
 export const loader = async () => {
 
-  let radio_and_tv = await getCollections()
+  let radio_and_tv = await getCollections("limit=4&order=random")
   let featured_collections = await getFeatured()
-  let exhibits = await getExhibits()
+  let exhibits = await getExhibits("limit=4&order=random")
   let blog_posts = await getLatestBlogPosts()
 
   if(radio_and_tv){
@@ -80,10 +80,10 @@ export default function Index() {
         />
       </div>
       <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={ data.featured_collections } />
-        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <TVMenu title="Featured Collections" programs={ data.featured_collections} showDesc={true} />
+        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/program-collections" />
         <TVMenu title="Exhibits" programs={ data.exhibits } seeAllURL="/exhibits" />
-        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/collections" />
+        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-collections" />
       </div>
       <div className="body-container">
         <a href="/organizations">
