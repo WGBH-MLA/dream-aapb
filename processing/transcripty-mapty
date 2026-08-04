@@ -34,19 +34,9 @@ curl -v -X PUT "localhost:9200/transcript-cold-gold/" \
    },
 
   "mappings": {
-    "runtime": {
-      "asset": {
-        "type": "lookup",
-        "target_index": "aapb-cold-gold",
-        "input_field": "guid",
-        "target_field": "guid",
-        "fetch_fields": ["pbcoreDescriptionDocument", "title"]
-      }
-    },
     "properties": {
       "guid": { "type": "keyword" },
       "transcript_text": { "type": "text" }
     }
   }
 }'
-

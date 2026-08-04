@@ -123,12 +123,10 @@ export default function Catalog() {
   })
 
 
-// include transcript in search or not
+  // include transcript in search or not
   const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
   // store actual index names in state so it changes with the radio button
   const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
-
-
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -174,7 +172,6 @@ export default function Catalog() {
     // ohh la la
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
-
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
   }
@@ -347,6 +344,7 @@ export default function Catalog() {
           {
             nested: {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
+              ignore_unmapped: true,
               query: {
                 match: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -375,6 +373,7 @@ export default function Catalog() {
           {
             nested: {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
+              ignore_unmapped: true,
               query: {
                 match_phrase: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -391,9 +390,10 @@ export default function Catalog() {
   }
 
   function allFieldsArray(query){
-    return [
-      // simplified syntax that works but omits options
+
+    let afArray = [
       {
+        // simplified syntax that works but omits options
         match: {
           "guid": query
         }
@@ -408,9 +408,8 @@ export default function Catalog() {
           "topics": query,
         }
       },
-      
-      //full syntax w options
       {
+        //full syntax w options
         match: {
           title: {
             query: query,
@@ -423,19 +422,17 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                query: query,
-              }
-            }
-          }
+          // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
+          ignore_unmapped: true,
+          query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
+
             match: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": {
                 query: query,
@@ -443,25 +440,28 @@ export default function Catalog() {
                 boost: 3
               }
             }
-          },
+          }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             match: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
                 query: query
               }
-            }
+            }      
           }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
+      
             match: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
                 query: query,
@@ -472,11 +472,22 @@ export default function Catalog() {
         }
       }
     ]
+
+    if(searchSet != SEARCH_RECORD){
+      afArray.push({
+        match: {
+          transcript_text: query
+        }
+      })
+    }
+
+
+    return afArray
   }
 
   function allFieldsTermArray(query){
 
-    return [ 
+    let aftArray = [ 
       {
         term: {
           guid: {
@@ -512,6 +523,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreDescription.text": {
@@ -525,6 +537,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -538,6 +551,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
@@ -550,6 +564,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
@@ -561,6 +576,21 @@ export default function Catalog() {
         }
       }
     ]
+
+    if(searchSet != SEARCH_RECORD){
+      aftArray.push(
+        {
+          term: {
+            transcript_text: {
+              value: query,
+              case_insensitive: true
+            }
+          }
+        },
+      )
+    }
+
+    return aftArray
   }
 
   function allFieldsTermQuery(query){
@@ -579,8 +609,7 @@ export default function Catalog() {
   }
 
   function allFieldsMatchPhraseArray(query){
-
-    return [ 
+    let afmpArray = [ 
       {
         match_phrase: {
           guid: query
@@ -604,6 +633,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreDescription.text": query
@@ -614,6 +644,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": query
@@ -624,6 +655,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
@@ -634,6 +666,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
@@ -642,40 +675,41 @@ export default function Catalog() {
         }
       }
     ]
+
+
+    if(searchSet != SEARCH_RECORD){
+      afmpArray.push(
+        {
+          term: {
+            transcript_text: {
+              value: query,
+              case_insensitive: true
+            }
+          }
+        },
+      )
+    }
+
+    return afmpArray
   }
 
 
-  const sk = new Searchkit({
+  const config = {
     connection: {
       host: data.esURL,
       apiKey: data.apiKey
     },
-
     search_settings: {
       // runtime_mappings: {
-      //   asset_data: {
+      //   asset: {
       //     type: "lookup",
       //     target_index: data.esIndex,
       //     input_field: "guid",
       //     target_field: "guid",
-      //     fetch_fields: ["title","pbcoreDescriptionDocument"]
+      //     // cant get nested fields in runtime lookuip
+      //     fetch_fields: ["title", "producing_org", "media_type"]
       //   },
-      //   transcript: {
-      //     type: "lookup",
-      //     target_index: data.tsIndex,
-      //     input_field: "guid",
-      //     target_field: "guid",
-      //     fetch_fields: ["transcript_text"]
-      //   }
-      // },
 
-      // runtime_mappings: {
-      //   scripto: {
-      //     type: 'keyword',
-      //     script: {
-      //       source: "emit(doc['title'].value)"
-      //     }
-      //   }
       // },
 
       // highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
@@ -700,9 +734,8 @@ export default function Catalog() {
         "pbcoreDescriptionDocument",
         "media_type",
         "producing_org",
-        "transcript",
-        "asset",
-        "transcript_text"
+        "transcript_text",
+        "asset"
       ],
 
       // // maybe used in concert with filter range frontend
@@ -815,7 +848,37 @@ export default function Catalog() {
         },
       }
     }
-  })
+  }
+
+  if(searchSet == SEARCH_BOTH || searchSet === SEARCH_TRANSCRIPT){
+    config.search_settings.runtime_mappings = {
+      asset: {
+        type: "lookup",
+        target_index: data.esIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["title", "producing_org", "media_type"]
+      },
+        // transcript: {
+        //   type: "lookup",
+        //   target_index: data.tsIndex,
+        //   input_field: "guid",
+        //   target_field: "guid",
+        //   fetch_fields: ["transcript_text"]
+    }
+  } else {
+    // SEARCH_RECORD
+    // config.search_settings.runtime_mappings = {
+    //   asset: {
+    //     type: 'keyword',
+    //     script: {
+    //       source: "emit('zapparanes')"
+    //     }
+    //   }
+    // }
+  }
+
+  const sk = new Searchkit(config)
 
   const isEmpty = (query) => {
     return query === "" || query.match(/^\s+$/)
@@ -845,13 +908,12 @@ export default function Catalog() {
       if(emptyQuery){
 
         // console.log( 'it aint no query' )
-        
         // there *is not* a main box query
         queryHash = {
           // top bool
           bool: {
             // big should
-            // should: []
+            should: []
           }
         }
       } else {
@@ -864,12 +926,21 @@ export default function Catalog() {
               {
                 bool: {
                   should: mainAllFieldsArray,
-                  minimum_should_match: 1
+                  // minimum_should_match: 1
                 }
               }
             ]
           }
         }
+
+        // queryHash = {
+        //   // top bool
+        //   bool: {
+        //     // big should
+        //     should: [{ match: { title: query }}],
+        //     minimum_should_match: 1
+        //   }
+        // }
       }
 
       // add in clauses for each of 3 secondary searchbox fields
@@ -890,11 +961,11 @@ export default function Catalog() {
 
         // whether query was modified or not, go ahead and do nonquoty all query v
 
-        // add second big should clause to outer bool query
+        // add second big should clause to outer bool query's must clause
         var allQuery
         if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
           // only add the regular query for allbox IF there remains a NONQUOTY allbox query
-          console.log( 'there is a remaining allbox query' )
+
           allQuery = {
             bool: {
               should: allFieldsArray( allBoxQueryString ),
@@ -1006,7 +1077,7 @@ export default function Catalog() {
         })
       }
 
-      // console.log( 'finishing with qh', query, queryHash )
+      console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
     }
@@ -1037,17 +1108,6 @@ export default function Catalog() {
 
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
-    // if(newHideSearchy){
-    //   // hide it
-    //   let sidebar = document.getElementById("search-sidebar")
-    //   console.log( 'hiding that stupid', searchyPosition )
-    //   window.scroll(0, searchyPosition)
-    // } else {
-    //   // show it
-    //   console.log( 'showing, i like to go to', window.scrollY )
-    //   setSearchyPosition(window.scrollY)
-    //   scrollToTop()
-    // }
   }
 
   return (
@@ -1095,8 +1155,6 @@ export default function Catalog() {
                 <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
               </div>
             </div>
-
-            
           </div>
         </div>
 
@@ -1122,9 +1180,7 @@ export default function Catalog() {
           <h3 className="sidebar-title">Refine Search</h3>
           <hr />
           
-          <SearchAccordion title="Keywords" content={
-            searchbox
-          }/>
+          <SearchAccordion title="Keywords" content={ searchbox }/>
 
           <hr />
 
@@ -1172,7 +1228,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="producing_org"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1183,7 +1238,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1194,7 +1248,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="genres"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1205,7 +1258,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="topics"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1214,7 +1266,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="contributing_orgs"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1225,7 +1276,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="special_collections"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1237,7 +1287,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="series_titles"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1249,7 +1298,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="contributors"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1261,7 +1309,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="people"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>

@@ -1836,6 +1836,13 @@ button.sidebar-search-button {
 
 }
 
+div.hit-transcript-snippet {
+  font-style: italic;
+}
+div.hit-transcript-snippet label {
+  font-weight: bold;
+}
+
 div.hit-thumbnail-container, div.hit-info-container {
   vertical-align: top;
   display: inline-block;
