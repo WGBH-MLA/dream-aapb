@@ -302,10 +302,10 @@ export default function Catalog() {
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All"
+    showRefinementButtonText = "Show Filters"
   } else {
     currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
+    showRefinementButtonText = "Hide Filters"
   }
 
 
@@ -481,6 +481,21 @@ export default function Catalog() {
       })
     }
 
+    if(searchSet === SEARCH_TRANSCRIPT){
+      afArray.push({
+        nested:  {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            match: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
+    }
 
     return afArray
   }
@@ -590,6 +605,22 @@ export default function Catalog() {
       )
     }
 
+    if(searchSet === SEARCH_TRANSCRIPT){
+      aftArray.push({
+        nested:  {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            term: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
+    }
+
     return aftArray
   }
 
@@ -676,7 +707,6 @@ export default function Catalog() {
       }
     ]
 
-
     if(searchSet != SEARCH_RECORD){
       afmpArray.push(
         {
@@ -688,6 +718,22 @@ export default function Catalog() {
           }
         },
       )
+    }
+
+    if(searchSet === SEARCH_TRANSCRIPT){
+      afmpArray.push({
+        nested: {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            match_phrase: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
     }
 
     return afmpArray
@@ -913,7 +959,7 @@ export default function Catalog() {
           // top bool
           bool: {
             // big should
-            should: []
+            // should: []
           }
         }
       } else {
@@ -1169,7 +1215,7 @@ export default function Catalog() {
             />
           </div>
           <div className="clear-refinements-container marright">
-            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
+            <ClearRefinements translations={{ resetButtonText: "Clear Filters" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>

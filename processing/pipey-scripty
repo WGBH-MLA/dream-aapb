@@ -376,43 +376,47 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
       LocalDate date;
 
       def dateSplit = ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text.splitOnToken("-");
-      String first = dateSplit[0];
-      String second = dateSplit[1];
-      String third = dateSplit[2];
 
-      String month;
-      String day;
-      String year;
-      if(first != null && first.length() == 4){
-        year = first;
-        month = second;
-        day = third;
+      if(dateSplit.length == 3){
+        String first = dateSplit[0];
+        String second = dateSplit[1];
+        String third = dateSplit[2];
 
-      //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        String month;
+        String day;
+        String year;
+        if(first != null && first.length() == 4){
+          year = first;
+          month = second;
+          day = third;
 
-      } else if(first != null && first.length() == 2){
-        month = first;
-        day = second;
-        year = third;
+        //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
 
-      //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-      }
+        } else if(first != null && first.length() == 2){
+          month = first;
+          day = second;
+          year = third;
 
-      if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
-        try {
+        //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        }
 
-          ctx.broadcast_date = date;
-          ctx.broadcast_date_numeric = date.toEpochMilli();
-        } catch(Exception e) {
-          // Debug.explain("Great!");
+        if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
+          try {
+
+            ctx.broadcast_date = date;
+            ctx.broadcast_date_numeric = date.toEpochMilli();
+          } catch(Exception e) {
+            // Debug.explain("Great!");
+          }
         }
       }
+      
     }
   }
 }

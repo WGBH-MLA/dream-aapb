@@ -2118,13 +2118,31 @@ div.sort-container.per-page svg {
 div.current-refinements-container {
   display: inline-flex;
   min-width: 52.5%;
-  max-width: 65%;
-
+  max-width: 60%;
 }
 
 div.current-refinements-container.closed {
+  position: relative;
   overflow: hidden;
+  max-height: 10em;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+  z-index: 100;
 }
+/*
+div.current-refinements-container.closed::after {
+  z-index: 110;
+  position: absolute;
+  top: 2em;
+  text-align: center;
+  width: 100%;
+  padding: 1em;
+  background-color: #3C439B;
+  color: #fff;
+  content: "More refinements hidden";
+}*/
 
 div.clear-refinements-container {
   margin-top: 1em;

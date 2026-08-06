@@ -29,7 +29,7 @@ export default function Thumbnail(props) {
 
     if(exists === EXIST){
       img = <img id={ props.guid } crossOrigin="anonymous" className="thumbnail" src={ url } />
-      bottomBar = <img id={ props.guid } src="/video-slice.png" className="thumbnail-bar" />
+      bottomBar = <img src="/video-slice.png" className="thumbnail-bar" />
     } else {
       if(props.mediaType == "Moving Image"){
         img = <img id={ props.guid } src="/VIDEO.png" className="thumbnail" />
