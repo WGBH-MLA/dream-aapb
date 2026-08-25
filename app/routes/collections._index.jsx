@@ -8,7 +8,7 @@ export const loader = async () => {
   let featured = await getFeatured()
   let radio_and_tv = await getCollections("limit=4&order=random")
 
-  console.log('lecto', collections)
+  // console.log('lecto', collections)
   if (radio_and_tv) {
     radio_and_tv = radio_and_tv.map((collection) => collectionToTVProgram(collection))
   }

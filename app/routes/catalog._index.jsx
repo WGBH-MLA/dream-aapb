@@ -4,6 +4,7 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
+import { getCollections } from "../utils/fetch"
 import { scrollToTop }  from '../utils/helpers'
 
 const SEARCH_RECORD = 0
@@ -39,11 +40,14 @@ import SearchAccordion from "../components/SearchAccordion"
 import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
+  let collections = await getCollections("limit=999")
+
   return {
     esIndex: process.env.ES_INDEX,
     tsIndex: process.env.ES_TS_INDEX,
     apiKey: process.env.ES_API_KEY,
-    esURL: process.env.ES_URL
+    esURL: process.env.ES_URL,
+    collections: collections
   }
 }
 
@@ -271,6 +275,27 @@ export default function Catalog() {
       // name of field (dont show in top bar)
       attribute.label = ""
       attribute.refinements = refs
+      return attribute
+    })
+
+    return attributes
+  }
+
+// 10 attributea
+// each one a facetcollection
+// each fcollection has count, value, label
+
+  const prettyCollections = (attributes) => {
+    // console.log( 'ummm', attributes )
+
+    attributes = attributes.map((attribute) => {
+      // console.log( 'attribute', attribute )
+      // console.log( 'honking', data.collections.forEach((honk) => console.log( 'honk!!', honk.meta.slug )) )
+      let thisCollection = data.collections.find((coll) => coll.meta.slug == attribute.label )
+      if(thisCollection){
+        attribute.label = thisCollection.meta.slug
+      }
+
       return attribute
     })
 
@@ -1322,6 +1347,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="special_collections"
+                transformItems={ prettyCollections }
               />
             </>
           }/>
