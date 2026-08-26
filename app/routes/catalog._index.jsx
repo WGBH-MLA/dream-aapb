@@ -96,13 +96,14 @@ function CustomSearchBox(props) {
         />
 
         <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.all } />
         <h4>This title</h4>
-        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.title } />
         <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.none } />
         <div>
           <button className="sidebar-search-button">Update</button>
+          <button id="copy" className="sidebar-search-button secondary smarleft" onClick={ props.copySearch }>Copy Search</button>
         </div>
         <div hidden={!isSearchStalled}>Searching…</div>
 
@@ -114,11 +115,13 @@ function CustomSearchBox(props) {
 export default function Catalog() {
   const data = useLoaderData()
 
+  // include transcript in search or not
+  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
-
   const [customQuery, setCustomQuery] = useState({
-    query: searchParams.get(`${data.esIndex}[query]`) || "",
+    query: searchParams.get(`${ indicesToUse(searchSet, data.esIndex, data.tsIndex) }[query]`) || "",
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || "",
@@ -126,9 +129,6 @@ export default function Catalog() {
     endDate: searchParams.get("endDate") || "",
   })
 
-
-  // include transcript in search or not
-  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
   // store actual index names in state so it changes with the radio button
   const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
 
@@ -141,6 +141,46 @@ export default function Catalog() {
   // toggle searchy UI on mobile only
   const [hideSearchy, setHideSearchy] = useState(false)
   const [searchyPosition, setSearchyPosition] = useState(0)
+
+  const addToolTip = () => {
+    document.getElementById("copy").innerHTML = "Copy Search<span class='tooltip fade'>Copied to clipboard</span>"
+  }
+
+  const copySearch = (indices) => {
+    let query,all,title,none
+    query = all = title = none = ""
+    if(customQuery.query){
+      query = `${ indices }[query]=${customQuery.query}`
+    }
+
+    if(customQuery.all){
+      all = `&all=${customQuery.all}`
+    }
+
+    if(customQuery.title){
+      title = `&title=${customQuery.title}`
+    }
+
+    if(customQuery.none){
+      none = `&none=${customQuery.none}`
+    }
+
+    let url = `${window.location.href.split('?')[0]}/?${query}${all}${title}${none}`
+    console.log( 'log it', url )
+
+    function copyTextToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          console.log('Impressively succeeded copying to clipboard!');
+        })
+        .catch(err => {
+          console.error('Annoyingly failed to copy text: ', err);
+        })
+    }
+
+    copyTextToClipboard(url)
+    addToolTip()
+  }
 
   let sidebarClasses = "page-sidebar bmarleft"
   let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
@@ -156,13 +196,13 @@ export default function Catalog() {
 
   function indicesToUse(search_set, asset_index, transcript_index){
     if(search_set === SEARCH_RECORD){
-      console.log( "RECORD" )
+      // console.log( "RECORD" )
       return asset_index
     } else if(search_set === SEARCH_TRANSCRIPT){
-      console.log( "TRANSCRIPT" )
+      // console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
-      console.log( "BOPH" )
+      // console.log( "BOPH" )
       return `${asset_index},${transcript_index}`
     }
   }
@@ -176,6 +216,19 @@ export default function Catalog() {
     // ohh la la
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
+    let allParam = searchParams.get("all")
+    if(customQuery.all && !allParam){
+      searchParams.set("all", customQuery.all)
+    }
+    let titleParam = searchParams.get("title")
+    if(customQuery.title && !titleParam){
+      searchParams.set("title", customQuery.title)
+    }
+    let noneParam = searchParams.get("none")
+    if(customQuery.none && !noneParam){
+      searchParams.set("none", customQuery.none)
+    }
+
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
   }
@@ -200,10 +253,13 @@ export default function Catalog() {
     return items.map( (item) => {
       if(item.label == "Online Reading Room"){
         item.label = "Available Online"
-      } else if(item.label == "On Location"){
+      } else if(item.label == "On Location" || item.label == "On location"){
         item.label = "All Digitized"
+      } else if(item.label == "Private"){
+        item.label = "Private"
       } else {
         // private or nothing
+        console.log( 'help!', item.label, item.value )
         item.label = "All Records"
       }
 
@@ -351,6 +407,8 @@ export default function Catalog() {
               handleCustomQuery={ handleCustomQuery }
               query={ customQuery.query }
               defaultQuery={ customQuery.query }
+              customQuery={ customQuery }
+              copySearch={ () => copySearch(indicesToUse(searchSet, data.esIndex, data.tsIndex), ) }
             />
   //////////
 
@@ -1148,7 +1206,7 @@ export default function Catalog() {
         })
       }
 
-      console.log( 'finishing with qh', query, queryHash )
+      // console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
     }

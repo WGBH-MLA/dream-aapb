@@ -1833,8 +1833,46 @@ button.sidebar-search-button {
   padding: 0.5em;
   color: #fff;
   background-color: #3C439B;
-
+  opacity: 1;
+  position: relative;
 }
+
+button.sidebar-search-button.secondary {
+  background-color: #6D659D;
+}
+
+button.sidebar-search-button span.tooltip {
+  position: absolute;
+  background-color: #eee;
+  color: #000;
+  padding: 0.5em;
+  bottom: 1.2em;
+  right: -4em;
+  opacity: 0.8;
+  border-radius: 4px;
+  font-size: 0.75em;
+}
+
+.fade {
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  50% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
 
 div.hit-transcript-snippet {
   font-style: italic;
@@ -2270,6 +2308,10 @@ input.sidebar-search  {
   height: 1em;
   padding: 0.25em;
   margin-bottom: 1em;
+}
+
+input.sidebar-search::placeholder {
+  color: black;
 }
 
 div.score-light {
