@@ -106,6 +106,7 @@ export default function ShowRecord() {
         lines={ transcriptData }
         viewerOpen={ viewerOpen }
         handleViewerToggle={ handleViewerToggle }
+        wide={ record.is169() }
       />
     )  
   }
@@ -223,7 +224,7 @@ export default function ShowRecord() {
     }
     
   }
-  
+
   return (
     <>
       <div className="page-container">

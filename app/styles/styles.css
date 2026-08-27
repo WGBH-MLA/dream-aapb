@@ -1660,6 +1660,10 @@ div.transcript-viewer {
   overflow-y: scroll;
 }
 
+div.transcript-viewer.wide {
+  height: 10em;
+}
+
 div.transcript-line {
   display: block;
   padding-bottom: 0.25em;

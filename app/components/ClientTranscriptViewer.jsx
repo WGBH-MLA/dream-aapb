@@ -77,6 +77,11 @@ export default function ClientTranscriptViewer(props){
   } else {
    chevy = <ChevronRight className="transcript-chevy"/>
   }
+
+  if(props.wide){
+    classes += " wide"
+  }
+
   let toggler = <b onClick={ props.handleViewerToggle }>{ toggleMessage }{ chevy }</b>
 
   let transcriptSearch, transcriptViewer

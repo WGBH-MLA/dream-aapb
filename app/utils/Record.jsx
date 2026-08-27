@@ -58,7 +58,23 @@ export default class Record {
   hasPlayableMedia(){
     return ( this.isVideo() || this.isAudio() ) && this.ciID && this.ciID.length > 0
   }
-  
+
+  aspectRatio(){
+    let inst = this.instantiations()
+    let aspectInst = inst.find((i) => notEmpty(i.aspect_ratio))
+    if(aspectInst){
+      return aspectInst.aspect_ratio
+    }
+  }
+
+  is169(){
+    return this.isVideo() && (this.aspectRatio() == "1.778" || this.aspectRatio() == "16:9")
+  }
+
+  is43(){
+   return this.isVideo() && (this.aspectRatio() == "1.333" || this.aspectRatio() == "4:3")
+  }
+
   description(){
     if(this.pbcoreDescriptionDocument.pbcoreDescription && this.pbcoreDescriptionDocument.pbcoreDescription[0] && this.pbcoreDescriptionDocument.pbcoreDescription[0].text){
       // aapb currently takes the first description only, obv we can show more if we want
@@ -117,6 +133,15 @@ class Instantiation {
 
     if(notEmpty(instantiation.instantiationDuration)){
       this.durations = instantiation.instantiationDuration.map((id) => new Element(id))
+    }
+
+    if(notEmpty(instantiation.instantiationEssenceTrack)){
+      let aspectEssenceTrack
+      aspectEssenceTrack = instantiation.instantiationEssenceTrack.find((ess) => ess.essenceTrackAspectRatio && ess.essenceTrackAspectRatio.text)
+
+      if(aspectEssenceTrack){
+        this.aspect_ratio = aspectEssenceTrack.essenceTrackAspectRatio.text
+      }
     }
 
   }
