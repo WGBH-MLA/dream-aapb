@@ -7,7 +7,6 @@ import {
   FileX2,
 } from 'lucide-react'
 import VideoPlayer from "../components/VideoPlayer"
-import { getRecord } from "../utils/getRecord"
 
 function mediaType(pbcore) {
   let inst = pbcore.pbcoreDescriptionDocument?.pbcoreInstantiation

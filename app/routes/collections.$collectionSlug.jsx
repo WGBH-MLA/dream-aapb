@@ -3,6 +3,7 @@ import { getPageBySlug } from '../utils/fetch'
 import { getRecords } from '../utils/getRecord'
 import { renderCollection } from '../classes/collectionPresenter'
 import { extractMeta } from '../utils/meta'
+import { normalizeGuid } from '../utils/helpers'
 
 export const loader = async ({
   params,
@@ -20,7 +21,7 @@ export const loader = async ({
   let featuredRecords = {}
   if(collection.featured_items.length > 0){
     // collect the guids they said
-    let featured_guids = collection.featured_items.map((item) => item.value.guids[0])
+    let featured_guids = collection.featured_items.map((item) => normalizeGuid(item.value.guids[0]))
 
     // get some records they said
     let records = await getRecords(featured_guids, esURL, esIndex, apiKey)

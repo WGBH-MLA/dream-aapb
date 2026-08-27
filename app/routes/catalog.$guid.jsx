@@ -8,7 +8,7 @@ import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName, notEmpty } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
@@ -21,7 +21,8 @@ export const loader = async ({params, request}) => {
   let esAPIKey = process.env.ES_API_KEY
 
   let data = {}
-  let guid = params.guid
+
+  let guid = normalizeGuid(params.guid)
 
   // get record from es
   let recordData = await getRecord(guid, esURL, esIndex, esAPIKey)
@@ -122,7 +123,7 @@ export default function ShowRecord() {
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
   }
 
-  let people, orgs, identifiers
+  let credits, orgs, identifiers
   let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
   let transcript
   let videoPlayerClasses = "media-area-container"
@@ -154,15 +155,49 @@ export default function ShowRecord() {
       )
     }
 
-    // people
-    creators = record.creators()
-    if(creators){
+    // credits
+    // creators = record.creators()
+    // if(notEmpty(creators)){
 
-      creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
-      people = (
+    //   creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
+    //   credits = (
+    //     <>
+    //       <div className="show-metadata-header">Creators</div>
+    //       { creators }
+    //     </>
+    //   )
+    // }
+    function role(entity){
+      if(entity){
+        if(entity.creatorRole && entity.creatorRole[0]){
+          return entity.creatorRole[0].text
+        } else if(entity.contributorRole && entity.contributorRole[0]){
+          return entity.contributorRole[0].text
+        } else if(entity.publisherRole && entity.publisherRole[0]){
+          return entity.publisherRole[0].text
+        }   
+      }
+    }
+
+    function name(entity){
+      if(entity){
+        if(entity.creator){
+          return entity.creator.text
+        } else if(entity.contributor){
+          return entity.contributor.text
+        } else if(entity.publisher){
+          return entity.publisher.text
+        }   
+      }
+    }
+
+    credits = record.credits()
+    if(notEmpty(credits)){
+      credits = credits.map((entity, i) => <ShowBox key={i} label={ role(entity) } text={ name(entity) } />)
+      credits = (
         <>
-          <div className="show-metadata-header">People</div>
-          { creators }
+          <div className="show-metadata-header">Credits</div>
+          { credits }
         </>
       )
     }
@@ -254,13 +289,13 @@ export default function ShowRecord() {
             { description }
             { orgs }
             { identifiers }
-            { people }
+            { credits }
             { coverages }
             { dates }
           </div>
 
           <div className="show-metadata-container bmarbot">
-            <div className="show-metadata-header">Instantiations</div>
+            <div className="show-metadata-header">Contributor Holdings</div>
             { instantiations }
           </div>
 

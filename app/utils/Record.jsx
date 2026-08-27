@@ -17,6 +17,8 @@ export default class Record {
     this.title = this.data.title
     this.producing_org = this.data.producing_org
 
+    this.people = this.data.people
+
 
     this.access_level = "private"
     if(notEmpty(this.data.pbcoreDescriptionDocument.pbcoreAnnotation)){
@@ -84,18 +86,63 @@ export default class Record {
     }
   }
 
-  creators(){
-    // all creators other than producing organization
+  people(){
+    let people = []
+    // all people other than producing organization
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
-      return this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
+      people = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creator.text) && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
     }
+
+    return people
+  }
+
+  creators(){
+    let creators = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
+      creators = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creator.text) && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text)
+    }
+
+    return creators
+  }
+
+  contributors(){
+    let contributors = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreContributor)){
+
+      contributors = this.pbcoreDescriptionDocument.pbcoreContributor.filter((pbc) => pbc.contributor && notEmpty(pbc.contributor.text) && notEmpty(pbc.contributorRole) && pbc.contributorRole[0].text)
+    }
+
+    return contributors
+  }
+
+  publishers(){
+    let publishers = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcorePublisher)){
+      publishers = this.pbcoreDescriptionDocument.pbcorePublisher.filter((pbc) => pbc.publisher && notEmpty(pbc.publisher.text) && notEmpty(pbc.publisherRole) && pbc.publisherRole[0].text)
+    }
+
+    return publishers
+  }
+
+  credits(){
+    let creators = this.creators()
+    let contributors = this.contributors()
+    let publishers = this.publishers()
+    return creators.concat(contributors, publishers)
   }
 
   instantiations(){
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreInstantiation)){
+      return this.pbcoreDescriptionDocument.pbcoreInstantiation.map( (pbi) => new Instantiation(pbi) ).filter((pbi) => pbi.organization != "American Archive of Public Broadcasting")
+    }
+  }
+
+  allInstantiations(){
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreInstantiation)){
       return this.pbcoreDescriptionDocument.pbcoreInstantiation.map( (pbi) => new Instantiation(pbi) )
     }
   }
+  
 }
 
 class Instantiation {
@@ -144,6 +191,12 @@ class Instantiation {
       }
     }
 
+    if(notEmpty(instantiation.instantiationAnnotation)){
+      let orgAnnotation = instantiation.instantiationAnnotation.find((ia) => ia.annotationType === "organization")
+      if(orgAnnotation){
+        this.organization = orgAnnotation.text
+      }
+    }
   }
 
   blurb(){

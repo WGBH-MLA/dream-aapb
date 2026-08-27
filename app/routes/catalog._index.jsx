@@ -271,7 +271,7 @@ export default function Catalog() {
       } else {
         return -1
       }
-    })
+    }).flat()
   }
 
   const isOrField = (fieldName) => {  

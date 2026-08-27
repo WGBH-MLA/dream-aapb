@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import thumbnailURL from "../utils/thumbnailURL"
-import { getRecord } from "../utils/getRecord"
 import { checkVisible } from "../utils/helpers"
 
 // exists
