@@ -103,7 +103,7 @@ export default function ClientVideoPlayer(props){
     )
   } else {
     return (
-      <div className="martop marbot">
+      <div className="marbot">
         <Thumbnail
           guid={ props.guid }
           mediaType={ props.mediaType }
