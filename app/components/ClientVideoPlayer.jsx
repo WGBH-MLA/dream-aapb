@@ -12,7 +12,6 @@ export default function ClientVideoPlayer(props){
   const [pippy, setPippy] = useState(false)
   const [blockPippy, setBlockPippy] = useState(false)
 
-
   if(!props.guid){
     return null
   }
@@ -24,7 +23,7 @@ export default function ClientVideoPlayer(props){
   }
 
   useEffect(() => {
-    if(props.mediaURL){
+    if(props.mediaURL && videojs.getAllPlayers().length == 0){
       videojs('vjs-player', {
         fluid: true,
         controls: true,
@@ -41,7 +40,6 @@ export default function ClientVideoPlayer(props){
         videojs.log('I am ready for your video yes!')
         let player = videojs.players["vjs-player"]
         if(props.adHLSURL){
-          
 
           // we received an audio desc URL
           addADButton(videojs, props.adHLSURL)
@@ -96,14 +94,14 @@ export default function ClientVideoPlayer(props){
     return (
       <div id="video-player-container" className={ playerClasses }>
         <video className="video-js" id="vjs-player" poster={ thumbnailURL(props.guid) } controls preload="auto" width="640" height="480">
-          <source src={ props.mediaURL || "/A_Colour_Box_512kb.mp4" } />
+          <source type="application/x-mpegURL" src={ props.mediaURL || "/A_Colour_Box_512kb.mp4" } />
           { captions }
         </video>
       </div>
     )
   } else {
     return (
-      <div className="martop marbot">
+      <div className="marbot">
         <Thumbnail
           guid={ props.guid }
           mediaType={ props.mediaType }

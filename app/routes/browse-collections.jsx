@@ -7,7 +7,6 @@ export const loader = async () => {
   let collections = await getCollections()
   let featured = await getFeatured()
   let programs = []
-  // console.log( 'lecto', collections )
   if(collections){
     programs = collections.map((collection) => collectionToTVProgram(collection) )
   }

@@ -1510,11 +1510,15 @@ div#show-media div.show-thumbnail {
   padding: 0;
   overflow: hidden;
   width: 100%;
+  height: 11.25em;
 }
 
 div#show-media div.show-thumbnail img {
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  /*little hacky but will true up em scale to the actual player later (9.85em) */
+  height: 11.25em;
+
 }
 
 div.media-area-container {
@@ -1656,8 +1660,13 @@ div.transcript-viewer {
   padding-left: 1em;
   padding-top: 2em;
   padding-bottom: 1.2em;
-  height: 15.72em;
+  /*height: 15.75em;*/
+  height: 9.85em;
   overflow-y: scroll;
+}
+
+div.transcript-viewer.wide {
+  height: 9.85em;
 }
 
 div.transcript-line {
@@ -1833,7 +1842,52 @@ button.sidebar-search-button {
   padding: 0.5em;
   color: #fff;
   background-color: #3C439B;
+  opacity: 1;
+  position: relative;
+}
 
+button.sidebar-search-button.secondary {
+  background-color: #6D659D;
+}
+
+button.sidebar-search-button span.tooltip {
+  position: absolute;
+  background-color: #eee;
+  color: #000;
+  padding: 0.5em;
+  bottom: 1.2em;
+  right: -4em;
+  opacity: 0.8;
+  border-radius: 4px;
+  font-size: 0.75em;
+}
+
+.fade {
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  50% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+
+div.hit-transcript-snippet {
+  font-style: italic;
+}
+div.hit-transcript-snippet label {
+  font-weight: bold;
 }
 
 div.hit-thumbnail-container, div.hit-info-container {
@@ -2111,13 +2165,31 @@ div.sort-container.per-page svg {
 div.current-refinements-container {
   display: inline-flex;
   min-width: 52.5%;
-  max-width: 65%;
-
+  max-width: 60%;
 }
 
 div.current-refinements-container.closed {
+  position: relative;
   overflow: hidden;
+  max-height: 10em;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+  z-index: 100;
 }
+/*
+div.current-refinements-container.closed::after {
+  z-index: 110;
+  position: absolute;
+  top: 2em;
+  text-align: center;
+  width: 100%;
+  padding: 1em;
+  background-color: #3C439B;
+  color: #fff;
+  content: "More refinements hidden";
+}*/
 
 div.clear-refinements-container {
   margin-top: 1em;
@@ -2245,6 +2317,10 @@ input.sidebar-search  {
   height: 1em;
   padding: 0.25em;
   margin-bottom: 1em;
+}
+
+input.sidebar-search::placeholder {
+  color: black;
 }
 
 div.score-light {
@@ -3914,7 +3990,7 @@ div.newsletter-bar input[type="submit"] {
   /*show page*/
 
   div#show-media {
-    margin-bottom: 12em;
+    /*margin-bottom: 12em;*/
   }
 
   /*bigtviewer*/
@@ -3922,7 +3998,14 @@ div.newsletter-bar input[type="submit"] {
     margin-left: 13%;
   }
   div.transcript-viewer {
-    height: 24em;
+    height: 16.25em;
+  }
+
+  div#show-media div.show-thumbnail {
+    height: 15.075em;
+  }
+  div#show-media div.show-thumbnail img {
+    height: 15.075em;
   }
 }
 

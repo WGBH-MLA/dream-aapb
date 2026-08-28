@@ -16,7 +16,8 @@ export default class Record {
     this.media_type = this.data.media_type
     this.title = this.data.title
     this.producing_org = this.data.producing_org
-
+    this.topics = this.data.topics
+    this.contributing_orgs = this.data.contributing_orgs
 
     this.access_level = "private"
     if(notEmpty(this.data.pbcoreDescriptionDocument.pbcoreAnnotation)){
@@ -58,28 +59,129 @@ export default class Record {
   hasPlayableMedia(){
     return ( this.isVideo() || this.isAudio() ) && this.ciID && this.ciID.length > 0
   }
-  
+
+  aspectRatio(){
+    let inst = this.instantiations()
+    let aspectInst = inst.find((i) => i.aspect_ratio)
+    if(aspectInst){
+      return aspectInst.aspect_ratio
+    }
+  }
+
+  is169(){
+    return this.isVideo() && (this.aspectRatio() == "1.778" || this.aspectRatio() == "16:9")
+  }
+
+  is43(){
+   return this.isVideo() && (this.aspectRatio() == "1.333" || this.aspectRatio() == "4:3")
+  }
+
   description(){
     if(this.pbcoreDescriptionDocument.pbcoreDescription && this.pbcoreDescriptionDocument.pbcoreDescription[0] && this.pbcoreDescriptionDocument.pbcoreDescription[0].text){
-      // aapb currently takes the first description only, obv we can show more if we want
       return this.pbcoreDescriptionDocument.pbcoreDescription[0].text
     } else {
       return "No Description Available"
     }
   }
 
-  creators(){
-    // all creators other than producing organization
-    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
-      return this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
+  descriptionsByType(){
+    if(this.pbcoreDescriptionDocument.pbcoreDescription && notEmpty(this.pbcoreDescriptionDocument.pbcoreDescription)){
+      return this.pbcoreDescriptionDocument.pbcoreDescription.sort((a,b) => { a.descriptionType.localeCompare(b.descriptionType) })
     }
+  }
+
+  titlesByType(){
+    if(this.pbcoreDescriptionDocument.pbcoreTitle && notEmpty(this.pbcoreDescriptionDocument.pbcoreTitle)){
+      return this.pbcoreDescriptionDocument.pbcoreTitle.sort((a,b) => { a.titleType.localeCompare(b.titleType) })
+    }
+  }
+
+  people(){
+    let people = []
+    // all people other than producing organization
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
+      people = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && pbc.creator.text && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
+    }
+
+    return people
+  }
+
+  creators(){
+    let creators = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
+      creators = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && pbc.creator.text && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text)
+    }
+
+    return creators
+  }
+
+  contributors(){
+    let contributors = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreContributor)){
+
+      contributors = this.pbcoreDescriptionDocument.pbcoreContributor.filter((pbc) => pbc.contributor && pbc.contributor.text && notEmpty(pbc.contributorRole) && pbc.contributorRole[0].text)
+    }
+
+    return contributors
+  }
+
+  publishers(){
+    let publishers = []
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcorePublisher)){
+      publishers = this.pbcoreDescriptionDocument.pbcorePublisher.filter((pbc) => pbc.publisher && notEmpty(pbc.publisher.text) && notEmpty(pbc.publisherRole) && pbc.publisherRole[0].text)
+    }
+
+    return publishers
+  }
+
+  credits(){
+    let creators = this.creators()
+    let contributors = this.contributors()
+    let publishers = this.publishers()
+    return creators.concat(contributors, publishers)
   }
 
   instantiations(){
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreInstantiation)){
+      return this.pbcoreDescriptionDocument.pbcoreInstantiation.map( (pbi) => new Instantiation(pbi) ).filter((pbi) => pbi.organization != "American Archive of Public Broadcasting")
+    }
+  }
+
+  allInstantiations(){
+    if(notEmpty(this.pbcoreDescriptionDocument.pbcoreInstantiation)){
       return this.pbcoreDescriptionDocument.pbcoreInstantiation.map( (pbi) => new Instantiation(pbi) )
     }
   }
+
+  duration(){
+    let inst = this.allInstantiations()
+    if(notEmpty(inst)){
+      let duration
+      // check for proxy duration
+      for(var i=0; i<inst.length; i++){
+        if(notEmpty(inst[i].generations)){
+          if(inst[i].generations.find((ig) => ig.text == "Proxy") && notEmpty(inst[i].essence_tracks)){
+            let ess = inst[i].essence_tracks.find((ess) => ess.essenceTrackDuration)
+            if(ess){
+              return ess.essenceTrackDuration.text
+            }
+          }
+        }
+      }
+
+      // check for any duration
+      for(var i=0; i<inst.length; i++){
+        if(notEmpty(inst[i].essence_tracks)){
+          let durEss = inst[i].essence_tracks.find((ess) => ess.essenceTrackDuration)
+          if(durEss){
+            // ;P
+            return durEss.essenceTrackDuration.text
+          }
+        }
+      }
+    }
+  }
+  
 }
 
 class Instantiation {
@@ -118,7 +220,27 @@ class Instantiation {
     if(notEmpty(instantiation.instantiationDuration)){
       this.durations = instantiation.instantiationDuration.map((id) => new Element(id))
     }
+    
+    if(notEmpty(instantiation.instantiationEssenceTrack)){
+      // TODO: finish ess class
+      // this.essence_tracks = instantiation.instantiationEssenceTrack.map((ess) => new EssenceTrack(ess))
+      this.essence_tracks = instantiation.instantiationEssenceTrack
+    }
 
+    if(notEmpty(this.essence_tracks)){
+      let aspectEssenceTrack
+      aspectEssenceTrack = this.essence_tracks.find((ess) => ess.essenceTrackAspectRatio && ess.essenceTrackAspectRatio.text)
+      if(aspectEssenceTrack){
+        this.aspect_ratio = aspectEssenceTrack.essenceTrackAspectRatio.text
+      }
+    }
+
+    if(notEmpty(instantiation.instantiationAnnotation)){
+      let orgAnnotation = instantiation.instantiationAnnotation.find((ia) => ia.annotationType === "organization")
+      if(orgAnnotation){
+        this.organization = orgAnnotation.text
+      }
+    }
   }
 
   blurb(){
@@ -149,6 +271,12 @@ class Instantiation {
   }
 }
 
+// class EssenceTrack {
+//   constructor(ess){
+//     // TODO: coming soon
+//   }
+// }
+
 class Element {
   constructor(element){
     // 90% of pb subelements have overlapping attributes
@@ -172,8 +300,5 @@ class Element {
     if(element.source){
       this.source = element.source
     }
-
   }
 }
-
-

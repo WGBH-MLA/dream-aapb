@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, Link } from 'react-router'
 
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
@@ -8,7 +8,7 @@ import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName, notEmpty } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import VideoHound from '../classes/VideoHound'
@@ -21,17 +21,17 @@ export const loader = async ({params, request}) => {
   let esAPIKey = process.env.ES_API_KEY
 
   let data = {}
-  let guid = params.guid
+
+  let guid = normalizeGuid(params.guid)
 
   // get record from es
   let recordData = await getRecord(guid, esURL, esIndex, esAPIKey)
-  
   if(!recordData){
     throw `Asset ${guid} was not found!!`
   } else {
     data.recordData = recordData
     data.mediaURL = null
-    data.esIndex = esIndex  
+    data.esIndex = esIndex
   }
 
   // fill presenter model with record data
@@ -40,6 +40,8 @@ export const loader = async ({params, request}) => {
   let location = new Location(request)
   // get access level based on record and location
   let access = new Access(record, location)
+
+  console.log( 'playability was', access.canPlay() && record.hasPlayableMedia() )
 
   if( access.canPlay() && record.hasPlayableMedia() ){
 
@@ -83,6 +85,7 @@ export default function ShowRecord() {
   const data = useLoaderData()
 
   const [viewerOpen, setViewerOpen] = useState(true)
+  // const [mediaURL, setMediaURL] = useState(data.mediaURL)
 
   const [transcriptData, setTranscriptData] = useState(false)
 
@@ -106,6 +109,7 @@ export default function ShowRecord() {
         lines={ transcriptData }
         viewerOpen={ viewerOpen }
         handleViewerToggle={ handleViewerToggle }
+        wide={ record.is169() }
       />
     )  
   }
@@ -121,8 +125,8 @@ export default function ShowRecord() {
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
   }
 
-  let people, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
+  let credits, orgs, identifiers
+  let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics
   let transcript
   let videoPlayerClasses = "media-area-container"
 
@@ -130,13 +134,41 @@ export default function ShowRecord() {
 
     title = record.title
 
-    description = record.description()
-    if(description){
-      description = <ShowBox label="Description" text={ description } />
+    // descriptions = record.descriptionsByType()
+    // if(descriptions){
+    //   descriptions = <ShowBox label="Descriptions" text={ descriptions } />
+    // }
+
+    descriptionsByType = record.descriptionsByType()
+    if(descriptionsByType){
+      descriptionsByType = (
+        <>
+          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={ pbd.descriptionType } text={ pbd.text } />) }
+        </>
+      )
+    }
+    
+    titlesByType = record.titlesByType()
+    if(titlesByType){
+      titlesByType = (
+        <>
+          { titlesByType.map((pbt, i) => <ShowBox key={i} label={ pbt.titleType } text={ pbt.text } />) }
+        </>
+      )
     }
 
     if(record.media_type){
       mediaType = <ShowBox label="Media Type" text={ record.media_type } />
+    }
+
+    if(record.media_type){
+      mediaType = <ShowBox label="Media Type" text={ record.media_type } />
+    }
+
+    // orgs
+    if(notEmpty(record.contributing_orgs)){
+      contributingOrgs = [...new Set(record.contributing_orgs)]
+      contributingOrgs = contributingOrgs.filter((co) => co != "American Archive of Public Broadcasting").map((co) => <ShowBox label="Contributing Organization" text={ co } />)
     }
 
     // orgs
@@ -153,15 +185,73 @@ export default function ShowRecord() {
       )
     }
 
-    // people
-    creators = record.creators()
-    if(creators){
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreSubject)){
+      subjects = <ShowBox key="subjects" label="Subjects" text={ record.pbcoreDescriptionDocument.pbcoreSubject.map((ps) => ps.text).join('; ') } />
+    }
 
-      creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
-      people = (
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    if(notEmpty(record.topics)){
+      // could technically be multiple
+      topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
+    }
+
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    let duration = record.duration()
+    if(duration){
+      assetTypes = <ShowBox key="duration" label="Duration" text={ duration } />
+    }
+
+    // credits
+    // creators = record.creators()
+    // if(notEmpty(creators)){
+
+    //   creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
+    //   credits = (
+    //     <>
+    //       <div className="show-metadata-header">Creators</div>
+    //       { creators }
+    //     </>
+    //   )
+    // }
+    function role(entity){
+      if(entity){
+        if(entity.creatorRole && entity.creatorRole[0]){
+          return entity.creatorRole[0].text
+        } else if(entity.contributorRole && entity.contributorRole[0]){
+          return entity.contributorRole[0].text
+        } else if(entity.publisherRole && entity.publisherRole[0]){
+          return entity.publisherRole[0].text
+        }   
+      }
+    }
+
+    function name(entity){
+      if(entity){
+        if(entity.creator){
+          return entity.creator.text
+        } else if(entity.contributor){
+          return entity.contributor.text
+        } else if(entity.publisher){
+          return entity.publisher.text
+        }   
+      }
+    }
+
+    credits = record.credits()
+    if(notEmpty(credits)){
+      credits = credits.map((entity, i) => <ShowBox key={i} label={ role(entity) } text={ name(entity) } />)
+      credits = (
         <>
-          <div className="show-metadata-header">People</div>
-          { creators }
+          <div className="show-metadata-header">Credits</div>
+          { credits }
         </>
       )
     }
@@ -223,7 +313,7 @@ export default function ShowRecord() {
     }
     
   }
-  
+
   return (
     <>
       <div className="page-container">
@@ -246,20 +336,36 @@ export default function ShowRecord() {
             { transcript }
           </div>
 
-
           <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>
-            { mediaType }
-            { description }
+            { titlesByType }
             { orgs }
+            { contributingOrgs }
+          </div>
+
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Description</div>
+            {/*regular info list*/}
+            { mediaType }
+            { subjects }
+            { assetTypes }
+            { topics }
+            { duration }
+    
+            {/*addl optional sections*/}
             { identifiers }
-            { people }
+            { credits }
             { coverages }
             { dates }
           </div>
 
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Descriptions</div>
+            { descriptionsByType }
+          </div>
+
           <div className="show-metadata-container bmarbot">
-            <div className="show-metadata-header">Instantiations</div>
+            <div className="show-metadata-header">Contributor Holdings</div>
             { instantiations }
           </div>
 

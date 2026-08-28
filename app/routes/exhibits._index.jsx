@@ -11,12 +11,11 @@ import { getExhibits } from "../utils/fetch"
 export const loader = async () => {
   let data = await getExhibits("limit=9999&order=random")
   let exhibits = data.map((exhibit) => exhibitToTVProgram(exhibit))
-
   return exhibits
 }
 
 export default function Index() {
-  let data = useLoaderData()
+  let exhibits = useLoaderData()
   const [currentPage, setCurrentPage] = useState(0)
 
   var handleChangePage = (pageNumber) => {
@@ -28,7 +27,7 @@ export default function Index() {
       <h1>Exhibits</h1>
       <p>American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance.</p>
 
-      <TVMenu title="" programs={data.exhibits} />
+      <TVMenu title="" programs={exhibits} />
       <QuickPagination baseURL={"/exhibits"} currentPage={currentPage} handleChangePage={handleChangePage} />
     </div>
   )

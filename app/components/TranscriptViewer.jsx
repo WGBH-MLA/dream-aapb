@@ -11,6 +11,7 @@ export default function TranscriptViewer(props){
             lines={ props.lines }
             viewerOpen={ props.viewerOpen }
             handleViewerToggle={ props.handleViewerToggle }
+            wide={ props.wide }
           />
         </Suspense>
       </ClientOnly>

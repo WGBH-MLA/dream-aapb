@@ -9,7 +9,6 @@ function aapbGuid(descdoc){
   }
 }
 
-
 function resultDescription(descriptions){
   if(descriptions.length > 0 && descriptions[0].text && descriptions[0].text.toLowerCase() !== "no description available"){
     return `${descriptions[0].text.substring(0, 500)}`
@@ -23,18 +22,50 @@ function producingOrganization(creators){
 }
 
 export default function SearchResult({hit}){
-  let guid = aapbGuid(hit.pbcoreDescriptionDocument)
-  let description = resultDescription(hit.pbcoreDescriptionDocument.pbcoreDescription)
-  let recordDate
+  let guid, recordDate, date, producingOrg
+  let pb_doc = hit.pbcoreDescriptionDocument
 
-  let date, producingOrg
-  if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
-    // aapb convention is just first stored assetDate
-    date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
+  let producing_org, media_type, title, description
+  if(hit.producing_org){
+    producing_org = hit.producing_org
+  } else if(hit.asset && hit.asset[0] && hit.asset[0].producing_org && hit.asset[0].producing_org[0]){
+    producing_org = hit.asset[0].producing_org[0]
+  }
+  
+  if(hit.media_type){
+    media_type = hit.media_type
+  } else if(hit.asset && hit.asset[0] && hit.asset[0].media_type && hit.asset[0].media_type[0]){
+    media_type = hit.asset[0].media_type[0]
   }
 
-  if(hit.producing_org){
-    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
+  if(hit.title){
+    title = hit.title
+  } else if(hit.asset && hit.asset[0] && hit.asset[0].title && hit.asset[0].title[0]){
+    title = hit.asset[0].title[0]
+  }
+
+  guid = hit.guid
+
+  let snippet
+  if(hit.transcript_text){
+    snippet = <div className="hit-transcript-snippet"><label>From Transcript:</label> {hit.transcript_text.slice(0,128) + "..."}</div>
+  }
+
+  if(hit.description){
+    description = hit.description.slice(0, 500)
+  } else if(hit.asset && hit.asset[0] && hit.asset[0].description && hit.asset[0].description[0]){
+    description = hit.asset[0].description[0].slice(0, 500)
+  }
+
+  if(pb_doc){
+    if(pb_doc.assetDate && pb_doc.assetDate.length > 0){
+      // aapb convention is just first stored assetDate
+      date = (<><b>Date:</b> { pb_doc.assetDate[0] }</>)
+    }
+  }
+
+  if(producing_org){
+    producingOrg = (<><b>Produced By:</b> { producing_org }</>)
   }
 
   return (
@@ -42,13 +73,13 @@ export default function SearchResult({hit}){
       {/*TODO back to search link, with your query saved*/}
       <a href={`/catalog/${guid}`} >
         <div className="hit-thumbnail-container smarbot">
-          <Thumbnail guid={ guid } searchResult={true} mediaType={ hit.media_type } />
+          <Thumbnail guid={ guid } searchResult={true} mediaType={ media_type } />
         </div>
       </a>
 
       <div className="hit-info-container">
         <div className="smarbot">
-          <h3 className="hit-title "><a href={`/catalog/${guid}`} >{ hit.title }</a></h3>
+          <h3 className="hit-title "><a href={`/catalog/${guid}`} >{ title }</a></h3>
         </div>
 
         <div className="smarbot ">
@@ -58,6 +89,7 @@ export default function SearchResult({hit}){
 
         <div className=" marbot">
           { description }
+          { snippet }
         </div>
       </div>
 

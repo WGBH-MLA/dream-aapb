@@ -1,5 +1,5 @@
-curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/aapb-freezing-osmium"
-curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
+curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/aapb-molten-mercury"
+curl -v -X PUT "localhost:9200/aapb-molten-mercury/" \
 -H "Authorization: ApiKey "XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw=="" \
 -H "Content-Type: application/json" \
 -d'{
@@ -36,6 +36,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
   "mappings": {
     "properties": {
 
+      "description": { "type": "text"},
       "producing_org": { "type": "keyword" },
       "media_type": { "type": "keyword" },
       "access_level": { "type": "keyword" },
@@ -45,7 +46,7 @@ curl -v -X PUT "localhost:9200/aapb-freezing-osmium/" \
       "topics": { "type": "keyword" },
       "broadcast_date": { "type": "date" },
       "broadcast_date_numeric": { "type": "long" },
-      "guid": { "type": "text" },
+      "guid": { "type": "keyword" },
       
       "title": { "type": "text" },
       "series_titles": { "type": "keyword" },

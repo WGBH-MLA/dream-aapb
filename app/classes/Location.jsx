@@ -5,7 +5,8 @@ export default class Location {
   constructor(request){
     this.request = request
     let ip = this.request.ip
-    if(process.env.NODE_ENV === "development"){
+    // TODO: hack for demo
+    if(true || process.env.NODE_ENV === "development"){
       this.region = AccessTypes.LOCATION_ONSITE
     } else if(ip && ip !== undefined) {
       this.country_code = geocode(ip)
