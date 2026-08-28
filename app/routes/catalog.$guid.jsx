@@ -56,7 +56,7 @@ export const loader = async ({params, request}) => {
 
     // retrieve media url from ci
     let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
-    data.mediaURL = mediaURL + `&v=${Date.now()}`
+    data.mediaURL = mediaURL
 
     // check for audio description
     let adHLSURL = await getAD(record.guid)
