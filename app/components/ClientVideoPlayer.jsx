@@ -23,7 +23,7 @@ export default function ClientVideoPlayer(props){
   }
 
   useEffect(() => {
-    if(props.mediaURL){
+    if(props.mediaURL && videojs.getAllPlayers().length == 0){
       videojs('vjs-player', {
         fluid: true,
         controls: true,
@@ -40,7 +40,6 @@ export default function ClientVideoPlayer(props){
         videojs.log('I am ready for your video yes!')
         let player = videojs.players["vjs-player"]
         if(props.adHLSURL){
-          
 
           // we received an audio desc URL
           addADButton(videojs, props.adHLSURL)
