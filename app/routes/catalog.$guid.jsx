@@ -336,7 +336,6 @@ export default function ShowRecord() {
             { transcript }
           </div>
 
-
           <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>
             { titlesByType }
