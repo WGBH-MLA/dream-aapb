@@ -4,7 +4,7 @@ import ClientOnly from "./ClientOnly"
 let ClientVideoPlayer = lazy(() => import("./ClientVideoPlayer"));
 export default function VideoPlayer(props){
   return (
-    <>
+    <Fragment key={ Date.now() }>
       <ClientOnly>
         <Suspense fallback="Loading...">
           <ClientVideoPlayer
@@ -16,6 +16,6 @@ export default function VideoPlayer(props){
           />
         </Suspense>
       </ClientOnly>
-    </>
+    </Fragment>
   )
 }
