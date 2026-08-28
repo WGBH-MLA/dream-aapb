@@ -56,7 +56,7 @@ export const loader = async ({params, request}) => {
 
     // retrieve media url from ci
     let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
-    data.mediaURL = mediaURL
+    data.mediaURL = mediaURL + `&v=${Date.now()}`
 
     // check for audio description
     let adHLSURL = await getAD(record.guid)
@@ -85,7 +85,7 @@ export default function ShowRecord() {
   const data = useLoaderData()
 
   const [viewerOpen, setViewerOpen] = useState(true)
-  const [mediaURL, setMediaURL] = useState(data.mediaURL)
+  // const [mediaURL, setMediaURL] = useState(data.mediaURL)
 
   const [transcriptData, setTranscriptData] = useState(false)
 
@@ -328,7 +328,7 @@ export default function ShowRecord() {
               <VideoPlayer
                 guid={ record.guid }
                 title={ record.title }
-                mediaURL={ mediaURL }
+                mediaURL={ data.mediaURL }
                 adHLSURL={ data.adHLSURL }
                 captionURL={ data.captionURL }
               />
