@@ -26,7 +26,6 @@ export const loader = async ({params, request}) => {
 
   // get record from es
   let recordData = await getRecord(guid, esURL, esIndex, esAPIKey)
-  
   if(!recordData){
     throw `Asset ${guid} was not found!!`
   } else {
@@ -86,6 +85,7 @@ export default function ShowRecord() {
   const data = useLoaderData()
 
   const [viewerOpen, setViewerOpen] = useState(true)
+  const [mediaURL, setMediaURL] = useState(data.mediaURL)
 
   const [transcriptData, setTranscriptData] = useState(false)
 
@@ -328,7 +328,7 @@ export default function ShowRecord() {
               <VideoPlayer
                 guid={ record.guid }
                 title={ record.title }
-                mediaURL={ data.mediaURL }
+                mediaURL={ mediaURL }
                 adHLSURL={ data.adHLSURL }
                 captionURL={ data.captionURL }
               />
