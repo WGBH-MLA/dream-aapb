@@ -12,7 +12,6 @@ export default function ClientVideoPlayer(props){
   const [pippy, setPippy] = useState(false)
   const [blockPippy, setBlockPippy] = useState(false)
 
-
   if(!props.guid){
     return null
   }
