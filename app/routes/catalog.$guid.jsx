@@ -42,6 +42,8 @@ export const loader = async ({params, request}) => {
   // get access level based on record and location
   let access = new Access(record, location)
 
+  console.log( 'playability was', access.canPlay() && record.hasPlayableMedia() )
+
   if( access.canPlay() && record.hasPlayableMedia() ){
 
     let ciConfig = {
