@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, Link } from 'react-router'
 
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
@@ -32,7 +32,7 @@ export const loader = async ({params, request}) => {
   } else {
     data.recordData = recordData
     data.mediaURL = null
-    data.esIndex = esIndex  
+    data.esIndex = esIndex
   }
 
   // fill presenter model with record data
@@ -124,7 +124,7 @@ export default function ShowRecord() {
   }
 
   let credits, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
+  let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics
   let transcript
   let videoPlayerClasses = "media-area-container"
 
@@ -132,13 +132,41 @@ export default function ShowRecord() {
 
     title = record.title
 
-    description = record.description()
-    if(description){
-      description = <ShowBox label="Description" text={ description } />
+    // descriptions = record.descriptionsByType()
+    // if(descriptions){
+    //   descriptions = <ShowBox label="Descriptions" text={ descriptions } />
+    // }
+
+    descriptionsByType = record.descriptionsByType()
+    if(descriptionsByType){
+      descriptionsByType = (
+        <>
+          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={ pbd.descriptionType } text={ pbd.text } />) }
+        </>
+      )
+    }
+    
+    titlesByType = record.titlesByType()
+    if(titlesByType){
+      titlesByType = (
+        <>
+          { titlesByType.map((pbt, i) => <ShowBox key={i} label={ pbt.titleType } text={ pbt.text } />) }
+        </>
+      )
     }
 
     if(record.media_type){
       mediaType = <ShowBox label="Media Type" text={ record.media_type } />
+    }
+
+    if(record.media_type){
+      mediaType = <ShowBox label="Media Type" text={ record.media_type } />
+    }
+
+    // orgs
+    if(notEmpty(record.contributing_orgs)){
+      contributingOrgs = [...new Set(record.contributing_orgs)]
+      contributingOrgs = contributingOrgs.filter((co) => co != "American Archive of Public Broadcasting").map((co) => <ShowBox label="Contributing Organization" text={ co } />)
     }
 
     // orgs
@@ -153,6 +181,30 @@ export default function ShowRecord() {
           { producingOrg }
         </>
       )
+    }
+
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreSubject)){
+      subjects = <ShowBox key="subjects" label="Subjects" text={ record.pbcoreDescriptionDocument.pbcoreSubject.map((ps) => ps.text).join('; ') } />
+    }
+
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    if(notEmpty(record.topics)){
+      // could technically be multiple
+      topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
+    }
+
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    let duration = record.duration()
+    if(duration){
+      assetTypes = <ShowBox key="duration" label="Duration" text={ duration } />
     }
 
     // credits
@@ -285,13 +337,30 @@ export default function ShowRecord() {
 
           <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>
-            { mediaType }
-            { description }
+            { titlesByType }
             { orgs }
+            { contributingOrgs }
+          </div>
+
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Description</div>
+            {/*regular info list*/}
+            { mediaType }
+            { subjects }
+            { assetTypes }
+            { topics }
+            { duration }
+    
+            {/*addl optional sections*/}
             { identifiers }
             { credits }
             { coverages }
             { dates }
+          </div>
+
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Descriptions</div>
+            { descriptionsByType }
           </div>
 
           <div className="show-metadata-container bmarbot">

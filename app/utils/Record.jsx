@@ -16,9 +16,8 @@ export default class Record {
     this.media_type = this.data.media_type
     this.title = this.data.title
     this.producing_org = this.data.producing_org
-
-    this.people = this.data.people
-
+    this.topics = this.data.topics
+    this.contributing_orgs = this.data.contributing_orgs
 
     this.access_level = "private"
     if(notEmpty(this.data.pbcoreDescriptionDocument.pbcoreAnnotation)){
@@ -63,7 +62,7 @@ export default class Record {
 
   aspectRatio(){
     let inst = this.instantiations()
-    let aspectInst = inst.find((i) => notEmpty(i.aspect_ratio))
+    let aspectInst = inst.find((i) => i.aspect_ratio)
     if(aspectInst){
       return aspectInst.aspect_ratio
     }
@@ -79,10 +78,21 @@ export default class Record {
 
   description(){
     if(this.pbcoreDescriptionDocument.pbcoreDescription && this.pbcoreDescriptionDocument.pbcoreDescription[0] && this.pbcoreDescriptionDocument.pbcoreDescription[0].text){
-      // aapb currently takes the first description only, obv we can show more if we want
       return this.pbcoreDescriptionDocument.pbcoreDescription[0].text
     } else {
       return "No Description Available"
+    }
+  }
+
+  descriptionsByType(){
+    if(this.pbcoreDescriptionDocument.pbcoreDescription && notEmpty(this.pbcoreDescriptionDocument.pbcoreDescription)){
+      return this.pbcoreDescriptionDocument.pbcoreDescription.sort((a,b) => { a.descriptionType.localeCompare(b.descriptionType) })
+    }
+  }
+
+  titlesByType(){
+    if(this.pbcoreDescriptionDocument.pbcoreTitle && notEmpty(this.pbcoreDescriptionDocument.pbcoreTitle)){
+      return this.pbcoreDescriptionDocument.pbcoreTitle.sort((a,b) => { a.titleType.localeCompare(b.titleType) })
     }
   }
 
@@ -90,7 +100,7 @@ export default class Record {
     let people = []
     // all people other than producing organization
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
-      people = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creator.text) && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
+      people = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && pbc.creator.text && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text && pbc.creatorRole[0].text != "Producing Organization")
     }
 
     return people
@@ -99,7 +109,7 @@ export default class Record {
   creators(){
     let creators = []
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreCreator)){
-      creators = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && notEmpty(pbc.creator.text) && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text)
+      creators = this.pbcoreDescriptionDocument.pbcoreCreator.filter((pbc) => pbc.creator && pbc.creator.text && notEmpty(pbc.creatorRole) && pbc.creatorRole[0].text)
     }
 
     return creators
@@ -109,7 +119,7 @@ export default class Record {
     let contributors = []
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreContributor)){
 
-      contributors = this.pbcoreDescriptionDocument.pbcoreContributor.filter((pbc) => pbc.contributor && notEmpty(pbc.contributor.text) && notEmpty(pbc.contributorRole) && pbc.contributorRole[0].text)
+      contributors = this.pbcoreDescriptionDocument.pbcoreContributor.filter((pbc) => pbc.contributor && pbc.contributor.text && notEmpty(pbc.contributorRole) && pbc.contributorRole[0].text)
     }
 
     return contributors
@@ -140,6 +150,35 @@ export default class Record {
   allInstantiations(){
     if(notEmpty(this.pbcoreDescriptionDocument.pbcoreInstantiation)){
       return this.pbcoreDescriptionDocument.pbcoreInstantiation.map( (pbi) => new Instantiation(pbi) )
+    }
+  }
+
+  duration(){
+    let inst = this.allInstantiations()
+    if(notEmpty(inst)){
+      let duration
+      // check for proxy duration
+      for(var i=0; i<inst.length; i++){
+        if(notEmpty(inst[i].generations)){
+          if(inst[i].generations.find((ig) => ig.text == "Proxy") && notEmpty(inst[i].essence_tracks)){
+            let ess = inst[i].essence_tracks.find((ess) => ess.essenceTrackDuration)
+            if(ess){
+              return ess.essenceTrackDuration.text
+            }
+          }
+        }
+      }
+
+      // check for any duration
+      for(var i=0; i<inst.length; i++){
+        if(notEmpty(inst[i].essence_tracks)){
+          let durEss = inst[i].essence_tracks.find((ess) => ess.essenceTrackDuration)
+          if(durEss){
+            // ;P
+            return durEss.essenceTrackDuration.text
+          }
+        }
+      }
     }
   }
   
@@ -181,11 +220,16 @@ class Instantiation {
     if(notEmpty(instantiation.instantiationDuration)){
       this.durations = instantiation.instantiationDuration.map((id) => new Element(id))
     }
-
+    
     if(notEmpty(instantiation.instantiationEssenceTrack)){
-      let aspectEssenceTrack
-      aspectEssenceTrack = instantiation.instantiationEssenceTrack.find((ess) => ess.essenceTrackAspectRatio && ess.essenceTrackAspectRatio.text)
+      // TODO: finish ess class
+      // this.essence_tracks = instantiation.instantiationEssenceTrack.map((ess) => new EssenceTrack(ess))
+      this.essence_tracks = instantiation.instantiationEssenceTrack
+    }
 
+    if(notEmpty(this.essence_tracks)){
+      let aspectEssenceTrack
+      aspectEssenceTrack = this.essence_tracks.find((ess) => ess.essenceTrackAspectRatio && ess.essenceTrackAspectRatio.text)
       if(aspectEssenceTrack){
         this.aspect_ratio = aspectEssenceTrack.essenceTrackAspectRatio.text
       }
@@ -227,6 +271,12 @@ class Instantiation {
   }
 }
 
+// class EssenceTrack {
+//   constructor(ess){
+//     // TODO: coming soon
+//   }
+// }
+
 class Element {
   constructor(element){
     // 90% of pb subelements have overlapping attributes
@@ -250,8 +300,5 @@ class Element {
     if(element.source){
       this.source = element.source
     }
-
   }
 }
-
-
