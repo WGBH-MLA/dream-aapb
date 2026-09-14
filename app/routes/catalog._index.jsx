@@ -11,6 +11,8 @@ const SEARCH_RECORD = 0
 const SEARCH_TRANSCRIPT = 1
 const SEARCH_BOTH = 2
 
+const MIN_SCORE_THRESHOLD = 0.2
+
 const OR_FIELDS = [
   "producing_org",
   "pbcoreDescriptionDocument.pbcoreCreator.creator"
@@ -53,25 +55,47 @@ export const loader = async ({params, request}) => {
 
 // aapb-freezing-osmium,transcript-freezing-osmium
 
-function CustomStats() {
-  const {
-    hitsPerPage,
-    nbHits,
-    areHitsSorted,
-    nbSortedHits,
-    nbPages,
-    page,
-    processingTimeMS,
-    query,
-  } = useStats()
+function CustomStats(props) {
+  function showCount(count){
+    if(props.query){
+      if(count && count > 0){
+        return `${count} results found`
+      } else if(count == 0){
+        return "0 results found"
+      }  
+    }
+
+    // no query, no text
+    return ""
+  }
+
+  // const {
+  //   hitsPerPage,
+  //   nbHits,
+  //   areHitsSorted,
+  //   nbSortedHits,
+  //   nbPages,
+  //   page,
+  //   processingTimeMS,
+  //   query,
+  // } = useStats()
+
+  // return (
+  //   <div className="ais-Stats">
+  //     <span className="ais-Stats-text">
+  //       Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+  //     </span>
+  //   </div>
+  // )
 
   return (
     <div className="ais-Stats">
       <span className="ais-Stats-text">
-        Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+        { showCount(props.count) }
       </span>
     </div>
   )
+
 }
 
 function CustomSearchBox(props) {
@@ -117,7 +141,8 @@ export default function Catalog() {
 
   // include transcript in search or not
   const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
-
+  const [count, setCount] = useState(null)
+  
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
   const [customQuery, setCustomQuery] = useState({
@@ -166,8 +191,6 @@ export default function Catalog() {
     }
 
     let url = `${window.location.href.split('?')[0]}/?${query}${all}${title}${none}`
-    console.log( 'log it', url )
-
     function copyTextToClipboard(text) {
       navigator.clipboard.writeText(text)
         .then(() => {
@@ -249,30 +272,31 @@ export default function Catalog() {
     })
   }
 
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(item.label == "Online Reading Room"){
-        item.label = "Available Online"
-      } else if(item.label == "On Location" || item.label == "On location"){
-        item.label = "All Digitized"
-      } else if(item.label == "Private"){
-        item.label = "Private"
-      } else {
-        // private or nothing
-        console.log( 'help!', item.label, item.value )
-        item.label = "All Records"
-      }
+  // const accessLevel = (items) => {
+  //   // causes weird rerender and doesnt consolidate options as desired
+  //   return items.map( (item) => {
+  //     if(item.label == "Online Reading Room"){
+  //       item.label = "Available Online"
+  //     } else if(item.label == "On Location" || item.label == "On location"){
+  //       item.label = "All Digitized"
+  //     } else if(item.label == "Private"){
+  //       item.label = "Private"
+  //     } else {
+  //       // private or nothing
+  //       console.log( 'help!', item.label, item.value )
+  //       item.label = "All Records"
+  //     }
 
-      return item
-    }).sort((a,b) => {
-      // sort availabilty options a-z so they dont jump around ui based on num results
-      if(a < b){
-        return 1
-      } else {
-        return -1
-      }
-    }).flat()
-  }
+  //     return item
+  //   }).sort((a,b) => {
+  //     // sort availabilty options a-z so they dont jump around ui based on num results
+  //     if(a < b){
+  //       return 1
+  //     } else {
+  //       return -1
+  //     }
+  //   }).flat()
+  // }
 
   const isOrField = (fieldName) => {  
     return OR_FIELDS.includes(fieldName)
@@ -988,12 +1012,13 @@ export default function Catalog() {
         target_field: "guid",
         fetch_fields: ["title", "producing_org", "media_type"]
       },
-        // transcript: {
-        //   type: "lookup",
-        //   target_index: data.tsIndex,
-        //   input_field: "guid",
-        //   target_field: "guid",
-        //   fetch_fields: ["transcript_text"]
+      transcript: {
+        type: "lookup",
+        target_index: data.tsIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["transcript_text"]
+      }
     }
   } else {
     // SEARCH_RECORD
@@ -1014,6 +1039,87 @@ export default function Catalog() {
   }
 
   const searchClient = Client(sk, {
+    hooks: {
+      beforeSearch: async (searchRequests) => {
+        // get main query resuest
+        const request = searchRequests[0]
+        const activeQuery = request?.body?.query || { match_all: {} };
+
+        const countRequest = {
+          body: {
+            query: activeQuery,
+            size: 0,
+            track_total_hits: true
+          }
+        }
+
+        // add in count request to be processed too
+        return [...searchRequests, countRequest];
+      },
+      afterSearch: async (searchRequests, searchResponses) => {
+        // oops there it is
+        const countResponse = searchResponses.pop()
+        if (countResponse && countResponse.hits) {
+          setCount(countResponse.hits.total.value)
+        }
+
+        // return this continue main query normally
+        return searchResponses
+      }
+
+    },
+
+    // hooks: {
+    //   beforeSearch: async (searchRequests) => searchRequests,
+    //   afterSearch: async (searchRequests, searchResponses) => {
+    //     return searchResponses.map((res) => {
+    //       // Searchkit v4 maps raw Elasticsearch payloads directly onto the root object
+    //       if (!res || !res.hits || !res.hits.hits || res.hits.hits.length === 0) {
+    //         return res;
+    //       }
+
+    //       const hits = res.hits.hits;
+
+    //       // Calculate global boundaries for this batch of results
+    //       const maxScore = hits[0]._score;
+    //       const minScore = hits[hits.length - 1]._score;
+    //       const scoreRange = maxScore - minScore;
+
+    //       // 1. Map scores precisely to a 0.0 - 1.0 spectrum
+    //       const normalizedHits = hits.map((hit) => {
+    //         let normalizedScore = 1.0; // Fallback if all hits share the same score
+
+    //         if (scoreRange > 0) {
+    //           normalizedScore = (hit._score - minScore) / scoreRange;
+    //         }
+
+    //         return {
+    //           ...hit,
+    //           _score: normalizedScore // Overwrite original score (e.g. 100+ -> 0.85)
+    //         };
+    //       });
+
+    //       // 2. Prune documents falling beneath the threshold percentage
+    //       const filteredHits = normalizedHits.filter(
+    //         (hit) => hit._score >= MIN_SCORE_THRESHOLD
+    //       );
+
+    //       // 3. Return the payload with the updated counts and results
+    //       return {
+    //         ...res,
+    //         hits: {
+    //           ...res.hits,
+    //           hits: filteredHits,
+    //           total: {
+    //             ...res.hits.total,
+    //             value: filteredHits.length // Sync total counts so pagination updates dynamically
+    //           }
+    //         }
+    //       };
+    //     });
+    //   }
+    // },
+ 
     getQuery: (query, search_attributes) => {
       var queryHash
 
@@ -1043,6 +1149,7 @@ export default function Catalog() {
           bool: {
             // big should
             // should: []
+            minimum_should_match: 1
           }
         }
       } else {
@@ -1055,7 +1162,7 @@ export default function Catalog() {
               {
                 bool: {
                   should: mainAllFieldsArray,
-                  // minimum_should_match: 1
+                  minimum_should_match: 1
                 }
               }
             ]
@@ -1209,7 +1316,8 @@ export default function Catalog() {
       // console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
-    }
+    }, 
+
   })
 
   function matchPhraseShouldClause(quoty){
@@ -1288,9 +1396,6 @@ export default function Catalog() {
         </div>
 
         <div className={ topRefinementsBarClasses }>
-          <div className="stats-container">
-            <CustomStats />
-          </div>
 
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
@@ -1306,7 +1411,15 @@ export default function Catalog() {
         </div>
 
         <div id="search-sidebar" className={ sidebarClasses }>
-          <h3 className="sidebar-title">Refine Search</h3>
+          <h3 className="sidebar-title">
+            Refine Search
+
+            <div className="stats-container">
+              <CustomStats query={ customQuery.query } count={ count } />
+            </div>
+
+          </h3>
+
           <hr />
           
           <SearchAccordion title="Keywords" content={ searchbox }/>
@@ -1336,7 +1449,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="access_level"
-                transformItems={ accessLevel }
+                // transformItems={ accessLevel }
               />
             </>
           }/>

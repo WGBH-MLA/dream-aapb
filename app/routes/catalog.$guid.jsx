@@ -85,6 +85,7 @@ export default function ShowRecord() {
   const data = useLoaderData()
 
   const [viewerOpen, setViewerOpen] = useState(true)
+
   // const [mediaURL, setMediaURL] = useState(data.mediaURL)
 
   const [transcriptData, setTranscriptData] = useState(false)

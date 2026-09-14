@@ -42,11 +42,11 @@ export default function ListResult({hit}){
       </a>
 
       <div className="hit-info-container">
-        <h3 className="hit-title ssmartop smarleft ssmarbot">
+        <h3 className="hit-title ssmartop marleft ssmarbot">
           <a href={`/catalog/${guid}`} >{ hit.title }</a>
         </h3>
 
-        <div className="hit-details">
+        <div className="list-hit-details">
           { date }
           { producingOrg }
         </div>

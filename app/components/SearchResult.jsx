@@ -48,7 +48,7 @@ export default function SearchResult({hit}){
 
   let snippet
   if(hit.transcript_text){
-    snippet = <div className="hit-transcript-snippet"><label>From Transcript:</label> {hit.transcript_text.slice(0,128) + "..."}</div>
+    snippet = <div className="hit-transcript-snippet"><label>From Transcript:</label>{hit.transcript_text.slice(0,128) + "..."}</div>
   }
 
   if(hit.description){

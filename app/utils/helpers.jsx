@@ -67,7 +67,8 @@ export function checkVisible(ele) {
   }
 
   var rect = ele.getBoundingClientRect()
-  var viewHeight = Math.max(document.documentElement.clientHeight*0.7, window.innerHeight*0.7)
+  var viewHeight = Math.max(document.documentElement.clientHeight*0.9, window.innerHeight*0.9)
+
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }
 
