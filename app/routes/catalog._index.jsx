@@ -1041,6 +1041,9 @@ export default function Catalog() {
   const searchClient = Client(sk, {
     hooks: {
       beforeSearch: async (searchRequests) => {
+        // add request to  main query request to get query doc count
+
+
         // get main query resuest
         const request = searchRequests[0]
         const activeQuery = request?.body?.query || { match_all: {} };
@@ -1057,6 +1060,8 @@ export default function Catalog() {
         return [...searchRequests, countRequest];
       },
       afterSearch: async (searchRequests, searchResponses) => {
+        // record doc count to state and then proceed with normal search
+
         // oops there it is
         const countResponse = searchResponses.pop()
         if (countResponse && countResponse.hits) {
@@ -1065,61 +1070,9 @@ export default function Catalog() {
 
         // return this continue main query normally
         return searchResponses
-      }
-
+      },
     },
 
-    // hooks: {
-    //   beforeSearch: async (searchRequests) => searchRequests,
-    //   afterSearch: async (searchRequests, searchResponses) => {
-    //     return searchResponses.map((res) => {
-    //       // Searchkit v4 maps raw Elasticsearch payloads directly onto the root object
-    //       if (!res || !res.hits || !res.hits.hits || res.hits.hits.length === 0) {
-    //         return res;
-    //       }
-
-    //       const hits = res.hits.hits;
-
-    //       // Calculate global boundaries for this batch of results
-    //       const maxScore = hits[0]._score;
-    //       const minScore = hits[hits.length - 1]._score;
-    //       const scoreRange = maxScore - minScore;
-
-    //       // 1. Map scores precisely to a 0.0 - 1.0 spectrum
-    //       const normalizedHits = hits.map((hit) => {
-    //         let normalizedScore = 1.0; // Fallback if all hits share the same score
-
-    //         if (scoreRange > 0) {
-    //           normalizedScore = (hit._score - minScore) / scoreRange;
-    //         }
-
-    //         return {
-    //           ...hit,
-    //           _score: normalizedScore // Overwrite original score (e.g. 100+ -> 0.85)
-    //         };
-    //       });
-
-    //       // 2. Prune documents falling beneath the threshold percentage
-    //       const filteredHits = normalizedHits.filter(
-    //         (hit) => hit._score >= MIN_SCORE_THRESHOLD
-    //       );
-
-    //       // 3. Return the payload with the updated counts and results
-    //       return {
-    //         ...res,
-    //         hits: {
-    //           ...res.hits,
-    //           hits: filteredHits,
-    //           total: {
-    //             ...res.hits.total,
-    //             value: filteredHits.length // Sync total counts so pagination updates dynamically
-    //           }
-    //         }
-    //       };
-    //     });
-    //   }
-    // },
- 
     getQuery: (query, search_attributes) => {
       var queryHash
 

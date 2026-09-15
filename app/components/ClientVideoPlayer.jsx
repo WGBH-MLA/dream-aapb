@@ -71,7 +71,7 @@ export default function ClientVideoPlayer(props){
         // this.on('ended', function() {
           // videojs.log('whoa mama!!')
         // })
-      })  
+      })
     }
   })
 
