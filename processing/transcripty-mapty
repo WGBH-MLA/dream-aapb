@@ -1,5 +1,5 @@
-curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/transcript-freezing-osmium"
-curl -v -X PUT "localhost:9200/transcript-freezing-osmium/" \
+curl -X DELETE -H "Authorization: ApiKey XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw==" "http://localhost:9200/transcript-molten-mercury"
+curl -v -X PUT "localhost:9200/transcript-molten-mercury/" \
 -H "Authorization: ApiKey "XzFjdXJaNEJlY0xxNy1obVJtTzE6clNuc0VhQUh3c3BEa3pMSUd6NWt6Zw=="" \
 -H "Content-Type: application/json" \
 -d'{
@@ -35,9 +35,8 @@ curl -v -X PUT "localhost:9200/transcript-freezing-osmium/" \
 
   "mappings": {
     "properties": {
-      "guid": { "type": "text" },
+      "guid": { "type": "keyword" },
       "transcript_text": { "type": "text" }
     }
   }
 }'
-

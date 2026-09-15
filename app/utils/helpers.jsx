@@ -30,27 +30,29 @@ export function niceTitle(titles){
 }
 
 export function dateTypeName(type){
-  switch(type){
-    case "broadcast":
-      return "Broadcast"
-    case "air":
-      return "Broadcast"
-    case "issue":
-      return "Broadcast"
-    case "published":
-      return "Broadcast"
-    case "release":
-      return "Broadcast"
-    case "created":
-      return "Created"
-    case "recorded":
-      return "Created"
-    case "performance":
-      return "Created"
-    case "revised":
-      return "Revised"
-    case "copyright":
-      return "Copyright Date"
+  if(type){
+    switch(type.toLowerCase()){
+      case "broadcast":
+        return "Broadcast"
+      case "air":
+        return "Broadcast"
+      case "issue":
+        return "Broadcast"
+      case "published":
+        return "Broadcast"
+      case "release":
+        return "Broadcast"
+      case "created":
+        return "Created"
+      case "recorded":
+        return "Created"
+      case "performance":
+        return "Created"
+      case "revised":
+        return "Revised"
+      case "copyright":
+        return "Copyright Date"
+    }  
   }
 }
 
@@ -65,7 +67,8 @@ export function checkVisible(ele) {
   }
 
   var rect = ele.getBoundingClientRect()
-  var viewHeight = Math.max(document.documentElement.clientHeight*0.7, window.innerHeight*0.7)
+  var viewHeight = Math.max(document.documentElement.clientHeight*0.9, window.innerHeight*0.9)
+
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }
 
@@ -103,4 +106,8 @@ export function scrollToAnchor(anchorId) {
 
 export function scrollToTop() {
   window.scrollTo(0, 0)
+}
+
+export function normalizeGuid(guid){
+  return guid.replace(/cpb-aacip./g, "cpb-aacip-")
 }

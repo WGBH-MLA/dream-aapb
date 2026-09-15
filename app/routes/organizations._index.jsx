@@ -4,10 +4,7 @@ import HeaderBar from "../components/HeaderBar"
 import orgs from "../data/orgs.json"
 
 export const loader = async ({params, request}) => {
-  // let data = await getRecord(params.guid)
   let data = orgs
-
-
 
   if(data){
     return data
@@ -26,9 +23,6 @@ export default function Organizations() {
         <pre style={{ fontSize: "10px", display: "none" }}>
           {JSON.stringify(data, null, 20)}
         </pre>
-
-
-
 
         <div className="mappy-container marbot">
           <Mappy />

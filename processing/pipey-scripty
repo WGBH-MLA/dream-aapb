@@ -142,7 +142,7 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 
 // fix creatorrole cardi
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-  for(int t = 0; t < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; t++){
+  for(int t=0; t < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; t++){
     if(ctx.pbcoreDescriptionDocument.pbcoreCreator[t] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole instanceof HashMap){
       HashMap creRoleVal = ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole;
       ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole = new ArrayList();
@@ -194,7 +194,7 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 
   for (int i = 0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
     if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length > 0)
-    for (int s = 0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
+    for (int s=0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
       if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s].text == "Producing Organization"){
         if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
           ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
@@ -376,43 +376,47 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
       LocalDate date;
 
       def dateSplit = ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text.splitOnToken("-");
-      String first = dateSplit[0];
-      String second = dateSplit[1];
-      String third = dateSplit[2];
 
-      String month;
-      String day;
-      String year;
-      if(first != null && first.length() == 4){
-        year = first;
-        month = second;
-        day = third;
+      if(dateSplit.length == 3){
+        String first = dateSplit[0];
+        String second = dateSplit[1];
+        String third = dateSplit[2];
 
-      //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        String month;
+        String day;
+        String year;
+        if(first != null && first.length() == 4){
+          year = first;
+          month = second;
+          day = third;
 
-      } else if(first != null && first.length() == 2){
-        month = first;
-        day = second;
-        year = third;
+        //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
 
-      //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-      }
+        } else if(first != null && first.length() == 2){
+          month = first;
+          day = second;
+          year = third;
 
-      if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
-        try {
+        //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        }
 
-          ctx.broadcast_date = date;
-          ctx.broadcast_date_numeric = date.toEpochMilli();
-        } catch(Exception e) {
-          // Debug.explain("Great!");
+        if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
+          try {
+
+            ctx.broadcast_date = date;
+            ctx.broadcast_date_numeric = date.toEpochMilli();
+          } catch(Exception e) {
+            // Debug.explain("Great!");
+          }
         }
       }
+      
     }
   }
 }
@@ -500,6 +504,11 @@ if(ctx.pbcoreDescriptionDocument.pbcorePublisher != null && ctx.pbcoreDescriptio
 // uniq the people list
 if(ctx.people != null && ctx.people.length > 0){
   ctx.people = ctx.people.stream().distinct().collect(Collectors.toList())
+}
+
+
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreDescription != null && ctx.pbcoreDescriptionDocument.pbcoreDescription.length > 0){
+  ctx.description = ctx.pbcoreDescriptionDocument.pbcoreDescription[0].text;
 }
 
 

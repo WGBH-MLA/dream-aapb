@@ -1452,7 +1452,7 @@ div.page-sidebar {
 }
 
 div.page-sidebar h3.sidebar-title {
-  margin-top: 1em;
+  margin-top: 0.25em;
   margin-bottom: 1em;
   font-weight: 800;
 }
@@ -1496,8 +1496,7 @@ div.instantiation-blurb ul li {
 }
 
 div#show-media {
-  /*background-color: #f9f9f9;*/
-  /*height: 14em;*/
+  min-height: 14em;
   width: 100%;
 
   display: inline-flex;
@@ -1510,12 +1509,19 @@ div#show-media div.show-thumbnail {
   padding: 0;
   overflow: hidden;
   width: 100%;
+  height: 15.25em;
 }
 
 div#show-media div.show-thumbnail img {
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
+
+div#show-media div.show-thumbnail img.thumbnail-bar {
+  height: 4em;
+}
+
 
 div.media-area-container {
   overflow: hidden;
@@ -1656,8 +1662,13 @@ div.transcript-viewer {
   padding-left: 1em;
   padding-top: 2em;
   padding-bottom: 1.2em;
-  height: 15.72em;
+  /*height: 15.75em;*/
+  height: 9.85em;
   overflow-y: scroll;
+}
+
+div.transcript-viewer.wide {
+  height: 9.85em;
 }
 
 div.transcript-line {
@@ -1833,7 +1844,52 @@ button.sidebar-search-button {
   padding: 0.5em;
   color: #fff;
   background-color: #3C439B;
+  opacity: 1;
+  position: relative;
+}
 
+button.sidebar-search-button.secondary {
+  background-color: #6D659D;
+}
+
+button.sidebar-search-button span.tooltip {
+  position: absolute;
+  background-color: #eee;
+  color: #000;
+  padding: 0.5em;
+  bottom: 1.2em;
+  right: -4em;
+  opacity: 0.8;
+  border-radius: 4px;
+  font-size: 0.75em;
+}
+
+.fade {
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  50% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+
+div.hit-transcript-snippet {
+  font-style: italic;
+}
+div.hit-transcript-snippet label {
+  font-weight: bold;
 }
 
 div.hit-thumbnail-container, div.hit-info-container {
@@ -1853,6 +1909,12 @@ div.search-result.list {
   min-height: inherit;
   height: 6em;
 }
+
+div.search-result.list div.list-hit-details {
+  margin-left: 2.5em;
+  display: block;
+}
+
 
 div.search-result.list div.hit-thumbnail-container {
   width: 5%;
@@ -1969,10 +2031,6 @@ div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img.thum
   height: 3rem;
 }
 
-div.hit-details {
-  display: block;
-}
-
 div.top-search-bar * {
   position: relative;
 }
@@ -2015,7 +2073,7 @@ div.options-container {
 div.ais-Stats span.ais-Stats-text {
   font-size: 1em;
   font-weight: bold;
-  color: #3C439B;
+  color: #ddd;
 }
 
 div.sort-container div.ais-HitsPerPage select {
@@ -2028,11 +2086,12 @@ div.ais-HitsPerPage, div.ais-SortBy {
 }
 
 div.stats-container {
+  display: block;
   max-width: 50%;
-  font-size: 1.2em;
+  font-size: 0.6em;
   text-align: top;
-  display: inline-flex;
-  margin-left: 2em;
+  height: 1.25em;
+
 }
 
 div.options-container h2 {
@@ -2110,14 +2169,31 @@ div.sort-container.per-page svg {
 
 div.current-refinements-container {
   display: inline-flex;
-  min-width: 52.5%;
-  max-width: 65%;
-
+  min-width: 80.5%;
 }
 
 div.current-refinements-container.closed {
+  position: relative;
   overflow: hidden;
+  max-height: 10em;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+  z-index: 100;
 }
+/*
+div.current-refinements-container.closed::after {
+  z-index: 110;
+  position: absolute;
+  top: 2em;
+  text-align: center;
+  width: 100%;
+  padding: 1em;
+  background-color: #3C439B;
+  color: #fff;
+  content: "More refinements hidden";
+}*/
 
 div.clear-refinements-container {
   margin-top: 1em;
@@ -2245,6 +2321,10 @@ input.sidebar-search  {
   height: 1em;
   padding: 0.25em;
   margin-bottom: 1em;
+}
+
+input.sidebar-search::placeholder {
+  color: black;
 }
 
 div.score-light {
@@ -3914,7 +3994,7 @@ div.newsletter-bar input[type="submit"] {
   /*show page*/
 
   div#show-media {
-    margin-bottom: 12em;
+    /*margin-bottom: 12em;*/
   }
 
   /*bigtviewer*/
@@ -3922,7 +4002,14 @@ div.newsletter-bar input[type="submit"] {
     margin-left: 13%;
   }
   div.transcript-viewer {
-    height: 24em;
+    height: 16.25em;
+  }
+
+  div#show-media div.show-thumbnail {
+    height: 15.075em;
+  }
+  div#show-media div.show-thumbnail img {
+    height: 15.075em;
   }
 }
 
