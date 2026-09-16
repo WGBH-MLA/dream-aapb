@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router'
-import Carousel from '../components/Carousel';
+import TVMenu from '../components/TVMenu';
 
 export const loader = async () => {
   const key_events = [
@@ -86,14 +86,14 @@ export default function America250() {
         <iframe src="https://www.youtube.com/embed/tWcRbP-FEg8?si=OPg1ev7V-CP8N0rF"></iframe>
       </div>
       <hr />
-      <Carousel title="Key Historical Events" items={ data.key_events } />
-      <Carousel title="Culture" items={ data.culture } />
-      <Carousel title="Innovation" items={ data.innovation } />
-      <Carousel title="Regional Content (Southwest)" items={ data.southwest } />
-      <Carousel title="Regional Content (Northwest)" items={ data.northwest } />
-      <Carousel title="Regional Content (Midwest)" items={ data.midwest } />
-      <Carousel title="Regional Content (Northeast)" items={ data.northeast } />
-      <Carousel title="Regional Content (Southeast)" items={ data.southeast } />
+      <TVMenu title="Key Historical Events" items={ data.key_events } />
+      <TVMenu title="Culture" items={ data.culture } />
+      <TVMenu title="Innovation" items={ data.innovation } />
+      <TVMenu title="Regional Content (Southwest)" items={ data.southwest } />
+      <TVMenu title="Regional Content (Northwest)" items={ data.northwest } />
+      <TVMenu title="Regional Content (Midwest)" items={ data.midwest } />
+      <TVMenu title="Regional Content (Northeast)" items={ data.northeast } />
+      <TVMenu title="Regional Content (Southeast)" items={ data.southeast } />
     </div>
   )
 }

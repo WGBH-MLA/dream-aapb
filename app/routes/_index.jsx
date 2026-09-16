@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useNavigate, useLoaderData } from "react-router"
 import LayoutSearch from "../components/LayoutSearch"
 import TVMenu from "../components/TVMenu"
-import { Home } from 'lucide-react'
+
 import { exhibitToTVProgram, collectionToTVProgram } from "../utils/toTVProgram"
 import { getCollections, getExhibits, getFeatured, getLatestBlogPosts } from "../utils/fetch"
 
 export const loader = async () => {
 
-  let radio_and_tv = await getCollections("limit=4&order=random")
+  let radio_and_tv = await getCollections("order=random")
   let featured_collections = await getFeatured()
-  let exhibits = await getExhibits("limit=4&order=random")
+  let exhibits = await getExhibits("order=random")
   let blog_posts = await getLatestBlogPosts()
 
   if(radio_and_tv){
@@ -31,19 +31,19 @@ export const loader = async () => {
   }
 
   let data = {
-     radio_and_tv: radio_and_tv,
-     featured_collections: featured_collections,
-     exhibits: exhibits,
-     blog_posts: blog_posts,
-     esIndex: process.env.ES_INDEX
-   }
+    radio_and_tv: radio_and_tv,
+    featured_collections: featured_collections,
+    exhibits: exhibits,
+    blog_posts: blog_posts,
+    esIndex: process.env.ES_INDEX,
+  }
 
-   return data
- }
+  return data
+}
 
 export default function Index() {
   let data = useLoaderData()
-
+  
   let navigateHook = useNavigate()
   const [search, setSearch] = useState("")
   const handleLayoutSearch = (val) => {
@@ -80,12 +80,12 @@ export default function Index() {
         />
       </div>
       <div className='body-container'>
-        <TVMenu title="Featured Collections" programs={ data.featured_collections} showDesc={true} />
-        <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/program-collections" />
-        <TVMenu title="Exhibits" programs={ data.exhibits } seeAllURL="/exhibits" />
-        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-collections" />
+      <TVMenu title="Featured Collections" programs={ data.featured_collections } showDesc={true} />
+      <TVMenu title="Program Collections" programs={ data.radio_and_tv } seeAllURL="/program-collections" />
+      <TVMenu title="Exhibits" programs={ data.exhibits } seeAllURL="/exhibits" />
+      <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-collections" />
       </div>
-      <div className="body-container">
+       <div className="body-container">
         <a href="/organizations">
           <img src="/homepage-map.png" className="map-image" />
         </a>
