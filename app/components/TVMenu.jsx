@@ -1,57 +1,144 @@
-import Thumbnail from "./Thumbnail"
+import { useState, useRef, useEffect } from "react";
+import Thumbnail from "./Thumbnail";
 
-export default function TVMenu(props){
-  let classes = "tv-menu-container bmarbot"
+export default function Carousel({
+  title,
+  items = [],
+  programs = [],
+  seeAllURL,
+  columns,
+  showDesc = false,
+}) {
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  let programs = props.programs
-  if(props.programs){
-    if(programs.length == 3){
-      programs = programs.map( (program) => {
-        program.classes = " three"
-        return program
-      })
+  const itemList = items && items.length > 0 ? items : programs || [];
+  const seeAll = seeAllURL;
 
-      classes += " three"
-    } else {
-      classes += " four"
+  // Auto-detect 3-column rows (Featured Collections) or explicit columns prop
+  const isThreeColumn = columns === 3 || itemList.length === 3;
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 5);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (el) {
+      el.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
     }
+    return () => {
+      if (el) el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [itemList]);
 
-    programs = programs.slice(0,4)
-    programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
-  }
+  const handleScroll = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth * 0.8;
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
 
-  let seeAll
-  if(props.seeAllURL){
-    seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
-  }
- 
   return (
-    <div className={ classes }>
-      { seeAll }
-      <h2>{props.title}</h2>
-      <div className="tv-menu-body">
-        { programs }
+    <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""}`}>
+      {/* Header */}
+      <div className="carousel-header">
+        <h2 className="carousel-title">{title}</h2>
+        {seeAll && (
+          <a className="carousel-see-all" href={seeAll}>
+            See All <span className="carousel-see-all-arrow">&rsaquo;</span>
+          </a>
+        )}
+      </div>
+
+      {/* Slider Viewport */}
+      <div className="carousel-slider-wrapper">
+        {/* Left Floating Chevron */}
+        {!isThreeColumn && canScrollLeft && (
+          <button
+            onClick={() => handleScroll("left")}
+            className="carousel-nav-btn left"
+            aria-label="Scroll Left"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
+
+        {/* Scroll Track */}
+        <div className="carousel-track" ref={scrollRef}>
+          {itemList.map((item, index) => {
+            // 1. Anchor link destination (where clicking the card navigates)
+            const cardLink = item.url || item.link || (item.guid ? `/catalog/${item.guid}` : "#");
+
+            // 2. Direct image URL (for non-guid items)
+            const directImgUrl = item.thumbnailURL || item.img || item.thumbnail || item.image;
+            const description = item.desc || item.description;
+
+            // 3. Recreate TVProgram thumbnail branch logic
+            let thumb;
+            if (item.guid) {
+              // AAPB Catalog Record: DO NOT pass url prop so Thumbnail runs GUID fetch
+              thumb = (
+                <Thumbnail
+                  guid={item.guid}
+                  mediaType={item.mediaType || item.media_type}
+                  alt={item.title || ""}
+                  hideBar={true}
+                />
+              );
+            } else {
+              // Static Image: Pass image URL directly to Thumbnail's url prop
+              thumb = (
+                <Thumbnail
+                  url={directImgUrl}
+                  alt={item.title || ""}
+                  hideBar={true}
+                />
+              );
+            }
+
+            return (
+              <a className="carousel-card" key={item.key || item.guid || index} href={cardLink}>
+                <div className="carousel-card-media">
+                  {thumb}
+                  <div className="carousel-card-overlay">
+                    <span className="carousel-card-title">{item.title}</span>
+                    {showDesc && description && (
+                      <span className="carousel-card-desc">{description}</span>
+                    )}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Right Floating Chevron */}
+        {!isThreeColumn && canScrollRight && (
+          <button
+            onClick={() => handleScroll("right")}
+            className="carousel-nav-btn right"
+            aria-label="Scroll Right"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
-  )
-}
-
-function TVProgram(props){
-  let thumb
-  if(props.guid){
-    // it's a record
-    thumb = <Thumbnail guid={props.guid} mediaType={props.mediaType} />
-  } else {
-    // it's just an image
-    thumb = <Thumbnail url={props.thumbnailURL} />
-  }
-  return (
-    <div key={props.key} className={"tv-menu-program " + (props.classes ? props.classes : "")} >
-      <a href={props.url} >
-        { thumb }
-        <h4>{ props.title }</h4>
-        {props.showDesc && <h5 className="tv-menu-program-desc">{ props.desc }</h5> }
-      </a>
-    </div>
-  )
+  );
 }

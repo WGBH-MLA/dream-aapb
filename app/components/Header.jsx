@@ -24,6 +24,11 @@ const drawerItems = {
       external: false,
 
     },
+    {
+      label: "National History Day",
+      url: "/national-history-day",
+      external: false,
+    }
   ],
   participate: [
     {
