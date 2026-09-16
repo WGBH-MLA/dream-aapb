@@ -1,3 +1,4 @@
+import SummaryBox from "../components/SummaryBox"
 import LinkBankFooter from "../components/LinkBankFooter"
 import { useState } from "react"
 
@@ -153,7 +154,7 @@ export default function FAQ() {
         <a className="back-link-nav" href="/about">
           &lt; About the AAPB
         </a>
-        <h1 className="marbot">FAQ</h1>
+        <SummaryBox title="Frequently Asked Questions" />
         {faqs.map((item, i) => (
           <FAQItem key={i} question={item.q} answer={item.a} />
         ))}
