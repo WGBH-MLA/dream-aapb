@@ -18,7 +18,20 @@ export default class MoreLikeThis {
       query: {
         more_like_this: {
           // because we use doc ids rather than just text or field value query to find mlt, we seem to have to specify fields explciitly
-          fields: ["title", "description", "producing_org", "genres", "description", "description", "description", "description", "description"],
+          fields: [
+            "description",
+            "title",
+            "all_titles",
+            "pbcoreDescriptionDocument.pbcoreSubject.text",
+            "pbcoreDescriptionDocument.pbcoreDescription.text",
+            "pbcoreDescriptionDocument.pbcoreGenre.text",
+            "pbcoreDescriptionDocument.pbcoreRelation.pbcoreRelationIdentifier.text",
+            "pbcoreDescriptionDocument.pbcoreCoverage.coverage.text",
+            "pbcoreDescriptionDocument.pbcoreCreator.creator.text",
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text",
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text",
+            "pbcoreDescriptionDocument.pbcoreAnnotation.text",
+          ],
           like: idsClause,
           min_term_freq: 1,
           max_query_terms: 1024,

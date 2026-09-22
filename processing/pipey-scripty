@@ -325,7 +325,7 @@ ArrayList alternative_titles = new ArrayList();
 if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle.length > 0){
   for(int h=0; h < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; h++){
 
-    all_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle.text);
+    all_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
 
     if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Series"){
       series_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);

@@ -1539,8 +1539,9 @@ div#show-media div.show-thumbnail {
 }
 
 div#show-media div.show-thumbnail img {
-  width: 100%;
+  width: 80%;
   object-fit: cover;
+  margin-left: 4em;
   /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
 
