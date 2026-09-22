@@ -83,6 +83,7 @@ export default function SearchResult({hit}){
         </div>
 
         <div className="smarbot ">
+          <div style={{ display: "inline-block", padding: "0.5em", marginRight: "2em", backgroundColor: "#f00" }}>{ hit._score }</div>
           { date }
           { producingOrg }
         </div>

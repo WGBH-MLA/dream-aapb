@@ -1479,6 +1479,32 @@ div.show-description {
   width: 50%;
 }
 
+div.related-records-container {
+  display: block;
+}
+
+div.related-records {
+  background-color: #eee;
+  height: 10em;
+}
+
+div.related-records div.related-records-content {
+  display: inline-flex;
+  margin-left: 1em;
+}
+
+div.related-records h4 {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+div.related-records div.nice-item {
+  width: 7em;
+}
+
+div.related-records div.nice-item h2 {
+  font-size: 0.65em;
+}
 div.instantiation-blurb {
   padding: 1em;
   background-color: #ddf;
@@ -4011,6 +4037,21 @@ div.newsletter-bar input[type="submit"] {
   div#show-media div.show-thumbnail img {
     height: 15.075em;
   }
+
+
+  div.related-records {
+    background-color: #eee;
+    height: 13em;
+  }
+
+  div.related-records-content {
+    margin-left: 1.5em;
+  }
+
+  div.related-records div.nice-item {
+    width: 10em;
+  }
+
 }
 
 

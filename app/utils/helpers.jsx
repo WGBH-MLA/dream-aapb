@@ -111,3 +111,7 @@ export function scrollToTop() {
 export function normalizeGuid(guid){
   return guid.replace(/cpb-aacip./g, "cpb-aacip-")
 }
+
+export function pageTitle(title){
+  return `${title} - American Archive of Public Broadcasting`
+}

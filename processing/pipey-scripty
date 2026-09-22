@@ -315,6 +315,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDoc
 // stored display ` -> people will think they can search for the displayed title, which is not txt from a single element
 ctx.title = null;
 
+ArrayList all_titles = new ArrayList();
 ArrayList display_titles = new ArrayList();
 ArrayList series_titles = new ArrayList();
 ArrayList episode_titles = new ArrayList();
@@ -323,6 +324,8 @@ ArrayList alternative_titles = new ArrayList();
 
 if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle.length > 0){
   for(int h=0; h < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; h++){
+
+    all_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle.text);
 
     if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Series"){
       series_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
@@ -361,6 +364,8 @@ if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDoc
 
   ctx.title = display_titles.join("; ");
   ctx.title_keyword = display_titles.join("; ");
+
+  ctx.all_titles = all_titles;
 }
 
 

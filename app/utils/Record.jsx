@@ -4,13 +4,16 @@ import { notEmpty } from "../utils/helpers"
 export default class Record {
   // view helper class for common pbcore stuff
   constructor(data){
-    // this is the entire es document v
+    // this is the entire es document v + mixed-in es id
     this.data = data
     if(!this.data || !this.data.guid){
       throw `Input data invalid for Record!! ${data}`
     }
 
-    // accessors that actually get used in this class (keep the properties limited to stuff getting called on the view for cleanness)
+    // es id
+    this.id = this.data.id
+
+    // accessors that actually get used in this class (keep the properties limited to stuff getting called on the view for cleanness)    
     this.guid = this.data.guid
     this.pbcoreDescriptionDocument = this.data.pbcoreDescriptionDocument
     this.media_type = this.data.media_type

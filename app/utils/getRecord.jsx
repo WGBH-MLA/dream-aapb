@@ -3,7 +3,8 @@ export async function getRecord(guid, esURL, esIndex, esAPIKey){
   var query = { "query": {"match_phrase": { "guid": guid } } }
   var data = await executeQuery(query, esURL, esIndex, esAPIKey)
   if(data && data.hits && data.hits.hits && data.hits.hits[0] && data.hits.hits[0]._source){
-    return data.hits.hits[0]._source
+    //mix in the es doc id so we can use that for related records
+    return {...data.hits.hits[0]._source, id: data.hits.hits[0]._id}
   }  
 }
 
@@ -23,7 +24,8 @@ export async function getRecords(guids, esURL, esIndex, esAPIKey){
 
   if(data && data.hits && data.hits.hits ){
     if(data.hits.hits[0] && data.hits.hits[0]._source){
-      return data.hits.hits.map((hit) => hit._source)
+      //mix in the es doc id so we can use that for related records
+      return data.hits.hits.map((hit) => { return {...hit._source, id: hit._id} })
     } else {
       return []
     }

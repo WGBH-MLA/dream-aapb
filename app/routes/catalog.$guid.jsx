@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react"
-import { useLoaderData, useSearchParams, Link } from 'react-router'
+import { useLoaderData, useSearchParams, useOutletContext, Link } from 'react-router'
 
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
 import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
+import RelatedRecords from "../components/RelatedRecords"
+
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName, notEmpty, normalizeGuid } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
+
 import VideoHound from '../classes/VideoHound'
 import Access from '../classes/Access'
 import Location from '../classes/Location'
+import MoreLikeThis from "../classes/MoreLikeThis"
 
 export const loader = async ({params, request}) => {
   let esIndex = process.env.ES_INDEX
   let esURL = process.env.ES_URL
   let esAPIKey = process.env.ES_API_KEY
-
   let data = {}
 
   let guid = normalizeGuid(params.guid)
@@ -41,8 +44,6 @@ export const loader = async ({params, request}) => {
   // get access level based on record and location
   let access = new Access(record, location)
 
-  console.log( 'playability was', access.canPlay() && record.hasPlayableMedia() )
-
   if( access.canPlay() && record.hasPlayableMedia() ){
 
     let ciConfig = {
@@ -54,28 +55,39 @@ export const loader = async ({params, request}) => {
       ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
     }
 
-    // retrieve media url from ci
-    let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
-    data.mediaURL = mediaURL
+    if(true){
+      // retrieve media url from ci
+      let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
+      data.mediaURL = mediaURL
+      
+      // check for audio description
+      let adHLSURL = await getAD(record.guid)
+      if(adHLSURL){
+        data.adHLSURL = adHLSURL
+      }
 
-    // check for audio description
-    let adHLSURL = await getAD(record.guid)
-    if(adHLSURL){
-      data.adHLSURL = adHLSURL
-    }
+      // check for caption file
+      let captionURL = await getCaption(record.guid)
+      if(captionURL){
+        data.captionURL = captionURL
+      }
 
-    // check for caption file
-    let captionURL = await getCaption(record.guid)
-    if(captionURL){
-      data.captionURL = captionURL
+      // check for transcript file
+      let transcriptURL = await getTranscript(record.guid)
+      if(transcriptURL){
+        // url returned only if its there
+        data.transcriptURL = transcriptURL
+      }
     }
-
-    // check for transcript file
-    let transcriptURL = await getTranscript(record.guid)
-    if(transcriptURL){
-      // url returned only if its there
-      data.transcriptURL = transcriptURL
+    
+    // retrieve more like this from es
+    let config = {
+      esURL: process.env.ES_URL,
+      esIndex: process.env.ES_INDEX,
+      esAPIKey: process.env.ES_API_KEY
     }
+    let relatedRecords = await new MoreLikeThis(config).getMoreLikeThis( [record.id] )
+    data.related_records = relatedRecords
   }
 
   return data
@@ -84,16 +96,19 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
 
+  const { pagedata, setPagedata } = useOutletContext()
   const [viewerOpen, setViewerOpen] = useState(true)
-
-  // const [mediaURL, setMediaURL] = useState(data.mediaURL)
-
   const [transcriptData, setTranscriptData] = useState(false)
 
   const handleViewerToggle = (e) => {
     setViewerOpen(!viewerOpen)
   }
   
+  useEffect(() => {
+    // only run on first load
+    setPagedata({title: pageTitle(record.title)})
+  }, [])
+
   useEffect(() => {
     if(viewerOpen && data.transcriptURL && !transcriptData){
       getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines) )
@@ -102,6 +117,7 @@ export default function ShowRecord() {
 
   // class instance cant survive ssr serialization, so do it again
   let record = new Record(data.recordData)
+
 
   let transcriptViewer
   if(data.transcriptURL){
@@ -127,7 +143,7 @@ export default function ShowRecord() {
   }
 
   let credits, orgs, identifiers
-  let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics
+  let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics, relatedRecords
   let transcript
   let videoPlayerClasses = "media-area-container"
 
@@ -156,10 +172,6 @@ export default function ShowRecord() {
           { titlesByType.map((pbt, i) => <ShowBox key={i} label={ pbt.titleType } text={ pbt.text } />) }
         </>
       )
-    }
-
-    if(record.media_type){
-      mediaType = <ShowBox label="Media Type" text={ record.media_type } />
     }
 
     if(record.media_type){
@@ -312,6 +324,15 @@ export default function ShowRecord() {
     } else {
       videoPlayerClasses += " full"
     }
+
+    if(notEmpty(data.related_records)){
+      relatedRecords = (
+        <div className="show-metadata-container related-records-container marbot">
+          <div className="show-metadata-header">Related Records</div>
+          <RelatedRecords records={ data.related_records } />
+        </div>
+      )
+    }
     
   }
 
@@ -365,10 +386,12 @@ export default function ShowRecord() {
             { descriptionsByType }
           </div>
 
-          <div className="show-metadata-container bmarbot">
+          <div className="show-metadata-container marbot">
             <div className="show-metadata-header">Contributor Holdings</div>
             { instantiations }
           </div>
+
+          { relatedRecords }
 
           <div className="pbcore-viewer-container">
             <Viewer label="PBCore Metadata" guid={ record.guid } content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />

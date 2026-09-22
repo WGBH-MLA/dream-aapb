@@ -11,7 +11,11 @@ const SEARCH_RECORD = 0
 const SEARCH_TRANSCRIPT = 1
 const SEARCH_BOTH = 2
 
-const MIN_SCORE_THRESHOLD = 0.2
+let dis = 3
+// 0 => dismax top query
+// 1 => original bool with second bool with should mainAllFieldsArray
+// 2 => stupid simple multimatch query
+// 3 => original bool with multimatch clause instead of mainAllFieldsArray
 
 const OR_FIELDS = [
   "producing_org",
@@ -1097,39 +1101,98 @@ export default function Catalog() {
 
         // console.log( 'it aint no query' )
         // there *is not* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            // should: []
-            minimum_should_match: 1
-          }
-        }
-      } else {
-        // there *is* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            should: [
-              {
-                bool: {
-                  should: mainAllFieldsArray,
-                  minimum_should_match: 1
+
+        if(dis == 0){
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  dis_max: {
+                    queries: mainAllFieldsArray,
+                    tie_breaker: 0.7
+                  }
                 }
-              }
-            ]
+              ],
+              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
+              // minimum_should_match: 1
+            }
+          }
+          
+
+        } else if(dis == 1){
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              // should: []
+              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
+              // minimum_should_match: 1
+            }
+          }
+        } else if(dis == 3){
+          // same as dis 1, because this is the no query case an
+          queryHash = {
+            bool: {
+              // big should
+              // should: []
+
+              // minimum match with multi_match query seems to cause no results even when its the only clause - not sure why but dont mattah
+              // minimum_should_match: 1
+            }
           }
         }
 
-        // queryHash = {
-        //   // top bool
-        //   bool: {
-        //     // big should
-        //     should: [{ match: { title: query }}],
-        //     minimum_should_match: 1
-        //   }
-        // }
+      } else {
+        // there *is* a main box query
+        
+        if(dis == 0){
+          // dismax
+
+          queryHash = {
+            dis_max: {
+              queries: mainAllFieldsArray,
+              tie_breaker: 0.8
+            }
+          }          
+        } else if(dis == 1) {
+          queryHash = {
+            // original
+
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  bool: {
+                    should: mainAllFieldsArray,
+                    // minimum_should_match: 1
+                  }
+                }
+              ]
+            }
+          }
+        } else if(dis == 2) {
+          // simple
+          queryHash = {
+            multi_match: {
+              query: customQuery.query
+            }
+          }
+        } else if(dis == 3){
+          // dump the giant array nested query, still works with other 3 boxes because top bool
+          queryHash = {
+            bool: {
+              should: [
+                { multi_match: { query: customQuery.query } }
+              ],
+
+              // not minmatch because it causes failure of quoted searches that get added?
+              minimum_should_match: 1
+            }
+          }
+        }
       }
 
       // add in clauses for each of 3 secondary searchbox fields
@@ -1275,12 +1338,25 @@ export default function Catalog() {
 
   function matchPhraseShouldClause(quoty){
     // return a bool that *should* match minimum one field with our quoty clause
-    return  {
-      bool: {
-        should: allFieldsMatchPhraseArray(quoty),
-        minimum_should_match: 1
+
+
+    if(dis == 3){
+      return {
+        multi_match: {
+          query: quoty,
+          type: "phrase",
+          // fields: [some field names...]
+        }
+      }
+    } else {
+      return  {
+        bool: {
+          should: allFieldsMatchPhraseArray(quoty),
+          minimum_should_match: 1
+        }
       }
     }
+    
   }
 
   function pullQuotedClauses(query){
