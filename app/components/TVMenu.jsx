@@ -16,7 +16,6 @@ export default function Carousel({
   const itemList = items && items.length > 0 ? items : programs || [];
   const seeAll = seeAllURL;
 
-  // Auto-detect 3-column rows (Featured Collections) or explicit columns prop
   const isThreeColumn = columns === 3 || itemList.length === 3;
 
   const checkScroll = () => {
@@ -52,7 +51,7 @@ export default function Carousel({
 
   return (
     <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""}`}>
-      {/* Header */}
+
       <div className="carousel-header">
         <h2 className="carousel-title">{title}</h2>
         {seeAll && (
@@ -62,9 +61,7 @@ export default function Carousel({
         )}
       </div>
 
-      {/* Slider Viewport */}
       <div className="carousel-slider-wrapper">
-        {/* Left Floating Chevron */}
         {!isThreeColumn && canScrollLeft && (
           <button
             onClick={() => handleScroll("left")}
@@ -77,20 +74,16 @@ export default function Carousel({
           </button>
         )}
 
-        {/* Scroll Track */}
         <div className="carousel-track" ref={scrollRef}>
           {itemList.map((item, index) => {
-            // 1. Anchor link destination (where clicking the card navigates)
+
             const cardLink = item.url || item.link || (item.guid ? `/catalog/${item.guid}` : "#");
 
-            // 2. Direct image URL (for non-guid items)
             const directImgUrl = item.thumbnailURL || item.img || item.thumbnail || item.image;
             const description = item.desc || item.description;
 
-            // 3. Recreate TVProgram thumbnail branch logic
             let thumb;
             if (item.guid) {
-              // AAPB Catalog Record: DO NOT pass url prop so Thumbnail runs GUID fetch
               thumb = (
                 <Thumbnail
                   guid={item.guid}
@@ -100,7 +93,6 @@ export default function Carousel({
                 />
               );
             } else {
-              // Static Image: Pass image URL directly to Thumbnail's url prop
               thumb = (
                 <Thumbnail
                   url={directImgUrl}
@@ -126,7 +118,6 @@ export default function Carousel({
           })}
         </div>
 
-        {/* Right Floating Chevron */}
         {!isThreeColumn && canScrollRight && (
           <button
             onClick={() => handleScroll("right")}
