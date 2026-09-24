@@ -6,7 +6,6 @@ import { getCollections, getFeatured } from "../utils/fetch"
 export const loader = async () => {
     let collections = await getCollections()
     let programs = []
-    console.log( 'lecto', collections )
     if(collections){
         programs = collections.map((collection) => collectionToTVProgram(collection) )
     }

@@ -1,37 +1,40 @@
 import { useEffect, useState } from "react"
-import { useLoaderData, useSearchParams } from 'react-router'
+import { useLoaderData, useSearchParams, useOutletContext, Link } from 'react-router'
 
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
 import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
+import RelatedRecords from "../components/RelatedRecords"
+
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName, notEmpty } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
+
 import VideoHound from '../classes/VideoHound'
 import Access from '../classes/Access'
 import Location from '../classes/Location'
+import MoreLikeThis from "../classes/MoreLikeThis"
 
 export const loader = async ({params, request}) => {
   let esIndex = process.env.ES_INDEX
   let esURL = process.env.ES_URL
   let esAPIKey = process.env.ES_API_KEY
-
   let data = {}
-  let guid = params.guid
+
+  let guid = normalizeGuid(params.guid)
 
   // get record from es
   let recordData = await getRecord(guid, esURL, esIndex, esAPIKey)
-  
   if(!recordData){
     throw `Asset ${guid} was not found!!`
   } else {
     data.recordData = recordData
     data.mediaURL = null
-    data.esIndex = esIndex  
+    data.esIndex = esIndex
   }
 
   // fill presenter model with record data
@@ -52,28 +55,39 @@ export const loader = async ({params, request}) => {
       ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
     }
 
-    // retrieve media url from ci
-    let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
-    data.mediaURL = mediaURL
+    if(true){
+      // retrieve media url from ci
+      let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
+      data.mediaURL = mediaURL
+      
+      // check for audio description
+      let adHLSURL = await getAD(record.guid)
+      if(adHLSURL){
+        data.adHLSURL = adHLSURL
+      }
 
-    // check for audio description
-    let adHLSURL = await getAD(record.guid)
-    if(adHLSURL){
-      data.adHLSURL = adHLSURL
-    }
+      // check for caption file
+      let captionURL = await getCaption(record.guid)
+      if(captionURL){
+        data.captionURL = captionURL
+      }
 
-    // check for caption file
-    let captionURL = await getCaption(record.guid)
-    if(captionURL){
-      data.captionURL = captionURL
+      // check for transcript file
+      let transcriptURL = await getTranscript(record.guid)
+      if(transcriptURL){
+        // url returned only if its there
+        data.transcriptURL = transcriptURL
+      }
     }
-
-    // check for transcript file
-    let transcriptURL = await getTranscript(record.guid)
-    if(transcriptURL){
-      // url returned only if its there
-      data.transcriptURL = transcriptURL
+    
+    // retrieve more like this from es
+    let config = {
+      esURL: process.env.ES_URL,
+      esIndex: process.env.ES_INDEX,
+      esAPIKey: process.env.ES_API_KEY
     }
+    let relatedRecords = await new MoreLikeThis(config).getMoreLikeThis( [record.id] )
+    data.related_records = relatedRecords
   }
 
   return data
@@ -82,14 +96,19 @@ export const loader = async ({params, request}) => {
 export default function ShowRecord() {
   const data = useLoaderData()
 
+  const { pagedata, setPagedata } = useOutletContext()
   const [viewerOpen, setViewerOpen] = useState(true)
-
   const [transcriptData, setTranscriptData] = useState(false)
 
   const handleViewerToggle = (e) => {
     setViewerOpen(!viewerOpen)
   }
   
+  useEffect(() => {
+    // only run on first load
+    setPagedata({title: pageTitle(record.title)})
+  }, [])
+
   useEffect(() => {
     if(viewerOpen && data.transcriptURL && !transcriptData){
       getTranscriptData(data.transcriptURL).then( (lines) => setTranscriptData(lines) )
@@ -99,6 +118,7 @@ export default function ShowRecord() {
   // class instance cant survive ssr serialization, so do it again
   let record = new Record(data.recordData)
 
+
   let transcriptViewer
   if(data.transcriptURL){
     transcriptViewer = (
@@ -106,6 +126,7 @@ export default function ShowRecord() {
         lines={ transcriptData }
         viewerOpen={ viewerOpen }
         handleViewerToggle={ handleViewerToggle }
+        wide={ record.is169() }
       />
     )  
   }
@@ -121,8 +142,8 @@ export default function ShowRecord() {
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
   }
 
-  let people, orgs, identifiers
-  let title, description, mediaType, eachId, producingOrg, creators, coverages, dates, pbCore, instantiations
+  let credits, orgs, identifiers
+  let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics, relatedRecords
   let transcript
   let videoPlayerClasses = "media-area-container"
 
@@ -130,13 +151,37 @@ export default function ShowRecord() {
 
     title = record.title
 
-    description = record.description()
-    if(description){
-      description = <ShowBox label="Description" text={ description } />
+    // descriptions = record.descriptionsByType()
+    // if(descriptions){
+    //   descriptions = <ShowBox label="Descriptions" text={ descriptions } />
+    // }
+
+    descriptionsByType = record.descriptionsByType()
+    if(descriptionsByType){
+      descriptionsByType = (
+        <>
+          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={ pbd.descriptionType } text={ pbd.text } />) }
+        </>
+      )
+    }
+    
+    titlesByType = record.titlesByType()
+    if(titlesByType){
+      titlesByType = (
+        <>
+          { titlesByType.map((pbt, i) => <ShowBox key={i} label={ pbt.titleType } text={ pbt.text } />) }
+        </>
+      )
     }
 
     if(record.media_type){
       mediaType = <ShowBox label="Media Type" text={ record.media_type } />
+    }
+
+    // orgs
+    if(notEmpty(record.contributing_orgs)){
+      contributingOrgs = [...new Set(record.contributing_orgs)]
+      contributingOrgs = contributingOrgs.filter((co) => co != "American Archive of Public Broadcasting").map((co) => <ShowBox label="Contributing Organization" text={ co } />)
     }
 
     // orgs
@@ -153,15 +198,73 @@ export default function ShowRecord() {
       )
     }
 
-    // people
-    creators = record.creators()
-    if(creators){
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreSubject)){
+      subjects = <ShowBox key="subjects" label="Subjects" text={ record.pbcoreDescriptionDocument.pbcoreSubject.map((ps) => ps.text).join('; ') } />
+    }
 
-      creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
-      people = (
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    if(notEmpty(record.topics)){
+      // could technically be multiple
+      topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
+    }
+
+    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
+      // could technically be multiple
+      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
+    }
+
+    let duration = record.duration()
+    if(duration){
+      assetTypes = <ShowBox key="duration" label="Duration" text={ duration } />
+    }
+
+    // credits
+    // creators = record.creators()
+    // if(notEmpty(creators)){
+
+    //   creators = creators.map((pbc, i) => <ShowBox key={i} label={ pbc.creatorRole[0].text } text={ pbc.creator.text } />)
+    //   credits = (
+    //     <>
+    //       <div className="show-metadata-header">Creators</div>
+    //       { creators }
+    //     </>
+    //   )
+    // }
+    function role(entity){
+      if(entity){
+        if(entity.creatorRole && entity.creatorRole[0]){
+          return entity.creatorRole[0].text
+        } else if(entity.contributorRole && entity.contributorRole[0]){
+          return entity.contributorRole[0].text
+        } else if(entity.publisherRole && entity.publisherRole[0]){
+          return entity.publisherRole[0].text
+        }   
+      }
+    }
+
+    function name(entity){
+      if(entity){
+        if(entity.creator){
+          return entity.creator.text
+        } else if(entity.contributor){
+          return entity.contributor.text
+        } else if(entity.publisher){
+          return entity.publisher.text
+        }   
+      }
+    }
+
+    credits = record.credits()
+    if(notEmpty(credits)){
+      credits = credits.map((entity, i) => <ShowBox key={i} label={ role(entity) } text={ name(entity) } />)
+      credits = (
         <>
-          <div className="show-metadata-header">People</div>
-          { creators }
+          <div className="show-metadata-header">Credits</div>
+          { credits }
         </>
       )
     }
@@ -221,9 +324,18 @@ export default function ShowRecord() {
     } else {
       videoPlayerClasses += " full"
     }
+
+    if(notEmpty(data.related_records)){
+      relatedRecords = (
+        <div className="show-metadata-container related-records-container marbot">
+          <div className="show-metadata-header">Related Records</div>
+          <RelatedRecords records={ data.related_records } />
+        </div>
+      )
+    }
     
   }
-  
+
   return (
     <>
       <div className="page-container">
@@ -246,22 +358,40 @@ export default function ShowRecord() {
             { transcript }
           </div>
 
-
           <div className="show-metadata-container smarbot">
             <div className="show-metadata-header">Info</div>
-            { mediaType }
-            { description }
+            { titlesByType }
             { orgs }
+            { contributingOrgs }
+          </div>
+
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Description</div>
+            {/*regular info list*/}
+            { mediaType }
+            { subjects }
+            { assetTypes }
+            { topics }
+            { duration }
+    
+            {/*addl optional sections*/}
             { identifiers }
-            { people }
+            { credits }
             { coverages }
             { dates }
           </div>
 
-          <div className="show-metadata-container bmarbot">
-            <div className="show-metadata-header">Instantiations</div>
+          <div className="show-metadata-container smarbot">
+            <div className="show-metadata-header">Descriptions</div>
+            { descriptionsByType }
+          </div>
+
+          <div className="show-metadata-container marbot">
+            <div className="show-metadata-header">Contributor Holdings</div>
             { instantiations }
           </div>
+
+          { relatedRecords }
 
           <div className="pbcore-viewer-container">
             <Viewer label="PBCore Metadata" guid={ record.guid } content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />

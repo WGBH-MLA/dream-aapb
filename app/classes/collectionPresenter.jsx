@@ -7,7 +7,9 @@ import LayoutSearch from "../components/LayoutSearch"
 
 export function renderCollection(collection, esConfig) {
   // console.log("rendering collection", collection)
-  let specialCollectionTag = collection.tag || "peabody"
+
+  // TODO verify that the slugs are in parity with special_collections annotations
+  let specialCollectionTag = collection.slug
   let navigateHook = useNavigate()
   const [search, setSearch] = useState("")
 

@@ -1,36 +1,50 @@
 import { redirect } from 'react-router';
 
 export async function getExhibits(options = "") {
+  let exhibits = []
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
     wagHost + `/exhibits/?` + options,
   ).catch((error) => {
     console.log("Error fetching exhibits", error)
-    return []
   })
 
-  let body = await resp.json()
-  // TODO REMOVE ->> real top level exhibits via top_exhibit field
-  // return body.items.filter((ex) => (ex.meta.html_url.match(/\//g) || []).length == 4 )
-  return body.items
+  if(resp){
+    let body = await resp.json()
+    exhibits = body.items
+  }
+
+  return exhibits
 }
 
 export async function getCollections(options = "") {
+  let collections = []
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(
-    wagHost + `/collections/?` + options,
-  )
-  let body = await resp.json()
-  return body.items
+  let resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
+    console.log( 'Error fetching collections!', err )
+  })
+
+  if(resp){
+    let body = await resp.json()
+    collections = body.items
+  }
+
+  return collections
 }
 
 export async function getFeatured() {
+  let featured = []
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(
-    wagHost + `/collections/?limit=3&order=random`,
-  )
-  let body = await resp.json()
-  return body.items
+  let resp = await fetch(`${wagHost}/collections/?limit=3&order=random`).catch((err) => {
+    console.log( 'Error fetching featured collections!', err )
+  })
+
+  if(resp){
+    let body = await resp.json()
+    featured = body.items
+  }
+
+  return featured
 }
 
 export async function getPageBySlug(type, slug) {

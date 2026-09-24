@@ -41,6 +41,7 @@ import "./styles/styles.css"
 
 export default function App() {
   const [pleaseRotate, setPleaseRotate] = useState(false)
+  const [pagedata, setPagedata] = useState(null)
 
   const data = useLoaderData()
   const location = useLocation()
@@ -54,16 +55,18 @@ export default function App() {
         />
         <Meta />
         <Links />
+
+        <title>{ pagedata && pagedata.title }</title>
       </head>
       <body>
-
         <div className="rotation-helper" onClick={ () => { setPleaseRotate(!pleaseRotate) }} />
 
         <span className={ pleaseRotate ? "main-span rotate" : "main-span" }>
           <Header isHomepage={ isHomepage } esIndex={ data.esIndex } />
-          <Outlet />
+          <Outlet context={{ pagedata, setPagedata }} />
           <Footer />
         </span>
+
         <ScrollRestoration />
         <Scripts />
       </body>

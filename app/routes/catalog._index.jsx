@@ -4,11 +4,18 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
+import { getCollections } from "../utils/fetch"
 import { scrollToTop }  from '../utils/helpers'
 
 const SEARCH_RECORD = 0
 const SEARCH_TRANSCRIPT = 1
 const SEARCH_BOTH = 2
+
+let dis = 3
+// 0 => dismax top query
+// 1 => original bool with second bool with should mainAllFieldsArray
+// 2 => stupid simple multimatch query
+// 3 => original bool with multimatch clause instead of mainAllFieldsArray
 
 const OR_FIELDS = [
   "producing_org",
@@ -39,35 +46,60 @@ import SearchAccordion from "../components/SearchAccordion"
 import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
+  let collections = await getCollections("limit=999")
+
   return {
     esIndex: process.env.ES_INDEX,
     tsIndex: process.env.ES_TS_INDEX,
     apiKey: process.env.ES_API_KEY,
-    esURL: process.env.ES_URL
+    esURL: process.env.ES_URL,
+    collections: collections
   }
 }
 
 // aapb-freezing-osmium,transcript-freezing-osmium
 
-function CustomStats() {
-  const {
-    hitsPerPage,
-    nbHits,
-    areHitsSorted,
-    nbSortedHits,
-    nbPages,
-    page,
-    processingTimeMS,
-    query,
-  } = useStats()
+function CustomStats(props) {
+  function showCount(count){
+    if(props.query){
+      if(count && count > 0){
+        return `${count} results found`
+      } else if(count == 0){
+        return "0 results found"
+      }  
+    }
+
+    // no query, no text
+    return ""
+  }
+
+  // const {
+  //   hitsPerPage,
+  //   nbHits,
+  //   areHitsSorted,
+  //   nbSortedHits,
+  //   nbPages,
+  //   page,
+  //   processingTimeMS,
+  //   query,
+  // } = useStats()
+
+  // return (
+  //   <div className="ais-Stats">
+  //     <span className="ais-Stats-text">
+  //       Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+  //     </span>
+  //   </div>
+  // )
 
   return (
     <div className="ais-Stats">
       <span className="ais-Stats-text">
-        Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+        { showCount(props.count) }
       </span>
     </div>
   )
+
 }
 
 function CustomSearchBox(props) {
@@ -92,13 +124,14 @@ function CustomSearchBox(props) {
         />
 
         <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.all } />
         <h4>This title</h4>
-        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.title } />
         <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.none } />
         <div>
           <button className="sidebar-search-button">Update</button>
+          <button id="copy" className="sidebar-search-button secondary smarleft" onClick={ props.copySearch }>Copy Search</button>
         </div>
         <div hidden={!isSearchStalled}>Searching…</div>
 
@@ -110,11 +143,14 @@ function CustomSearchBox(props) {
 export default function Catalog() {
   const data = useLoaderData()
 
+  // include transcript in search or not
+  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+  const [count, setCount] = useState(null)
+  
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
-
   const [customQuery, setCustomQuery] = useState({
-    query: searchParams.get(`${data.esIndex}[query]`) || "",
+    query: searchParams.get(`${ indicesToUse(searchSet, data.esIndex, data.tsIndex) }[query]`) || "",
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || "",
@@ -122,9 +158,8 @@ export default function Catalog() {
     endDate: searchParams.get("endDate") || "",
   })
 
-
-// include transcript in search or not
-  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+  // store actual index names in state so it changes with the radio button
+  const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -135,6 +170,44 @@ export default function Catalog() {
   // toggle searchy UI on mobile only
   const [hideSearchy, setHideSearchy] = useState(false)
   const [searchyPosition, setSearchyPosition] = useState(0)
+
+  const addToolTip = () => {
+    document.getElementById("copy").innerHTML = "Copy Search<span class='tooltip fade'>Copied to clipboard</span>"
+  }
+
+  const copySearch = (indices) => {
+    let query,all,title,none
+    query = all = title = none = ""
+    if(customQuery.query){
+      query = `${ indices }[query]=${customQuery.query}`
+    }
+
+    if(customQuery.all){
+      all = `&all=${customQuery.all}`
+    }
+
+    if(customQuery.title){
+      title = `&title=${customQuery.title}`
+    }
+
+    if(customQuery.none){
+      none = `&none=${customQuery.none}`
+    }
+
+    let url = `${window.location.href.split('?')[0]}/?${query}${all}${title}${none}`
+    function copyTextToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          console.log('Impressively succeeded copying to clipboard!');
+        })
+        .catch(err => {
+          console.error('Annoyingly failed to copy text: ', err);
+        })
+    }
+
+    copyTextToClipboard(url)
+    addToolTip()
+  }
 
   let sidebarClasses = "page-sidebar bmarleft"
   let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
@@ -148,22 +221,40 @@ export default function Catalog() {
     toggleMessage = "Hide"
   }
 
-  function indicesToUse(asset_index, transcript_index){
-    // until ts querying fully implemented
-    return asset_index
-    if(searchSet === SEARCH_RECORD){
+  function indicesToUse(search_set, asset_index, transcript_index){
+    if(search_set === SEARCH_RECORD){
+      // console.log( "RECORD" )
       return asset_index
-    } else if(searchSet === SEARCH_TRANSCRIPT){
+    } else if(search_set === SEARCH_TRANSCRIPT){
+      // console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
+      // console.log( "BOPH" )
       return `${asset_index},${transcript_index}`
     }
+  }
+
+  function handleSearchSet(search_set, asset_index, transcript_index){
+    setSearchSet(search_set)
+    setCurrentIndexes( indicesToUse(search_set, asset_index, transcript_index) )
   }
 
   function handleCustomQuery(type, value, refine){
     // ohh la la
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
+    let allParam = searchParams.get("all")
+    if(customQuery.all && !allParam){
+      searchParams.set("all", customQuery.all)
+    }
+    let titleParam = searchParams.get("title")
+    if(customQuery.title && !titleParam){
+      searchParams.set("title", customQuery.title)
+    }
+    let noneParam = searchParams.get("none")
+    if(customQuery.none && !noneParam){
+      searchParams.set("none", customQuery.none)
+    }
 
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
@@ -185,27 +276,31 @@ export default function Catalog() {
     })
   }
 
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(item.label == "Online Reading Room"){
-        item.label = "Available Online"
-      } else if(item.label == "On Location"){
-        item.label = "All Digitized"
-      } else {
-        // private or nothing
-        item.label = "All Records"
-      }
+  // const accessLevel = (items) => {
+  //   // causes weird rerender and doesnt consolidate options as desired
+  //   return items.map( (item) => {
+  //     if(item.label == "Online Reading Room"){
+  //       item.label = "Available Online"
+  //     } else if(item.label == "On Location" || item.label == "On location"){
+  //       item.label = "All Digitized"
+  //     } else if(item.label == "Private"){
+  //       item.label = "Private"
+  //     } else {
+  //       // private or nothing
+  //       console.log( 'help!', item.label, item.value )
+  //       item.label = "All Records"
+  //     }
 
-      return item
-    }).sort((a,b) => {
-      // sort availabilty options a-z so they dont jump around ui based on num results
-      if(a < b){
-        return 1
-      } else {
-        return -1
-      }
-    })
-  }
+  //     return item
+  //   }).sort((a,b) => {
+  //     // sort availabilty options a-z so they dont jump around ui based on num results
+  //     if(a < b){
+  //       return 1
+  //     } else {
+  //       return -1
+  //     }
+  //   }).flat()
+  // }
 
   const isOrField = (fieldName) => {  
     return OR_FIELDS.includes(fieldName)
@@ -270,6 +365,27 @@ export default function Catalog() {
     return attributes
   }
 
+// 10 attributea
+// each one a facetcollection
+// each fcollection has count, value, label
+
+  const prettyCollections = (attributes) => {
+    // console.log( 'ummm', attributes )
+
+    attributes = attributes.map((attribute) => {
+      // console.log( 'attribute', attribute )
+      // console.log( 'honking', data.collections.forEach((honk) => console.log( 'honk!!', honk.meta.slug )) )
+      let thisCollection = data.collections.find((coll) => coll.meta.slug == attribute.label )
+      if(thisCollection){
+        attribute.label = thisCollection.meta.slug
+      }
+
+      return attribute
+    })
+
+    return attributes
+  }
+
   const onlyUnique = (value, index, array) => {
     return array.indexOf(value) === index
   }
@@ -295,10 +411,10 @@ export default function Catalog() {
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All"
+    showRefinementButtonText = "Show Filters"
   } else {
     currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
+    showRefinementButtonText = "Hide Filters"
   }
 
 
@@ -319,6 +435,8 @@ export default function Catalog() {
               handleCustomQuery={ handleCustomQuery }
               query={ customQuery.query }
               defaultQuery={ customQuery.query }
+              customQuery={ customQuery }
+              copySearch={ () => copySearch(indicesToUse(searchSet, data.esIndex, data.tsIndex), ) }
             />
   //////////
 
@@ -337,6 +455,7 @@ export default function Catalog() {
           {
             nested: {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
+              ignore_unmapped: true,
               query: {
                 match: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -365,6 +484,7 @@ export default function Catalog() {
           {
             nested: {
               path: "pbcoreDescriptionDocument.pbcoreTitle",
+              ignore_unmapped: true,
               query: {
                 match_phrase: {
                   "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -381,9 +501,10 @@ export default function Catalog() {
   }
 
   function allFieldsArray(query){
-    return [
-      // simplified syntax that works but omits options
+
+    let afArray = [
       {
+        // simplified syntax that works but omits options
         match: {
           "guid": query
         }
@@ -398,9 +519,8 @@ export default function Catalog() {
           "topics": query,
         }
       },
-      
-      //full syntax w options
       {
+        //full syntax w options
         match: {
           title: {
             query: query,
@@ -413,19 +533,17 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                query: query,
-              }
-            }
-          }
+          // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
+          ignore_unmapped: true,
+          query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
+
             match: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": {
                 query: query,
@@ -433,25 +551,28 @@ export default function Catalog() {
                 boost: 3
               }
             }
-          },
+          }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             match: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
                 query: query
               }
-            }
+            }      
           }
         } 
       },
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
+      
             match: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
                 query: query,
@@ -462,11 +583,37 @@ export default function Catalog() {
         }
       }
     ]
+
+    if(searchSet != SEARCH_RECORD){
+      afArray.push({
+        match: {
+          transcript_text: query
+        }
+      })
+    }
+
+    if(searchSet === SEARCH_TRANSCRIPT){
+      afArray.push({
+        nested:  {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            match: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
+    }
+
+    return afArray
   }
 
   function allFieldsTermArray(query){
 
-    return [ 
+    let aftArray = [ 
       {
         term: {
           guid: {
@@ -502,6 +649,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreDescription.text": {
@@ -515,6 +663,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": {
@@ -528,6 +677,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
@@ -540,6 +690,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
             term: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
@@ -551,6 +702,37 @@ export default function Catalog() {
         }
       }
     ]
+
+    if(searchSet != SEARCH_RECORD){
+      aftArray.push(
+        {
+          term: {
+            transcript_text: {
+              value: query,
+              case_insensitive: true
+            }
+          }
+        },
+      )
+    }
+
+    if(searchSet === SEARCH_TRANSCRIPT){
+      aftArray.push({
+        nested:  {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            term: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
+    }
+
+    return aftArray
   }
 
   function allFieldsTermQuery(query){
@@ -569,8 +751,7 @@ export default function Catalog() {
   }
 
   function allFieldsMatchPhraseArray(query){
-
-    return [ 
+    let afmpArray = [ 
       {
         match_phrase: {
           guid: query
@@ -594,6 +775,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreDescription",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreDescription.text": query
@@ -604,6 +786,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreTitle",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreTitle.text": query
@@ -614,6 +797,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
@@ -624,6 +808,7 @@ export default function Catalog() {
       {
         nested: {
           path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+          ignore_unmapped: true,
           query: {
             match_phrase: {
               "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
@@ -632,17 +817,59 @@ export default function Catalog() {
         }
       }
     ]
+
+    if(searchSet != SEARCH_RECORD){
+      afmpArray.push(
+        {
+          term: {
+            transcript_text: {
+              value: query,
+              case_insensitive: true
+            }
+          }
+        },
+      )
+    }
+
+    if(searchSet === SEARCH_TRANSCRIPT){
+      afmpArray.push({
+        nested: {
+          path: "asset",
+          ignore_unmapped: true,
+          query: {
+            match_phrase: {
+              "asset.title": {
+                query: query
+              }
+            }
+          }
+        }
+      })
+    }
+
+    return afmpArray
   }
 
 
-  const sk = new Searchkit({
+  const config = {
     connection: {
       host: data.esURL,
       apiKey: data.apiKey
     },
-
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
+      // runtime_mappings: {
+      //   asset: {
+      //     type: "lookup",
+      //     target_index: data.esIndex,
+      //     input_field: "guid",
+      //     target_field: "guid",
+      //     // cant get nested fields in runtime lookuip
+      //     fetch_fields: ["title", "producing_org", "media_type"]
+      //   },
+
+      // },
+
+      // highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
 
       search_attributes: [
         // "guid",
@@ -657,7 +884,16 @@ export default function Catalog() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
+      result_attributes: [
+        "guid",
+        "title",
+        "broadcast_date",
+        "pbcoreDescriptionDocument",
+        "media_type",
+        "producing_org",
+        "transcript_text",
+        "asset"
+      ],
 
       // // maybe used in concert with filter range frontend
       // filter_attributes: [
@@ -769,13 +1005,78 @@ export default function Catalog() {
         },
       }
     }
-  })
+  }
+
+  if(searchSet == SEARCH_BOTH || searchSet === SEARCH_TRANSCRIPT){
+    config.search_settings.runtime_mappings = {
+      asset: {
+        type: "lookup",
+        target_index: data.esIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["title", "producing_org", "media_type"]
+      },
+      transcript: {
+        type: "lookup",
+        target_index: data.tsIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["transcript_text"]
+      }
+    }
+  } else {
+    // SEARCH_RECORD
+    // config.search_settings.runtime_mappings = {
+    //   asset: {
+    //     type: 'keyword',
+    //     script: {
+    //       source: "emit('zapparanes')"
+    //     }
+    //   }
+    // }
+  }
+
+  const sk = new Searchkit(config)
 
   const isEmpty = (query) => {
     return query === "" || query.match(/^\s+$/)
   }
 
   const searchClient = Client(sk, {
+    hooks: {
+      beforeSearch: async (searchRequests) => {
+        // add request to  main query request to get query doc count
+
+
+        // get main query resuest
+        const request = searchRequests[0]
+        const activeQuery = request?.body?.query || { match_all: {} };
+
+        const countRequest = {
+          body: {
+            query: activeQuery,
+            size: 0,
+            track_total_hits: true
+          }
+        }
+
+        // add in count request to be processed too
+        return [...searchRequests, countRequest];
+      },
+      afterSearch: async (searchRequests, searchResponses) => {
+        // record doc count to state and then proceed with normal search
+
+        // oops there it is
+        const countResponse = searchResponses.pop()
+        if (countResponse && countResponse.hits) {
+          setCount(countResponse.hits.total.value)
+        }
+
+        // return this continue main query normally
+        return searchResponses
+      },
+    },
+
     getQuery: (query, search_attributes) => {
       var queryHash
 
@@ -799,29 +1100,97 @@ export default function Catalog() {
       if(emptyQuery){
 
         // console.log( 'it aint no query' )
-        
         // there *is not* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            // should: []
+
+        if(dis == 0){
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  dis_max: {
+                    queries: mainAllFieldsArray,
+                    tie_breaker: 0.7
+                  }
+                }
+              ],
+              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
+              // minimum_should_match: 1
+            }
+          }
+          
+
+        } else if(dis == 1){
+          queryHash = {
+            // top bool
+            bool: {
+              // big should
+              // should: []
+              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
+              // minimum_should_match: 1
+            }
+          }
+        } else if(dis == 3){
+          // same as dis 1, because this is the no query case an
+          queryHash = {
+            bool: {
+              // big should
+              // should: []
+
+              // minimum match with multi_match query seems to cause no results even when its the only clause - not sure why but dont mattah
+              // minimum_should_match: 1
+            }
           }
         }
+
       } else {
         // there *is* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            should: [
-              {
-                bool: {
-                  should: mainAllFieldsArray,
-                  minimum_should_match: 1
+        
+        if(dis == 0){
+          // dismax
+
+          queryHash = {
+            dis_max: {
+              queries: mainAllFieldsArray,
+              tie_breaker: 0.8
+            }
+          }          
+        } else if(dis == 1) {
+          queryHash = {
+            // original
+
+            // top bool
+            bool: {
+              // big should
+              should: [
+                {
+                  bool: {
+                    should: mainAllFieldsArray,
+                    // minimum_should_match: 1
+                  }
                 }
-              }
-            ]
+              ]
+            }
+          }
+        } else if(dis == 2) {
+          // simple
+          queryHash = {
+            multi_match: {
+              query: customQuery.query
+            }
+          }
+        } else if(dis == 3){
+          // dump the giant array nested query, still works with other 3 boxes because top bool
+          queryHash = {
+            bool: {
+              should: [
+                { multi_match: { query: customQuery.query } }
+              ],
+
+              // not minmatch because it causes failure of quoted searches that get added?
+              minimum_should_match: 1
+            }
           }
         }
       }
@@ -844,11 +1213,11 @@ export default function Catalog() {
 
         // whether query was modified or not, go ahead and do nonquoty all query v
 
-        // add second big should clause to outer bool query
+        // add second big should clause to outer bool query's must clause
         var allQuery
         if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
           // only add the regular query for allbox IF there remains a NONQUOTY allbox query
-          console.log( 'there is a remaining allbox query' )
+
           allQuery = {
             bool: {
               should: allFieldsArray( allBoxQueryString ),
@@ -963,17 +1332,31 @@ export default function Catalog() {
       // console.log( 'finishing with qh', query, queryHash )
       // regahdless
       return queryHash
-    }
+    }, 
+
   })
 
   function matchPhraseShouldClause(quoty){
     // return a bool that *should* match minimum one field with our quoty clause
-    return  {
-      bool: {
-        should: allFieldsMatchPhraseArray(quoty),
-        minimum_should_match: 1
+
+
+    if(dis == 3){
+      return {
+        multi_match: {
+          query: quoty,
+          type: "phrase",
+          // fields: [some field names...]
+        }
+      }
+    } else {
+      return  {
+        bool: {
+          should: allFieldsMatchPhraseArray(quoty),
+          minimum_should_match: 1
+        }
       }
     }
+    
   }
 
   function pullQuotedClauses(query){
@@ -991,23 +1374,12 @@ export default function Catalog() {
 
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
-    // if(newHideSearchy){
-    //   // hide it
-    //   let sidebar = document.getElementById("search-sidebar")
-    //   console.log( 'hiding that stupid', searchyPosition )
-    //   window.scroll(0, searchyPosition)
-    // } else {
-    //   // show it
-    //   console.log( 'showing, i like to go to', window.scrollY )
-    //   setSearchyPosition(window.scrollY)
-    //   scrollToTop()
-    // }
   }
 
   return (
     <div className="body-container">
       <InstantSearch
-        indexName={ encode(indicesToUse(data.esIndex, data.tsIndex)) }
+        indexName={ currentIndexes }
         searchClient={ searchClient }
         routing={ true }
       >
@@ -1049,15 +1421,10 @@ export default function Catalog() {
                 <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
               </div>
             </div>
-
-            
           </div>
         </div>
 
         <div className={ topRefinementsBarClasses }>
-          <div className="stats-container">
-            <CustomStats />
-          </div>
 
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
@@ -1065,7 +1432,7 @@ export default function Catalog() {
             />
           </div>
           <div className="clear-refinements-container marright">
-            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
+            <ClearRefinements translations={{ resetButtonText: "Clear Filters" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
@@ -1073,21 +1440,27 @@ export default function Catalog() {
         </div>
 
         <div id="search-sidebar" className={ sidebarClasses }>
-          <h3 className="sidebar-title">Refine Search</h3>
+          <h3 className="sidebar-title">
+            Refine Search
+
+            <div className="stats-container">
+              <CustomStats query={ customQuery.query } count={ count } />
+            </div>
+
+          </h3>
+
           <hr />
           
-          <SearchAccordion title="Keywords" content={
-            searchbox
-          }/>
+          <SearchAccordion title="Keywords" content={ searchbox }/>
 
           <hr />
 
           <SearchAccordion title="Options" content ={
             <>
               <div>Include</div>
-              <div><label>All Sources<input onChange={ () => setSearchSet(SEARCH_BOTH) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => setSearchSet(SEARCH_RECORD) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => setSearchSet(SEARCH_TRANSCRIPT) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>All Sources<input onChange={ () => handleSearchSet(SEARCH_BOTH, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => handleSearchSet(SEARCH_RECORD, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => handleSearchSet(SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 
@@ -1105,7 +1478,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="access_level"
-                transformItems={ accessLevel }
+                // transformItems={ accessLevel }
               />
             </>
           }/>
@@ -1126,7 +1499,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="producing_org"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1137,7 +1509,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1148,7 +1519,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="genres"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1159,7 +1529,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="topics"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1168,7 +1537,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="contributing_orgs"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1179,7 +1547,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="special_collections"
-                // transformItems={ producingOrganization }
+                transformItems={ prettyCollections }
               />
             </>
           }/>
@@ -1191,7 +1559,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="series_titles"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1203,7 +1570,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="contributors"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1215,7 +1581,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="people"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>

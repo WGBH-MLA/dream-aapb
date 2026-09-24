@@ -5,6 +5,7 @@ export default function TVMenu(props){
 
   let programs = props.programs
   if(props.programs){
+
     if(programs.length == 3){
       programs = programs.map( (program) => {
         program.classes = " three"
@@ -24,7 +25,7 @@ export default function TVMenu(props){
   if(props.seeAllURL){
     seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
   }
- 
+
   return (
     <div className={ classes }>
       { seeAll }
