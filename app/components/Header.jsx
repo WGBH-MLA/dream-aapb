@@ -88,7 +88,7 @@ export default function Header(props) {
         <div className="drawermenu-container">
           <a href="/about" className="drawer-label">About</a>
         </div>
-        {<DonateButton />}
+        <DonateButton />
         { layoutSearch }
       </div>
       <div className="header-row">
