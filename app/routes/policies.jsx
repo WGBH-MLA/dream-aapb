@@ -1,3 +1,4 @@
+import SummaryBox from "../components/SummaryBox"
 import LinkBankFooter from "../components/LinkBankFooter"
 
 export default function Terms() {
@@ -5,10 +6,9 @@ export default function Terms() {
     <div className="page-container">
       <div className="skinny-body-container marbot">
         <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
-        <h2 className="marbot">AAPB Terms of Use</h2>
-        <div className="marbot">THE FOLLOWING TERMS AND CONDITIONS GOVERN YOUR USE OF THE SITE. PLEASE READ THESE TERMS OF USE CAREFULLY BEFORE USING THIS SITE.</div>
-
-        <div className="marbot">By using the American Archive of Public Broadcasting (“AAPB”) website you agree to be bound by these Terms of Use, Privacy Policy, and the Discussion and Comment Policy. If you do not agree to these Terms of Use, Privacy Policy, and Discussion and Comment Policy, please exit the Site and do not use the Site or any of its features.</div>
+        <SummaryBox title="Terms of Use" />
+        <div className="marbot">THE FOLLOWING TERMS AND CONDITIONS GOVERN YOUR USE OF THE SITE. PLEASE READ THESE TERMS OF USE CAREFULLY BEFORE USING THIS SITE." </div>
+        <div className="marbot"> By using the American Archive of Public Broadcasting (“AAPB”) website you agree to be bound by these Terms of Use, Privacy Policy, and the Discussion and Comment Policy. If you do not agree to these Terms of Use, Privacy Policy, and Discussion and Comment Policy, please exit the Site and do not use the Site or any of its features.</div>
 
         <div className="marbot">This AAPB website (including all services, features, functionality and content available through the americanarchive.org domain name, collectively, the “Site”) is operated by the WGBH Educational Foundation (“GBH”). The terms and conditions of use (the “Terms” or “Terms of Use”) set forth herein apply to all information, online communications, services, text, video, audio files, graphics, still images, links, or other material and content that is or becomes available on the Site or is otherwise offered through the Site (collectively, “Content”). By accessing or using the Site, you specifically agree to abide by these Terms and any modifications thereto. Any modifications, additions or deletions to these Terms of Use or the Privacy Policy shall be effective immediately upon posting. Your continued use of the Site following the posting of updated Terms of Use or an updated Privacy Policy will mean that you agree to those changes.</div>
 
