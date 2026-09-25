@@ -1,6 +1,49 @@
 import { useState, useRef, useEffect } from "react";
 import Thumbnail from "./Thumbnail";
 
+const ChevronLeft = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+);
+
+function CarouselCard({ item, showDesc }) {
+  return(
+    <a className="carousel-card" href={item.url}>
+      <div className="carousel-card-media">
+        <Thumbnail
+          url={item.thumbnailURL}
+          alt={item.title} hidebar={true}
+        />
+        <div className="carousel-card-overlay">
+          <span className="carousel-card-title">{item.title}</span>
+          {showDesc && item.desc && (
+            <span className="carousel-card-desc">{item.desc}</span>
+          )}
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function NavButton({ direction, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`carousel-nav-btn ${direction}`}
+      aria-label={`Scroll ${direction === "left" ? "Scroll Left" : "Scroll Right"}`}
+    >
+      {direction === "left" ? <ChevronLeft /> : <ChevronRight />}
+    </button>
+  );
+}
+
 export default function Carousel({
   title,
   items = [],
@@ -9,13 +52,12 @@ export default function Carousel({
   columns,
   showDesc = false,
 }) {
+
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-
-  const itemList = items && items.length > 0 ? items : programs || [];
-  const seeAll = seeAllURL;
-
+  
+  const itemList = items.length > 0 ? items : programs;
   const isThreeColumn = columns === 3 || itemList.length === 3;
 
   const checkScroll = () => {
@@ -29,12 +71,11 @@ export default function Carousel({
   useEffect(() => {
     checkScroll();
     const el = scrollRef.current;
-    if (el) {
+    if (!el) return;
       el.addEventListener("scroll", checkScroll);
       window.addEventListener("resize", checkScroll);
-    }
     return () => {
-      if (el) el.removeEventListener("scroll", checkScroll);
+      el.removeEventListener("scroll", checkScroll);
       window.removeEventListener("resize", checkScroll);
     };
   }, [itemList]);
@@ -48,86 +89,40 @@ export default function Carousel({
       behavior: "smooth",
     });
   };
+  
+  const showNav = !isThreeColumn;
 
   return (
     <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""}`}>
 
       <div className="carousel-header">
         <h2 className="carousel-title">{title}</h2>
-        {seeAll && (
-          <a className="carousel-see-all" href={seeAll}>
+        {seeAllURL && (
+          <a className="carousel-see-all" href={seeAllURL}>
             See All <span className="carousel-see-all-arrow">&rsaquo;</span>
           </a>
         )}
       </div>
 
       <div className="carousel-slider-wrapper">
-        {!isThreeColumn && canScrollLeft && (
-          <button
+        {showNav && canScrollLeft && (
+          <NavButton
+            direction="left"
             onClick={() => handleScroll("left")}
-            className="carousel-nav-btn left"
-            aria-label="Scroll Left"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+          />
         )}
 
         <div className="carousel-track" ref={scrollRef}>
-          {itemList.map((item, index) => {
-
-            const cardLink = item.url || item.link || (item.guid ? `/catalog/${item.guid}` : "#");
-
-            const directImgUrl = item.thumbnailURL || item.img || item.thumbnail || item.image;
-            const description = item.desc || item.description;
-
-            let thumb;
-            if (item.guid) {
-              thumb = (
-                <Thumbnail
-                  guid={item.guid}
-                  mediaType={item.mediaType || item.media_type}
-                  alt={item.title || ""}
-                  hideBar={true}
-                />
-              );
-            } else {
-              thumb = (
-                <Thumbnail
-                  url={directImgUrl}
-                  alt={item.title || ""}
-                  hideBar={true}
-                />
-              );
-            }
-
-            return (
-              <a className="carousel-card" key={item.key || item.guid || index} href={cardLink}>
-                <div className="carousel-card-media">
-                  {thumb}
-                  <div className="carousel-card-overlay">
-                    <span className="carousel-card-title">{item.title}</span>
-                    {showDesc && description && (
-                      <span className="carousel-card-desc">{description}</span>
-                    )}
-                  </div>
-                </div>
-              </a>
-            );
-          })}
+          {itemList.map((item, index) => (
+            <CarouselCard key={index} item={item} showDesc={showDesc} />
+          ))}
         </div>
 
-        {!isThreeColumn && canScrollRight && (
-          <button
+        {showNav && canScrollRight && (
+          <NavButton
+            direction="right"
             onClick={() => handleScroll("right")}
-            className="carousel-nav-btn right"
-            aria-label="Scroll Right"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          />
         )}
       </div>
     </div>
