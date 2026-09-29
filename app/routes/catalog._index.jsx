@@ -4,23 +4,19 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
+
 import { getCollections } from "../utils/fetch"
 import { scrollToTop }  from '../utils/helpers'
+import originalSearch from '../searches/originalSearch'
 
-const SEARCH_RECORD = 0
-const SEARCH_TRANSCRIPT = 1
-const SEARCH_BOTH = 2
+import { SearchSubsets } from "../utils/SearchSubsets"
+
 
 let dis = 3
 // 0 => dismax top query
 // 1 => original bool with second bool with should mainAllFieldsArray
 // 2 => stupid simple multimatch query
 // 3 => original bool with multimatch clause instead of mainAllFieldsArray
-
-const OR_FIELDS = [
-  "producing_org",
-  "pbcoreDescriptionDocument.pbcoreCreator.creator"
-]
 
 import {
           InstantSearch,
@@ -144,7 +140,7 @@ export default function Catalog() {
   const data = useLoaderData()
 
   // include transcript in search or not
-  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+  const [searchSet, setSearchSet] = useState(SearchSubsets.SEARCH_BOTH)
   const [count, setCount] = useState(null)
   
   // state that we need out here, and down inside the search area...
@@ -222,10 +218,10 @@ export default function Catalog() {
   }
 
   function indicesToUse(search_set, asset_index, transcript_index){
-    if(search_set === SEARCH_RECORD){
+    if(search_set === SearchSubsets.SEARCH_RECORD){
       // console.log( "RECORD" )
       return asset_index
-    } else if(search_set === SEARCH_TRANSCRIPT){
+    } else if(search_set === SearchSubsets.SEARCH_TRANSCRIPT){
       // console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
@@ -301,10 +297,6 @@ export default function Catalog() {
   //     }
   //   }).flat()
   // }
-
-  const isOrField = (fieldName) => {  
-    return OR_FIELDS.includes(fieldName)
-  }
 
   const prettyFieldNames = (fieldName) => {
     switch(fieldName){
@@ -390,22 +382,6 @@ export default function Catalog() {
     return array.indexOf(value) === index
   }
 
-  const hasQuoties = (query) => {
-    return query && query.includes('\"')
-  }
-
-  const extractQuotiesFromSearchbox = (query) => {
-    var quoties = pullQuotedClauses(query)
-    // remove quoted clauses from the query itself
-    query = query.replace(/".*?"/g ,"")
-    // console.log( 'I WANT MY QUOTIES', quoties, query )
-
-    return {
-      query: query, 
-      quoties: quoties
-    }
-  }
-
   // createquotyquyery???
 
   let currentRefinementsClasses, showRefinementButtonText
@@ -440,415 +416,6 @@ export default function Catalog() {
             />
   //////////
 
-  
-  // othiz
-  function titleQuery(tQuery){
-    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
-    return {
-      bool: {
-        should: [
-          {
-            match: {
-              "title": tQuery
-            }
-          },
-          {
-            nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
-              ignore_unmapped: true,
-              query: {
-                match: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                    query: tQuery,
-                  }
-                }
-              }
-            } 
-          },
-        ],
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function titleQueryExact(tQuery){
-    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle, exact match
-    return {
-      bool: {
-        should: [
-          {
-            match_phrase: {
-              "title": tQuery
-            }
-          },
-          {
-            nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
-              ignore_unmapped: true,
-              query: {
-                match_phrase: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                    query: tQuery,
-                  }
-                }
-              }
-            } 
-          },
-        ],
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function allFieldsArray(query){
-
-    let afArray = [
-      {
-        // simplified syntax that works but omits options
-        match: {
-          "guid": query
-        }
-      },
-      {
-        match: {
-          "genres": query,
-        }
-      },
-      {
-        match: {
-          "topics": query,
-        }
-      },
-      {
-        //full syntax w options
-        match: {
-          title: {
-            query: query,
-            analyzer: "standard",
-            boost: 4
-          }
-        }
-      },
-
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
-          ignore_unmapped: true,
-          query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          ignore_unmapped: true,
-          query: {
-
-            match: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                query: query,
-                analyzer: "standard",
-                boost: 3
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          ignore_unmapped: true,
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                query: query
-              }
-            }      
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          ignore_unmapped: true,
-          query: {
-      
-            match: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                query: query,
-                boost: 1
-              }
-            }
-          }
-        }
-      }
-    ]
-
-    if(searchSet != SEARCH_RECORD){
-      afArray.push({
-        match: {
-          transcript_text: query
-        }
-      })
-    }
-
-    if(searchSet === SEARCH_TRANSCRIPT){
-      afArray.push({
-        nested:  {
-          path: "asset",
-          ignore_unmapped: true,
-          query: {
-            match: {
-              "asset.title": {
-                query: query
-              }
-            }
-          }
-        }
-      })
-    }
-
-    return afArray
-  }
-
-  function allFieldsTermArray(query){
-
-    let aftArray = [ 
-      {
-        term: {
-          guid: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          genres: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          topics: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          title: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          ignore_unmapped: true,
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          ignore_unmapped: true,
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          },
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          ignore_unmapped: true,
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                value: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          ignore_unmapped: true,
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        }
-      }
-    ]
-
-    if(searchSet != SEARCH_RECORD){
-      aftArray.push(
-        {
-          term: {
-            transcript_text: {
-              value: query,
-              case_insensitive: true
-            }
-          }
-        },
-      )
-    }
-
-    if(searchSet === SEARCH_TRANSCRIPT){
-      aftArray.push({
-        nested:  {
-          path: "asset",
-          ignore_unmapped: true,
-          query: {
-            term: {
-              "asset.title": {
-                query: query
-              }
-            }
-          }
-        }
-      })
-    }
-
-    return aftArray
-  }
-
-  function allFieldsTermQuery(query){
-    // should with a term match for each field, min match 1
-    // if one of these hits, the must_not clause in the big bool will remove it
-
-    var nested_clauses = query.split(" ").map((q) => allFieldsTermArray(q)).flat()
-    return {
-      bool: {
-        // this is admittedly just crazy
-        should: nested_clauses,
-        // this is for must_not, any single match fails!
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function allFieldsMatchPhraseArray(query){
-    let afmpArray = [ 
-      {
-        match_phrase: {
-          guid: query
-        }
-      },
-      {
-        match_phrase: {
-          genres: query
-        }
-      },
-      {
-        match_phrase: {
-          topics: query
-        }
-      },
-      {
-        match_phrase: {
-          title: query
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          ignore_unmapped: true,
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": query
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          ignore_unmapped: true,
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": query
-            }
-          },
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          ignore_unmapped: true,
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          ignore_unmapped: true,
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
-            }
-          }
-        }
-      }
-    ]
-
-    if(searchSet != SEARCH_RECORD){
-      afmpArray.push(
-        {
-          term: {
-            transcript_text: {
-              value: query,
-              case_insensitive: true
-            }
-          }
-        },
-      )
-    }
-
-    if(searchSet === SEARCH_TRANSCRIPT){
-      afmpArray.push({
-        nested: {
-          path: "asset",
-          ignore_unmapped: true,
-          query: {
-            match_phrase: {
-              "asset.title": {
-                query: query
-              }
-            }
-          }
-        }
-      })
-    }
-
-    return afmpArray
-  }
 
 
   const config = {
@@ -1007,7 +574,7 @@ export default function Catalog() {
     }
   }
 
-  if(searchSet == SEARCH_BOTH || searchSet === SEARCH_TRANSCRIPT){
+  if(searchSet == SearchSubsets.SEARCH_BOTH || searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
     config.search_settings.runtime_mappings = {
       asset: {
         type: "lookup",
@@ -1025,7 +592,7 @@ export default function Catalog() {
       }
     }
   } else {
-    // SEARCH_RECORD
+    // SearchSubsets.SEARCH_RECORD
     // config.search_settings.runtime_mappings = {
     //   asset: {
     //     type: 'keyword',
@@ -1038,15 +605,10 @@ export default function Catalog() {
 
   const sk = new Searchkit(config)
 
-  const isEmpty = (query) => {
-    return query === "" || query.match(/^\s+$/)
-  }
-
   const searchClient = Client(sk, {
     hooks: {
       beforeSearch: async (searchRequests) => {
         // add request to  main query request to get query doc count
-
 
         // get main query resuest
         const request = searchRequests[0]
@@ -1078,299 +640,10 @@ export default function Catalog() {
     },
 
     getQuery: (query, search_attributes) => {
-      var queryHash
-
-      var title_if_present
-      if(customQuery.title && customQuery.title.length > 0){
-        title_if_present = customQuery.title
-      }
-
-      var mainBoxQuoties
-      if(hasQuoties(query)){
-        var mainBox = extractQuotiesFromSearchbox(query)
-        query = mainBox.query
-        mainBoxQuoties = mainBox.quoties
-      }
-
-      // is query empty now ?
-      let emptyQuery = isEmpty(query)
-      
-      var mainAllFieldsArray = allFieldsArray(query)
-
-      if(emptyQuery){
-
-        // console.log( 'it aint no query' )
-        // there *is not* a main box query
-
-        if(dis == 0){
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              should: [
-                {
-                  dis_max: {
-                    queries: mainAllFieldsArray,
-                    tie_breaker: 0.7
-                  }
-                }
-              ],
-              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
-              // minimum_should_match: 1
-            }
-          }
-          
-
-        } else if(dis == 1){
-          queryHash = {
-            // top bool
-            bool: {
-              // big should
-              // should: []
-              // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
-              // minimum_should_match: 1
-            }
-          }
-        } else if(dis == 3){
-          // same as dis 1, because this is the no query case an
-          queryHash = {
-            bool: {
-              // big should
-              // should: []
-
-              // minimum match with multi_match query seems to cause no results even when its the only clause - not sure why but dont mattah
-              // minimum_should_match: 1
-            }
-          }
-        }
-
-      } else {
-        // there *is* a main box query
-        
-        if(dis == 0){
-          // dismax
-
-          queryHash = {
-            dis_max: {
-              queries: mainAllFieldsArray,
-              tie_breaker: 0.8
-            }
-          }          
-        } else if(dis == 1) {
-          queryHash = {
-            // original
-
-            // top bool
-            bool: {
-              // big should
-              should: [
-                {
-                  bool: {
-                    should: mainAllFieldsArray,
-                    // minimum_should_match: 1
-                  }
-                }
-              ]
-            }
-          }
-        } else if(dis == 2) {
-          // simple
-          queryHash = {
-            multi_match: {
-              query: customQuery.query
-            }
-          }
-        } else if(dis == 3){
-          // dump the giant array nested query, still works with other 3 boxes because top bool
-          queryHash = {
-            bool: {
-              should: [
-                { multi_match: { query: customQuery.query } }
-              ],
-
-              // not minmatch because it causes failure of quoted searches that get added?
-              minimum_should_match: 1
-            }
-          }
-        }
-      }
-
-      // add in clauses for each of 3 secondary searchbox fields
-      var allBox, allBoxQuoties
-      if(customQuery.all && customQuery.all.length > 0){
-
-        // lets get crazy
-        var allBoxQueryString = customQuery.all
-        if( hasQuoties(allBoxQueryString) ){
-          // quoty me on that
-          
-          // we're modifying the actual value of the main query here (to remove quoties) so don't store the altered state in customQuery
-           allBox = extractQuotiesFromSearchbox(allBoxQueryString)
-           allBoxQueryString = allBox.query
-           allBoxQuoties = allBox.quoties
-          // add appropriate quoty search clauses to bool down at the end
-        }
-
-        // whether query was modified or not, go ahead and do nonquoty all query v
-
-        // add second big should clause to outer bool query's must clause
-        var allQuery
-        if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
-          // only add the regular query for allbox IF there remains a NONQUOTY allbox query
-
-          allQuery = {
-            bool: {
-              should: allFieldsArray( allBoxQueryString ),
-              // allbox query should ALWAYS have min match one on ITS OWN BOOL, because doc doesnt match unless allboxquery appears in at least one field!
-              minimum_should_match: 1
-            }
-          }
-
-          // adding 'all' box query to outer bool here
-          queryHash.bool.must ||= []
-          queryHash.bool.must.push(allQuery)
-        }
-      }
-
-      var noneBox, noneBoxQuoties
-      if(customQuery.none && customQuery.none.length > 0){
-        
-        // lets get noney
-        var noneBoxQueryString = customQuery.none        
-        if( hasQuoties(noneBoxQueryString) ){
-          
-          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered state in customQuery
-          noneBox = extractQuotiesFromSearchbox(noneBoxQueryString)
-          noneBoxQueryString = noneBox.query
-          noneBoxQuoties = noneBox.quoties
-
-          // add appropriate quoty search clauses to bool down at the end
-        }
-
-        queryHash.bool.must_not ||= []
-
-        // add must_not clause to big bool
-        if(noneBoxQueryString && noneBoxQueryString.length > 0){
-          // only add it IF there remains a NONQUOTY nonebox query
-          queryHash.bool.must_not.push( allFieldsTermQuery(noneBoxQueryString) )
-        }
-
-        if(noneBoxQuoties && noneBoxQuoties.length > 0){
-          // now also add our quoty clauses to must_not
-          noneBoxQuoties.forEach( (quooty) => {
-            // add all-fields-array match_phrase query for each quoty
-            queryHash.bool.must_not.push( matchPhraseShouldClause(quooty) )
-          })
-        }
-      }
-
-      var titleBox, titleBoxQuoties
-      if(customQuery.title && customQuery.title.length > 0){
-
-        // lets get title-oriented
-        var titleBoxQueryString = customQuery.title
-
-        queryHash.bool.must ||= []
-        if( hasQuoties(titleBoxQueryString) ){
-          
-          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered query state in customQuery
-           titleBox = extractQuotiesFromSearchbox(titleBoxQueryString)
-           titleBoxQueryString = titleBox.query
-           titleBoxQuoties = titleBox.quoties
-          
-          // we add the appropriate quoty search clauses to the bool down at the end
-        }
-
-        if(titleBoxQueryString && titleBoxQueryString.length > 0){
-          queryHash.bool.must.push( titleQuery(titleBoxQueryString) )
-        }
-      }
-
-      if(customQuery.startDate || customQuery.endDate){
-        queryHash.bool.filter = {
-          range: {
-            broadcast_date: {}
-          }
-        }
-
-        if(customQuery.startDate){
-          queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
-        }
-
-        if(customQuery.endDate){
-          queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
-        }
-      }
-
-      if(mainBoxQuoties){
-        // ooh wee we got da quoties
-        queryHash.bool.must ||= []
-        mainBoxQuoties.forEach( (quooty) => {
-          // add all-fields-array match_phrase query for each quoty
-
-          // each quoty term *must* satisfy its *should*
-          // its *should* requires at least one field to match_phrase the quoty term
-          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )
-        })
-      }
-
-      if(allBoxQuoties){
-        queryHash.bool.must ||= []
-        allBoxQuoties.forEach( (quooty) => {
-          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )  
-        })
-      }
-
-      if(titleBoxQuoties){
-        queryHash.bool.must ||= []
-        titleBoxQuoties.forEach( (quooty) => {
-          // same query required for quoties in 'all' box vs 'main' box, so just do the exact same thing
-          queryHash.bool.must.push( titleQueryExact(quooty) )
-        })
-      }
-
-      // console.log( 'finishing with qh', query, queryHash )
-      // regahdless
-      return queryHash
-    }, 
+      return originalSearch(query, search_attributes, searchSet)
+    } 
 
   })
-
-  function matchPhraseShouldClause(quoty){
-    // return a bool that *should* match minimum one field with our quoty clause
-
-
-    if(dis == 3){
-      return {
-        multi_match: {
-          query: quoty,
-          type: "phrase",
-          // fields: [some field names...]
-        }
-      }
-    } else {
-      return  {
-        bool: {
-          should: allFieldsMatchPhraseArray(quoty),
-          minimum_should_match: 1
-        }
-      }
-    }
-    
-  }
-
-  function pullQuotedClauses(query){
-    var result = []
-    var rx = /".*?"/g
-    var quoty
-    while( quoty = rx.exec( query ) ) {
-      if(quoty && quoty[0]){
-        result.push(quoty[0].replace(/\"/g, ''))
-      }
-    }
-
-    return result
-  }
 
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
@@ -1458,9 +731,9 @@ export default function Catalog() {
           <SearchAccordion title="Options" content ={
             <>
               <div>Include</div>
-              <div><label>All Sources<input onChange={ () => handleSearchSet(SEARCH_BOTH, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => handleSearchSet(SEARCH_RECORD, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => handleSearchSet(SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_BOTH} checked={ searchSet == SearchSubsets.SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_RECORD} checked={ searchSet == SearchSubsets.SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_TRANSCRIPT} checked={ searchSet == SearchSubsets.SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 

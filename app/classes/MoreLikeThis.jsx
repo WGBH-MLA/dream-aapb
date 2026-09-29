@@ -8,35 +8,58 @@ export default class MoreLikeThis {
     this.numRecords = numRecords
   }
   
-  async getMoreLikeThis(doc_ids){
+  async getMoreLikeThis(doc_ids, field_list){
     // must be 1 index, doesnt work with index,otherindex format here v
     var url = `${this.config.esURL}/${this.config.esIndex}/_search`
     var idsClause = doc_ids.map((doc_id) => { return { _index: this.config.esIndex, _id: doc_id } } )
-    
+
+    // // original
+    // var query = {
+    //   size: this.numRecords,
+    //   query: {
+    //     more_like_this: {
+    //       // because we use doc ids rather than just text or field value query to find mlt, we seem to have to specify fields explciitly
+    //       fields: field_list,
+    //       like: idsClause,
+    //       min_term_freq: 1,
+    //       max_query_terms: 1024,
+    //       // otherwise, input doc is too few
+    //       min_doc_freq: 1
+    //     }
+    //   }
+    // }
+
     var query = {
       size: this.numRecords,
       query: {
-        more_like_this: {
-          // because we use doc ids rather than just text or field value query to find mlt, we seem to have to specify fields explciitly
-          fields: [
-            "description",
-            "title",
-            "all_titles",
-            "pbcoreDescriptionDocument.pbcoreSubject.text",
-            "pbcoreDescriptionDocument.pbcoreDescription.text",
-            "pbcoreDescriptionDocument.pbcoreGenre.text",
-            "pbcoreDescriptionDocument.pbcoreRelation.pbcoreRelationIdentifier.text",
-            "pbcoreDescriptionDocument.pbcoreCoverage.coverage.text",
-            "pbcoreDescriptionDocument.pbcoreCreator.creator.text",
-            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text",
-            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text",
-            "pbcoreDescriptionDocument.pbcoreAnnotation.text",
-          ],
-          like: idsClause,
-          min_term_freq: 1,
-          max_query_terms: 1024,
-          // otherwise, input doc is too few
-          min_doc_freq: 1
+        bool: {
+          should: [
+            // regular mlt
+            {
+              more_like_this: {
+                fields: ["all_titles"],
+                like: idsClause,
+                min_term_freq: 1,
+                max_query_terms: 1024,
+                min_doc_freq: 1
+              }
+            },
+            // nested query is the only way to access nested field via query but we can do mlt inside it
+            {
+              nested: {
+                path: "pbcoreDescriptionDocument.pbcoreDescription",
+                query: {
+                  more_like_this: {
+                    fields: ["pbcoreDescriptionDocument.pbcoreDescription.text"],
+                    like: idsClause,
+                    min_term_freq: 1,
+                    max_query_terms: 1024,
+                    min_doc_freq: 1
+                  }
+                }
+              }      
+            }
+          ]
         }
       }
     }

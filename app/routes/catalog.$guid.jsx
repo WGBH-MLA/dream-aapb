@@ -86,8 +86,34 @@ export const loader = async ({params, request}) => {
       esIndex: process.env.ES_INDEX,
       esAPIKey: process.env.ES_API_KEY
     }
-    let relatedRecords = await new MoreLikeThis(config).getMoreLikeThis( [record.id] )
-    data.related_records = relatedRecords
+
+    let mlt_fields = [
+            
+      // adding too many fields to MLT causes no results, because mlt makes 'master term list', and more fields means more overall text so noisier matching
+      // "description",
+
+      // "title",
+      "all_titles",
+      // "pbcoreDescriptionDocument.pbcoreSubject.text",
+      // "pbcoreDescriptionDocument.pbcoreDescription.text",
+      // "pbcoreDescriptionDocument.pbcoreGenre.text",
+      // "pbcoreDescriptionDocument.pbcoreRelation.pbcoreRelationIdentifier.text",
+      // "pbcoreDescriptionDocument.pbcoreCoverage.coverage.text",
+      // "pbcoreDescriptionDocument.pbcoreCreator.creator.text",
+      // "pbcoreDescriptionDocument.pbcoreContributor.contributor.text",
+      // "pbcoreDescriptionDocument.pbcorePublisher.publisher.text",
+      // "pbcoreDescriptionDocument.pbcoreAnnotation.text",
+    ]
+    // let relatedRecordsTitle = await new MoreLikeThis(config).getMoreLikeThis( [record.id], mlt_fields )
+    // mlt_fields = [
+    //   "pbcoreDescriptionDocument.pbcoreDescription.text",
+    // ]
+    // let relatedRecordsDescription = await new MoreLikeThis(config).getMoreLikeThis( [record.id], mlt_fields )
+    // console.log( 'desc', relatedRecordsDescription )
+    // data.related_records = relatedRecordsTitle.concat(relatedRecordsDescription)
+
+
+    data.related_records = await new MoreLikeThis(config).getMoreLikeThis([record.id], ["title"])
   }
 
   return data
@@ -333,7 +359,6 @@ export default function ShowRecord() {
         </div>
       )
     }
-    
   }
 
   return (

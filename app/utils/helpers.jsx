@@ -77,9 +77,22 @@ export function truth(val){
   return val || typeof val === "number" || typeof val === "string"
 }
 
-export function notEmpty(array){
-  // console.log( 'when i test it i find taht', array, array.length, array.length > 0 )
-  return array && array.length > 0
+export function notEmpty(obj){
+  if(typeof obj === "string"){
+    return (obj || obj === 0) && obj.length > 0
+  } else if(Array.isArray(obj)){
+    return obj && obj.length > 0
+  }
+}
+
+export function isBlank(str){
+  if(str){
+    // truthy str value, is it empty or whitespace
+    return str === "" || str.match(/^\s+$/)
+  } else {
+    // stupid 0 case, we consider not blank if its exactly a 0 or "0"
+    return str == 0 ? false : true
+  }
 }
 
 
