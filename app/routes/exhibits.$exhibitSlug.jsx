@@ -4,6 +4,8 @@ import { renderExhibit } from "../classes/exhibitPresenter"
 import { extractMeta } from "../utils/meta"
 import AAPBRecord from "../components/AAPBRecord"
 import { getRecords } from "../utils/getRecord"
+import { normalizeGuid } from '../utils/helpers'
+
 
 export const loader = async ({
   params,
@@ -24,7 +26,7 @@ export const loader = async ({
     // there are record blocks
 
     // get the record data for these aapb records in one query
-    let aapb_record_data = await getRecords( aapb_record_blocks.map((ar) => ar.guid ), esURL, esIndex, apiKey )
+    let aapb_record_data = await getRecords( aapb_record_blocks.map((ar) => normalizeGuid(ar.guid) ), esURL, esIndex, apiKey )
 
     // format to hash so less looping
     let aapb_record_dict = {}

@@ -30,27 +30,29 @@ export function niceTitle(titles){
 }
 
 export function dateTypeName(type){
-  switch(type){
-    case "broadcast":
-      return "Broadcast"
-    case "air":
-      return "Broadcast"
-    case "issue":
-      return "Broadcast"
-    case "published":
-      return "Broadcast"
-    case "release":
-      return "Broadcast"
-    case "created":
-      return "Created"
-    case "recorded":
-      return "Created"
-    case "performance":
-      return "Created"
-    case "revised":
-      return "Revised"
-    case "copyright":
-      return "Copyright Date"
+  if(type){
+    switch(type.toLowerCase()){
+      case "broadcast":
+        return "Broadcast"
+      case "air":
+        return "Broadcast"
+      case "issue":
+        return "Broadcast"
+      case "published":
+        return "Broadcast"
+      case "release":
+        return "Broadcast"
+      case "created":
+        return "Created"
+      case "recorded":
+        return "Created"
+      case "performance":
+        return "Created"
+      case "revised":
+        return "Revised"
+      case "copyright":
+        return "Copyright Date"
+    }  
   }
 }
 
@@ -65,7 +67,8 @@ export function checkVisible(ele) {
   }
 
   var rect = ele.getBoundingClientRect()
-  var viewHeight = Math.max(document.documentElement.clientHeight*0.7, window.innerHeight*0.7)
+  var viewHeight = Math.max(document.documentElement.clientHeight*0.9, window.innerHeight*0.9)
+
   return !(rect.bottom < 0 || rect.top - viewHeight >= 0)
 }
 
@@ -74,9 +77,22 @@ export function truth(val){
   return val || typeof val === "number" || typeof val === "string"
 }
 
-export function notEmpty(array){
-  // console.log( 'when i test it i find taht', array, array.length, array.length > 0 )
-  return array && array.length > 0
+export function notEmpty(obj){
+  if(typeof obj === "string"){
+    return (obj || obj === 0) && obj.length > 0
+  } else if(Array.isArray(obj)){
+    return obj && obj.length > 0
+  }
+}
+
+export function isBlank(str){
+  if(str){
+    // truthy str value, is it empty or whitespace
+    return str === "" || str.match(/^\s+$/)
+  } else {
+    // stupid 0 case, we consider not blank if its exactly a 0 or "0"
+    return str == 0 ? false : true
+  }
 }
 
 
@@ -103,4 +119,12 @@ export function scrollToAnchor(anchorId) {
 
 export function scrollToTop() {
   window.scrollTo(0, 0)
+}
+
+export function normalizeGuid(guid){
+  return guid.replace(/cpb-aacip./g, "cpb-aacip-")
+}
+
+export function pageTitle(title){
+  return `${title} - American Archive of Public Broadcasting`
 }
