@@ -1,7 +1,4 @@
-import { redirect } from 'react-router';
-
 export async function getExhibits(options = "") {
-  let exhibits = []
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
     wagHost + `/exhibits/?` + options,
@@ -9,6 +6,7 @@ export async function getExhibits(options = "") {
     console.log("Error fetching exhibits", error)
   })
 
+  let exhibits = []
   if(resp){
     let body = await resp.json()
     exhibits = body.items
@@ -18,12 +16,12 @@ export async function getExhibits(options = "") {
 }
 
 export async function getCollections(options = "") {
-  let collections = []
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
     console.log( 'Error fetching collections!', err )
   })
 
+  let collections = []
   if(resp){
     let body = await resp.json()
     collections = body.items
@@ -33,18 +31,12 @@ export async function getCollections(options = "") {
 }
 
 export async function getFeatured() {
-  let featured = []
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(`${wagHost}/collections/?limit=3&order=random`).catch((err) => {
-    console.log( 'Error fetching featured collections!', err )
-  })
-
-  if(resp){
-    let body = await resp.json()
-    featured = body.items
-  }
-
-  return featured
+  let resp = await fetch(
+    wagHost + `/collections/?limit=3&order=random`,
+  )
+  let body = await resp.json()
+  return body.items
 }
 
 export async function getPageBySlug(type, slug) {
@@ -58,7 +50,6 @@ export async function getPageBySlug(type, slug) {
   }
 
   if (!body || body?.meta?.total_count === 0) {
-
     console.log(`Page not found by slug`)
     throw new Response('Page not found', {
       status: 404,
