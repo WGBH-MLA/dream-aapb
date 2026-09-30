@@ -1,57 +1,130 @@
-import Thumbnail from "./Thumbnail"
+import { useState, useRef, useEffect } from "react";
+import Thumbnail from "./Thumbnail";
 
-export default function TVMenu(props){
-  let classes = "tv-menu-container bmarbot"
+const ChevronLeft = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+  </svg>
+);
 
-  let programs = props.programs
-  if(props.programs){
-    if(programs.length == 3){
-      programs = programs.map( (program) => {
-        program.classes = " three"
-        return program
-      })
+const ChevronRight = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+  </svg>
+);
 
-      classes += " three"
-    } else {
-      classes += " four"
-    }
-
-    programs = programs.slice(0,4)
-    programs = programs.map((program) => TVProgram({...program, showDesc: props.showDesc}))
-  }
-
-  let seeAll
-  if(props.seeAllURL){
-    seeAll = <a className="see-all" href={ props.seeAllURL }>See All</a>
-  }
- 
-  return (
-    <div className={ classes }>
-      { seeAll }
-      <h2>{props.title}</h2>
-      <div className="tv-menu-body">
-        { programs }
+function CarouselCard({ item, showDesc }) {
+  return(
+    <a className="carousel-card" href={item.url}>
+      <div className="carousel-card-media">
+        <Thumbnail
+          url={item.thumbnailURL}
+          alt={item.title} hidebar={true}
+        />
+        <div className="carousel-card-overlay">
+          <span className="carousel-card-title">{item.title}</span>
+          {showDesc && item.desc && (
+            <span className="carousel-card-desc">{item.desc}</span>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    </a>
+  );
 }
 
-function TVProgram(props){
-  let thumb
-  if(props.guid){
-    // it's a record
-    thumb = <Thumbnail guid={props.guid} mediaType={props.mediaType} />
-  } else {
-    // it's just an image
-    thumb = <Thumbnail url={props.thumbnailURL} />
-  }
+function NavButton({ direction, onClick }) {
   return (
-    <div key={props.key} className={"tv-menu-program " + (props.classes ? props.classes : "")} >
-      <a href={props.url} >
-        { thumb }
-        <h4>{ props.title }</h4>
-        {props.showDesc && <h5 className="tv-menu-program-desc">{ props.desc }</h5> }
-      </a>
+    <button
+      onClick={onClick}
+      className={`carousel-nav-btn ${direction}`}
+      aria-label={`Scroll ${direction === "left" ? "Scroll Left" : "Scroll Right"}`}
+    >
+      {direction === "left" ? <ChevronLeft /> : <ChevronRight />}
+    </button>
+  );
+}
+
+export default function Carousel({
+  title,
+  items = [],
+  programs = [],
+  seeAllURL,
+  columns,
+  showDesc = false,
+}) {
+
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  
+  const itemList = items.length > 0 ? items : programs;
+  const isThreeColumn = columns === 3 || itemList.length === 3;
+
+  const checkScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 5);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const el = scrollRef.current;
+    if (!el) return;
+      el.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+    return () => {
+      el.removeEventListener("scroll", checkScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [itemList]);
+
+  const handleScroll = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth * 0.8;
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+  
+  const showNav = !isThreeColumn;
+
+  return (
+    <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""}`}>
+
+      <div className="carousel-header">
+        <h2 className="carousel-title">{title}</h2>
+        {seeAllURL && (
+          <a className="carousel-see-all" href={seeAllURL}>
+            See All <span className="carousel-see-all-arrow">&rsaquo;</span>
+          </a>
+        )}
+      </div>
+
+      <div className="carousel-slider-wrapper">
+        {showNav && canScrollLeft && (
+          <NavButton
+            direction="left"
+            onClick={() => handleScroll("left")}
+          />
+        )}
+
+        <div className="carousel-track" ref={scrollRef}>
+          {itemList.map((item, index) => (
+            <CarouselCard key={index} item={item} showDesc={showDesc} />
+          ))}
+        </div>
+
+        {showNav && canScrollRight && (
+          <NavButton
+            direction="right"
+            onClick={() => handleScroll("right")}
+          />
+        )}
+      </div>
     </div>
-  )
+  );
 }

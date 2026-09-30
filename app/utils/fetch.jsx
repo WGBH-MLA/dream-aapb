@@ -6,22 +6,30 @@ export async function getExhibits(options = "") {
     wagHost + `/exhibits/?` + options,
   ).catch((error) => {
     console.log("Error fetching exhibits", error)
-    return []
   })
 
-  let body = await resp.json()
-  // TODO REMOVE ->> real top level exhibits via top_exhibit field
-  // return body.items.filter((ex) => (ex.meta.html_url.match(/\//g) || []).length == 4 )
-  return body.items
+  let exhibits = []
+  if(resp){
+    let body = await resp.json()
+    exhibits = body.items
+  }
+
+  return exhibits
 }
 
 export async function getCollections(options = "") {
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(
-    wagHost + `/collections/?` + options,
-  )
-  let body = await resp.json()
-  return body.items
+  let resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
+    console.log( 'Error fetching collections!', err )
+  })
+
+  let collections = []
+  if(resp){
+    let body = await resp.json()
+    collections = body.items
+  }
+
+  return collections
 }
 
 export async function getFeatured() {

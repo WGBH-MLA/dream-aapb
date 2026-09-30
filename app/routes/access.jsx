@@ -1,3 +1,4 @@
+import SummaryBox from "../components/SummaryBox"
 import LinkBankFooter from '../components/LinkBankFooter';
 
 export default function Access() {
@@ -5,11 +6,8 @@ export default function Access() {
     <div className="page-container">
       <div className="skinny-body-container marbot static-logos">
         <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
-        <h2 className="marbot">On Location Research</h2>
-        <div className="marbot">
-          Approximately 30% of the American Archive of Public Broadcasting (AAPB) collection is accessible anywhere in the United States through the Online Reading Room on the AAPB website. Members of the general public may access the entire collection within the GBH Archives offices and at the Library of Congress Moving Image and Recorded Sound Research Centers. Content is accessible as proxy files, or low-resolution viewing/listening copies provided through the AAPB website. Users accessing AAPB materials at the on-site research locations must agree to abide by AAPB Access Policies.
-        </div>
-
+        <SummaryBox title="On Location Research" text="Approximately 30% of the American Archive of Public Broadcasting (AAPB) collection is accessible anywhere in the United States through the Online Reading Room on the AAPB website. Members of the general public may access the entire collection within the GBH Archives offices and at the Library of Congress Moving Image and Recorded Sound Research Centers. Content is accessible as proxy files, or low-resolution viewing/listening copies provided through the AAPB website. Users accessing AAPB materials at the on-site research locations must agree to abide by AAPB Access Policies."
+        />
         <h3 className="marbot">Visiting GBH</h3>
 
         <div className="marbot" style={{ display: "flex"}}>

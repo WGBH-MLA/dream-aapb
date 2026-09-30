@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
-import QuickPagination from "../components/QuickPagination"
 import SummaryBox from "../components/SummaryBox"
 import randomThumb from "../utils/randomThumb"
 import randomRecords from "../utils/randomRecords"
@@ -9,27 +8,28 @@ import { exhibitToTVProgram } from "../utils/toTVProgram"
 import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
-  let data = await getExhibits("limit=9999&order=random")
-  let exhibits = data.map((exhibit) => exhibitToTVProgram(exhibit))
-
-  return exhibits
-}
-
-export default function Index() {
-  let data = useLoaderData()
-  const [currentPage, setCurrentPage] = useState(0)
-
-  var handleChangePage = (pageNumber) => {
-    setCurrentPage(pageNumber)
+  let radio_and_tv = await getExhibits("order=random")
+  
+  if (radio_and_tv) {
+    radio_and_tv = radio_and_tv.map((exhibit) => exhibitToTVProgram(exhibit))
+  }
+  
+  let data
+  data = {
+    radio_and_tv,
   }
 
-  return (
-    <div className='body-container'>
-      <h1>Exhibits</h1>
-      <p>American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance.</p>
+  return data
+}
 
-      <TVMenu title="" programs={data.exhibits} />
-      <QuickPagination baseURL={"/exhibits"} currentPage={currentPage} handleChangePage={handleChangePage} />
+export default function Exhibits() {
+  let data = useLoaderData()
+  return (
+    <div className="skinny-body-container">
+       <SummaryBox title="Exhibits" text="American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance." />
+         <div className="body-container">
+          <TVMenu title="Test Exhibits" programs={data.radio_and_tv} />
+          </div>
     </div>
   )
 }
