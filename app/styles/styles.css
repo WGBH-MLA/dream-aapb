@@ -809,19 +809,19 @@ div.homepage-search div.layout-search input::placeholder {
 }
 
 div.header-bar div.layout-search input {
-  height: 2.4em;
+  height: 2.8em;
   border-radius: 3px 0 0 3px;
   border: 1px solid #9da2cc;
 }
 div.header-bar div.layout-search {
-  margin-top: 1.2em;
+  margin-top: 1.4em;
   margin-right: 2em;
   margin-left: -5em;
   border-radius: 0 3px 3px 0;
 }
 
 div.header-bar div.layout-search button {
-  height: 3.2em;
+  height: 3.1em;
   width: 3.6em;
   margin-top: -.1em;
   border-radius: 0 3px 3px 0;
@@ -860,12 +860,9 @@ div.layout-search {
   height: 2.4em;
 }
 
-div.layout-search input, div.layout-search button {
-  margin: 0;
-}
 
 div.layout-search input {
-  min-height: 2.4rem;
+  min-height: 2rem;
   padding-left: 1.2em;
   border: -1px solid #ddd;
   min-width: 12rem;
