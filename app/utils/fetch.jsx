@@ -1,5 +1,3 @@
-import { redirect } from 'react-router';
-
 export async function getExhibits(options = "") {
   let wagHost = process.env.AAPB_API_URL
   let resp = await fetch(
@@ -52,7 +50,6 @@ export async function getPageBySlug(type, slug) {
   }
 
   if (!body || body?.meta?.total_count === 0) {
-
     console.log(`Page not found by slug`)
     throw new Response('Page not found', {
       status: 404,

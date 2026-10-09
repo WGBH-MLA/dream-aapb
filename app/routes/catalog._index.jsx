@@ -4,16 +4,17 @@ import { useLoaderData, useSearchParams } from 'react-router'
 import Searchkit from "searchkit"
 import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
-import { scrollToTop }  from '../utils/helpers'
 
-const SEARCH_RECORD = 0
-const SEARCH_TRANSCRIPT = 1
-const SEARCH_BOTH = 2
+import { getCollections } from "../utils/fetch"
+import { scrollToTop }  from "../utils/helpers"
+import originalSearch from "../searches/originalSearch"
+import multimatchSearch from "../searches/multimatchSearch"
+import dismaxSearch from "../searches/dismaxSearch"
+import poshSearch from "../searches/poshSearch"
+import boostySearch from "../searches/boostySearch"
 
-const OR_FIELDS = [
-  "producing_org",
-  "pbcoreDescriptionDocument.pbcoreCreator.creator"
-]
+import { SearchSubsets } from "../utils/SearchSubsets"
+import { SearchModes } from "../utils/SearchModes"
 
 import {
           InstantSearch,
@@ -39,35 +40,60 @@ import SearchAccordion from "../components/SearchAccordion"
 import ViewSelect from "../components/ViewSelect"
 
 export const loader = async ({params, request}) => {
+  let collections = await getCollections("limit=999")
+
   return {
     esIndex: process.env.ES_INDEX,
     tsIndex: process.env.ES_TS_INDEX,
     apiKey: process.env.ES_API_KEY,
-    esURL: process.env.ES_URL
+    esURL: process.env.ES_URL,
+    collections: collections
   }
 }
 
 // aapb-freezing-osmium,transcript-freezing-osmium
 
-function CustomStats() {
-  const {
-    hitsPerPage,
-    nbHits,
-    areHitsSorted,
-    nbSortedHits,
-    nbPages,
-    page,
-    processingTimeMS,
-    query,
-  } = useStats()
+function CustomStats(props) {
+  function showCount(count){
+    if(props.query){
+      if(count && count > 0){
+        return `${count} results found`
+      } else if(count == 0){
+        return "0 results found"
+      }  
+    }
+
+    // no query, no text
+    return ""
+  }
+
+  // const {
+  //   hitsPerPage,
+  //   nbHits,
+  //   areHitsSorted,
+  //   nbSortedHits,
+  //   nbPages,
+  //   page,
+  //   processingTimeMS,
+  //   query,
+  // } = useStats()
+
+  // return (
+  //   <div className="ais-Stats">
+  //     <span className="ais-Stats-text">
+  //       Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+  //     </span>
+  //   </div>
+  // )
 
   return (
     <div className="ais-Stats">
       <span className="ais-Stats-text">
-        Found {nbHits === 10000 ? "more than 10000" : nbHits} records in {processingTimeMS} ms
+        { showCount(props.count) }
       </span>
     </div>
   )
+
 }
 
 function CustomSearchBox(props) {
@@ -92,13 +118,14 @@ function CustomSearchBox(props) {
         />
 
         <h4>Contains all of these words</h4>
-        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="all"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.all } />
         <h4>This title</h4>
-        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="title"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.title } />
         <h4>None of these words</h4>
-        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } />
+        <input id="none"  className="sidebar-search" type="text" onKeyUp={ (e) => props.handleCustomQuery(e.target.id, e.target.value, refine) } placeholder={ props.customQuery.none } />
         <div>
           <button className="sidebar-search-button">Update</button>
+          <button id="copy" className="sidebar-search-button secondary smarleft" onClick={ props.copySearch }>Copy Search</button>
         </div>
         <div hidden={!isSearchStalled}>Searching…</div>
 
@@ -110,11 +137,16 @@ function CustomSearchBox(props) {
 export default function Catalog() {
   const data = useLoaderData()
 
+  // include transcript in search or not
+  const [searchSet, setSearchSet] = useState(SearchSubsets.BOTH)
+  // which querying style are we using
+  const [searchMode, setSearchMode] = useState(SearchModes.BOOSTY)
+  const [count, setCount] = useState(null)
+  
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
-
   const [customQuery, setCustomQuery] = useState({
-    query: searchParams.get(`${data.esIndex}[query]`) || "",
+    query: searchParams.get(`${ indicesToUse(searchSet, data.esIndex, data.tsIndex) }[query]`) || "",
     all: searchParams.get("all") || "",
     title: searchParams.get("title") || "",
     none: searchParams.get("none") || "",
@@ -122,9 +154,8 @@ export default function Catalog() {
     endDate: searchParams.get("endDate") || "",
   })
 
-
-// include transcript in search or not
-  const [searchSet, setSearchSet] = useState(SEARCH_BOTH)
+  // store actual index names in state so it changes with the radio button
+  const [currentIndexes, setCurrentIndexes] = useState( indicesToUse(searchSet, data.esIndex, data.tsIndex) )
 
   let view = searchParams.get("view") || "standard"
   const [viewSelect, setViewSelect] = useState(view)
@@ -135,6 +166,44 @@ export default function Catalog() {
   // toggle searchy UI on mobile only
   const [hideSearchy, setHideSearchy] = useState(false)
   const [searchyPosition, setSearchyPosition] = useState(0)
+
+  const addToolTip = () => {
+    document.getElementById("copy").innerHTML = "Copy Search<span class='tooltip fade'>Copied to clipboard</span>"
+  }
+
+  const copySearch = (indices) => {
+    let query,all,title,none
+    query = all = title = none = ""
+    if(customQuery.query){
+      query = `${ indices }[query]=${customQuery.query}`
+    }
+
+    if(customQuery.all){
+      all = `&all=${customQuery.all}`
+    }
+
+    if(customQuery.title){
+      title = `&title=${customQuery.title}`
+    }
+
+    if(customQuery.none){
+      none = `&none=${customQuery.none}`
+    }
+
+    let url = `${window.location.href.split('?')[0]}/?${query}${all}${title}${none}`
+    function copyTextToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          console.log('Impressively succeeded copying to clipboard!');
+        })
+        .catch(err => {
+          console.error('Annoyingly failed to copy text: ', err);
+        })
+    }
+
+    copyTextToClipboard(url)
+    addToolTip()
+  }
 
   let sidebarClasses = "page-sidebar bmarleft"
   let topRefinementsBarClasses = "top-refinements-bar smarbot bmarleft"
@@ -148,22 +217,40 @@ export default function Catalog() {
     toggleMessage = "Hide"
   }
 
-  function indicesToUse(asset_index, transcript_index){
-    // until ts querying fully implemented
-    return asset_index
-    if(searchSet === SEARCH_RECORD){
+  function indicesToUse(search_set, asset_index, transcript_index){
+    if(search_set === SearchSubsets.RECORD){
+      // console.log( "RECORD" )
       return asset_index
-    } else if(searchSet === SEARCH_TRANSCRIPT){
+    } else if(search_set === SearchSubsets.TRANSCRIPT){
+      // console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
+      // console.log( "BOPH" )
       return `${asset_index},${transcript_index}`
     }
+  }
+
+  function handleSearchSet(search_set, asset_index, transcript_index){
+    setSearchSet(search_set)
+    setCurrentIndexes( indicesToUse(search_set, asset_index, transcript_index) )
   }
 
   function handleCustomQuery(type, value, refine){
     // ohh la la
     setCustomQuery({...customQuery, [type]: value})
     // console.log( 'the current complete value of customQuery is ', customQuery )
+    let allParam = searchParams.get("all")
+    if(customQuery.all && !allParam){
+      searchParams.set("all", customQuery.all)
+    }
+    let titleParam = searchParams.get("title")
+    if(customQuery.title && !titleParam){
+      searchParams.set("title", customQuery.title)
+    }
+    let noneParam = searchParams.get("none")
+    if(customQuery.none && !noneParam){
+      searchParams.set("none", customQuery.none)
+    }
 
     // make sure the query param changes (harmlessly) when there's no query present, so other boxes actually work onchange
     refine(customQuery.query === "" ? " " : customQuery.query)
@@ -185,31 +272,31 @@ export default function Catalog() {
     })
   }
 
-  const accessLevel = (items) => {
-    return items.map( (item) => {
-      if(item.label == "Online Reading Room"){
-        item.label = "Available Online"
-      } else if(item.label == "On Location"){
-        item.label = "All Digitized"
-      } else {
-        // private or nothing
-        item.label = "All Records"
-      }
+  // const accessLevel = (items) => {
+  //   // causes weird rerender and doesnt consolidate options as desired
+  //   return items.map( (item) => {
+  //     if(item.label == "Online Reading Room"){
+  //       item.label = "Available Online"
+  //     } else if(item.label == "On Location" || item.label == "On location"){
+  //       item.label = "All Digitized"
+  //     } else if(item.label == "Private"){
+  //       item.label = "Private"
+  //     } else {
+  //       // private or nothing
+  //       console.log( 'help!', item.label, item.value )
+  //       item.label = "All Records"
+  //     }
 
-      return item
-    }).sort((a,b) => {
-      // sort availabilty options a-z so they dont jump around ui based on num results
-      if(a < b){
-        return 1
-      } else {
-        return -1
-      }
-    })
-  }
-
-  const isOrField = (fieldName) => {  
-    return OR_FIELDS.includes(fieldName)
-  }
+  //     return item
+  //   }).sort((a,b) => {
+  //     // sort availabilty options a-z so they dont jump around ui based on num results
+  //     if(a < b){
+  //       return 1
+  //     } else {
+  //       return -1
+  //     }
+  //   }).flat()
+  // }
 
   const prettyFieldNames = (fieldName) => {
     switch(fieldName){
@@ -270,24 +357,29 @@ export default function Catalog() {
     return attributes
   }
 
+// 10 attributea
+// each one a facetcollection
+// each fcollection has count, value, label
+
+  const prettyCollections = (attributes) => {
+    // console.log( 'ummm', attributes )
+
+    attributes = attributes.map((attribute) => {
+      // console.log( 'attribute', attribute )
+      // console.log( 'honking', data.collections.forEach((honk) => console.log( 'honk!!', honk.meta.slug )) )
+      let thisCollection = data.collections.find((coll) => coll.meta.slug == attribute.label )
+      if(thisCollection){
+        attribute.label = thisCollection.meta.slug
+      }
+
+      return attribute
+    })
+
+    return attributes
+  }
+
   const onlyUnique = (value, index, array) => {
     return array.indexOf(value) === index
-  }
-
-  const hasQuoties = (query) => {
-    return query && query.includes('\"')
-  }
-
-  const extractQuotiesFromSearchbox = (query) => {
-    var quoties = pullQuotedClauses(query)
-    // remove quoted clauses from the query itself
-    query = query.replace(/".*?"/g ,"")
-    // console.log( 'I WANT MY QUOTIES', quoties, query )
-
-    return {
-      query: query, 
-      quoties: quoties
-    }
   }
 
   // createquotyquyery???
@@ -295,10 +387,10 @@ export default function Catalog() {
   let currentRefinementsClasses, showRefinementButtonText
   if(!showingRefinements){
     currentRefinementsClasses = "current-refinements-container closed"
-    showRefinementButtonText = "Show All"
+    showRefinementButtonText = "Show Filters"
   } else {
     currentRefinementsClasses = "current-refinements-container"
-    showRefinementButtonText = "Show Less"
+    showRefinementButtonText = "Hide Filters"
   }
 
 
@@ -319,330 +411,32 @@ export default function Catalog() {
               handleCustomQuery={ handleCustomQuery }
               query={ customQuery.query }
               defaultQuery={ customQuery.query }
+              customQuery={ customQuery }
+              copySearch={ () => copySearch(indicesToUse(searchSet, data.esIndex, data.tsIndex), ) }
             />
   //////////
 
-  
-  // othiz
-  function titleQuery(tQuery){
-    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle
-    return {
-      bool: {
-        should: [
-          {
-            match: {
-              "title": tQuery
-            }
-          },
-          {
-            nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
-              query: {
-                match: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                    query: tQuery,
-                  }
-                }
-              }
-            } 
-          },
-        ],
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function titleQueryExact(tQuery){
-    // the tQuery must appear in EITHER the derived title field or a pbcoreTitle, exact match
-    return {
-      bool: {
-        should: [
-          {
-            match_phrase: {
-              "title": tQuery
-            }
-          },
-          {
-            nested: {
-              path: "pbcoreDescriptionDocument.pbcoreTitle",
-              query: {
-                match_phrase: {
-                  "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                    query: tQuery,
-                  }
-                }
-              }
-            } 
-          },
-        ],
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function allFieldsArray(query){
-    return [
-      // simplified syntax that works but omits options
-      {
-        match: {
-          "guid": query
-        }
-      },
-      {
-        match: {
-          "genres": query,
-        }
-      },
-      {
-        match: {
-          "topics": query,
-        }
-      },
-      
-      //full syntax w options
-      {
-        match: {
-          title: {
-            query: query,
-            analyzer: "standard",
-            boost: 4
-          }
-        }
-      },
-
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                query: query,
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                query: query,
-                analyzer: "standard",
-                boost: 3
-              }
-            }
-          },
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                query: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            match: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                query: query,
-                boost: 1
-              }
-            }
-          }
-        }
-      }
-    ]
-  }
-
-  function allFieldsTermArray(query){
-
-    return [ 
-      {
-        term: {
-          guid: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          genres: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          topics: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        term: {
-          title: {
-            value: query,
-            case_insensitive: true
-          }
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          },
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-                value: query
-              }
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            term: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
-                value: query,
-                case_insensitive: true
-              }
-            }
-          }
-        }
-      }
-    ]
-  }
-
-  function allFieldsTermQuery(query){
-    // should with a term match for each field, min match 1
-    // if one of these hits, the must_not clause in the big bool will remove it
-
-    var nested_clauses = query.split(" ").map((q) => allFieldsTermArray(q)).flat()
-    return {
-      bool: {
-        // this is admittedly just crazy
-        should: nested_clauses,
-        // this is for must_not, any single match fails!
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function allFieldsMatchPhraseArray(query){
-
-    return [ 
-      {
-        match_phrase: {
-          guid: query
-        }
-      },
-      {
-        match_phrase: {
-          genres: query
-        }
-      },
-      {
-        match_phrase: {
-          topics: query
-        }
-      },
-      {
-        match_phrase: {
-          title: query
-        }
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreDescription",
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreDescription.text": query
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreTitle",
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreTitle.text": query
-            }
-          },
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreAssetDate",
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
-            }
-          }
-        } 
-      },
-      {
-        nested: {
-          path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
-          query: {
-            match_phrase: {
-              "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
-            }
-          }
-        }
-      }
-    ]
-  }
 
 
-  const sk = new Searchkit({
+  const config = {
     connection: {
       host: data.esURL,
       apiKey: data.apiKey
     },
-
     search_settings: {
-      highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
+      // runtime_mappings: {
+      //   asset: {
+      //     type: "lookup",
+      //     target_index: data.esIndex,
+      //     input_field: "guid",
+      //     target_field: "guid",
+      //     // cant get nested fields in runtime lookuip
+      //     fetch_fields: ["title", "producing_org", "media_type"]
+      //   },
+
+      // },
+
+      // highlight_attributes: ["pbcoreDescriptionDocument.pbcoreTitle.text"],
 
       search_attributes: [
         // "guid",
@@ -657,7 +451,16 @@ export default function Catalog() {
       ],
 
       // WHAT FIELDS ARE INCLUDED IN RETURNED HIT
-      result_attributes: ["guid", "title", "broadcast_date", "pbcoreDescriptionDocument", "media_type", "producing_org"],
+      result_attributes: [
+        "guid",
+        "title",
+        "broadcast_date",
+        "pbcoreDescriptionDocument",
+        "media_type",
+        "producing_org",
+        "transcript_text",
+        "asset"
+      ],
 
       // // maybe used in concert with filter range frontend
       // filter_attributes: [
@@ -769,245 +572,106 @@ export default function Catalog() {
         },
       }
     }
-  })
-
-  const isEmpty = (query) => {
-    return query === "" || query.match(/^\s+$/)
   }
 
+  if(searchSet == SearchSubsets.BOTH || searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
+    config.search_settings.runtime_mappings = {
+      asset: {
+        type: "lookup",
+        target_index: data.esIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["title", "producing_org", "media_type"]
+      },
+      transcript: {
+        type: "lookup",
+        target_index: data.tsIndex,
+        input_field: "guid",
+        target_field: "guid",
+        fetch_fields: ["transcript_text"]
+      }
+    }
+  } else {
+    // SearchSubsets.RECORD
+    // config.search_settings.runtime_mappings = {
+    //   asset: {
+    //     type: 'keyword',
+    //     script: {
+    //       source: "emit('zapparanes')"
+    //     }
+    //   }
+    // }
+  }
+
+  const sk = new Searchkit(config)
+
   const searchClient = Client(sk, {
+    hooks: {
+      beforeSearch: async (searchRequests) => {
+        // add request to  main query request to get query doc count
+
+        // get main query resuest
+        const request = searchRequests[0]
+        const activeQuery = request?.body?.query || { match_all: {} };
+
+        const countRequest = {
+          body: {
+            query: activeQuery,
+            size: 0,
+            track_total_hits: true
+          }
+        }
+
+        // add in count request to be processed too
+        return [...searchRequests, countRequest];
+      },
+      afterSearch: async (searchRequests, searchResponses) => {
+        // record doc count to state and then proceed with normal search
+
+        // oops there it is
+        const countResponse = searchResponses.pop()
+        if (countResponse && countResponse.hits) {
+          setCount(countResponse.hits.total.value)
+        }
+
+        // return this continue main query normally
+        return searchResponses
+      },
+    },
+
     getQuery: (query, search_attributes) => {
-      var queryHash
-
-      var title_if_present
-      if(customQuery.title && customQuery.title.length > 0){
-        title_if_present = customQuery.title
-      }
-
-      var mainBoxQuoties
-      if(hasQuoties(query)){
-        var mainBox = extractQuotiesFromSearchbox(query)
-        query = mainBox.query
-        mainBoxQuoties = mainBox.quoties
-      }
-
-      // is query empty now ?
-      let emptyQuery = isEmpty(query)
-      
-      var mainAllFieldsArray = allFieldsArray(query)
-
-      if(emptyQuery){
-
-        // console.log( 'it aint no query' )
-        
-        // there *is not* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            // should: []
-          }
-        }
-      } else {
-        // there *is* a main box query
-        queryHash = {
-          // top bool
-          bool: {
-            // big should
-            should: [
-              {
-                bool: {
-                  should: mainAllFieldsArray,
-                  minimum_should_match: 1
-                }
-              }
-            ]
-          }
-        }
-      }
-
-      // add in clauses for each of 3 secondary searchbox fields
-      var allBox, allBoxQuoties
-      if(customQuery.all && customQuery.all.length > 0){
-
-        // lets get crazy
-        var allBoxQueryString = customQuery.all
-        if( hasQuoties(allBoxQueryString) ){
-          // quoty me on that
-          
-          // we're modifying the actual value of the main query here (to remove quoties) so don't store the altered state in customQuery
-           allBox = extractQuotiesFromSearchbox(allBoxQueryString)
-           allBoxQueryString = allBox.query
-           allBoxQuoties = allBox.quoties
-          // add appropriate quoty search clauses to bool down at the end
-        }
-
-        // whether query was modified or not, go ahead and do nonquoty all query v
-
-        // add second big should clause to outer bool query
-        var allQuery
-        if(allBoxQueryString && allBoxQueryString.length > 0 && !isEmpty(allBoxQueryString)){
-          // only add the regular query for allbox IF there remains a NONQUOTY allbox query
-          console.log( 'there is a remaining allbox query' )
-          allQuery = {
-            bool: {
-              should: allFieldsArray( allBoxQueryString ),
-              // allbox query should ALWAYS have min match one on ITS OWN BOOL, because doc doesnt match unless allboxquery appears in at least one field!
-              minimum_should_match: 1
-            }
-          }
-
-          // adding 'all' box query to outer bool here
-          queryHash.bool.must ||= []
-          queryHash.bool.must.push(allQuery)
-        }
-      }
-
-      var noneBox, noneBoxQuoties
-      if(customQuery.none && customQuery.none.length > 0){
-        
-        // lets get noney
-        var noneBoxQueryString = customQuery.none        
-        if( hasQuoties(noneBoxQueryString) ){
-          
-          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered state in customQuery
-          noneBox = extractQuotiesFromSearchbox(noneBoxQueryString)
-          noneBoxQueryString = noneBox.query
-          noneBoxQuoties = noneBox.quoties
-
-          // add appropriate quoty search clauses to bool down at the end
-        }
-
-        queryHash.bool.must_not ||= []
-
-        // add must_not clause to big bool
-        if(noneBoxQueryString && noneBoxQueryString.length > 0){
-          // only add it IF there remains a NONQUOTY nonebox query
-          queryHash.bool.must_not.push( allFieldsTermQuery(noneBoxQueryString) )
-        }
-
-        if(noneBoxQuoties && noneBoxQuoties.length > 0){
-          // now also add our quoty clauses to must_not
-          noneBoxQuoties.forEach( (quooty) => {
-            // add all-fields-array match_phrase query for each quoty
-            queryHash.bool.must_not.push( matchPhraseShouldClause(quooty) )
-          })
-        }
-      }
-
-      var titleBox, titleBoxQuoties
-      if(customQuery.title && customQuery.title.length > 0){
-
-        // lets get title-oriented
-        var titleBoxQueryString = customQuery.title
-
-        queryHash.bool.must ||= []
-        if( hasQuoties(titleBoxQueryString) ){
-          
-          // we're modifying the actual value of the none query here (to remove quoties) so don't store the altered query state in customQuery
-           titleBox = extractQuotiesFromSearchbox(titleBoxQueryString)
-           titleBoxQueryString = titleBox.query
-           titleBoxQuoties = titleBox.quoties
-          
-          // we add the appropriate quoty search clauses to the bool down at the end
-        }
-
-        if(titleBoxQueryString && titleBoxQueryString.length > 0){
-          queryHash.bool.must.push( titleQuery(titleBoxQueryString) )
-        }
-      }
-
-      if(customQuery.startDate || customQuery.endDate){
-        queryHash.bool.filter = {
-          range: {
-            broadcast_date: {}
-          }
-        }
-
-        if(customQuery.startDate){
-          queryHash.bool.filter.range.broadcast_date.gt = customQuery.startDate
-        }
-
-        if(customQuery.endDate){
-          queryHash.bool.filter.range.broadcast_date.lt = customQuery.endDate
-        }
-      }
-
-      if(mainBoxQuoties){
-        // ooh wee we got da quoties
-        queryHash.bool.must ||= []
-        mainBoxQuoties.forEach( (quooty) => {
-          // add all-fields-array match_phrase query for each quoty
-
-          // each quoty term *must* satisfy its *should*
-          // its *should* requires at least one field to match_phrase the quoty term
-          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )
-        })
-      }
-
-      if(allBoxQuoties){
-        queryHash.bool.must ||= []
-        allBoxQuoties.forEach( (quooty) => {
-          queryHash.bool.must.push( matchPhraseShouldClause(quooty) )  
-        })
-      }
-
-      if(titleBoxQuoties){
-        queryHash.bool.must ||= []
-        titleBoxQuoties.forEach( (quooty) => {
-          // same query required for quoties in 'all' box vs 'main' box, so just do the exact same thing
-          queryHash.bool.must.push( titleQueryExact(quooty) )
-        })
+      let queryHash
+      if(searchMode === SearchModes.ORIGINAL){
+        queryHash = originalSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.MULTIMATCH) {
+        queryHash = multimatchSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.DISMAX){
+        queryHash = dismaxSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.POSH){
+        queryHash = poshSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.BOOSTY){
+        queryHash = boostySearch(query, customQuery, search_attributes, searchSet)
       }
 
       // console.log( 'finishing with qh', query, queryHash )
-      // regahdless
       return queryHash
     }
   })
 
-  function matchPhraseShouldClause(quoty){
-    // return a bool that *should* match minimum one field with our quoty clause
-    return  {
-      bool: {
-        should: allFieldsMatchPhraseArray(quoty),
-        minimum_should_match: 1
-      }
-    }
-  }
-
-  function pullQuotedClauses(query){
-    var result = []
-    var rx = /".*?"/g
-    var quoty
-    while( quoty = rx.exec( query ) ) {
-      if(quoty && quoty[0]){
-        result.push(quoty[0].replace(/\"/g, ''))
-      }
-    }
-
-    return result
-  }
-
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
-    // if(newHideSearchy){
-    //   // hide it
-    //   let sidebar = document.getElementById("search-sidebar")
-    //   console.log( 'hiding that stupid', searchyPosition )
-    //   window.scroll(0, searchyPosition)
-    // } else {
-    //   // show it
-    //   console.log( 'showing, i like to go to', window.scrollY )
-    //   setSearchyPosition(window.scrollY)
-    //   scrollToTop()
-    // }
   }
+
+  let searchModeToggler = (
+    <div className="searchmode-toggler">
+      { Object.keys(SearchModes).map((mode) => <button className={ searchMode === SearchModes[mode] ? "selected" : "" } id={ `searchmode-${SearchModes[mode]}` } onClick={ () => setSearchMode(SearchModes[mode]) } >Search { mode }</button> ) }
+    </div>
+  )
 
   return (
     <div className="body-container">
       <InstantSearch
-        indexName={ encode(indicesToUse(data.esIndex, data.tsIndex)) }
+        indexName={ currentIndexes }
         searchClient={ searchClient }
         routing={ true }
       >
@@ -1018,7 +682,10 @@ export default function Catalog() {
 
         <div className="top-search-bar bmarleft smarbot smarright">
           <div className="options-container martop">
-            <h2 className="search-result-label">Search Results</h2>
+            <h2 className="search-result-label">
+              Search Results
+              { searchModeToggler }
+            </h2>
             
             <div className="header-spacer" />
 
@@ -1049,15 +716,10 @@ export default function Catalog() {
                 <ViewSelect selected={ viewSelect == "list" } viewType="list" viewSelect={ () => setViewSelect("list") } />
               </div>
             </div>
-
-            
           </div>
         </div>
 
         <div className={ topRefinementsBarClasses }>
-          <div className="stats-container">
-            <CustomStats />
-          </div>
 
           <div className={ currentRefinementsClasses }>
             <CurrentRefinements
@@ -1065,7 +727,7 @@ export default function Catalog() {
             />
           </div>
           <div className="clear-refinements-container marright">
-            <ClearRefinements translations={{ reset: "DOMETHINGGISNGISGNS" }} />
+            <ClearRefinements translations={{ resetButtonText: "Clear Filters" }} />
             <div className="more-refinements">
               <button onClick={ () => { setShowingRefinements(!showingRefinements) } }>{showRefinementButtonText}</button>
             </div>
@@ -1073,21 +735,27 @@ export default function Catalog() {
         </div>
 
         <div id="search-sidebar" className={ sidebarClasses }>
-          <h3 className="sidebar-title">Refine Search</h3>
+          <h3 className="sidebar-title">
+            Refine Search
+
+            <div className="stats-container">
+              <CustomStats query={ customQuery.query } count={ count } />
+            </div>
+
+          </h3>
+
           <hr />
           
-          <SearchAccordion title="Keywords" content={
-            searchbox
-          }/>
+          <SearchAccordion title="Keywords" content={ searchbox }/>
 
           <hr />
 
           <SearchAccordion title="Options" content ={
             <>
               <div>Include</div>
-              <div><label>All Sources<input onChange={ () => setSearchSet(SEARCH_BOTH) } type="radio" value={SEARCH_BOTH} checked={ searchSet == SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => setSearchSet(SEARCH_RECORD) } type="radio" value={SEARCH_RECORD} checked={ searchSet == SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => setSearchSet(SEARCH_TRANSCRIPT) } type="radio" value={SEARCH_TRANSCRIPT} checked={ searchSet == SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.BOTH} checked={ searchSet == SearchSubsets.BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.RECORD} checked={ searchSet == SearchSubsets.RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Transcripts<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_TRANSCRIPT} checked={ searchSet == SearchSubsets.SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>
 
@@ -1105,7 +773,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="access_level"
-                transformItems={ accessLevel }
+                // transformItems={ accessLevel }
               />
             </>
           }/>
@@ -1126,7 +794,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="producing_org"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1137,7 +804,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1148,7 +814,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="genres"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1159,7 +824,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="topics"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1168,7 +832,6 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="contributing_orgs"
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1179,7 +842,7 @@ export default function Catalog() {
             <>
               <RefinementList
                 attribute="special_collections"
-                // transformItems={ producingOrganization }
+                transformItems={ prettyCollections }
               />
             </>
           }/>
@@ -1191,7 +854,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="series_titles"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1203,7 +865,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="contributors"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
@@ -1215,7 +876,6 @@ export default function Catalog() {
               <RefinementList
                 attribute="people"
                 searchable={true}
-                // transformItems={ producingOrganization }
               />
             </>
           }/>
