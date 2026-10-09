@@ -663,6 +663,16 @@ div.view-select-button.selected img {
   background-color: #aaa;
 }
 
+div.options-container div.searchmode-toggler button {
+  color: #fff;
+  background-color: #909;
+}
+
+div.options-container div.searchmode-toggler button.selected {
+  color: #909;
+  background-color: #fff;
+}
+
 
 /*misc static page components*/
 

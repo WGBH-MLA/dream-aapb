@@ -6,17 +6,15 @@ import Client from '@searchkit/instantsearch-client'
 import { ChevronDown, LayoutPanelLeft } from 'lucide-react'
 
 import { getCollections } from "../utils/fetch"
-import { scrollToTop }  from '../utils/helpers'
-import originalSearch from '../searches/originalSearch'
+import { scrollToTop }  from "../utils/helpers"
+import originalSearch from "../searches/originalSearch"
+import multimatchSearch from "../searches/multimatchSearch"
+import dismaxSearch from "../searches/dismaxSearch"
+import poshSearch from "../searches/poshSearch"
+import boostySearch from "../searches/boostySearch"
 
 import { SearchSubsets } from "../utils/SearchSubsets"
-
-
-let dis = 3
-// 0 => dismax top query
-// 1 => original bool with second bool with should mainAllFieldsArray
-// 2 => stupid simple multimatch query
-// 3 => original bool with multimatch clause instead of mainAllFieldsArray
+import { SearchModes } from "../utils/SearchModes"
 
 import {
           InstantSearch,
@@ -140,7 +138,9 @@ export default function Catalog() {
   const data = useLoaderData()
 
   // include transcript in search or not
-  const [searchSet, setSearchSet] = useState(SearchSubsets.SEARCH_BOTH)
+  const [searchSet, setSearchSet] = useState(SearchSubsets.BOTH)
+  // which querying style are we using
+  const [searchMode, setSearchMode] = useState(SearchModes.BOOSTY)
   const [count, setCount] = useState(null)
   
   // state that we need out here, and down inside the search area...
@@ -218,10 +218,10 @@ export default function Catalog() {
   }
 
   function indicesToUse(search_set, asset_index, transcript_index){
-    if(search_set === SearchSubsets.SEARCH_RECORD){
+    if(search_set === SearchSubsets.RECORD){
       // console.log( "RECORD" )
       return asset_index
-    } else if(search_set === SearchSubsets.SEARCH_TRANSCRIPT){
+    } else if(search_set === SearchSubsets.TRANSCRIPT){
       // console.log( "TRANSCRIPT" )
       return transcript_index
     } else {
@@ -574,7 +574,7 @@ export default function Catalog() {
     }
   }
 
-  if(searchSet == SearchSubsets.SEARCH_BOTH || searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
+  if(searchSet == SearchSubsets.BOTH || searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
     config.search_settings.runtime_mappings = {
       asset: {
         type: "lookup",
@@ -592,7 +592,7 @@ export default function Catalog() {
       }
     }
   } else {
-    // SearchSubsets.SEARCH_RECORD
+    // SearchSubsets.RECORD
     // config.search_settings.runtime_mappings = {
     //   asset: {
     //     type: 'keyword',
@@ -640,14 +640,33 @@ export default function Catalog() {
     },
 
     getQuery: (query, search_attributes) => {
-      return originalSearch(query, search_attributes, searchSet)
-    } 
+      let queryHash
+      if(searchMode === SearchModes.ORIGINAL){
+        queryHash = originalSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.MULTIMATCH) {
+        queryHash = multimatchSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.DISMAX){
+        queryHash = dismaxSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.POSH){
+        queryHash = poshSearch(query, customQuery, search_attributes, searchSet)
+      } else if(searchMode === SearchModes.BOOSTY){
+        queryHash = boostySearch(query, customQuery, search_attributes, searchSet)
+      }
 
+      // console.log( 'finishing with qh', query, queryHash )
+      return queryHash
+    }
   })
 
   function handleHideSearchy(newHideSearchy){
     setHideSearchy(newHideSearchy)
   }
+
+  let searchModeToggler = (
+    <div className="searchmode-toggler">
+      { Object.keys(SearchModes).map((mode) => <button className={ searchMode === SearchModes[mode] ? "selected" : "" } id={ `searchmode-${SearchModes[mode]}` } onClick={ () => setSearchMode(SearchModes[mode]) } >Search { mode }</button> ) }
+    </div>
+  )
 
   return (
     <div className="body-container">
@@ -663,7 +682,10 @@ export default function Catalog() {
 
         <div className="top-search-bar bmarleft smarbot smarright">
           <div className="options-container martop">
-            <h2 className="search-result-label">Search Results</h2>
+            <h2 className="search-result-label">
+              Search Results
+              { searchModeToggler }
+            </h2>
             
             <div className="header-spacer" />
 
@@ -731,8 +753,8 @@ export default function Catalog() {
           <SearchAccordion title="Options" content ={
             <>
               <div>Include</div>
-              <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_BOTH} checked={ searchSet == SearchSubsets.SEARCH_BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_RECORD} checked={ searchSet == SearchSubsets.SEARCH_RECORD ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.BOTH} checked={ searchSet == SearchSubsets.BOTH ? "checked" : "" } name="search_set" /></label></div>
+              <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.RECORD} checked={ searchSet == SearchSubsets.RECORD ? "checked" : "" } name="search_set" /></label></div>
               <div><label>Transcripts<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_TRANSCRIPT} checked={ searchSet == SearchSubsets.SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
             </>
           }/>

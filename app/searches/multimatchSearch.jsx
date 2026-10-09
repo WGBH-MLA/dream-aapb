@@ -3,7 +3,7 @@ import { isBlank } from "../utils/helpers"
 import { hasQuoties, extractQuotiesFromSearchbox, pullQuotedClauses } from "../utils/searchHelpers"
 import * as QueryHelpers from "../utils/queryHelpers"
 
-export default function originalSearch(query, customQuery, search_attributes, searchSet){
+export default function multimatchSearch(query, customQuery, search_attributes, searchSet){
   var queryHash
 
   var title_if_present
@@ -40,20 +40,15 @@ export default function originalSearch(query, customQuery, search_attributes, se
 
   } else {
     // there *is* a main box query
+    // dump the giant array nested query, still works with other 3 boxes because top bool
     queryHash = {
-      // original
-
-      // top bool
       bool: {
-        // big should
         should: [
-          {
-            bool: {
-              should: mainAllFieldsArray,
-              // minimum_should_match: 1
-            }
-          }
-        ]
+          { multi_match: { query: query } }
+        ],
+
+        // not minmatch because it causes failure of quoted searches that get added?
+        minimum_should_match: 1
       }
     }
   }
@@ -122,7 +117,7 @@ export default function originalSearch(query, customQuery, search_attributes, se
       // now also add our quoty clauses to must_not
       noneBoxQuoties.forEach( (quooty) => {
         // add all-fields-array match_phrase query for each quoty
-        queryHash.bool.must_not.push( QueryHelpers.matchPhraseShouldClause(quooty, searchSet) )
+        queryHash.bool.must_not.push( QueryHelpers.multimatchPhraseShouldClause(quooty, searchSet) )
       })
     }
   }
@@ -173,14 +168,14 @@ export default function originalSearch(query, customQuery, search_attributes, se
 
       // each quoty term *must* satisfy its *should*
       // its *should* requires at least one field to match_phrase the quoty term
-      queryHash.bool.must.push( QueryHelpers.matchPhraseShouldClause(quooty, searchSet) )
+      queryHash.bool.must.push( QueryHelpers.multimatchPhraseShouldClause(quooty, searchSet) )
     })
   }
 
   if(allBoxQuoties){
     queryHash.bool.must ||= []
     allBoxQuoties.forEach( (quooty) => {
-      queryHash.bool.must.push( QueryHelpers.matchPhraseShouldClause(quooty, searchSet) )  
+      queryHash.bool.must.push( QueryHelpers.multimatchPhraseShouldClause(quooty, searchSet) )  
     })
   }
 

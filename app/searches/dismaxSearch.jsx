@@ -3,7 +3,7 @@ import { isBlank } from "../utils/helpers"
 import { hasQuoties, extractQuotiesFromSearchbox, pullQuotedClauses } from "../utils/searchHelpers"
 import * as QueryHelpers from "../utils/queryHelpers"
 
-export default function originalSearch(query, customQuery, search_attributes, searchSet){
+export default function dismaxSearch(query, customQuery, search_attributes, searchSet){
   var queryHash
 
   var title_if_present
@@ -32,7 +32,14 @@ export default function originalSearch(query, customQuery, search_attributes, se
       // top bool
       bool: {
         // big should
-        // should: []
+        should: [
+          {
+            dis_max: {
+              queries: mainAllFieldsArray,
+              tie_breaker: 0.7
+            }
+          }
+        ],
         // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
         // minimum_should_match: 1
       }
@@ -41,20 +48,17 @@ export default function originalSearch(query, customQuery, search_attributes, se
   } else {
     // there *is* a main box query
     queryHash = {
-      // original
-
-      // top bool
       bool: {
-        // big should
         should: [
           {
-            bool: {
-              should: mainAllFieldsArray,
-              // minimum_should_match: 1
+            dis_max: {
+              queries: mainAllFieldsArray,
+              tie_breaker: 0.8
             }
           }
         ]
       }
+
     }
   }
 

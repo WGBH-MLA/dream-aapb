@@ -87,7 +87,6 @@ export function allFieldsArray(query, searchSet){
         }
       }
     },
-
     {
       nested: {
         path: "pbcoreDescriptionDocument.pbcoreDescription",
@@ -127,6 +126,19 @@ export function allFieldsArray(query, searchSet){
     },
     {
       nested: {
+        path: "pbcoreDescriptionDocument.pbcoreIdentifier",
+        ignore_unmapped: true,
+        query: {
+          match: {
+            "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },    
+    {
+      nested: {
         path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
         ignore_unmapped: true,
         query: {
@@ -139,10 +151,41 @@ export function allFieldsArray(query, searchSet){
           }
         }
       }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcorePublisher.publisher",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreContributor.contributor",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
     }
+
   ]
 
-  if(searchSet != SearchSubsets.SEARCH_RECORD){
+  if(searchSet != SearchSubsets.RECORD){
     afArray.push({
       match: {
         transcript_text: query
@@ -150,7 +193,7 @@ export function allFieldsArray(query, searchSet){
     })
   }
 
-  if(searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
+  if(searchSet === SearchSubsets.TRANSCRIPT){
     afArray.push({
       nested:  {
         path: "asset",
@@ -207,15 +250,9 @@ export function allFieldsTermArray(query, searchSet){
     {
       nested: {
         path: "pbcoreDescriptionDocument.pbcoreDescription",
+        // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
         ignore_unmapped: true,
-        query: {
-          term: {
-            "pbcoreDescriptionDocument.pbcoreDescription.text": {
-              value: query,
-              case_insensitive: true
-            }
-          }
-        }
+        query: { term: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
       } 
     },
     {
@@ -223,13 +260,14 @@ export function allFieldsTermArray(query, searchSet){
         path: "pbcoreDescriptionDocument.pbcoreTitle",
         ignore_unmapped: true,
         query: {
+
           term: {
             "pbcoreDescriptionDocument.pbcoreTitle.text": {
               value: query,
-              case_insensitive: true
+              boost: 3
             }
           }
-        },
+        }
       } 
     },
     {
@@ -241,19 +279,63 @@ export function allFieldsTermArray(query, searchSet){
             "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
               value: query
             }
-          }
+          }      
         }
       } 
     },
     {
       nested: {
-        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        path: "pbcoreDescriptionDocument.pbcoreIdentifier",
         ignore_unmapped: true,
         query: {
           term: {
+            "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
+              value: query
+            }
+          }      
+        }
+      } 
+    },    
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        ignore_unmapped: true,
+        query: {
+    
+          term: {
             "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
               value: query,
-              case_insensitive: true
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcorePublisher.publisher",
+        ignore_unmapped: true,
+        query: {
+    
+          term: {
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
+              value: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreContributor.contributor",
+        ignore_unmapped: true,
+        query: {
+    
+          term: {
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
+              value: query,
+              boost: 1
             }
           }
         }
@@ -261,7 +343,7 @@ export function allFieldsTermArray(query, searchSet){
     }
   ]
 
-  if(searchSet != SearchSubsets.SEARCH_RECORD){
+  if(searchSet != SearchSubsets.RECORD){
     aftArray.push(
       {
         term: {
@@ -274,7 +356,7 @@ export function allFieldsTermArray(query, searchSet){
     )
   }
 
-  if(searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
+  if(searchSet === SearchSubsets.TRANSCRIPT){
     aftArray.push({
       nested:  {
         path: "asset",
@@ -334,11 +416,7 @@ export function allFieldsMatchPhraseArray(query, searchSet){
       nested: {
         path: "pbcoreDescriptionDocument.pbcoreDescription",
         ignore_unmapped: true,
-        query: {
-          match_phrase: {
-            "pbcoreDescriptionDocument.pbcoreDescription.text": query
-          }
-        }
+        query: { match_phrase: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
       } 
     },
     {
@@ -346,10 +424,14 @@ export function allFieldsMatchPhraseArray(query, searchSet){
         path: "pbcoreDescriptionDocument.pbcoreTitle",
         ignore_unmapped: true,
         query: {
+
           match_phrase: {
-            "pbcoreDescriptionDocument.pbcoreTitle.text": query
+            "pbcoreDescriptionDocument.pbcoreTitle.text": {
+              query: query,
+              boost: 3
+            }
           }
-        },
+        }
       } 
     },
     {
@@ -358,25 +440,75 @@ export function allFieldsMatchPhraseArray(query, searchSet){
         ignore_unmapped: true,
         query: {
           match_phrase: {
-            "pbcoreDescriptionDocument.pbcoreAssetDate.text": query
-          }
+            "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
+              query: query
+            }
+          }      
         }
       } 
     },
     {
       nested: {
-        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        path: "pbcoreDescriptionDocument.pbcoreIdentifier",
         ignore_unmapped: true,
         query: {
           match_phrase: {
-            "pbcoreDescriptionDocument.pbcoreCreator.creator.text": query
+            "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },    
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        ignore_unmapped: true,
+        query: {
+    
+          match_phrase: {
+            "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcorePublisher.publisher",
+        ignore_unmapped: true,
+        query: {
+    
+          match_phrase: {
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreContributor.contributor",
+        ignore_unmapped: true,
+        query: {
+    
+          match_phrase: {
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
+              query: query,
+              boost: 1
+            }
           }
         }
       }
     }
+
   ]
 
-  if(searchSet != SearchSubsets.SEARCH_RECORD){
+  if(searchSet != SearchSubsets.RECORD){
     afmpArray.push(
       {
         term: {
@@ -389,7 +521,7 @@ export function allFieldsMatchPhraseArray(query, searchSet){
     )
   }
 
-  if(searchSet === SearchSubsets.SEARCH_TRANSCRIPT){
+  if(searchSet === SearchSubsets.TRANSCRIPT){
     afmpArray.push({
       nested: {
         path: "asset",
@@ -419,10 +551,6 @@ export function matchPhraseShouldClause(quoty, searchSet){
 }
 
 export function multimatchPhraseShouldClause(quoty, searchSet){
-
-  // YOOO remember to use THIS one for dis == 3
-
-
   // return a bool that *should* match minimum one field with our quoty clause
   return {
     multi_match: {
@@ -432,5 +560,333 @@ export function multimatchPhraseShouldClause(quoty, searchSet){
     }
   }
 
+}
+
+export function poshNoisyQueries(query){
+  let array = [
+    { match: { genres: query } },
+    { match: { contributing_orgs: query } },
+    { match: { special_collections: query } },
+    { match: { topics: query } },
+    { match: { all_titles: query } },
+    { match: { series_titles: query } },
+    { match: { program_titles: query } },
+    { match: { episode_titles: query } },
+    { match: { episode_number_titles: query } },
+    { match: { segment_titles: query } },
+    { match: { raw_footage_titles: query } },
+    { match: { promo_titles: query } },
+    { match: { clip_titles: query } },
+    { match: { contributors: query } },
+    { match: { creators: query } },
+    { match: { publishers: query } },
+    { match: { people: query } },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreDescription",
+        // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
+        ignore_unmapped: true,
+        query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreTitle",
+        ignore_unmapped: true,
+        query: {
+
+          match: {
+            "pbcoreDescriptionDocument.pbcoreTitle.text": {
+              query: query,
+              analyzer: "standard",
+              boost: 3
+            }
+          }
+        }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+        ignore_unmapped: true,
+        query: {
+          match: {
+            "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreIdentifier",
+        ignore_unmapped: true,
+        query: {
+          match: {
+            "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },    
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcorePublisher.publisher",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreContributor.contributor",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    }
+
+  ]
+
+  return array
+}
+
+export function poshCleanQueries(query){
+  return [
+    {
+      match: {
+        guid: query
+      }
+    },
+    {
+      match: {
+        title: {
+          query: query,
+          analyzer: "standard",
+          boost: 4
+        }
+      }
+    },
+    {
+      match: {
+        description: {
+          query: query,
+          analyzer: "standard",
+          boost: 2
+        }
+      }
+    },
+    {
+      match: {
+        producing_org: {
+          query: query,
+          analyzer: "standard",
+          boost: 1
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreTitle",
+        ignore_unmapped: true,
+        query: {
+
+          match: {
+            "pbcoreDescriptionDocument.pbcoreTitle.text": {
+              query: query,
+              analyzer: "standard",
+            }
+          }
+        }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreDescription",
+        ignore_unmapped: true,
+        query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
+      } 
+    },
+
+  ]
+}
+
+
+export function boostyGoodQueries(query){
+  return [
+    {
+      match: {
+        guid: query
+      }
+    },
+    {
+      match: {
+        description: {
+          query: query,
+          analyzer: "standard",
+          boost: 2
+        }
+      }
+    },
+    {
+      match: {
+        producing_org: {
+          query: query,
+          analyzer: "standard",
+          boost: 1
+        }
+      }
+    }
+  ]
+}
+
+
+export function boostyBadQueries(query){
+  return [
+    { match: { genres: query } },
+    { match: { contributing_orgs: query } },
+    { match: { special_collections: query } },
+    { match: { topics: query } },
+    { match: { all_titles: query } },
+    { match: { series_titles: query } },
+    { match: { program_titles: query } },
+    { match: { episode_titles: query } },
+    { match: { episode_number_titles: query } },
+    { match: { segment_titles: query } },
+    { match: { raw_footage_titles: query } },
+    { match: { promo_titles: query } },
+    { match: { clip_titles: query } },
+    { match: { contributors: query } },
+    { match: { creators: query } },
+    { match: { publishers: query } },
+    { match: { people: query } },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreDescription",
+        // dont fail the whole search if field is missing from index (only necessary for nested query, when querying multi indexes)
+        ignore_unmapped: true,
+        query: { match: { "pbcoreDescriptionDocument.pbcoreDescription.text": query } }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreTitle",
+        ignore_unmapped: true,
+        query: {
+
+          match: {
+            "pbcoreDescriptionDocument.pbcoreTitle.text": {
+              query: query,
+              analyzer: "standard",
+              boost: 3
+            }
+          }
+        }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreAssetDate",
+        ignore_unmapped: true,
+        query: {
+          match: {
+            "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreIdentifier",
+        ignore_unmapped: true,
+        query: {
+          match: {
+            "pbcoreDescriptionDocument.pbcoreIdentifier.text": {
+              query: query
+            }
+          }      
+        }
+      } 
+    },    
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreCreator.creator",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcorePublisher.publisher",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    },
+    {
+      nested: {
+        path: "pbcoreDescriptionDocument.pbcoreContributor.contributor",
+        ignore_unmapped: true,
+        query: {
+    
+          match: {
+            "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
+              query: query,
+              boost: 1
+            }
+          }
+        }
+      }
+    }
+
+  ]
 }
 

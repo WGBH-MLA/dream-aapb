@@ -3,7 +3,7 @@ import { isBlank } from "../utils/helpers"
 import { hasQuoties, extractQuotiesFromSearchbox, pullQuotedClauses } from "../utils/searchHelpers"
 import * as QueryHelpers from "../utils/queryHelpers"
 
-export default function originalSearch(query, customQuery, search_attributes, searchSet){
+export default function poshSearch(query, customQuery, search_attributes, searchSet){
   var queryHash
 
   var title_if_present
@@ -24,38 +24,36 @@ export default function originalSearch(query, customQuery, search_attributes, se
   var mainAllFieldsArray = QueryHelpers.allFieldsArray(query)
 
   if(emptyQuery){
-
-    // console.log( 'it aint no query' )
     // there *is not* a main box query
-
     queryHash = {
-      // top bool
       bool: {
-        // big should
-        // should: []
-        // disabled because if you add "quoted terms" there will be a big clause that matches nothing in :should, blocking the :must clause from matching
-        // minimum_should_match: 1
+        should: [
+        ]
       }
     }
 
   } else {
     // there *is* a main box query
     queryHash = {
-      // original
-
-      // top bool
       bool: {
-        // big should
         should: [
+          // noisy
+          {
+            dis_max: {
+              queries: QueryHelpers.poshNoisyQueries(query),
+              tie_breaker: 0.4
+            }
+          },
+          // clean
           {
             bool: {
-              should: mainAllFieldsArray,
-              // minimum_should_match: 1
+              should: QueryHelpers.poshCleanQueries(query)
             }
           }
         ]
       }
     }
+    
   }
 
   // add in clauses for each of 3 secondary searchbox fields
