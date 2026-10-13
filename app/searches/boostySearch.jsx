@@ -36,16 +36,24 @@ export default function boostySearch(query, customQuery, search_attributes, sear
     queryHash = {
       bool: {
         should: [
+          // reggie title -> good but also contains a lot of extra stuff from tech info etc
           {
             //title
             match: {
               title: {
                 query: query,
-                boost: 20
+                boost: 10
               }
 
             }
           },
+          // all relevant titles
+          // {
+          //   bool: {
+          //     should: QueryHelpers.boostyTitleQueries(query),
+          //     boost: 10
+          //   }
+          // },
           {
             //good
             bool: {

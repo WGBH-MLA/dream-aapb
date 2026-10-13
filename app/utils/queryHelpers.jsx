@@ -118,7 +118,9 @@ export function allFieldsArray(query, searchSet){
         query: {
           match: {
             "pbcoreDescriptionDocument.pbcoreAssetDate.text": {
-              query: query
+              query: query,
+              // dont strip punctuation during analyzer, so you can search for 09-09-99 or 3/20
+              analyzer: "whitespace"
             }
           }      
         }
@@ -742,6 +744,25 @@ export function poshCleanQueries(query){
   ]
 }
 
+export function boostyTitleQueries(query){
+  return [
+    {
+      match: {
+        series_titles: query
+      }
+    },
+    {
+      match: {
+        program_titles: query
+      }
+    },
+    {
+      match: {
+        episode_titles: query
+      }
+    },
+  ]
+}
 
 export function boostyGoodQueries(query){
   return [
@@ -809,7 +830,6 @@ export function boostyBadQueries(query){
             "pbcoreDescriptionDocument.pbcoreTitle.text": {
               query: query,
               analyzer: "standard",
-              boost: 3
             }
           }
         }
@@ -850,7 +870,6 @@ export function boostyBadQueries(query){
           match: {
             "pbcoreDescriptionDocument.pbcoreCreator.creator.text": {
               query: query,
-              boost: 1
             }
           }
         }
@@ -865,7 +884,6 @@ export function boostyBadQueries(query){
           match: {
             "pbcoreDescriptionDocument.pbcorePublisher.publisher.text": {
               query: query,
-              boost: 1
             }
           }
         }
@@ -880,7 +898,6 @@ export function boostyBadQueries(query){
           match: {
             "pbcoreDescriptionDocument.pbcoreContributor.contributor.text": {
               query: query,
-              boost: 1
             }
           }
         }
@@ -889,4 +906,13 @@ export function boostyBadQueries(query){
 
   ]
 }
+
+export function dateQuery(query){
+  return {
+    match: {
+
+    }
+  }
+}
+
 
