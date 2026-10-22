@@ -165,6 +165,12 @@ export default function originalSearch(query, customQuery, search_attributes, se
     }
   }
 
+
+  // if(foundADate){
+  //   TODO add in dynamic date query
+  // }
+
+
   if(mainBoxQuoties){
     // ooh wee we got da quoties
     queryHash.bool.must ||= []

@@ -142,6 +142,9 @@ export default function Catalog() {
   // which querying style are we using
   const [searchMode, setSearchMode] = useState(SearchModes.BOOSTY)
   const [count, setCount] = useState(null)
+
+  // show/hide facets only on mobile
+  const [showFacets, setShowFacets] = useState(true)
   
   // state that we need out here, and down inside the search area...
   const [searchParams, setSearchParams] = useSearchParams()
@@ -416,8 +419,7 @@ export default function Catalog() {
             />
   //////////
 
-
-
+  
   const config = {
     connection: {
       host: data.esURL,
@@ -668,6 +670,16 @@ export default function Catalog() {
     </div>
   )
 
+  let mobileFacetTogglerMessage
+  let searchFacetClasses = "search-facets-container"
+  if(!showFacets){
+    mobileFacetTogglerMessage = "Show Options"
+    searchFacetClasses += " hide"
+  } else {
+    mobileFacetTogglerMessage = "Hide Options"
+  }
+
+
   return (
     <div className="body-container">
       <InstantSearch
@@ -748,139 +760,146 @@ export default function Catalog() {
           
           <SearchAccordion title="Keywords" content={ searchbox }/>
 
-          <hr />
-
-          <SearchAccordion title="Options" content ={
-            <>
-              <div>Include</div>
-              <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.BOTH} checked={ searchSet == SearchSubsets.BOTH ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.RECORD} checked={ searchSet == SearchSubsets.RECORD ? "checked" : "" } name="search_set" /></label></div>
-              <div><label>Transcripts<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_TRANSCRIPT} checked={ searchSet == SearchSubsets.SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
-            </>
-          }/>
-
-          <SearchAccordion title="Broadcast Date" content={
-            <>
-              <div>
-                <input id="startDate" type="date" name="startDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
-                <div className="date-text">to</div>
-                <input id="endDate" type="date" name="endDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
-              </div>
-            </>
-          }/>
-
-          <SearchAccordion title="Availability" content={
-            <>
-              <RefinementList
-                attribute="access_level"
-                // transformItems={ accessLevel }
-              />
-            </>
-          }/>
+          {/* TODO decide on mobile half-height search ui vs full ui open/close */}
+          <button style={{ display: "none" }} onClick={ (e) => setShowFacets(!showFacets) } className="sidebar-search-button mobile-facet-toggler">
+            { mobileFacetTogglerMessage }
+          </button>
 
           <hr />
 
-          <SearchAccordion title="Media Type" content={
-            <>
-              <RefinementList
-                attribute="media_type"
-              />
-            </>
-          }/>
+          <div className={ searchFacetClasses }>
+            <SearchAccordion title="Options" content ={
+              <>
+                <div>Include</div>
+                <div><label>All Sources<input onChange={ () => handleSearchSet(SearchSubsets.BOTH, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.BOTH} checked={ searchSet == SearchSubsets.BOTH ? "checked" : "" } name="search_set" /></label></div>
+                <div><label>Records<input onChange={ () => handleSearchSet(SearchSubsets.RECORD, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.RECORD} checked={ searchSet == SearchSubsets.RECORD ? "checked" : "" } name="search_set" /></label></div>
+                <div><label>Transcripts<input onChange={ () => handleSearchSet(SearchSubsets.SEARCH_TRANSCRIPT, data.esIndex, data.tsIndex) } type="radio" value={SearchSubsets.SEARCH_TRANSCRIPT} checked={ searchSet == SearchSubsets.SEARCH_TRANSCRIPT ? "checked" : "" } name="search_set" /></label></div>
+              </>
+            }/>
 
-          <hr />
+            <SearchAccordion title="Broadcast Date" content={
+              <>
+                <div>
+                  <input id="startDate" type="date" name="startDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
+                  <div className="date-text">to</div>
+                  <input id="endDate" type="date" name="endDate" onChange={ (e) => handleDateQuery(e.target.id, e.target.value) } />
+                </div>
+              </>
+            }/>
 
-          <SearchAccordion title="Producing Organization" content={
-            <>
-              <RefinementList
-                attribute="producing_org"
-              />
-            </>
-          }/>
+            <SearchAccordion title="Availability" content={
+              <>
+                <RefinementList
+                  attribute="access_level"
+                  // transformItems={ accessLevel }
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
 
-          <SearchAccordion title="Asset Type" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
-              />
-            </>
-          }/>
+            <SearchAccordion title="Media Type" content={
+              <>
+                <RefinementList
+                  attribute="media_type"
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
 
-          <SearchAccordion title="Genre" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="genres"
-              />
-            </>
-          }/>
+            <SearchAccordion title="Producing Organization" content={
+              <>
+                <RefinementList
+                  attribute="producing_org"
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
 
-          <SearchAccordion title="Topic" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="topics"
-              />
-            </>
-          }/>
+            <SearchAccordion title="Asset Type" startClosed={true} content={
+              <>
+                <RefinementList
+                  attribute="pbcoreDescriptionDocument.pbcoreAssetType.text"
+                />
+              </>
+            }/>
 
-          <SearchAccordion title="Contributing Organization" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="contributing_orgs"
-              />
-            </>
-          }/>
+            <hr />
 
-          <hr />
+            <SearchAccordion title="Genre" startClosed={true} content={
+              <>
+                <RefinementList
+                  attribute="genres"
+                />
+              </>
+            }/>
 
-          <SearchAccordion title="Collection" startClosed={true} content={
-            <>
-              <RefinementList
-                attribute="special_collections"
-                transformItems={ prettyCollections }
-              />
-            </>
-          }/>
+            <hr />
 
-          <hr />
+            <SearchAccordion title="Topic" startClosed={true} content={
+              <>
+                <RefinementList
+                  attribute="topics"
+                />
+              </>
+            }/>
 
-          <SearchAccordion title="Series Title" startClosed={false} content={
-            <>
-              <RefinementList
-                attribute="series_titles"
-                searchable={true}
-              />
-            </>
-          }/>
+            <SearchAccordion title="Contributing Organization" startClosed={true} content={
+              <>
+                <RefinementList
+                  attribute="contributing_orgs"
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
 
-          <SearchAccordion title="Contributors" startClosed={false} content={
-            <>
-              <RefinementList
-                attribute="contributors"
-                searchable={true}
-              />
-            </>
-          }/>
+            <SearchAccordion title="Collection" startClosed={true} content={
+              <>
+                <RefinementList
+                  attribute="special_collections"
+                  transformItems={ prettyCollections }
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
 
-          <SearchAccordion title="Orgs & People" startClosed={false} content={
-            <>
-              <RefinementList
-                attribute="people"
-                searchable={true}
-              />
-            </>
-          }/>
+            <SearchAccordion title="Series Title" startClosed={false} content={
+              <>
+                <RefinementList
+                  attribute="series_titles"
+                  searchable={true}
+                />
+              </>
+            }/>
 
-          <hr />
+            <hr />
+
+            <SearchAccordion title="Contributors" startClosed={false} content={
+              <>
+                <RefinementList
+                  attribute="contributors"
+                  searchable={true}
+                />
+              </>
+            }/>
+
+            <hr />
+
+            <SearchAccordion title="Orgs & People" startClosed={false} content={
+              <>
+                <RefinementList
+                  attribute="people"
+                  searchable={true}
+                />
+              </>
+            }/>
+
+            <hr />
+          </div>
         </div>
 
         <div className="page-maincolumn bmarright">

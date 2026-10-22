@@ -51,11 +51,17 @@ export default function Index() {
   }
 
   let blog_posts
+  let dateString
+  let postDate = new Date(post.date)
+  if(postDate){
+    dateString = postDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })    
+  }
+
   if(data.blog_posts){
     blog_posts = data.blog_posts.map((post, i) => (
       <div key={i} className="blog-post-item">
         <span className="blog-post-date">
-          {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          { dateString }
         </span>
         <h3 className="blog-post-title">
           <a href={post.link} target="_blank" rel="noreferrer"

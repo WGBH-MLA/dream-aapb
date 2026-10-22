@@ -89,13 +89,13 @@ export default class Record {
 
   descriptionsByType(){
     if(this.pbcoreDescriptionDocument.pbcoreDescription && notEmpty(this.pbcoreDescriptionDocument.pbcoreDescription)){
-      return this.pbcoreDescriptionDocument.pbcoreDescription.sort((a,b) => { a.descriptionType.localeCompare(b.descriptionType) })
+      return this.pbcoreDescriptionDocument.pbcoreDescription.sort((a,b) => { a.descriptionType?.localeCompare(b.descriptionType) })
     }
   }
 
   titlesByType(){
     if(this.pbcoreDescriptionDocument.pbcoreTitle && notEmpty(this.pbcoreDescriptionDocument.pbcoreTitle)){
-      return this.pbcoreDescriptionDocument.pbcoreTitle.sort((a,b) => { a.titleType.localeCompare(b.titleType) })
+      return this.pbcoreDescriptionDocument.pbcoreTitle.sort((a,b) => { a.titleType?.localeCompare(b.titleType) })
     }
   }
 

@@ -2104,6 +2104,14 @@ div.search-accordion-container div.search-accordion-content div.ais-CurrentRefin
   font-size: 2em;
 }
 
+div.search-facets-container, div.search-facets-container.hide {
+  display: block;
+}
+
+button.mobile-facet-toggler {
+  display: none;
+}
+
 /*hide the 'container' label containing facets for a particular field*/
 ul.ais-CurrentRefinements-list li span.ais-CurrentRefinements-label {
   display: none;
@@ -3135,6 +3143,7 @@ div#mobile-sidebar-toggler {
 /*leetle*/
 /*for local mobile dev v*/
 /*@media (max-width: 1200px) {*/
+/*actual correct media query v*/
 @media (max-width: 568px) {
   /*block mobile double click zoom*/
   * {
@@ -3450,6 +3459,18 @@ div.newsletter-bar input[type="submit"] {
     margin-bottom: 4em;
   }
 
+  div.search-facets-container {
+    display: block;
+  }
+
+  div.search-facets-container.hide {
+    display: none;
+  }
+
+  button.mobile-facet-toggler {
+    display: block;
+  }
+
   input.sidebar-search  {
     width: 77%;
     margin-top: 0.5em;
@@ -3691,6 +3712,10 @@ div.newsletter-bar input[type="submit"] {
     background-color: #fff;
     top: 0;
     left: 0;
+
+    /*for showing half-page search ui*/
+    /*height: 50vh;
+    max-height: 50vh;*/
     height: 105vh;
     max-height: 105vh;
     margin-left: 0;
