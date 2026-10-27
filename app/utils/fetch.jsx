@@ -17,10 +17,15 @@ export async function getExhibits(options = "") {
 
 export async function getCollections(options = "") {
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
-    console.log( 'Error fetching collections!', err )
-  })
-
+  let resp
+  try {
+    resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
+      console.log( 'Error fetching collections!', err )
+    })
+  } catch(err) {
+    console.log( 'Problem fetching collections!!', err )
+  }
+  
   let collections = []
   if(resp){
     let body = await resp.json()
@@ -32,11 +37,20 @@ export async function getCollections(options = "") {
 
 export async function getFeatured() {
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(
-    wagHost + `/collections/?limit=3&order=random`,
-  )
-  let body = await resp.json()
-  return body.items
+  let resp
+  try {
+    resp = await fetch(wagHost + `/collections/?limit=3&order=random`)
+  } catch(err){
+    console.log( 'Problem fetching featured!!', err )
+  }
+
+  let featured = []
+  if(resp){
+    let body = await resp.json()
+    featured = body.items  
+  }
+  
+  return featured
 }
 
 export async function getPageBySlug(type, slug) {
@@ -63,5 +77,7 @@ export async function getPageBySlug(type, slug) {
 
 export async function getLatestBlogPosts() {
   const response = await fetch('https://blog.americanarchive.org/wp-json/wp/v2/posts?per_page=4&page=1&orderby=date&order=desc')
-  return await response.json()
+  if(response){
+    return await response.json()
+  }
 }
