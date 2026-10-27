@@ -250,8 +250,9 @@ a:hover {
 
 /*general page layout*/
 div.body-container {
-  width: 96%;
-  margin-left: 1%;
+  width: 91%;
+  margin-left: 5em;
+  margin-right: 5em;
 }
 
 div.body-container h1 {
@@ -360,8 +361,9 @@ div.sidey-sidebar h2:hover, div.sidey-sidebar ul li a:hover {
 div.skinnier-body-container {
   overflow: visible;
   font-size: 1.5em;
-  width: 75%;
-  margin-left: 14%;
+  width: auto;
+  margin-left: 24%;
+  margin-right: 24%;
   text-align: left;
 }
 
@@ -564,10 +566,9 @@ div.social-icon img {
 }
 
 div.welcome-video-container {
-  margin-left: 13%;
   margin-top: 2em;
   text-align: left;
-  width: 85%;
+  width: 100%;
   border: none;
 }
 
@@ -593,9 +594,6 @@ div.link-bank {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
-  width: 80%;
-  margin-left: 13.2%;
-  margin-right: -10%;
 }
 
 div.link-bank a {
@@ -888,16 +886,26 @@ div.layout-search button {
   border: none;
 }
 
+/*bar title*/
+h2.bar-title {
+  padding: 1em;
+  font-size: 2em;
+  background-color: #292A72;
+  width: 85vw;
+  color: #fff;
+  position: relative;
+  width: 97.5%;
+}
 
 /*summary box*/
 div.summary-box-container {
-  margin-bottom: 2em;
+  margin-bottom: 4em;
   display: block;
+  overflow-x: hidden;
 }
 
 div.summary-box-container h2 {
   background-color: #292A72;
-  width: 85vw;
   color: #fff;
   position: relative;
   padding: 18px 32px;
@@ -906,8 +914,8 @@ div.summary-box-container h2 {
 
 
 div.summary-box  {
+  width: 40%;
   margin-top: 2em;
-  margin-left: 7em;
 }
 
 div.summary-box-text {
@@ -2921,7 +2929,6 @@ a.america-250 div span {
   position: relative;
   width: 100%;
   margin-bottom: 3rem;
-  padding: 0 2.5rem;
   box-sizing: border-box;
 }
 
@@ -2994,7 +3001,7 @@ a.america-250 div span {
 }
 
 .carousel-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
   z-index: 10;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }

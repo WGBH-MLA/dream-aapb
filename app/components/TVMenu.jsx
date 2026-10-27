@@ -44,7 +44,7 @@ function NavButton({ direction, onClick }) {
   );
 }
 
-export default function Carousel({
+export default function TVMenu({
   title,
   items = [],
   programs = [],

@@ -30,16 +30,14 @@ export const loader = async () => {
 export default function Collections() {
   let data = useLoaderData()
   return (
-  <div className="skinny-body-container">
-     <SummaryBox title="Collections" text="The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below." />
-  <div className="body-container">
+    <div className="body-container">
+      <SummaryBox title="Collections" text="The American Archive of Public Broadcasting contains more than 50,000 hours of digitized public broadcasting programs and original materials. Browse collections below." />
       <TVMenu title="Featured Collections" programs={data.featured_collections} showDesc={true} />
       <TVMenu title="Program Collections" programs={data.radio_and_tv} seeAllURL="/program-collections"/>
       <TVMenu title="Stations and Organizations" programs={data.radio_and_tv} seeAllURL="/stations-organizations-collections"/>
       <TVMenu title="Historical Events and Interviews" programs={data.radio_and_tv} seeAllURL="/events-interviews-collections"/>
       <TVMenu title="Topics and Themes" programs={data.radio_and_tv} seeAllURL="/topics-themes-collections"/>
       <TVMenu title="Browse All" programs={data.radio_and_tv} seeAllURL="/browse-collections"/>
-  </div>
-  </div>
+    </div>
   )
 }
