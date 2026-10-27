@@ -9,13 +9,11 @@ import videojs from "video.js"
 import "../styles/video-js.min.css"
 
 export default function ClientVideoPlayer(props){
-  const [pippy, setPippy] = useState(false)
-  const [blockPippy, setBlockPippy] = useState(false)
-
-
   if(!props.guid){
     return null
   }
+
+  const [pippy, setPippy] = useState(false)
 
   var captions
   if(props.captionURL){
@@ -24,7 +22,9 @@ export default function ClientVideoPlayer(props){
   }
 
   useEffect(() => {
-    if(props.mediaURL){
+    setPippy(pippy)
+
+    if(props.mediaURL && videojs.getAllPlayers().length == 0){
       videojs('vjs-player', {
         fluid: true,
         controls: true,
@@ -41,7 +41,6 @@ export default function ClientVideoPlayer(props){
         videojs.log('I am ready for your video yes!')
         let player = videojs.players["vjs-player"]
         if(props.adHLSURL){
-          
 
           // we received an audio desc URL
           addADButton(videojs, props.adHLSURL)
@@ -60,50 +59,41 @@ export default function ClientVideoPlayer(props){
 
         window.addEventListener('scroll', () => {
           let mediaContainer = document.getElementById("show-media")
-          if(!blockPippy){
-            // we are allowed to pippy
+          // we are allowed to pippy
 
-            // this is the pippy we crave
-            let pippyValue = !checkVisible(mediaContainer)
+          // this is the pippy we crave
+          let pippyValue = !checkVisible(mediaContainer)
 
-            if(pippyValue !== pippy){
-              // but is it the pippy we deserve?
-
-              setBlockPippy(true)
-              // upon pippying we must restrain ourselves from pippying
-              setTimeout(() => {
-                // lest we pippy too much
-                setBlockPippy(false)
-              }, 200)
-
-              setPippy(pippyValue)
-            }
-          }
+          // but is it the pippy we deserve?
+          setPippy(pippyValue)
         })
 
         // this.on('ended', function() {
           // videojs.log('whoa mama!!')
-        // });
-      })  
+        // })
+      })
     }
   })
+
+  let playerClasses
+  if(pippy){
+    playerClasses = "video-player-container mini"
+  } else {
+    playerClasses = "video-player-container"
+  }
   
   if(props.mediaURL){
-    let playerClasses = "video-player-container"
-    if(pippy){
-      playerClasses += " mini"
-    }
     return (
       <div id="video-player-container" className={ playerClasses }>
         <video className="video-js" id="vjs-player" poster={ thumbnailURL(props.guid) } controls preload="auto" width="640" height="480">
-          <source src={ props.mediaURL || "/A_Colour_Box_512kb.mp4" } />
+          <source type="application/x-mpegURL" src={ props.mediaURL || "/A_Colour_Box_512kb.mp4" } />
           { captions }
         </video>
       </div>
     )
   } else {
     return (
-      <div className="martop marbot">
+      <div className="marbot">
         <Thumbnail
           guid={ props.guid }
           mediaType={ props.mediaType }

@@ -250,8 +250,9 @@ a:hover {
 
 /*general page layout*/
 div.body-container {
-  width: 96%;
-  margin-left: 1%;
+  width: 91%;
+  margin-left: 5em;
+  margin-right: 5em;
 }
 
 div.body-container h1 {
@@ -360,8 +361,9 @@ div.sidey-sidebar h2:hover, div.sidey-sidebar ul li a:hover {
 div.skinnier-body-container {
   overflow: visible;
   font-size: 1.5em;
-  width: 75%;
-  margin-left: 14%;
+  width: auto;
+  margin-left: 24%;
+  margin-right: 24%;
   text-align: left;
 }
 
@@ -564,10 +566,9 @@ div.social-icon img {
 }
 
 div.welcome-video-container {
-  margin-left: 13%;
   margin-top: 2em;
   text-align: left;
-  width: 85%;
+  width: 100%;
   border: none;
 }
 
@@ -593,9 +594,6 @@ div.link-bank {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2rem;
-  width: 80%;
-  margin-left: 13.2%;
-  margin-right: -10%;
 }
 
 div.link-bank a {
@@ -661,6 +659,16 @@ div.view-select-button img {
 
 div.view-select-button.selected img {
   background-color: #aaa;
+}
+
+div.options-container div.searchmode-toggler button {
+  color: #fff;
+  background-color: #909;
+}
+
+div.options-container div.searchmode-toggler button.selected {
+  color: #909;
+  background-color: #fff;
 }
 
 
@@ -878,16 +886,26 @@ div.layout-search button {
   border: none;
 }
 
+/*bar title*/
+h2.bar-title {
+  padding: 1em;
+  font-size: 2em;
+  background-color: #292A72;
+  width: 85vw;
+  color: #fff;
+  position: relative;
+  width: 97.5%;
+}
 
 /*summary box*/
 div.summary-box-container {
-  margin-bottom: 2em;
+  margin-bottom: 4em;
   display: block;
+  overflow-x: hidden;
 }
 
 div.summary-box-container h2 {
   background-color: #292A72;
-  width: 85vw;
   color: #fff;
   position: relative;
   padding: 18px 32px;
@@ -896,8 +914,8 @@ div.summary-box-container h2 {
 
 
 div.summary-box  {
+  width: 40%;
   margin-top: 2em;
-  margin-left: 7em;
 }
 
 div.summary-box-text {
@@ -1307,7 +1325,7 @@ div.page-sidebar {
 }
 
 div.page-sidebar h3.sidebar-title {
-  margin-top: 1em;
+  margin-top: 0.25em;
   margin-bottom: 1em;
   font-weight: 800;
 }
@@ -1334,6 +1352,32 @@ div.show-description {
   width: 50%;
 }
 
+div.related-records-container {
+  display: block;
+}
+
+div.related-records {
+  background-color: #eee;
+  height: 10em;
+}
+
+div.related-records div.related-records-content {
+  display: inline-flex;
+  margin-left: 1em;
+}
+
+div.related-records h4 {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+div.related-records div.nice-item {
+  width: 7em;
+}
+
+div.related-records div.nice-item h2 {
+  font-size: 0.65em;
+}
 div.instantiation-blurb {
   padding: 1em;
   background-color: #ddf;
@@ -1351,8 +1395,7 @@ div.instantiation-blurb ul li {
 }
 
 div#show-media {
-  /*background-color: #f9f9f9;*/
-  /*height: 14em;*/
+  min-height: 14em;
   width: 100%;
 
   display: inline-flex;
@@ -1365,12 +1408,20 @@ div#show-media div.show-thumbnail {
   padding: 0;
   overflow: hidden;
   width: 100%;
+  height: 15.25em;
 }
 
 div#show-media div.show-thumbnail img {
-  width: 100%;
-  object-fit: contain;
+  width: 80%;
+  object-fit: cover;
+  margin-left: 4em;
+  /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
+
+div#show-media div.show-thumbnail img.thumbnail-bar {
+  height: 4em;
+}
+
 
 div.media-area-container {
   overflow: hidden;
@@ -1511,8 +1562,13 @@ div.transcript-viewer {
   padding-left: 1em;
   padding-top: 2em;
   padding-bottom: 1.2em;
-  height: 15.72em;
+  /*height: 15.75em;*/
+  height: 9.85em;
   overflow-y: scroll;
+}
+
+div.transcript-viewer.wide {
+  height: 9.85em;
 }
 
 div.transcript-line {
@@ -1688,7 +1744,52 @@ button.sidebar-search-button {
   padding: 0.5em;
   color: #fff;
   background-color: #3C439B;
+  opacity: 1;
+  position: relative;
+}
 
+button.sidebar-search-button.secondary {
+  background-color: #6D659D;
+}
+
+button.sidebar-search-button span.tooltip {
+  position: absolute;
+  background-color: #eee;
+  color: #000;
+  padding: 0.5em;
+  bottom: 1.2em;
+  right: -4em;
+  opacity: 0.8;
+  border-radius: 4px;
+  font-size: 0.75em;
+}
+
+.fade {
+  animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  50% {
+    opacity: 0.8;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+
+
+div.hit-transcript-snippet {
+  font-style: italic;
+}
+div.hit-transcript-snippet label {
+  font-weight: bold;
 }
 
 div.hit-thumbnail-container, div.hit-info-container {
@@ -1708,6 +1809,12 @@ div.search-result.list {
   min-height: inherit;
   height: 6em;
 }
+
+div.search-result.list div.list-hit-details {
+  margin-left: 2.5em;
+  display: block;
+}
+
 
 div.search-result.list div.hit-thumbnail-container {
   width: 5%;
@@ -1817,10 +1924,6 @@ div.search-result.gallery div.hit-thumbnail-container div.hit-thumbnail img.thum
   height: 3rem;
 }
 
-div.hit-details {
-  display: block;
-}
-
 div.top-search-bar * {
   position: relative;
 }
@@ -1863,7 +1966,7 @@ div.options-container {
 div.ais-Stats span.ais-Stats-text {
   font-size: 1em;
   font-weight: bold;
-  color: #3C439B;
+  color: #ddd;
 }
 
 div.sort-container div.ais-HitsPerPage select {
@@ -1876,11 +1979,12 @@ div.ais-HitsPerPage, div.ais-SortBy {
 }
 
 div.stats-container {
+  display: block;
   max-width: 50%;
-  font-size: 1.2em;
+  font-size: 0.6em;
   text-align: top;
-  display: inline-flex;
-  margin-left: 2em;
+  height: 1.25em;
+
 }
 
 div.options-container h2 {
@@ -1958,14 +2062,31 @@ div.sort-container.per-page svg {
 
 div.current-refinements-container {
   display: inline-flex;
-  min-width: 52.5%;
-  max-width: 65%;
-
+  min-width: 80.5%;
 }
 
 div.current-refinements-container.closed {
+  position: relative;
   overflow: hidden;
+  max-height: 10em;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: top;
+  z-index: 100;
 }
+/*
+div.current-refinements-container.closed::after {
+  z-index: 110;
+  position: absolute;
+  top: 2em;
+  text-align: center;
+  width: 100%;
+  padding: 1em;
+  background-color: #3C439B;
+  color: #fff;
+  content: "More refinements hidden";
+}*/
 
 div.clear-refinements-container {
   margin-top: 1em;
@@ -1989,6 +2110,14 @@ div.ais-ClearRefinements button, div.more-refinements button {
 
 div.search-accordion-container div.search-accordion-content div.ais-CurrentRefinements ul li, div.search-accordion-container div.search-accordion-content div.ais-CurrentRefinements ul label, div.search-accordion-container div.search-accordion-content div.ais-CurrentRefinements ul span {
   font-size: 2em;
+}
+
+div.search-facets-container, div.search-facets-container.hide {
+  display: block;
+}
+
+button.mobile-facet-toggler {
+  display: none;
 }
 
 /*hide the 'container' label containing facets for a particular field*/
@@ -2093,6 +2222,10 @@ input.sidebar-search  {
   height: 1em;
   padding: 0.25em;
   margin-bottom: 1em;
+}
+
+input.sidebar-search::placeholder {
+  color: black;
 }
 
 div.score-light {
@@ -2796,7 +2929,6 @@ a.america-250 div span {
   position: relative;
   width: 100%;
   margin-bottom: 3rem;
-  padding: 0 2.5rem;
   box-sizing: border-box;
 }
 
@@ -2869,7 +3001,7 @@ a.america-250 div span {
 }
 
 .carousel-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
   z-index: 10;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }
@@ -3018,6 +3150,7 @@ div#mobile-sidebar-toggler {
 /*leetle*/
 /*for local mobile dev v*/
 /*@media (max-width: 1200px) {*/
+/*actual correct media query v*/
 @media (max-width: 568px) {
   /*block mobile double click zoom*/
   * {
@@ -3333,6 +3466,18 @@ div.newsletter-bar input[type="submit"] {
     margin-bottom: 4em;
   }
 
+  div.search-facets-container {
+    display: block;
+  }
+
+  div.search-facets-container.hide {
+    display: none;
+  }
+
+  button.mobile-facet-toggler {
+    display: block;
+  }
+
   input.sidebar-search  {
     width: 77%;
     margin-top: 0.5em;
@@ -3574,6 +3719,10 @@ div.newsletter-bar input[type="submit"] {
     background-color: #fff;
     top: 0;
     left: 0;
+
+    /*for showing half-page search ui*/
+    /*height: 50vh;
+    max-height: 50vh;*/
     height: 105vh;
     max-height: 105vh;
     margin-left: 0;
@@ -3731,7 +3880,7 @@ div.newsletter-bar input[type="submit"] {
   /*show page*/
 
   div#show-media {
-    margin-bottom: 12em;
+    /*margin-bottom: 12em;*/
   }
 
   /*bigtviewer*/
@@ -3739,8 +3888,30 @@ div.newsletter-bar input[type="submit"] {
     margin-left: 13%;
   }
   div.transcript-viewer {
-    height: 24em;
+    height: 16.25em;
   }
+
+  div#show-media div.show-thumbnail {
+    height: 15.075em;
+  }
+  div#show-media div.show-thumbnail img {
+    height: 15.075em;
+  }
+
+
+  div.related-records {
+    background-color: #eee;
+    height: 13em;
+  }
+
+  div.related-records-content {
+    margin-left: 1.5em;
+  }
+
+  div.related-records div.nice-item {
+    width: 10em;
+  }
+
 }
 
 

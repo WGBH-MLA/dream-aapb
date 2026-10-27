@@ -60,11 +60,11 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 
 // fix instantiationmediatype cardinality
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length > 0){
-  for(int o=0; o < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; o++){
-    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType instanceof String){
-      String imVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType;
-      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType = new HashMap();
-      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[o].instantiationMediaType.text = imVal;
+  for(int w=0; w < ctx.pbcoreDescriptionDocument.pbcoreInstantiation.length; w++){
+    if(ctx.pbcoreDescriptionDocument.pbcoreInstantiation[w].instantiationMediaType != null && ctx.pbcoreDescriptionDocument.pbcoreInstantiation[w].instantiationMediaType instanceof String){
+      String imVal = ctx.pbcoreDescriptionDocument.pbcoreInstantiation[w].instantiationMediaType;
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[w].instantiationMediaType = new HashMap();
+      ctx.pbcoreDescriptionDocument.pbcoreInstantiation[w].instantiationMediaType.text = imVal;
     }
   }
 }
@@ -119,7 +119,7 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 
 // genre annotation and source
 if( ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDocument.pbcoreGenre instanceof ArrayList){
-  for(int n = 0; n < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; n++){
+  for(int n=0; n < ctx.pbcoreDescriptionDocument.pbcoreGenre.length; n++){
 
     if(ctx.pbcoreDescriptionDocument.pbcoreGenre[n] != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation != null && ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation instanceof HashMap ){
       String oldGenreAnno = ctx.pbcoreDescriptionDocument.pbcoreGenre[n].annotation.text;
@@ -142,7 +142,7 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 
 // fix creatorrole cardi
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-  for(int t = 0; t < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; t++){
+  for(int t=0; t < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; t++){
     if(ctx.pbcoreDescriptionDocument.pbcoreCreator[t] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole instanceof HashMap){
       HashMap creRoleVal = ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole;
       ctx.pbcoreDescriptionDocument.pbcoreCreator[t].creatorRole = new ArrayList();
@@ -192,9 +192,9 @@ if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcore
 ctx.producing_org = null;
 if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
 
-  for (int i = 0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
+  for (int i=0; i < ctx.pbcoreDescriptionDocument.pbcoreCreator.length; i++) {
     if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length > 0)
-    for (int s = 0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
+    for (int s=0; s < ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole.length; s++) {
       if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s] != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creatorRole[s].text == "Producing Organization"){
         if(ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator != null && ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text != null){
           ctx.producing_org = ctx.pbcoreDescriptionDocument.pbcoreCreator[i].creator.text;
@@ -315,6 +315,7 @@ if(ctx.pbcoreDescriptionDocument.pbcoreGenre != null && ctx.pbcoreDescriptionDoc
 // stored display ` -> people will think they can search for the displayed title, which is not txt from a single element
 ctx.title = null;
 
+ArrayList all_titles = new ArrayList();
 ArrayList display_titles = new ArrayList();
 ArrayList series_titles = new ArrayList();
 ArrayList episode_titles = new ArrayList();
@@ -323,6 +324,8 @@ ArrayList alternative_titles = new ArrayList();
 
 if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDocument.pbcoreTitle.length > 0){
   for(int h=0; h < ctx.pbcoreDescriptionDocument.pbcoreTitle.length; h++){
+
+    all_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
 
     if(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].titleType == "Series"){
       series_titles.add(ctx.pbcoreDescriptionDocument.pbcoreTitle[h].text);
@@ -361,6 +364,8 @@ if(ctx.pbcoreDescriptionDocument.pbcoreTitle != null && ctx.pbcoreDescriptionDoc
 
   ctx.title = display_titles.join("; ");
   ctx.title_keyword = display_titles.join("; ");
+
+  ctx.all_titles = all_titles;
 }
 
 
@@ -376,43 +381,47 @@ if(ctx.pbcoreDescriptionDocument.pbcoreAssetDate != null && ctx.pbcoreDescriptio
       LocalDate date;
 
       def dateSplit = ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text.splitOnToken("-");
-      String first = dateSplit[0];
-      String second = dateSplit[1];
-      String third = dateSplit[2];
 
-      String month;
-      String day;
-      String year;
-      if(first != null && first.length() == 4){
-        year = first;
-        month = second;
-        day = third;
+      if(dateSplit.length == 3){
+        String first = dateSplit[0];
+        String second = dateSplit[1];
+        String third = dateSplit[2];
 
-      //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        String month;
+        String day;
+        String year;
+        if(first != null && first.length() == 4){
+          year = first;
+          month = second;
+          day = third;
 
-      } else if(first != null && first.length() == 2){
-        month = first;
-        day = second;
-        year = third;
+        //   // f = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
 
-      //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
-      //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-        f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-        date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
-      }
+        } else if(first != null && first.length() == 2){
+          month = first;
+          day = second;
+          year = third;
 
-      if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
-        try {
+        //   // f = DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneOffset.UTC);
+        //   // zdt = ZonedDateTime.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+          f = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+          date = LocalDate.from( f.parse(ctx.pbcoreDescriptionDocument.pbcoreAssetDate[l].text) );
+        }
 
-          ctx.broadcast_date = date;
-          ctx.broadcast_date_numeric = date.toEpochMilli();
-        } catch(Exception e) {
-          // Debug.explain("Great!");
+        if(day != "00" && day != "0" && month != "00" && month != "0" && year != "0000"){
+          try {
+
+            ctx.broadcast_date = date;
+            ctx.broadcast_date_numeric = date.toEpochMilli();
+          } catch(Exception e) {
+            // Debug.explain("Great!");
+          }
         }
       }
+      
     }
   }
 }
@@ -486,12 +495,12 @@ if(ctx.pbcoreDescriptionDocument.pbcoreCreator != null && ctx.pbcoreDescriptionD
 ctx.publishers = new ArrayList();
 if(ctx.pbcoreDescriptionDocument.pbcorePublisher != null && ctx.pbcoreDescriptionDocument.pbcorePublisher.length > 0){
 
-  for(int p=0; p < ctx.pbcoreDescriptionDocument.pbcorePublisher.length; p++){
-    if(ctx.pbcoreDescriptionDocument.pbcorePublisher[p] != null && ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher != null){
-      ctx.publishers.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher.text);
+  for(int v=0; v < ctx.pbcoreDescriptionDocument.pbcorePublisher.length; v++){
+    if(ctx.pbcoreDescriptionDocument.pbcorePublisher[v] != null && ctx.pbcoreDescriptionDocument.pbcorePublisher[v].publisher != null){
+      ctx.publishers.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[v].publisher.text);
 
       // brave index with such people in it
-      ctx.people.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[p].publisher.text);
+      ctx.people.add(ctx.pbcoreDescriptionDocument.pbcorePublisher[v].publisher.text);
     }
   }
 }
@@ -500,6 +509,11 @@ if(ctx.pbcoreDescriptionDocument.pbcorePublisher != null && ctx.pbcoreDescriptio
 // uniq the people list
 if(ctx.people != null && ctx.people.length > 0){
   ctx.people = ctx.people.stream().distinct().collect(Collectors.toList())
+}
+
+
+if(ctx.pbcoreDescriptionDocument != null && ctx.pbcoreDescriptionDocument.pbcoreDescription != null && ctx.pbcoreDescriptionDocument.pbcoreDescription.length > 0){
+  ctx.description = ctx.pbcoreDescriptionDocument.pbcoreDescription[0].text;
 }
 
 

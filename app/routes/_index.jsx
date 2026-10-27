@@ -7,7 +7,6 @@ import { exhibitToTVProgram, collectionToTVProgram } from "../utils/toTVProgram"
 import { getCollections, getExhibits, getFeatured, getLatestBlogPosts } from "../utils/fetch"
 
 export const loader = async () => {
-
   let radio_and_tv = await getCollections("order=random")
   let featured_collections = await getFeatured()
   let exhibits = await getExhibits("order=random")
@@ -51,18 +50,28 @@ export default function Index() {
   }
 
   let blog_posts
+
   if(data.blog_posts){
-    blog_posts = data.blog_posts.map((post, i) => (
-      <div key={i} className="blog-post-item">
-        <span className="blog-post-date">
-          {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </span>
-        <h3 className="blog-post-title">
-          <a href={post.link} target="_blank" rel="noreferrer"
-          dangerouslySetInnerHTML={{ __html: post.title.rendered }}/>
-        </h3>
-      </div>
-    ))
+    blog_posts = data.blog_posts.map((post, i) => {
+      let dateString
+      let postDate = new Date(post.date)
+      if(postDate){
+        dateString = postDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })    
+      }
+
+      return (
+        <div key={i} className="blog-post-item">
+          <span className="blog-post-date">
+            { dateString }
+          </span>
+          <h3 className="blog-post-title">
+            <a href={post.link} target="_blank" rel="noreferrer"
+            dangerouslySetInnerHTML={{ __html: post.title.rendered }}/>
+          </h3>
+        </div>
+      )
+      
+    })
   }
 
   return (

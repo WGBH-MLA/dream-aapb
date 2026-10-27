@@ -19,21 +19,19 @@ function resultDescription(descriptions){
   }
 }
 
-function producingOrganization(creators){
-  return creators ? creators.find(creator => creator.creatorRole?.[0] == "Producing Organization").creator : null 
-}
-
 export default function GalleryResult({hit}){
-  let guid = aapbGuid(hit.pbcoreDescriptionDocument)
-  let date, producingOrg
-  if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
-    // aapb convention is just first stored assetDate
-    date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
-  }
+  let guid, description, recordDate, date, producingOrg
+  guid = aapbGuid(hit.pbcoreDescriptionDocument)
+  if(hit.pbcoreDescriptionDocument){
+    if(hit.pbcoreDescriptionDocument.assetDate && hit.pbcoreDescriptionDocument.assetDate.length > 0){
+      // aapb convention is just first stored assetDate
+      date = (<><b>Date:</b> { hit.pbcoreDescriptionDocument.assetDate[0] }</>)
+    }
 
-  if(hit.pbcoreDescriptionDocument.pbcoreCreator && hit.pbcoreDescriptionDocument.pbcoreCreator.length > 0){
-    // this needs to be changed to a field producing_org that will be at the top level
-    producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
+    if(hit.producing_org){
+      producingOrg = (<><b>Produced By:</b> { hit.producing_org }</>)
+    }
+
   }
 
   return (
