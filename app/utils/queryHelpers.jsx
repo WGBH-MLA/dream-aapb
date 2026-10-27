@@ -907,13 +907,13 @@ export function boostyBadQueries(query){
   ]
 }
 
-export function dateQuery(query){
-  return {
-    match: {
+// export function dateQuery(query){
+//   return {
+//     match: {
 
-    }
-  }
-}
+//     }
+//   }
+// }
 
 
 

@@ -51,7 +51,6 @@ export default function Index() {
 
   let blog_posts
 
-
   if(data.blog_posts){
     blog_posts = data.blog_posts.map((post, i) => {
       let dateString

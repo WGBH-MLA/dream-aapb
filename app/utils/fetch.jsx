@@ -1,10 +1,17 @@
 export async function getExhibits(options = "") {
   let wagHost = process.env.AAPB_API_URL
-  let resp = await fetch(
-    wagHost + `/exhibits/?` + options,
-  ).catch((error) => {
-    console.log("Error fetching exhibits", error)
-  })
+  let resp
+
+  try {
+    resp = await fetch(
+      wagHost + `/exhibits/?` + options,
+    ).catch((error) => {
+      console.log("Error fetching exhibits", error)
+    })
+
+  } catch(error){
+    console.log( 'Problem fetching exhibits!!', err )
+  }
 
   let exhibits = []
   if(resp){

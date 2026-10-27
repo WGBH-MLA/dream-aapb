@@ -55,31 +55,29 @@ export const loader = async ({params, request}) => {
       ciClientSecret: process.env.SONY_CI_CLIENT_SECRET,
     }
 
-    if(true){
-      // retrieve media url from ci
-      let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
-      data.mediaURL = mediaURL
-      
-      // check for audio description
-      let adHLSURL = await getAD(record.guid)
-      if(adHLSURL){
-        data.adHLSURL = adHLSURL
-      }
-
-      // check for caption file
-      let captionURL = await getCaption(record.guid)
-      if(captionURL){
-        data.captionURL = captionURL
-      }
-
-      // check for transcript file
-      let transcriptURL = await getTranscript(record.guid)
-      if(transcriptURL){
-        // url returned only if its there
-        data.transcriptURL = transcriptURL
-      }
-    }
+    // retrieve media url from ci
+    let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
+    data.mediaURL = mediaURL
     
+    // check for audio description
+    let adHLSURL = await getAD(record.guid)
+    if(adHLSURL){
+      data.adHLSURL = adHLSURL
+    }
+
+    // check for caption file
+    let captionURL = await getCaption(record.guid)
+    if(captionURL){
+      data.captionURL = captionURL
+    }
+
+    // check for transcript file
+    let transcriptURL = await getTranscript(record.guid)
+    if(transcriptURL){
+      // url returned only if its there
+      data.transcriptURL = transcriptURL
+    }
+  
     // retrieve more like this from es
     let config = {
       esURL: process.env.ES_URL,
@@ -236,11 +234,6 @@ export default function ShowRecord() {
     if(notEmpty(record.topics)){
       // could technically be multiple
       topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
-    }
-
-    if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetType)){
-      // could technically be multiple
-      assetTypes = <ShowBox key="assettypes" label="Asset Type" text={ record.pbcoreDescriptionDocument.pbcoreAssetType.map((pbat) => pbat.text).join(', ') } />
     }
 
     let duration = record.duration()
