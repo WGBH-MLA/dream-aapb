@@ -40,12 +40,11 @@ export const loader = async ({params, request}) => {
   // fill presenter model with record data
   let record = new Record(data.recordData)
   // check location from IP
-  let location = new Location(request)
+  let location = await Location.getGeocode(request)
   // get access level based on record and location
   let access = new Access(record, location)
 
   if( access.canPlay() && record.hasPlayableMedia() ){
-
     let ciConfig = {
       ciAPIHost: process.env.SONY_CI_API_HOST,
       ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,

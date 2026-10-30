@@ -8,10 +8,8 @@ export default class Access {
   }
 
   canPlay() {
-    // console.log( 'I go to funcy', this.record, this.location )
     if( truth(this.record.access_level) ){
       // console.log( 'its true, access!' )
-
       if(this.location.region >= AccessTypes.LOCATION_USA){
         // console.log( 'its usa' )
         if(this.record.access_level === AccessTypes.ACCESS_ONLINE){

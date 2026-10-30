@@ -1,63 +1,13 @@
 export async function getExhibits(options = "") {
-  let wagHost = process.env.AAPB_API_URL
-  let resp
-
-  try {
-    resp = await fetch(
-      wagHost + `/exhibits/?` + options,
-    ).catch((error) => {
-      console.log("Error fetching exhibits", error)
-    })
-
-  } catch(error){
-    console.log( 'Problem fetching exhibits!!', err )
-  }
-
-  let exhibits = []
-  if(resp){
-    let body = await resp.json()
-    exhibits = body.items
-  }
-
-  return exhibits
+  return await safeGetWagData(process.env.AAPB_API_URL, `/exhibits/?${options}`)
 }
 
 export async function getCollections(options = "") {
-  let wagHost = process.env.AAPB_API_URL
-  let resp
-  try {
-    resp = await fetch(`${wagHost}/collections/?${options}`).catch((err) => {
-      console.log( 'Error fetching collections!', err )
-    })
-  } catch(err) {
-    console.log( 'Problem fetching collections!!', err )
-  }
-  
-  let collections = []
-  if(resp){
-    let body = await resp.json()
-    collections = body.items
-  }
-
-  return collections
+  return await safeGetWagData(process.env.AAPB_API_URL, `/collections/?${options}`)
 }
 
 export async function getFeatured() {
-  let wagHost = process.env.AAPB_API_URL
-  let resp
-  try {
-    resp = await fetch(wagHost + `/collections/?limit=3&order=random`)
-  } catch(err){
-    console.log( 'Problem fetching featured!!', err )
-  }
-
-  let featured = []
-  if(resp){
-    let body = await resp.json()
-    featured = body.items  
-  }
-  
-  return featured
+  return await safeGetWagData(process.env.AAPB_API_URL, `/collections/?limit=3&order=random`)
 }
 
 export async function getPageBySlug(type, slug) {
@@ -87,4 +37,23 @@ export async function getLatestBlogPosts() {
   if(response){
     return await response.json()
   }
+}
+
+async function safeGetWagData(host, path){
+  let resp
+  try {
+    resp = await fetch(host + path)
+  } catch(err){
+    console.log( `Problem fetching ${path}!!`, err )
+  }
+
+  let datums = []
+  if(resp){
+    let body = await resp.json()
+    if(body && body.items){
+      datums = body.items
+    }
+  }
+  
+  return datums
 }
