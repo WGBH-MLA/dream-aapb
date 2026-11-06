@@ -1345,11 +1345,27 @@ div.ais-ClearRefinements button {
 }
 
 /*show page*/
+
+.show-columns {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.show-left-col {
+  padding: 0;
+}
+
 div.show-description {
   min-height: 2em;
   margin-left: 25%;
   margin-bottom: 4em;
   width: 50%;
+}
+
+.citation {
+  margin: 25px 25px 35px ;
+  font-size: 16px;
 }
 
 div.related-records-container {
@@ -1378,21 +1394,20 @@ div.related-records div.nice-item {
 div.related-records div.nice-item h2 {
   font-size: 0.65em;
 }
-div.instantiation-blurb {
-  padding: 1em;
-  background-color: #ddf;
-  font-size: 0.8em;
 
+.instantiation-blurb {
+  margin: 25px 25px 35px ;
+  font-size: 16px;
 }
 
-div.instantiation-blurb ul {
-  display: inline;
-  list-style-type: none;
+.catalog-alert-box {
+  margin: 25px 25px 35px ;
+  padding: 19px;
+  background-color: #f2f2f2;
+  display: flow-root;
+  font-size: 16px;
 }
 
-div.instantiation-blurb ul li {
-  display: inline;
-}
 
 div#show-media {
   min-height: 14em;
@@ -1453,16 +1468,27 @@ div.show-header-bar hr {
   width: 50%;
 }
 
-div.show-box {
-  font-size: 0.8em;
-  margin-left: 1em;
-  padding-top: 1em;
-  padding-bottom: 1.2em;
+.show-box {
+  display: grid;
+  grid-template-columns: var(--label-width, 25%) 1fr;
+  column-gap: 1em;
+  padding: 18px 0 18px 15px;
+  margin: 0;
+  border-bottom: 1px solid #e4e4e4;
 }
 
-div.show-box label {
-  margin-right: 0.5em;
+.show-box-label {
+  font-size: 16px;
   font-weight: bold;
+  color: #7f1777;
+  margin: 0;
+}
+
+.show-box-value {
+  font-size: 16px;
+  margin: 0;
+  min-width: 0;
+  word-wrap: break-word;
 }
 
 div.show-metadata-container {
@@ -1471,9 +1497,11 @@ div.show-metadata-container {
 div.show-metadata-container div.show-metadata-header, div.transcript-viewer-container div.show-metadata-header {
   font-weight: bold;
   padding-left: 1em;
-  padding-top: 0.8em;
-  padding-bottom: 1em;
-  background-color: #d2d5e2;
+  padding-top: 0.2em;
+  padding-bottom: .2em;
+  background-color: #D2D5E2;
+  font-size: 0.8em;
+  color: #292A72;
 }
 
 div.video-player-container {
@@ -3878,7 +3906,7 @@ div.newsletter-bar input[type="submit"] {
   }
 
   /*show page*/
-
+  
   div#show-media {
     /*margin-bottom: 12em;*/
   }

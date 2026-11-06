@@ -1,8 +1,8 @@
-export default function ShowBox(props){
+export default function ShowBox({ label, text }) {
   return (
-    <div className="show-box">
-      <label>{ props.label }</label>
-      { props.text }
-    </div>
+    <dl className="show-box">
+      <dt className="show-box-label">{ label }</dt>
+      <dd className="show-box-value">{ text }</dd>
+    </dl>
   )
 }

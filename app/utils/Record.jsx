@@ -246,29 +246,22 @@ class Instantiation {
     }
   }
 
-  blurb(){
-    let identifiers, generations, colors, durations
-    if(this.identifiers){
-      identifiers = <div className="smarbot"><b>Identifiers:</b> <ul>{this.identifiers.map( (g) => <li>{g.source} - { g.text }</li>)}</ul></div>
-    }
-    if(this.generations){
-      generations = <div className="smarbot"><b>Generations:</b> <ul>{this.generations.map( (g) => <li>{ g.text }</li>)}</ul></div>
-    }
-    if(this.colors){
-      colors = <div className="smarbot"><b>Colors:</b> <ul>{this.colors && this.colors.map( (c) => <li>{ c.text }</li>)}</ul></div>
-    }
-    if(this.durations){
-      durations = <div className="smarbot"><b>Duration:</b> <ul>{this.durations && this.durations[0].map( (d) => <li>{ d.text }</li>)}</ul></div>
-    }
-    
+  
+  blurb(key){
+    const formatText = this.format_description || (this.format !== "Unknown" ? this.format : null)
+  
     return (
-      <div className="instantiation-blurb martop">
-        <div className="smarbot"><b>Format:</b> { this.format }</div>
-        <div className="smarbot"><b>Format Description:</b> { this.format_description }</div>
-        { identifiers }
-        { generations }
-        { colors }
-        { durations }
+      <div key={ key } className="instantiation-blurb">
+        { this.organization && <strong>{ this.organization }</strong> }
+        { this.organization && <br /> }
+  
+        { this.identifiers && this.identifiers.map((id, n) => (
+          <span key={ n }>
+            Identifier: { id.text }{ id.source && ` (${id.source})` }<br />
+          </span>
+        )) }
+  
+        { formatText && <span>Format: { formatText }<br /></span> }
       </div>
     )
   }
