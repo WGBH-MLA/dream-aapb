@@ -1470,7 +1470,6 @@ div.instantiation-blurb ul li {
 }
 
 div#show-media {
-  min-height: 14em;
   width: 100%;
 
   display: inline-flex;
@@ -1478,22 +1477,24 @@ div#show-media {
 
 div#show-media div.show-thumbnail {
   position: relative;
+  display: inline-block;
   border: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
   width: 100%;
-  height: 14em;
 }
 
 div#show-media div.show-thumbnail img {
   width: 100%;
   object-fit: cover;
+  display: block;
   /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
 
 div#show-media div.show-thumbnail img.thumbnail-bar {
-  height: 4em;
+  display: inline;
+  height: 3em;
 }
 
 
