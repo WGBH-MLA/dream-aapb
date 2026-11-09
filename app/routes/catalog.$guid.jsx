@@ -44,12 +44,12 @@ export const loader = async ({params, request}) => {
   let location = await Location.getGeocode(request)
 
   // get access level based on record and location
-  let access = new Access(request, location, record)
+  let access = new Access(request, record, location)
 
   // does user have agreement cookie
   data.hasAgreed = await access.hasAgreed(request)
 
-  if( access.canPlay() && record.hasPlayableMedia() ){
+  if( data.hasAgreed && access.canPlay() && record.hasPlayableMedia() ){
     let ciConfig = {
       ciAPIHost: process.env.SONY_CI_API_HOST,
       ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
@@ -75,13 +75,6 @@ export const loader = async ({params, request}) => {
       data.captionURL = captionURL
     }
 
-    // check for transcript file
-    let transcriptURL = await getTranscript(record.guid)
-    if(transcriptURL){
-      // url returned only if its there
-      data.transcriptURL = transcriptURL
-    }
-  
     // retrieve more like this from es
     let config = {
       esURL: process.env.ES_URL,
@@ -117,6 +110,15 @@ export const loader = async ({params, request}) => {
     data.related_records = await new MoreLikeThis(config).getMoreLikeThis([record.id], ["title"])
   }
 
+  if(record && record.guid){
+    // check for transcript file
+    let transcriptURL = await getTranscript(record.guid)
+    if(transcriptURL){
+      // url returned only if its there
+      data.transcriptURL = transcriptURL
+    }
+  }
+    
   return data
 }
 

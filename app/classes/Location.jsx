@@ -16,7 +16,7 @@ export default class Location {
     var country_code, region
     if(process.env.NODE_ENV === "development"){
       // allow all records viewable in dev
-      this.region = AccessTypes.LOCATION_ONSITE
+      region = AccessTypes.LOCATION_ONSITE
     } else if(ip && ip !== undefined) {
       country_code = await geocode(ip)
       region = codeToRegion(country_code)

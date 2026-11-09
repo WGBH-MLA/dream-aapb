@@ -26,7 +26,6 @@ export default class Record {
     if(notEmpty(this.data.pbcoreDescriptionDocument.pbcoreAnnotation)){
       let levelAnnotation = this.data.pbcoreDescriptionDocument.pbcoreAnnotation.find((pba) => pba.annotationType === "Level of User Access")
       if(levelAnnotation && levelAnnotation.text){
-
         switch(levelAnnotation.text){
           case "Online Reading Room":
             this.access_level = AccessTypes.ACCESS_ONLINE
