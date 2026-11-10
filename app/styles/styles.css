@@ -1556,6 +1556,9 @@ div.video-player-container {
   color: #fff;
   background-color: #000;
   width: 100%;
+
+  /*should be same as height of div#show-media*/
+  height: 10.5em;
   transition: height 0.8s, width 0.8s;
   z-index: 100;
 }
@@ -3892,9 +3895,6 @@ div.newsletter-bar input[type="submit"] {
     width: 100%;
   }
 
-  div.video-player-container {
-  }
-
   div.video-player-container.mini {
     width: 32%;
   }
@@ -3956,7 +3956,8 @@ div.newsletter-bar input[type="submit"] {
   /*show page*/
 
   div#show-media {
-    /*margin-bottom: 12em;*/
+    height: 14em;
+    max-height: 14em;
   }
 
   /*bigtviewer*/
@@ -3973,7 +3974,10 @@ div.newsletter-bar input[type="submit"] {
   div#show-media div.show-thumbnail img {
     height: 15.075em;
   }
-
+  
+  div.video-player-container {
+    height: 14em;
+  }
 
   div.related-records {
     background-color: #eee;

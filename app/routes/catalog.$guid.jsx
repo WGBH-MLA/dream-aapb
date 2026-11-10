@@ -118,7 +118,7 @@ export const loader = async ({params, request}) => {
       data.transcriptURL = transcriptURL
     }
   }
-    
+  
   return data
 }
 

@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
+import videojs from "video.js"
+import "../styles/video-js.min.css"
+
 import Thumbnail from "../components/Thumbnail"
 import Captions from "../components/Captions"
 import thumbnailURL from "../utils/thumbnailURL"
-import addADButton from "../utils/addADButton"
-import addSkipButtons from "../utils/addSkipButtons"
+import { addSkipButtons, addADButton, skipPlayer, togglePlayer } from "../utils/playerHelpers"
 import { checkVisible } from "../utils/helpers"
-import videojs from "video.js"
-import "../styles/video-js.min.css"
 
 export default function ClientVideoPlayer(props){
   if(!props.guid){
@@ -25,6 +25,7 @@ export default function ClientVideoPlayer(props){
     setPippy(pippy)
 
     if(props.mediaURL && videojs.getAllPlayers().length == 0){
+
       videojs('vjs-player', {
         fluid: true,
         controls: true,
@@ -36,6 +37,7 @@ export default function ClientVideoPlayer(props){
           pictureInPictureToggle: false
         }
       }, () => {
+
         // player is initialized
 
         videojs.log('I am ready for your video yes!')
@@ -68,10 +70,29 @@ export default function ClientVideoPlayer(props){
           setPippy(pippyValue)
         })
 
+        window.addEventListener('keyup', (e) => {
+          e.preventDefault()
+          switch(e.code){
+            case "Space":
+              togglePlayer(player)
+              break
+            case "ArrowLeft":
+              skipPlayer(player, -5)
+              break
+            case "ArrowRight":
+              skipPlayer(player, 5)
+              break
+            
+          }
+
+        })
+
         // this.on('ended', function() {
           // videojs.log('whoa mama!!')
         // })
       })
+
+
     }
   })
 
