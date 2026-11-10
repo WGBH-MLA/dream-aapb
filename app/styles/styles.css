@@ -1703,9 +1703,7 @@ div.transcript-viewer div.transcript-line mark.hot {
 }
 
 div.transcript-viewer-container div.transcript-search {
-  margin-left: 3%;
   font-size: 1em;
-  padding: 1em;
   display: none;
 }
 
@@ -1717,15 +1715,14 @@ div.transcript-viewer-container div.transcript-search input {
   padding: 0.5em;
   border: 0;
   border-radius: 4px;
-  min-width: 40%;
-  width: 40%;
+  min-width: 42%;
+  width: 42%;
 }
 
 div.transcript-viewer-container div.transcript-search a.transcript-search-button {
   display: inline-block;
-
-  width: 3%;
-  min-width: 3%;
+  width: 5%;
+  min-width: 5%;
   min-height: 1px;
   margin-left: 0.5em;
 }
@@ -1745,8 +1742,8 @@ div.transcript-viewer-container div.transcript-search a.transcript-search-button
 div.transcript-viewer-container div.transcript-search label {
   text-align: center;
   display: inline-block;
-  min-width: 10%;
-  width: 10%;
+  min-width: 18%;
+  width: 18%;
   margin-left: 1em;
   font-size: 0.75em;
 }
@@ -3488,10 +3485,6 @@ div.newsletter-bar input[type="submit"] {
     width: 40%;
   }
 
-  div.transcript-viewer-container div.transcript-search a.transcript-search-button {
-    width: 14%;
-  }
-
   div.transcript-viewer-container div.transcript-search a.transcript-search-button svg {
     width: 64px;
     height: 64px;
@@ -3962,12 +3955,24 @@ div.newsletter-bar input[type="submit"] {
 
   /*bigtviewer*/
   div.transcript-viewer-container div.transcript-search {
-    margin-left: 13%;
+    margin-left: 0.5em;
   }
   div.transcript-viewer {
     height: 16.25em;
   }
 
+  div.transcript-viewer-container div.transcript-search a.transcript-search-button {
+    width: 5%;
+    min-width: 5%;
+  }
+
+  div.transcript-viewer-container div.transcript-search label {
+    min-width: 22%;
+    width: 22%;
+  }
+
+
+  /*show page media player*/
   div#show-media div.show-thumbnail {
     height: 15.075em;
   }

@@ -130,7 +130,6 @@ export default function ClientTranscriptViewer(props){
   return (
     <>
       <div className={ headerClasses }>
-        Transcript
         { transcriptSearch }
       </div>
       
@@ -166,23 +165,29 @@ function TranscriptSearch(props){
   buttonClass = upClass = downClass = "transcript-search-button"
   upClass += " transcript-search-button-first"
 
-  if(props.query && props.numMatches > 0 && truth(props.selectedMatch)){
-    // we always get a props.selectedMatch, even when tehres no query
-    matchLabel = `${props.selectedMatch+1} of ${props.numMatches}`
-    matchX = <X />
+  if(props.query){
+    if(props.numMatches > 0 && truth(props.selectedMatch)){
+      // we always get a props.selectedMatch, even when tehres no query
+      matchLabel = `${props.selectedMatch+1} of ${props.numMatches}`
+      matchX = <X />
+    } else {
+      matchLabel = `0 matches`
+      upClass += " disable"
+      downClass += " disable"
+    }
+  
   } else {
-    matchLabel = `0 matches`
     upClass += " disable"
     downClass += " disable"
+    matchLabel = ""
   }
-
+  
   let classes = "transcript-search"
   if(props.open){
     classes += " open"
   }
   return (
     <div className={ classes } >
-      {/*Search the transcript*/}
       <input
         id="transcript-search-input"
         key="transcript-tommy"
