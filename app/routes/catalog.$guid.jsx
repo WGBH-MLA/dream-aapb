@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useLoaderData, useSearchParams, useOutletContext, Link } from 'react-router'
+import { useLoaderData, useSearchParams, useOutletContext, Link } from "react-router"
 
 import Accordion from "../components/Accordion"
 import VideoPlayer from "../components/VideoPlayer"
@@ -8,6 +8,7 @@ import ShowBox from "../components/ShowBox"
 import TranscriptViewer from "../components/TranscriptViewer"
 import Viewer from "../components/Viewer"
 import RelatedRecords from "../components/RelatedRecords"
+import Agreement from "../components/Agreement"
 
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
@@ -41,12 +42,15 @@ export const loader = async ({params, request}) => {
   // fill presenter model with record data
   let record = new Record(data.recordData)
   // check location from IP
-  let location = new Location(request)
+  let location = await Location.getGeocode(request)
+
   // get access level based on record and location
-  let access = new Access(record, location)
+  let access = new Access(request, location, record)
+
+  // does user have agreement cookie
+  data.hasAgreed = await access.hasAgreed(request)
 
   if( access.canPlay() && record.hasPlayableMedia() ){
-
     let ciConfig = {
       ciAPIHost: process.env.SONY_CI_API_HOST,
       ciWorkspaceId: process.env.SONY_CI_WORKSPACE_ID,
@@ -111,15 +115,24 @@ export const loader = async ({params, request}) => {
     // console.log( 'desc', relatedRecordsDescription )
     // data.related_records = relatedRecordsTitle.concat(relatedRecordsDescription)
 
-
     data.related_records = await new MoreLikeThis(config).getMoreLikeThis([record.id], ["title"])
   }
 
   return data
 }
 
+export const action = async ({request}) => {
+  // set the agreefunction as our server-side form action so its picked up when we submit the Form in the Agreement component
+  return await Access.agree(request)
+}
+
 export default function ShowRecord() {
   const data = useLoaderData()
+
+  let agreementUI
+  if(!data.hasAgreed){
+    agreementUI = <Agreement agreement={ data.hasAgreed } />
+  }
 
   const { pagedata, setPagedata } = useOutletContext()
   const [viewerOpen, setViewerOpen] = useState(true)
@@ -148,7 +161,6 @@ export default function ShowRecord() {
   // class instance cant survive ssr serialization, so do it again
   let record = new Record(data.recordData)
 
-
   let transcriptViewer
   if(data.transcriptURL){
     transcriptViewer = (
@@ -160,8 +172,7 @@ export default function ShowRecord() {
       />
     )
   }
-
-
+  
   // toggle show of raw pbcore json
   const [showPbcore, setShowPbcore] = useState(false)
 
@@ -206,7 +217,7 @@ export default function ShowRecord() {
     // orgs
     if(notEmpty(record.contributing_orgs)){
       contributingOrgs = [...new Set(record.contributing_orgs)]
-      contributingOrgs = contributingOrgs.filter((co) => co != "American Archive of Public Broadcasting").map((co) => <ShowBox label="Contributing Organization" text={ co } />)
+      contributingOrgs = contributingOrgs.filter((co) => co != "American Archive of Public Broadcasting").map((co) => <ShowBox key={ co } label="Contributing Organization" text={ co } />)
     }
 
     // orgs
@@ -228,8 +239,8 @@ export default function ShowRecord() {
     }
 
     if(notEmpty(record.topics)){
-       // could technically be multiple
-      topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
+      // could technically be multiple
+      topics = <ShowBox key="topics" label="Topics" text={ record.topics.map((topic) => <Link key={ topic } to={ `/catalog?topics[]=${topic}` }>{topic}</Link> ) } />
     }
 
     let duration = record.duration()
@@ -349,6 +360,8 @@ export default function ShowRecord() {
 
   return (
     <>
+      { agreementUI }
+
       <div className="page-container">
         <div className="body-container page-title">
           <HeaderBar title={title} />

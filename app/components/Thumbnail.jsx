@@ -19,11 +19,11 @@ export default function Thumbnail(props) {
 
     var classes
     if(props.searchResult){
-      classes = "hit-thumbnail"
+      classes = "thumbnail hit-thumbnail"
     } else if(props.cmsPlayer){
-      classes = "cms-thumbnail"
+      classes = "thumbnail cms-thumbnail"
     } else {
-      classes = "show-thumbnail"
+      classes = "thumbnail show-thumbnail"
     }
 
     if(exists === EXIST){

@@ -1375,6 +1375,81 @@ div.ais-ClearRefinements button {
   width: 100%;
 }
 
+/*agree widget*/
+div.agreement {
+  box-sizing: border-box;
+  border: 2px solid #eee;
+  height: 16em;
+  display: block;
+  background-color: #d2d5e2;
+  position: fixed;
+  z-index: 10000;
+  bottom: 0;
+  width: 100%;
+  padding-top: 2em;
+  padding-bottom: 3em;
+}
+
+div.agreement div {
+  display: inline-flex;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+div.agreement div.logo {
+  width: 12%;
+}
+
+div.agreement div.logo img {
+  width: 12em;
+  display: inline-flex;
+  text-align: center;
+  vertical-align: middle;
+}
+
+div.agreement div.blurb {
+  width: 20%;
+  margin-left: 2em;
+  margin-right: 2em;
+}
+
+div.agreement div.scrolling {
+  width: 40%;
+  line-height: 1.7em;
+  font-size: 0.85em;
+  padding-top: 1em;
+  padding-bottom: 3em;
+  padding-left: 2em;
+  padding-right: 2em;
+  border-radius: 8px;
+  background-color: #fff;
+  overflow-x: auto;
+  overflow-y: scroll;
+}
+
+div.agreement div.scrolling {
+  height: 8em;
+}
+
+div.agreement div.agree {
+  margin-left: 3em;
+  width: 8%;
+}
+
+div.agreement div.agree button {
+  width: 100%;
+  padding: 1.25em;
+  margin-left: auto;
+  margin-right: auto;
+  transition: background-color 0.4s ease-out;
+}
+
+div.agreement div.agree button:hover {
+  background-color: #7777BA;
+}
+
 /*show page*/
 
 .show-columns {
@@ -1441,7 +1516,6 @@ div.related-records div.nice-item h2 {
 
 
 div#show-media {
-  min-height: 14em;
   width: 100%;
 
   display: inline-flex;
@@ -1449,23 +1523,24 @@ div#show-media {
 
 div#show-media div.show-thumbnail {
   position: relative;
+  display: inline-block;
   border: 0;
   margin: 0;
   padding: 0;
   overflow: hidden;
   width: 100%;
-  height: 15.25em;
 }
 
 div#show-media div.show-thumbnail img {
-  width: 80%;
+  width: 100%;
   object-fit: cover;
-  margin-left: 4em;
+  display: block;
   /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
 
 div#show-media div.show-thumbnail img.thumbnail-bar {
-  height: 4em;
+  display: inline;
+  height: 3em;
 }
 
 
