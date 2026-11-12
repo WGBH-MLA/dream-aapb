@@ -17,7 +17,7 @@ export default function Footer(props) {
           text: "Exhibits"
         },
         {
-          url: "/resources",
+          url: "/educator-resources",
           text: "Educator Resources"
         },
       ]
