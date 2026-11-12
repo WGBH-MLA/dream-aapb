@@ -1,11 +1,13 @@
 import SummaryBox from "../components/SummaryBox"
 import LinkBankFooter from '../components/LinkBankFooter';
+import BarTitle from "../components/BarTitle"
 
 export default function Projects() {
   return (
-    <div className="skinny-body-container">
-      <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
-      <SummaryBox title="Projects" text="Our vision is to to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity. We're fulfilling our vision through several exciting grant projects." />
+     <div className="body-container">
+          <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
+          <BarTitle title="Projects" />
+     <p>"Our vision is to to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity. We're fulfilling our vision through several exciting grant projects."</p> 
       <h3>The American Archive of Public Broadcasting: From Repository to Resource</h3>
       <p>In June 2019, The Andrew W. Mellon Foundation awarded GBH a grant to enhance usability of the American Archive of Public Broadcasting. The grant will support a two-pronged effort to make the AAPB a better resource for researchers, educators, academics and the public. The AAPB will work with Brandeis University’s Lab for Linguistics and Computation, which uses machine learning and artificial intelligence to develop open-source tools and workflows, to capture detailed metadata from AAPB radio and television programs. <a href="/about-the-american-archive/projects/mellon2">Read more about the Mellon project.</a>.</p>
       <h3>The Public Broadcasting Preservation Fellowship</h3>
@@ -41,7 +43,9 @@ export default function Projects() {
       <h3 id="national-endowment-for-the-humanities">National Endowment for the Humanities</h3>
       <p className="marbot"><img src="https://s3.amazonaws.com/americanarchive.org/org-logos/neh_logo.jpg" alt="NEH Logo Image" /> Created in 1965 as an independent federal agency, the National Endowment for the Humanities supports research and learning in history, literature, philosophy, and other areas of the humanities by funding selected, peer-reviewed proposals from around the nation. Additional information about the National Endowment for the Humanities and its grant programs is available at: www.neh.gov.</p>
 
-      <LinkBankFooter />
+      <div className="skinnier-body-container">
+        <LinkBankFooter />
+      </div>
     </div>
   )
 }

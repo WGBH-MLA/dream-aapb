@@ -28,7 +28,9 @@ export default function About() {
           </p>
           <p>
             If this video inspires you, we hope you'll consider supporting our work to preserve these stories for future 
-            generations: https://americanarchive.donorsupport....
+            generations: <a href="https://americanarchive.donorsupport.org/" target="_blank" rel="noopener noreferrer">
+              https://americanarchive.donorsupport.org/
+            </a>
           </p>
         </div>
         <LinkBankFooter />

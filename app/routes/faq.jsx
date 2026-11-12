@@ -1,6 +1,57 @@
-import SummaryBox from "../components/SummaryBox"
+import BarTitle from "../components/BarTitle"
 import LinkBankFooter from "../components/LinkBankFooter"
 import { useState } from "react"
+
+export default function FAQ() {
+  return (
+    <>
+  
+      <div className="body-container">
+            <a className="back-link-nav" href="/about"> &lt; About the AAPB</a>
+        <BarTitle title="FAQ" />
+      </div>
+      <div className="skinny-body-container">
+        {faqs.map((item, i) => (
+          <FAQItem key={i} question={item.q} answer={item.a} />
+        ))}
+              </div>
+              <div className="skinnier-body-container">
+                <LinkBankFooter />
+              </div>
+    </>
+  )
+}
+
+function FAQItem({ question, answer }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="faq-item">
+      <button
+        className="faq-button"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        <h3 className="faq-question">
+          {question}
+        </h3>
+
+        <span
+          aria-hidden="true"
+          className={`faq-icon ${open ? "open" : ""}`}
+        >
+          +
+        </span>
+      </button>
+
+      {open && (
+        <div className="faq-answer">
+          {answer}
+        </div>
+      )}
+    </div>
+  )
+}
 
 const faqs = [
   {
@@ -56,7 +107,6 @@ const faqs = [
     q: "Can I access collection material that is not available online?",
     a: (
       <>
-        <p>Not all AAPB collection material is available online due to rights and other legal restrictions. However, the full collection can be accessed on-site at GBH and the Library of Congress.</p>
         <p>Not all AAPB collection material is available online due to rights and other legal restrictions. However, the full collection can be accessed on-site at GBH and the Library of Congress.</p>
         <p>In some cases, you may request limited remote access to materials for bona fide research and scholarly purposes. To do so, contact us at aapb_notifications@wgbh.org</p>
         <p>AAPB staff will make every effort to respond within three (3) business days, though response times may vary, and not all materials are eligible. If approved, you will receive secure access via a unique URL and password.</p>
@@ -115,53 +165,3 @@ const faqs = [
     ),
   },
 ]
-
-function FAQItem({ question, answer }) {
-  const [open, setOpen] = useState(false)
-
-  return (
-    <div className="faq-item">
-      <button
-        className="faq-button"
-        aria-expanded={open}
-        onClick={() => setOpen(!open)}
-      >
-        <h3 className="faq-question">
-          {question}
-        </h3>
-
-        <span
-          aria-hidden="true"
-          className={`faq-icon ${open ? "open" : ""}`}
-        >
-          +
-        </span>
-      </button>
-
-      {open && (
-        <div className="faq-answer">
-          {answer}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default function FAQ() {
-  return (
-    <div className="page-container">
-      <div className="skinny-body-container marbot">
-        <a className="back-link-nav" href="/about">
-          &lt; About the AAPB
-        </a>
-        <SummaryBox title="Frequently Asked Questions" />
-        {faqs.map((item, i) => (
-          <FAQItem key={i} question={item.q} answer={item.a} />
-        ))}
-        <LinkBankFooter />
-      </div>
-
-
-    </div>
-  )
-}
