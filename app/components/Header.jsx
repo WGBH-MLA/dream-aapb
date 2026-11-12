@@ -20,7 +20,7 @@ const drawerItems = {
     },
     {
       label: "Educator Resources",
-      url: "/resources",
+      url: "/educator-resources",
       external: false,
 
     },
