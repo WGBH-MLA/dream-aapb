@@ -4,6 +4,7 @@ import { renderBlocks, dangerousDiv } from "./contentHelpers"
 import NiceItem from "../components/NiceItem"
 import thumbnailURL from "../utils/thumbnailURL"
 import LayoutSearch from "../components/LayoutSearch"
+import BarTitle from "../components/BarTitle"
 
 export function renderCollection(collection, esConfig) {
   // console.log("rendering collection", collection)
@@ -71,10 +72,9 @@ export function renderCollection(collection, esConfig) {
 
   return (
     <div className="page-container collection-page-container">
-      <div className="collection-header">
-        <h2>{ dangerousDiv(collection.title, false) }</h2>
-      </div>
-      <a className="top-back-link" href="/collections">&lt; Back To Special Collections</a>
+      <a className="top-back-link-nav" href="/collections">&lt; Back To Special Collections</a>
+      <BarTitle title={ dangerousDiv(collection.title, false) } />
+      
 
       <div className="collection-main-grid">
 

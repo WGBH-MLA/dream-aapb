@@ -1,120 +1,118 @@
-import SummaryBox from "../components/SummaryBox"
+import BarTitle from "../components/BarTitle"
+import TVMenu from "../components/TVMenu"
 
 export default function HistoryDay() {
   return (
-    <div className="skinny-body-container marbot">
-      <h1 className="marbot">National History Day</h1>
-      <h2 className="marbot">Innovation in History: Impact, Influence, Change</h2>
-      <a className="floating-link" href="https://www.nhd.org/" target="_blank" rel="noreferrer">
-        <img
-          src="https://s3.amazonaws.com/americanarchive.org/override/NHD_logo_2027.jpg"
-          alt="National History Day"
-        />
-      </a>
-      <p>The American Archive of Public Broadcasting (AAPB) is proud to support <a href="https://www.nhd.org/">National History Day</a> (NHD) students and teachers as they explore the 2027 theme: Innovation in History: Impact, Influence, Change. This year's theme invites students to investigate how people have imagined, developed, and implemented new ideas, technologies, and methods, and how those innovations influenced societies over time.
-      </p>
-      <p>To fully understand innovation in a historical context, students must look beyond the idea itself and examine its effects. Public media stations have long documented these advancements, capturing breakthroughs, debates, and discoveries as they unfolded.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Using the Archive</h3>
-      <p>Students can use the AAPB to explore how television and radio have presented, interpreted, and followed innovations across nearly 100 years of broadcasting history. The AAPB provides access to over 300,000 digitized programs from all U.S. states and many territories.
-      </p>
-      <p>These materials include:</p>
-      <ul>
-        <li>Interviews with scientists, inventors, policymakers, and cultural leaders</li>
-        <li>National newscasts covering major breakthroughs</li>
-        <li>Local reporting documenting community-level change</li>
-        <li>Public affairs programs analyzing the impact of new ideas and technologies</li>
-      </ul>
-      <p>AAPB's collections allow students to see how innovations were understood in their own time and how public media shaped conversations around change.
-      </p>
-      <p>For more information on the 2027 theme, visit <a href="https://www.nhd.org/">National History Day</a>. For help from AAPB staff, email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">How the AAPB Helps You Explore Innovation</h3>
-      <p>Innovation isn't just about inventions; it's about new ways of thinking, organizing, communicating, and solving problems. Public broadcasting has documented these developments for more than 70 years, capturing:
-      </p>
-      <ul>
-        <li>How communities responded to new technologies</li>
-        <li>How policymakers debated scientific breakthroughs</li>
-        <li>How cultural leaders shaped new ideas</li>
-        <li>How innovations changed daily life</li>
-      </ul>
-      <p>AAPB's programs let you see innovation in real time through interviews, documentaries, news coverage, and local reporting.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Tips to Use the Archive</h3>
-      <p><strong>Special Collections</strong>: <a href="https://americanarchive.org/special_collections">Special Collections</a> group programs by theme, series, or historical topic. They're a strong starting point for finding content already organized around innovation, science, technology, culture, or social change.
-      </p>
-      <p><strong>Exhibits</strong>: <a href="https://americanarchive.org/exhibits">Exhibits</a> highlight how public broadcasting has covered issues and events of cultural and historical significance. Each exhibit includes curated programs and contextual essays, helpful for building background knowledge and understanding impact and influence.
-      </p>
-      <p><strong>Search Tools</strong>: Use filters to narrow results by:</p>
-      <ul>
-        <li>Media Type</li>
-        <li>Year(s)</li>
-        <li>Topic</li>
-        <li>Genre</li>
-        <li>Contributing organization</li>
-        <li>Geographic location</li>
-      </ul>
-      <p><strong>Local History</strong>: AAPB includes content from all 50 states, Washington, D.C., and the U.S. territories of Puerto Rico, American Samoa, the U.S. Virgin Islands, and Guam. Students researching regional innovation can <a href="https://americanarchive.org/participating-orgs">explore our interactive map to find local reporting</a>.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Relevant Collections and Exhibits</h3>
-      <p>These collections and exhibits highlight how public broadcasting has documented scientific, technological, cultural, and social innovations over time.
-      </p>
-      <ul>
-        <li><a href="https://americanarchive.org/special_collections/wapina">War and Peace in the Nuclear Age Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/kgou-weather-whys">Weather Whys Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/kexp-mind-over-matters">Mind Over Matters Sustainability Segment Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/about-science">About Science Series Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/higher-education-today">Higher Education Today Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/ttbook">To The Best Of Our Knowledge Collection</a></li>
-        <li><a href="https://americanarchive.org/special_collections/children-and-disabilities">Representing Children with Disabilities on Public Television Collection</a></li>
-        <li><a href="https://americanarchive.org/exhibits/hiv-aids-and-public-broadcasting">The HIV/AIDS Epidemic and Public Broadcasting Exhibit</a></li>
-        <li><a href="https://americanarchive.org/exhibits/climate-change">Climate Change Conversations: Causes, Impacts, Solutions Exhibit</a></li>
-      </ul>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Example Topics and Suggested Content</h3>
-      <ul>
-        <li>Nuclear Technology & Global Politics</li>
-        <li>Climate Science & Environmental Innovation</li>
-        <li>Meteorology & Weather Forecasting</li>
-        <li>Medical Innovation & Public Health</li>
-        <li>Education Technology & Access</li>
-        <li>Disability Representation & Media Innovation</li>
-        <li>Science Communication & Public Understanding</li>
-        <li>Sustainability & Environmental Design</li>
-      </ul>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">How to Cite AAPB Programs</h3>
-      <p>AAPB programs can be cited like any digital media source. Include:</p>
-      <ul>
-        <li>Program title</li>
-        <li>Series title (if applicable)</li>
-        <li>Producing Station</li>
-        <li>Original broadcast date</li>
-        <li>URL</li>
-      </ul>
-      <p><strong>Example</strong>: <em>"War and Peace in the Nuclear Age; Interview with Jimmy Carter, 1987" GBH, 1987. American Archive of Public Broadcasting. https://americanarchive.org/catalog/cpb-aacip_15-gt5fb4ws83</em>
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h2 className="marbot">FAQ</h2>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Can I download content?</h3>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <p>AAPB programs are available for streaming only. However, AAPB staff can connect you with the producing station to request copies for your National History Day project.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">Can I use programs that aren't available online?</h3>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <p>In some cases, AAPB can provide password-protected, two-week access to certain materials through our Limited Research Access (LRA) Policy. Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a> with your request and a brief description of your project.
-      </p>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <h3 className="marbot">I need help with my research. How do I contact AAPB staff?</h3>
-      <p style={{ marginBottom: '3rem' }}></p>
-      <p>Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>. Our team is happy to help.
-      </p>
-    </div >
+    <div className="body-container">
+      <BarTitle title="National History Day" />
+      <div className="skinny-body-container">
+        <h2><b>Innovation in History: Impact, Influence, Change</b></h2><br />
+        <a href="https://nhd.org" target="_blank" rel="noopener noreferrer">
+          <img
+            className="bmarright"
+            src="https://s3.amazonaws.com/americanarchive.org/override/NHD_logo_2027.jpg"
+            alt="National History Day"
+          />
+        </a>
+        <p>The American Archive of Public Broadcasting (AAPB) is proud to support National History Day (NHD) students and teachers as they explore the 2027 theme: Innovation in History: Impact, Influence, Change. This year’s theme invites students to investigate how people have imagined, developed, and implemented new ideas, technologies, and methods, and how those innovations influenced societies over time.
+        </p>
+        <p>To fully understand innovation in a historical context, students must look beyond the idea itself and examine its effects. Public media stations have long documented these advancements, capturing breakthroughs, debates, and discoveries as they unfolded.
+        </p>
+        <br />
+        <h2><b>Using the Archive</b></h2><br />
+        <p>Students can use the AAPB to explore how television and radio have presented, interpreted, and followed innovations across nearly 100 years of broadcasting history. The AAPB provides access to over 300,000 digitized programs from all U.S. states and many territories.
+        </p>
+        <p>These materials include:</p>
+        <ul className="bullet-list">
+          <li>Interviews with scientists, inventors, policymakers, and cultural leaders</li>
+          <li>National newscasts covering major breakthroughs</li>
+          <li>Local reporting documenting community-level change</li>
+          <li>Public affairs programs analyzing the impact of new ideas and technologies</li>
+        </ul>
+        <p>AAPB's collections allow students to see how innovations were understood in their own time and how public media shaped conversations around change.
+        </p>
+        <p>For more information on the 2027 theme, visit <a href="https://www.nhd.org/">National History Day</a>. For help from AAPB staff, email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>.
+        </p>
+        <h2><b>How the AAPB Helps You Explore Innovation</b></h2>
+        <p>Innovation isn't just about inventions; it's about new ways of thinking, organizing, communicating, and solving problems. Public broadcasting has documented these developments for more than 70 years, capturing:
+        </p>
+        <ul className="bullet-list">
+          <li>How communities responded to new technologies</li>
+          <li>How policymakers debated scientific breakthroughs</li>
+          <li>How cultural leaders shaped new ideas</li>
+          <li>How innovations changed daily life</li>
+        </ul>
+        <p>AAPB's programs let you see innovation in real time through interviews, documentaries, news coverage, and local reporting.
+        </p>
+        <h2><b>Tips to Use the Archive</b></h2>
+        <p><strong>Special Collections</strong>: <a href="https://americanarchive.org/special_collections">Special Collections</a> group programs by theme, series, or historical topic. They're a strong starting point for finding content already organized around innovation, science, technology, culture, or social change.
+        </p>
+        <p><strong>Exhibits</strong>: <a href="https://americanarchive.org/exhibits">Exhibits</a> highlight how public broadcasting has covered issues and events of cultural and historical significance. Each exhibit includes curated programs and contextual essays, helpful for building background knowledge and understanding impact and influence.
+        </p>
+        <p><strong>Search Tools</strong>: Use filters to narrow results by:</p>
+        <ul className="bullet-list">
+          <li>Media Type</li>
+          <li>Year(s)</li>
+          <li>Topic</li>
+          <li>Genre</li>
+          <li>Contributing organization</li>
+          <li>Geographic location</li>
+        </ul>
+        <p><strong>Local History</strong>: AAPB includes content from all 50 states, Washington, D.C., and the U.S. territories of Puerto Rico, American Samoa, the U.S. Virgin Islands, and Guam. Students researching regional innovation can <a href="https://americanarchive.org/participating-orgs">explore our interactive map to find local reporting</a>.
+        </p>
+        <h2><b>Relevant Collections and Exhibits</b></h2>
+        <p>These collections and exhibits highlight how public broadcasting has documented scientific, technological, cultural, and social innovations over time.
+        </p>
+        <ul className="bullet-list">
+          <li><a href="https://americanarchive.org/special_collections/wapina">War and Peace in the Nuclear Age Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/kgou-weather-whys">Weather Whys Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/kexp-mind-over-matters">Mind Over Matters Sustainability Segment Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/about-science">About Science Series Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/higher-education-today">Higher Education Today Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/ttbook">To The Best Of Our Knowledge Collection</a></li>
+          <li><a href="https://americanarchive.org/special_collections/children-and-disabilities">Representing Children with Disabilities on Public Television Collection</a></li>
+          <li><a href="https://americanarchive.org/exhibits/hiv-aids-and-public-broadcasting">The HIV/AIDS Epidemic and Public Broadcasting Exhibit</a></li>
+          <li><a href="https://americanarchive.org/exhibits/climate-change">Climate Change Conversations: Causes, Impacts, Solutions Exhibit</a></li>
+        </ul>
+        <h2><b>Example Topics and Suggested Content</b></h2>
+        <ul className="bullet-list">
+          <li>Nuclear Technology & Global Politics</li>
+          <li>Climate Science & Environmental Innovation</li>
+          <li>Meteorology & Weather Forecasting</li>
+          <li>Medical Innovation & Public Health</li>
+          <li>Education Technology & Access</li>
+          <li>Disability Representation & Media Innovation</li>
+          <li>Science Communication & Public Understanding</li>
+          <li>Sustainability & Environmental Design</li>
+        </ul>
+        <h2><b>How to Cite AAPB Programs</b></h2>
+        <p>AAPB programs can be cited like any digital media source. Include:</p>
+        <ul className="bullet-list">
+          <li>Program title</li>
+          <li>Series title (if applicable)</li>
+          <li>Producing Station</li>
+          <li>Original broadcast date</li>
+          <li>URL</li>
+        </ul>
+        <p><strong>Example</strong>: <em>"War and Peace in the Nuclear Age; Interview with Jimmy Carter, 1987" GBH, 1987. American Archive of Public Broadcasting. https://americanarchive.org/catalog/cpb-aacip_15-gt5fb4ws83</em>
+        </p>
+        <h2 className="marbot">FAQ</h2>
+
+        <h2><b>Can I download content?</b></h2>
+
+        <p>AAPB programs are available for streaming only. However, AAPB staff can connect you with the producing station to request copies for your National History Day project.
+        </p>
+
+        <h2><b>Can I use programs that aren't available online?</b></h2>
+
+        <p>In some cases, AAPB can provide <b>password-protected</b>, two-week access to certain materials through our Limited Research Access (LRA) Policy. Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a> with your request and a brief description of your project.
+        </p>
+
+        <h2><b>I need help with my research. How do I contact AAPB staff?</b></h2>
+
+        <p>Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>. Our team is happy to help.
+        </p>
+      </div >
+    </div>
   )
 }

@@ -24,11 +24,14 @@ export const loader = async () => {
 export default function Exhibits() {
   let data = useLoaderData()
   return (
-    <div className="skinny-body-container">
+    <div className="body-container">
       <SummaryBox title="Exhibits" text="American Archive of Public Broadcasting staff and guest curators create exhibits of selected recordings that focus on themes, topics, and events of cultural and historical significance." />
-      <div className="body-container">
-        <TVMenu title="Test Exhibits" programs={ data.radio_and_tv } />
+        <TVMenu title="Featured Exhibits" programs={data.featured_exhibits} showDesc={true} />
+        <TVMenu title="Stations and Organizations" programs={ data.radio_and_tv } seeAllURL="/stations-organizations-exhibits" />
+        <TVMenu title="Programming and Formats" programs={ data.radio_and_tv } seeAllURL="/programming-formats-exhibits" />
+        <TVMenu title="Historical Events and Interviews" programs={ data.radio_and_tv } seeAllURL="/historical-events-interviews-exhibits" />
+        <TVMenu title="Topics and Themes" programs={ data.radio_and_tv } seeAllURL="/topics-themes-exhibits" />
+        <TVMenu title="Browse All" programs={ data.radio_and_tv } seeAllURL="/browse-exhibits" />
       </div>
-    </div>
   )
 }

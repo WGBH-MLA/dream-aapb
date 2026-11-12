@@ -1,7 +1,13 @@
 import { useLoaderData } from 'react-router'
 import TVMenu from '../components/TVMenu';
+import BarTitle from '../components/BarTitle';
 
 export const loader = async () => {
+  const featured_collections = [
+    { title: "AAPB Road Trip Special Collections", thumbnail:
+      "https://s3.us-east-1.amazonaws.com/americanarchive.org/special-collections/road-trip-thumbnail-diamond.png"},
+
+  ];
   const key_events = [
       { title: "Black Journal", url: "/exhibits/black-journal", thumbnail: "https://..." },
       { title: "ZOOM (1972-1978)", url: "/exhibits/zoom", thumbnail: "https://..." },
@@ -60,6 +66,7 @@ export const loader = async () => {
   ];
 
   return {
+    featured_collections: featured_collections,
     key_events: key_events,
     culture: culture,
     innovation: innovation,
@@ -76,7 +83,7 @@ export default function America250() {
 
   return (
     <div className="body-container">
-      <h1>Celebrating 250 Years of American Stories</h1>
+      <BarTitle title="Celebrating 250 Years of American Stories" />
       <p>
         As the United States marks its 250th anniversary, the American Archive of Public Broadcasting (AAPB) invites you to explore the voices, events, and moments that have shaped the nation. Through historic broadcasts, firsthand accounts, and cultural reflections, this collection offers a unique window into America's past - its struggles, triumphs, and evolving identity.
       </p>
@@ -86,6 +93,7 @@ export default function America250() {
         <iframe src="https://www.youtube.com/embed/tWcRbP-FEg8?si=OPg1ev7V-CP8N0rF"></iframe>
       </div>
       <hr />
+      <TVMenu title="Featured Collections" programs={data.featured_collections} showDesc={true} />
       <TVMenu title="Key Historical Events" items={ data.key_events } />
       <TVMenu title="Culture" items={ data.culture } />
       <TVMenu title="Innovation" items={ data.innovation } />

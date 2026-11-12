@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLoaderData, useSearchParams, useOutletContext, Link } from "react-router"
 
+import Accordion from "../components/Accordion"
 import VideoPlayer from "../components/VideoPlayer"
 import HeaderBar from "../components/HeaderBar"
 import ShowBox from "../components/ShowBox"
@@ -9,15 +10,15 @@ import Viewer from "../components/Viewer"
 import RelatedRecords from "../components/RelatedRecords"
 import Agreement from "../components/Agreement"
 
-import { getRecord } from "../utils/getRecord"
-import Record from "../utils/Record"
-import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle } from "../utils/helpers"
-import { getCiToken, getCiMediaURL } from "../utils/media"
-import { getAD, getCaption, getTranscript, getTranscriptData } from "../utils/sidecarFetchers"
-
-import VideoHound from "../classes/VideoHound"
-import Access from "../classes/Access"
-import Location from "../classes/Location"
+import { getRecord } from '../utils/getRecord'
+import Record from '../utils/Record'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle } from '../utils/helpers'
+import { getCiToken, getCiMediaURL } from '../utils/media'
+import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
+import Citations from "../components/Citations"
+import VideoHound from '../classes/VideoHound'
+import Access from '../classes/Access'
+import Location from '../classes/Location'
 import MoreLikeThis from "../classes/MoreLikeThis"
 
 export const loader = async ({params, request}) => {
@@ -62,7 +63,7 @@ export const loader = async ({params, request}) => {
     // retrieve media url from ci
     let mediaURL = await new VideoHound(ciConfig).findMedia( record.ciID, record.isVideo() )
     data.mediaURL = mediaURL
-    
+
     // check for audio description
     let adHLSURL = await getAD(record.guid)
     if(adHLSURL){
@@ -81,7 +82,7 @@ export const loader = async ({params, request}) => {
       // url returned only if its there
       data.transcriptURL = transcriptURL
     }
-  
+
     // retrieve more like this from es
     let config = {
       esURL: process.env.ES_URL,
@@ -90,7 +91,7 @@ export const loader = async ({params, request}) => {
     }
 
     let mlt_fields = [
-            
+
       // adding too many fields to MLT causes no results, because mlt makes 'master term list', and more fields means more overall text so noisier matching
       // "description",
 
@@ -140,7 +141,12 @@ export default function ShowRecord() {
   const handleViewerToggle = (e) => {
     setViewerOpen(!viewerOpen)
   }
-  
+
+  const withSuffix = (label, suffix) => {
+    if (!label) return suffix
+    return label.toLowerCase().endsWith(suffix.toLowerCase()) ? label : `${label} ${suffix}`
+  }
+
   useEffect(() => {
     // only run on first load
     setPagedata({title: pageTitle(record.title)})
@@ -164,7 +170,7 @@ export default function ShowRecord() {
         handleViewerToggle={ handleViewerToggle }
         wide={ record.is169() }
       />
-    )  
+    )
   }
   
   // toggle show of raw pbcore json
@@ -186,20 +192,15 @@ export default function ShowRecord() {
 
     title = record.title
 
-    // descriptions = record.descriptionsByType()
-    // if(descriptions){
-    //   descriptions = <ShowBox label="Descriptions" text={ descriptions } />
-    // }
-
     descriptionsByType = record.descriptionsByType()
     if(descriptionsByType){
       descriptionsByType = (
         <>
-          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={ pbd.descriptionType } text={ pbd.text } />) }
+          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={withSuffix(pbd.descriptionType, "Description")} text={pbd.text} />) }
         </>
       )
     }
-    
+
     titlesByType = record.titlesByType()
     if(titlesByType){
       titlesByType = (
@@ -225,12 +226,7 @@ export default function ShowRecord() {
     }
 
     if(producingOrg){
-      orgs = (
-        <>
-          <div className="show-metadata-header">Organizations</div>
-          { producingOrg }
-        </>
-      )
+      orgs = producingOrg
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreSubject)){
@@ -249,7 +245,7 @@ export default function ShowRecord() {
 
     let duration = record.duration()
     if(duration){
-      assetTypes = <ShowBox key="duration" label="Duration" text={ duration } />
+      duration = <ShowBox key="duration" label="Duration" text={ duration } />
     }
 
     // credits
@@ -272,7 +268,7 @@ export default function ShowRecord() {
           return entity.contributorRole[0].text
         } else if(entity.publisherRole && entity.publisherRole[0]){
           return entity.publisherRole[0].text
-        }   
+        }
       }
     }
 
@@ -284,7 +280,7 @@ export default function ShowRecord() {
           return entity.contributor.text
         } else if(entity.publisher){
           return entity.publisher.text
-        }   
+        }
       }
     }
 
@@ -293,7 +289,6 @@ export default function ShowRecord() {
       credits = credits.map((entity, i) => <ShowBox key={i} label={ role(entity) } text={ name(entity) } />)
       credits = (
         <>
-          <div className="show-metadata-header">Credits</div>
           { credits }
         </>
       )
@@ -311,25 +306,23 @@ export default function ShowRecord() {
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreIdentifier)){
-      eachId = record.pbcoreDescriptionDocument.pbcoreIdentifier.map((pbi, i) => {
-        return <ShowBox key={i} label={ pbi.source || "Unknown ID" } text={ pbi.text } />
-      })
+      const isAapbSource = (source) =>
+        !!source &&
+        source.trim().toLowerCase().replace(/^https?:\/\//, "").startsWith("americanarchive")
 
-      if(eachId.length > 0){
-        identifiers = (
-          <>
-            <div className="show-metadata-header">Identifiers</div>
-            { eachId }
-          </>
-        )
+      const aapbBoxes = record.pbcoreDescriptionDocument.pbcoreIdentifier
+        .filter((pbi) => isAapbSource(pbi.source) && pbi.text)
+        .map((pbi, i) => <ShowBox key={`aapb-${i}`} label="AAPB ID" text={pbi.text} />)
+
+      if(aapbBoxes.length > 0){
+        identifiers = <>{aapbBoxes}</>
       }
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetDate)){
       dates = (
         <>
-          <div className="show-metadata-header">Dates</div>
-          { record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad, i) => <ShowBox key={i} label={ dateTypeName(pbad.dateType) } text={ pbad.text } />) }
+          {record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad, i) => <ShowBox key={i} label={dateTypeName(pbad.dateType)} text={pbad.text} />)}
         </>
       )
     }
@@ -340,17 +333,17 @@ export default function ShowRecord() {
 
     instantiations = record.instantiations()
     if(instantiations){
-      instantiations = instantiations.map((inst) => inst.blurb() )
+      instantiations = instantiations.map((inst, i) => inst.blurb(i))
     }
 
     if(transcriptData){
       transcript = <>
-        <div className="media-area-container"> 
+        <div className="media-area-container">
           <div className="transcript-viewer-container">
             { transcriptViewer }
           </div>
         </div>
-      </>  
+      </>
     } else {
       videoPlayerClasses += " full"
     }
@@ -370,12 +363,12 @@ export default function ShowRecord() {
       { agreementUI }
 
       <div className="page-container">
-        <div className="skinnier-body-container page-title">
-          <HeaderBar title={ title } />
+        <div className="body-container page-title">
+          <HeaderBar title={title} />
         </div>
 
-        <div className="skinnier-body-container bmarbot martop video-area">
-  
+        <div className="skinny-body-container bmarbot martop video-area">
+
           <div id="show-media" className="marbot">
             <div className={ videoPlayerClasses }> 
               <VideoPlayer
@@ -389,47 +382,45 @@ export default function ShowRecord() {
             { transcript }
           </div>
 
-          <div className="show-metadata-container smarbot">
-            <div className="show-metadata-header">Info</div>
-            { titlesByType }
-            { orgs }
-            { contributingOrgs }
-          </div>
+          <div className="show-columns">
 
-          <div className="show-metadata-container smarbot">
-            <div className="show-metadata-header">Description</div>
-            {/*regular info list*/}
-            { mediaType }
-            { subjects }
-            { assetTypes }
-            { topics }
-            { duration }
-    
-            {/*addl optional sections*/}
-            { identifiers }
-            { credits }
-            { coverages }
-            { dates }
-          </div>
+            <div className="show-left-col">
+              { titlesByType }
+              { orgs }
+              { contributingOrgs }
+              { identifiers }
+            </div>
 
-          <div className="show-metadata-container smarbot">
-            <div className="show-metadata-header">Descriptions</div>
-            { descriptionsByType }
-          </div>
+            <div className="show-right-col">
+              <Accordion title="Description" defaultOpen={true}>
+                { descriptionsByType }
+                { mediaType }
+                { assetTypes }
+                { subjects }
+                { topics }
+                { duration }
+                { coverages }
+                { dates }
+              </Accordion>
 
-          <div className="show-metadata-container marbot">
-            <div className="show-metadata-header">Contributor Holdings</div>
-            { instantiations }
+              <Accordion title="Credits">
+                { credits }
+              </Accordion>
+
+              <Accordion title="AAPB Contributor Holdings">
+                { instantiations }
+                <div className="catalog-alert-box">
+                  If you have a copy of this asset and would like us to add it to our catalog, please <a href="/contact-us">contact us</a>.
+                </div>
+              </Accordion>
+
+              <Accordion title="Citations">
+                <Citations record={ record } />
+              </Accordion>
+            </div>
           </div>
 
           { relatedRecords }
-
-          <div className="pbcore-viewer-container">
-            <Viewer label="PBCore Metadata" guid={ record.guid } content={ pbCore } showContent={ showPbcore } setShowContent={ setShowPbcore } />
-          </div>
-        </div>
-        <div className="skinnier-body-container">
-          <a className="back-link martop marbot" href={ `/catalog${yourQuery}` }>&lt; Back To Search</a>
         </div>
       </div>
     </>
