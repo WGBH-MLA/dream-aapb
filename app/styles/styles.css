@@ -754,7 +754,8 @@ img.map-image {
 }
 
 div.mappy-container {
-  display: block;
+  display: flex;
+  justify-content: center;
   z-index: 100;
   margin-left: auto;
   margin-right: auto;
@@ -778,6 +779,22 @@ div.mappy-container div.leaflet-container {
   border-radius: 6px;
 }
 
+.leaflet-popup-content .btn {
+  display: inline-block;
+  white-space: nowrap;
+  background-color: #9E2064;
+  padding: 6px;
+  color: #fff;
+  margin-top: 10px;
+}
+
+.leaflet-popup-content .btn:hover,
+.leaflet-popup-content .btn:focus {
+  background-color: #653090;
+  color: #fff;
+
+}
+
 div.leaflet-pane {
   z-index: 0;
 }
@@ -786,8 +803,136 @@ img.mappy-logo {
   object-fit: contain;
   display: block;
   height: auto;
-  min-height: 4em;
-  width: 6em;
+  min-height: 10em;
+  width: 10em;
+  margin-bottom: 1em;
+}
+
+/*organizations*/
+
+.organization-directory {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.organization-state {
+  margin-bottom: 2.25rem;
+  scroll-margin-top: 1.5rem;
+}
+
+.organization-state-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-bottom: 2px solid #292A72;
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.organization-state-header h2 {
+  margin: 0;
+  color: #292A72;
+}
+
+.organization-state-records {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #9D2264;
+  text-decoration: none;
+}
+
+.organization-state-records:hover {
+  text-decoration: underline;
+}
+
+.organization-state-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem 1.5rem;
+}
+
+.organization-state-item {
+  padding: 0.5rem 0.75rem;
+  background-color: #f8f9fa;
+  border-left: 3px solid #d2d5e2;
+  border-radius: 3px;
+}
+
+.organization-name {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.organization-name:hover {
+  text-decoration: underline;
+}
+
+.organization-location {
+  font-size: 0.85rem;
+  color: #555;
+  margin-top: 0.15rem;
+}
+
+.organization-back-to-top {
+  text-align: right;
+}
+
+.return-to-top-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+}
+
+.return-to-top-btn:hover {
+  color: #292A72;
+  text-decoration: underline;
+}
+
+
+.org-o-tron {
+  background-color: #f2f2f2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.org-o-tron h2,
+.org-o-tron p {
+  text-align: center;
+}
+
+.org-o-tron .org-logo {
+  display: block;
+  margin: 1rem auto;
+  max-width: 250px;
+  height: auto;
+}
+
+.org-records-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #9D2264;
+  text-decoration: none;
+}
+
+.skinny-body-container .org-o-tron a.org-records-btn,
+.skinny-body-container .org-o-tron a.org-records-btn:visited {
+  color: #ffffff;
+}
+
+.skinny-body-container.org-page h2 {
+  margin-left: 0;
 }
 
 div.homepage-search {
@@ -930,6 +1075,7 @@ div.summary-box-container h2 {
   position: relative;
   padding: 18px 32px;
   width: 100%;
+  font-size: 2em;
 }
 
 
