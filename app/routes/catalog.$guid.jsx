@@ -12,7 +12,7 @@ import Agreement from "../components/Agreement"
 
 import { getRecord } from '../utils/getRecord'
 import Record from '../utils/Record'
-import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle } from '../utils/helpers'
+import { niceTitle, dateTypeName, notEmpty, normalizeGuid, pageTitle, isAapbSource } from '../utils/helpers'
 import { getCiToken, getCiMediaURL } from '../utils/media'
 import { getAD, getCaption, getTranscript, getTranscriptData } from '../utils/sidecarFetchers'
 import Citations from "../components/Citations"
@@ -142,11 +142,6 @@ export default function ShowRecord() {
     setViewerOpen(!viewerOpen)
   }
 
-  const withSuffix = (label, suffix) => {
-    if (!label) return suffix
-    return label.toLowerCase().endsWith(suffix.toLowerCase()) ? label : `${label} ${suffix}`
-  }
-
   useEffect(() => {
     // only run on first load
     setPagedata({title: pageTitle(record.title)})
@@ -183,7 +178,7 @@ export default function ShowRecord() {
     yourQuery = `?${data.esIndex}[query]=${searchParams.get(`${data.esIndex}[query]`)}`
   }
 
-  let credits, orgs, identifiers
+  let credits, aapbBoxes
   let title, descriptionsByType, titlesByType, mediaType, eachId, producingOrg, contributingOrgs, creators, coverages, dates, pbCore, instantiations, subjects, duration, assetTypes, topics, relatedRecords
   let transcript
   let videoPlayerClasses = "media-area-container"
@@ -196,7 +191,7 @@ export default function ShowRecord() {
     if(descriptionsByType){
       descriptionsByType = (
         <>
-          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={withSuffix(pbd.descriptionType, "Description")} text={pbd.text} />) }
+          { descriptionsByType.map((pbd, i) => <ShowBox key={i} label={pbd.descriptionType} suffix="Description" text={pbd.text} />) }
         </>
       )
     }
@@ -223,10 +218,6 @@ export default function ShowRecord() {
     // orgs
     if(record.producing_org){
       producingOrg = <ShowBox label="Producing Organization" text={ record.producing_org } />
-    }
-
-    if(producingOrg){
-      orgs = producingOrg
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreSubject)){
@@ -287,11 +278,6 @@ export default function ShowRecord() {
     credits = record.credits()
     if(notEmpty(credits)){
       credits = credits.map((entity, i) => <ShowBox key={i} label={ role(entity) } text={ name(entity) } />)
-      credits = (
-        <>
-          { credits }
-        </>
-      )
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreCoverage)){
@@ -306,26 +292,15 @@ export default function ShowRecord() {
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreIdentifier)){
-      const isAapbSource = (source) =>
-        !!source &&
-        source.trim().toLowerCase().replace(/^https?:\/\//, "").startsWith("americanarchive")
-
-      const aapbBoxes = record.pbcoreDescriptionDocument.pbcoreIdentifier
-        .filter((pbi) => isAapbSource(pbi.source) && pbi.text)
-        .map((pbi, i) => <ShowBox key={`aapb-${i}`} label="AAPB ID" text={pbi.text} />)
-
-      if(aapbBoxes.length > 0){
-        identifiers = <>{aapbBoxes}</>
-      }
+      aapbBoxes = record.pbcoreDescriptionDocument.pbcoreIdentifier
+      .filter((pbi) => isAapbSource(pbi.source) && pbi.text)
+      .map((pbi, i) => <ShowBox key={`aapb-${i}`} label="AAPB ID" text={pbi.text} />)
     }
 
     if(notEmpty(record.pbcoreDescriptionDocument.pbcoreAssetDate)){
-      dates = (
-        <>
-          {record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad, i) => <ShowBox key={i} label={dateTypeName(pbad.dateType)} text={pbad.text} />)}
-        </>
-      )
-    }
+      dates = record.pbcoreDescriptionDocument.pbcoreAssetDate.map((pbad, i) => <ShowBox key={i} label={dateTypeName(pbad.dateType)} text={pbad.text} />
+    )
+  }
 
     if(record.pbcoreDescriptionDocument){
       pbCore = JSON.stringify(record.pbcoreDescriptionDocument, null, 4)
@@ -386,9 +361,9 @@ export default function ShowRecord() {
 
             <div className="show-left-col">
               { titlesByType }
-              { orgs }
+              { producingOrg }
               { contributingOrgs }
-              { identifiers }
+              { aapbBoxes }
             </div>
 
             <div className="show-right-col">
