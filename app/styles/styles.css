@@ -371,7 +371,7 @@ div.skinnier-body-container {
 div.skinny-body-container {
   font-size: 1.5em;
   width: 75%;
-  margin-left: 8%;
+  margin-left: 10%;
   text-align: left;
 }
 
@@ -898,8 +898,10 @@ img.mappy-logo {
 
 
 .org-o-tron {
+  width: 100%;
   background-color: #f2f2f2;
   padding: 2rem;
+  border-radius: .5em;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useLoaderData, useOutletContext } from "react-router"
 import { dangerousDiv } from "../classes/contentHelpers"
-import { notEmpty, pageTitle } from "../utils/helpers"
+import { notEmpty, pageTitle, aboutToHtml } from "../utils/helpers"
 import orgs from "../data/orgs.json"
 import BarTitle from "../components/BarTitle"
 
@@ -43,8 +43,8 @@ export default function OrganizationShow() {
     : Array.isArray(org.URLs)
       ? org.URLs
       : []
-
-  const aboutHtml = org.about_html || org.About || ""
+      
+  const aboutHtml = org.about_html || aboutToHtml(org.About)
 
   const facetUrl =
     org.facet_url ||
