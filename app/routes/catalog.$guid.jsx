@@ -374,8 +374,8 @@ export default function ShowRecord() {
                 { subjects }
                 { topics }
                 { duration }
-                { coverages }
                 { dates }
+                { coverages }
               </Accordion>
 
               <Accordion title="Credits">

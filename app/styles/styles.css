@@ -905,16 +905,14 @@ div.layout-search button {
   border: none;
 }
 
-/*bar title*/
-h2.bar-title {
-  padding: 1em;
-  font-size: 2em;
+/*bar title + summary box headings*/
+h2.bar-title, div.summary-box-container h2 {
   background-color: #292A72;
-  width: 85vw;
-  padding: 18px 32px;
   color: #fff;
   position: relative;
-  width: 97.5%;
+  padding: 18px 32px;
+  font-size: 2em;
+  width: 100%
 }
 
 /*summary box*/
@@ -923,15 +921,6 @@ div.summary-box-container {
   display: block;
   overflow-x: hidden;
 }
-
-div.summary-box-container h2 {
-  background-color: #292A72;
-  color: #fff;
-  position: relative;
-  padding: 18px 32px;
-  width: 100%;
-}
-
 
 div.summary-box {
   margin-top: 2em;
