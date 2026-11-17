@@ -1,8 +1,10 @@
-import { useState } from "react"
+import { Children, useState } from "react"
 
 export default function Accordion({ title, defaultOpen = false, className = "smarbot", children }) {
   const [open, setOpen] = useState(defaultOpen)
 
+  if (Children.toArray(children).length === 0) return null
+  
   return (
     <div className={ `show-metadata-container ${className}` }>
       <div
