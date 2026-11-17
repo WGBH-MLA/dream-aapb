@@ -128,3 +128,13 @@ export function normalizeGuid(guid){
 export function pageTitle(title){
   return `${title} - American Archive of Public Broadcasting`
 }
+
+export function withSuffix(label, suffix){
+  if (!label) return suffix
+  return label.toLowerCase().endsWith(suffix.toLowerCase()) ? label : `${label} ${suffix}`
+}
+
+export function isAapbSource(source) {
+  return !!source &&
+    source.trim().toLowerCase().replace(/^https?:\/\//, "").startsWith("americanarchive")
+}

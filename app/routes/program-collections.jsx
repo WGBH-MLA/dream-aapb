@@ -1,9 +1,8 @@
-import SummaryBox from "../components/SummaryBox"
 import BarTitle from "../components/BarTitle"
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
 import { collectionToTVProgram } from "../utils/toTVProgram"
-import { getCollections, getFeatured } from "../utils/fetch"
+import { getCollections } from "../utils/fetch"
 
 export const loader = async () => {
   let collections = await getCollections()
@@ -24,9 +23,9 @@ export default function Collections() {
   let data = useLoaderData()
   return (
     <div className="body-container">
-      <BarTitle title="Program Collections" />
       <a className="top-back-link-nav" href="/collections">&lt; Back to Collections</a>
-      <TVMenu programs={ data.radio_and_tv } />
+      <BarTitle title="Program Collections" />
+      <TVMenu programs={ data.radio_and_tv } layout="grid" />
     </div>
   )
 }

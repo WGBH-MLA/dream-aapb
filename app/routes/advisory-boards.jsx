@@ -2,13 +2,15 @@ import { ChevronRight } from 'lucide-react'
 import SummaryBox from "../components/SummaryBox"
 import PullQuote from "../components/PullQuote"
 import MemberCard from "../components/Membercard"
+import BarTitle from "../components/BarTitle"
 import LinkBankFooter from '../components/LinkBankFooter'
 
 export default function CouncilAndComittee() {
   return (
-    <div className="skinny-body-container">
+    <div className="body-container">
       <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
-      <SummaryBox title="Executive Advisory Council" text="AAPB Executive Advisory Council comprises a distinguished group of individuals from around the country who are passionate about public media and its long-term preservation and access. The Council informs and guides the strategic direction of the AAPB with the overarching goal of ensuring that the Archive continues to serve the needs of public media stakeholders and the American people." />
+      <BarTitle title="Advisory Boards" />
+      <p>AAPB Executive Advisory Council comprises a distinguished group of individuals from around the country who are passionate about public media and its long-term preservation and access. The Council informs and guides the strategic direction of the AAPB with the overarching goal of ensuring that the Archive continues to serve the needs of public media stakeholders and the American people.</p>
       <h3>The Council provides guidance to the Project Team in the following ways:</h3>
       <ul>
         <li>Provides advice and recommendations on strategic direction</li>
@@ -356,7 +358,7 @@ export default function CouncilAndComittee() {
       Associate Professor of History, Purdue University
       <strong>Dolores Inés Casillas</strong>
       Associate Professor of Chicana and Chicano Studies and a Faculty Affiliate of Film &amp; Media Studies and Applied Linguistics, University of California, Santa Barbara
-     <strong>Brenda J. Child</strong>
+      <strong>Brenda J. Child</strong>
       Northrop Professor of American Studies, University of Minnesota
       <strong>Mark Garrett Cooper</strong>
       Professor of Film and Media Studies, University of South Carolina
@@ -370,14 +372,14 @@ export default function CouncilAndComittee() {
       <PullQuote text="The American Archive of Public Broadcasting offers an invaluable resource of nonfiction media to help teach how national events, debates, and political struggles touched down locally. The holdings of <em>Say Brother</em> reveal Boston&#39;s relationship to the Black Power movement, and how communities of color in the area engaged with public media during a time of dynamic social change." />
       <strong>Peter B. Kaufman</strong>
       Strategic Initiatives, MIT Open Learning &amp; MIT Knowledge Futures Group; Executive Producer, Intelligent Television
-     <strong>Dimitrios Latsis</strong>
+      <strong>Dimitrios Latsis</strong>
       Assistant Professor, Ryerson University, Toronto, ON
       <strong>Jeffrey W. McClurken</strong>
       Professor of History and American Studies and Chief of Staff to the President at the University of Mary Washington, VA
       <strong>Ingrid Ockert</strong>
       Post-Doctoral Fellow, Philadelphia Science History Institute
       <blockquote>
-       ”The American Archive of Public Broadcasting (AAPB) is an incredible research for those who care about science. Do you want to learn more about climate change? Check out their incredible documentaries, like James Burke’s <a href="https://americanarchive.org/catalog/cpb-aacip_394-65h9wd4r"><em>After the Warming</em></a>. Are you curious about space? The AAPB holds a number of NASA’s stellar <a href="https://americanarchive.org/catalog/cpb-aacip_513-x639z91q83">public relations films</a>, as well as television series like <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Doctors+in+Space&amp;f[access_types][]=online"><em>Doctors in Space</em></a>. The more I find in the AAPB, the more I understand how science was communicated to and trusted by Americans in the 20th century.”
+        ”The American Archive of Public Broadcasting (AAPB) is an incredible research for those who care about science. Do you want to learn more about climate change? Check out their incredible documentaries, like James Burke’s <a href="https://americanarchive.org/catalog/cpb-aacip_394-65h9wd4r"><em>After the Warming</em></a>. Are you curious about space? The AAPB holds a number of NASA’s stellar <a href="https://americanarchive.org/catalog/cpb-aacip_513-x639z91q83">public relations films</a>, as well as television series like <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Doctors+in+Space&amp;f[access_types][]=online"><em>Doctors in Space</em></a>. The more I find in the AAPB, the more I understand how science was communicated to and trusted by Americans in the 20th century.”
       </blockquote>
       <strong>Kathryn Ostrofsky (SAC Co-Chair)</strong>
       Archivist/Librarian, Dedham Historical Society &amp; Museum
@@ -420,12 +422,12 @@ export default function CouncilAndComittee() {
       <strong>Katie Basil e</strong>
       Multimedia Director/Producer, KYUK
       <blockquote>
-       ”The American Archive of Public Broadcasting (AAPB) gives communities access to the recorded history of their region. In Southwest Alaska so much of the history is shared through oral storytelling. By making <a href="https://americanarchive.org/participating-orgs/1703">KYUK&#39;s</a> archive accessible to the public, people are able to go back and see Elders who have passed away and hear the stories that might have otherwise been lost. With the AAPB&#39;s dedication to preserving our audio/visual history, culture thrives as well. - Gabby Hiestand Salgado and Katie Basile&quot;
+        ”The American Archive of Public Broadcasting (AAPB) gives communities access to the recorded history of their region. In Southwest Alaska so much of the history is shared through oral storytelling. By making <a href="https://americanarchive.org/participating-orgs/1703">KYUK&#39;s</a> archive accessible to the public, people are able to go back and see Elders who have passed away and hear the stories that might have otherwise been lost. With the AAPB&#39;s dedication to preserving our audio/visual history, culture thrives as well. - Gabby Hiestand Salgado and Katie Basile&quot;
       </blockquote>
       <strong>Leslie Bourgeois (SPAC Co-Chair)</strong>
       Archivist, Louisiana Public Broadcasting
       <blockquote>
-       &quot;The AAPB is a wonderful collaborator that is helping close the gap between preservation efforts and audience awareness. <a href="http://ladigitalmedia.org/">The Louisiana Digital Media Archive</a> has applied for grants with the AAPB to preserve content in the LDMA collection and now master copies of the programs are preserved for posterity at the Library of Congress and links-out to LDMA&#39;s website are provided on the AAPB. Having this kind of cross-reference only benefits the historic series such as <a href="https://americanarchive.org/special_collections/en-francais"><em>En Français</em></a>, <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Louisiana%3A+The+State+We%27re+In&amp;f[access_types][]=online"><em>Louisiana: The State We&#39;re In</em></a>, and <a href="https://americanarchive.org/catalog?utf8=%E2%9C%93&amp;f%5Baccess_types%5D%5B%5D=online&amp;f%5Bcontributing_organizations%5D%5B%5D=Louisiana+Public+Broadcasting+%28LA%29&amp;q=%22A+Taste+of+Louisiana+with+Chef+John+Folse%22"><em>A Taste of Louisiana with Chef John Folse</em></a>.&quot;
+        &quot;The AAPB is a wonderful collaborator that is helping close the gap between preservation efforts and audience awareness. <a href="http://ladigitalmedia.org/">The Louisiana Digital Media Archive</a> has applied for grants with the AAPB to preserve content in the LDMA collection and now master copies of the programs are preserved for posterity at the Library of Congress and links-out to LDMA&#39;s website are provided on the AAPB. Having this kind of cross-reference only benefits the historic series such as <a href="https://americanarchive.org/special_collections/en-francais"><em>En Français</em></a>, <a href="https://americanarchive.org/catalog?f%5Bseries_titles%5D%5B%5D=Louisiana%3A+The+State+We%27re+In&amp;f[access_types][]=online"><em>Louisiana: The State We&#39;re In</em></a>, and <a href="https://americanarchive.org/catalog?utf8=%E2%9C%93&amp;f%5Baccess_types%5D%5B%5D=online&amp;f%5Bcontributing_organizations%5D%5B%5D=Louisiana+Public+Broadcasting+%28LA%29&amp;q=%22A+Taste+of+Louisiana+with+Chef+John+Folse%22"><em>A Taste of Louisiana with Chef John Folse</em></a>.&quot;
       </blockquote>
       <strong>Jack Brighton </strong>
       Archivist/Developer, Illinois Public Media
@@ -454,14 +456,16 @@ export default function CouncilAndComittee() {
       <strong>Winter Shanck </strong>
       Archivist, Thirteen/WNET
       <blockquote>
-      &quot;There is tremendous value in the America Archive of Public Broadcasting. Its <a href="https://americanarchive.org/about-the-american-archive/vision-and-mission">mission</a> allows the public, who were instrumental in funding the creation of these materials, the opportunity to gain access to primary materials that give an aural and visual snapshot into the early 19th century. It&#39;s reassuring to know that historic series like <a href="https://americanarchive.org/special_collections/black-journal"><em>Black Journal</em></a>, produced by WNET as the first nationally televised public affairs program produced for, about, and by African-Americans, is preserved at the Library of Congress for posterity and made available online to future generations at <a href="https://americanarchive.org/">americanarchive.org</a>.”
+        &quot;There is tremendous value in the America Archive of Public Broadcasting. Its <a href="https://americanarchive.org/about-the-american-archive/vision-and-mission">mission</a> allows the public, who were instrumental in funding the creation of these materials, the opportunity to gain access to primary materials that give an aural and visual snapshot into the early 19th century. It&#39;s reassuring to know that historic series like <a href="https://americanarchive.org/special_collections/black-journal"><em>Black Journal</em></a>, produced by WNET as the first nationally televised public affairs program produced for, about, and by African-Americans, is preserved at the Library of Congress for posterity and made available online to future generations at <a href="https://americanarchive.org/">americanarchive.org</a>.”
       </blockquote>
       <strong>Alana Stone </strong>
       Project Coordinator, Vision Maker Media
       bio="<strong>Ann Wilkens </strong>
       Archivist, Wisconsin Public Television
       <PullQuote text="PBS Wisconsin is incredibly honored to participate in the American Archive of Public Broadcasting (AAPB). The support and direction they have provided has allowed us to strengthen our preservation work, to make our broadcast history widely accessible, and has created a vibrant platform for collaboration amongst stations. Because of AAPB’s leadership and enthusiastic commitment, I feel we have a steadfast partner in preserving the broadcast legacy of PBS Wisconsin." />
-      <LinkBankFooter />
+      <div className="skinnier-body-container">
+        <LinkBankFooter />
+      </div>
     </div>
   )
 }
