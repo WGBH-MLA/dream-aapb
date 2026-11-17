@@ -9,7 +9,7 @@ export default function HistoryDay() {
         <h2><b>Innovation in History: Impact, Influence, Change</b></h2><br />
         <a href="https://nhd.org" target="_blank" rel="noopener noreferrer">
           <img
-            className="bmarright"
+            className="spaced-right"
             src="https://s3.amazonaws.com/americanarchive.org/override/NHD_logo_2027.jpg"
             alt="National History Day"
           />

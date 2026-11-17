@@ -2,7 +2,7 @@ import BarTitle from "../components/BarTitle"
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
 import { exhibitToTVProgram } from "../utils/toTVProgram"
-import { getExhibits, getFeatured } from "../utils/fetch"
+import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
   let exhibits = await getExhibits()

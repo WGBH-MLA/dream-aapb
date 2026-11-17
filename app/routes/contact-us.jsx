@@ -40,7 +40,7 @@ export default function ContactUs() {
             One Guest Street<br />
             Boston, Massachusetts 02135<br />
           </p>
-</div>
+          </div>
           <LinkBankFooter />
         </div>
       </div>

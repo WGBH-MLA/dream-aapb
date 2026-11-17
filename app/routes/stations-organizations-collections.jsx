@@ -2,7 +2,7 @@ import BarTitle from "../components/BarTitle"
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
 import { collectionToTVProgram } from "../utils/toTVProgram"
-import { getCollections, getFeatured } from "../utils/fetch"
+import { getCollections } from "../utils/fetch"
 
 export const loader = async () => {
   let collections = await getCollections()
@@ -23,10 +23,10 @@ export default function Collections() {
   let data = useLoaderData()
   return (
     <div className="body-container">
-        <a className="top-back-link-nav" href="/collections">&lt; Back to Collections</a>
+      <a className="top-back-link-nav" href="/collections">&lt; Back to Collections</a>
       <BarTitle title="Stations and Organizations" />
       <TVMenu programs={ data.radio_and_tv } layout="grid" />
-    </div>
-  )
-}
+      </div>
+      )
+    }
 

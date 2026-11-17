@@ -14,13 +14,14 @@ export default function FAQ() {
         {faqs.map((item, i) => (
           <FAQItem key={i} question={item.q} answer={item.a} />
         ))}
-              </div>
-              <div className="skinnier-body-container">
-                <LinkBankFooter />
-              </div>
-    </>
-  )
-}
+        </div>
+        
+        <div className="skinnier-body-container">
+          <LinkBankFooter />
+          </div>
+          </>
+          )
+        }
 
 function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false)
