@@ -685,19 +685,19 @@ div.static-logos img {
   max-height: 12em;
 }
 
-img.bmarright {
+img.spaced-right {
   float: right;
   width: 500px;
   height: auto;
   margin: 0 0 1em 1.5em;
 }
 
-img.bmarleft {
+img.spaced-left {
   float: left;
-  width: 200px;
-  max-width: 45%;
+  padding-left: 2em;
+  width: 300px;
   height: auto;
-  margin: 0 1.5em 1em 0;
+  margin: 0 1em 1em 0;
 }
 
 div.newsletter-bar {
@@ -1574,7 +1574,7 @@ div.show-header-bar hr {
   width: 50%;
 }
 
-.show-box {
+dl.show-box {
   display: grid;
   grid-template-columns: var(--label-width, 25%) 1fr;
   column-gap: 1em;
@@ -2482,9 +2482,6 @@ div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-contai
 }
 
 div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-container h2 {
-  /*  background-color: #E4C9FF;*/
-  /*  background-color: #CD9CFF;*/
-  /*  background-color: #e6cce9;*/
   border-radius: 8px 8px 0px 0px;
   padding: 2em;
   width: 30%;
