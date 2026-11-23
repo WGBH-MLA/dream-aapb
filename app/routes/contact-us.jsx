@@ -6,7 +6,7 @@ export default function ContactUs() {
     <div className="body-container">
       <a className="back-link-nav marbot" href="/about">&lt; About the AAPB</a>
       <BarTitle title="Contact Us" />
-      <div className="skinnier-body-container">
+      <div className="skinnier-content">
         <p>We want to hear from you!</p>
 
         <p>If you have general questions or comments about the AAPB, or want to share information on

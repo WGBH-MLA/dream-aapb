@@ -5,23 +5,22 @@ import { useState } from "react"
 export default function FAQ() {
   return (
     <>
-  
       <div className="body-container">
-            <a className="back-link-nav" href="/about"> &lt; About the AAPB</a>
+        <a className="back-link-nav" href="/about"> &lt; About the AAPB</a>
         <BarTitle title="FAQ" />
       </div>
       <div className="skinny-body-container">
         {faqs.map((item, i) => (
           <FAQItem key={i} question={item.q} answer={item.a} />
         ))}
-        </div>
+      </div>
         
-        <div className="skinnier-body-container">
-          <LinkBankFooter />
-          </div>
-          </>
-          )
-        }
+      <div className="skinnier-body-container">
+        <LinkBankFooter />
+      </div>
+    </>
+  )
+}
 
 function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false)

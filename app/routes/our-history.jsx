@@ -8,12 +8,9 @@ export default function History() {
       <div className="body-container">
         <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
         <BarTitle title="Our History" />
-        </div>
+      </div>
 
       <div className="skinnier-body-container">
-
-
-
         The American Archive of Public Broadcasting (AAPB) grew out of an initiative by the Corporation for Public Broadcasting (CPB) begun in 2007. Six years earlier, Congress had allocated funds to support PBS stations in the transition from analog to digital broadcasting. As the digital conversion deadline approached, many voiced concern about the fate of decades of public media programming recorded on analog formats which would soon be rendered unusable. Following lobbying efforts by the Association of Public Television Stations, Congress agreed to allow some of the funds it provided for the conversion to digital to be used to develop the American Archive. Over the next few years, the CPB developed the American Archive through a series of projects working in close collaboration with stations. These projects include:
         <p>
           <b>The American Archive Pilot Project (2009):</b> An initiative by the CPB, working with  Oregon Public Broadcasting, to identify, restore, and digitize nearly 2,500 hours of archival programming on the Southern Civil Rights Movement and the experiences of World War II veterans.

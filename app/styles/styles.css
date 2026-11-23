@@ -240,9 +240,8 @@ a:hover {
 
 /*general page layout*/
 div.body-container {
-  width: 91%;
+  width: 89%;
   margin-left: 5em;
-  margin-right: 5em;
 }
 
 div.body-container h1 {
@@ -364,7 +363,7 @@ div.skinny-body-container {
   margin-left: 8%;
   text-align: left;
 }
-
+/*
 div.skinny-body-container h3 {
   font-weight: 700;
   width: 80%;
@@ -376,8 +375,41 @@ div.skinny-body-container p {
   font-size: 0.80em;
   width: 95%;
 }
+*/
+/*div.skinny-body-container ul {
+  width: 80%;
+  margin-left: 8%;
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.8em;
+}
+*/
+div.skinny-body-container div.blue-box h3 {
+  text-align: left;
+}
 
-div.skinny-body-container ul {
+div.skinny-content {
+  font-size: 1.5em;
+  width: 75%;
+  margin-left: 8%;
+  text-align: left;
+}
+
+div.skinny-content h3 {
+  font-weight: 700;
+  width: 80%;
+  margin-left: 13.5%;
+  margin-top: 2em;
+}
+
+div.skinny-content p {
+  font-size: 0.80em;
+  width: 95%;
+}
+
+div.skinny-content ul, div.skinny-content ol {
   width: 80%;
   margin-left: 8%;
   margin-bottom: 2em;
@@ -387,7 +419,12 @@ div.skinny-body-container ul {
   font-size: 0.8em;
 }
 
-div.skinny-body-container div.blue-box h3 {
+div.skinnier-content {
+  overflow: visible;
+  font-size: 1.5em;
+  width: auto;
+  margin-left: 24%;
+  margin-right: 24%;
   text-align: left;
 }
 
@@ -899,9 +936,9 @@ h2.bar-title, div.summary-box-container h2 {
   background-color: #292A72;
   color: #fff;
   position: relative;
-  padding: 18px 32px;
+  padding: 1em;
   font-size: 2em;
-  width: 100%
+  width: auto;
 }
 
 /*summary box*/

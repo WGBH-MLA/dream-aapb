@@ -11,12 +11,9 @@ export const loader = async () => {
     programs = exhibits.map((exhibit) => exhibitToTVProgram(exhibit) )
   }
 
-  let data
-  data = {
+  return {
     radio_and_tv: programs
   }
-
-  return data
 }
 
 export default function Exhibits() {
@@ -26,6 +23,6 @@ export default function Exhibits() {
       <a className="top-back-link-nav" href="/exhibits">&lt; Back to Exhibits</a>
       <BarTitle title="Historical Events and Interviews"/>
       <TVMenu programs={ data.radio_and_tv } layout="grid" />
-      </div>
-      )
-    }
+    </div>
+  )
+}

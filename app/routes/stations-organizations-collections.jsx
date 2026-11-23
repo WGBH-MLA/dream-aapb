@@ -26,7 +26,7 @@ export default function Collections() {
       <a className="top-back-link-nav" href="/collections">&lt; Back to Collections</a>
       <BarTitle title="Stations and Organizations" />
       <TVMenu programs={ data.radio_and_tv } layout="grid" />
-      </div>
-      )
-    }
+    </div>
+  )
+}
 

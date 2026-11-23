@@ -23,7 +23,7 @@ export default function Exhibits() {
   let data = useLoaderData()
   return (
     <div className="body-container">
-        <a className="top-back-link-nav" href="/exhibits">&lt; Back to Exhibits</a>
+      <a className="top-back-link-nav" href="/exhibits">&lt; Back to Exhibits</a>
       <BarTitle title="Programming and Formats" />
       <TVMenu programs={ data.radio_and_tv } layout="grid" />
     </div>

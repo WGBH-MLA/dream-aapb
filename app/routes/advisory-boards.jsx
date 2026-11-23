@@ -463,7 +463,7 @@ export default function CouncilAndComittee() {
       bio="<strong>Ann Wilkens </strong>
       Archivist, Wisconsin Public Television
       <PullQuote text="PBS Wisconsin is incredibly honored to participate in the American Archive of Public Broadcasting (AAPB). The support and direction they have provided has allowed us to strengthen our preservation work, to make our broadcast history widely accessible, and has created a vibrant platform for collaboration amongst stations. Because of AAPB’s leadership and enthusiastic commitment, I feel we have a steadfast partner in preserving the broadcast legacy of PBS Wisconsin." />
-      <div className="skinnier-body-container">
+      <div className="skinnier-content">
         <LinkBankFooter />
       </div>
     </div>

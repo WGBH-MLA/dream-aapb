@@ -1,5 +1,4 @@
 import BarTitle from "../components/BarTitle"
-import TVMenu from "../components/TVMenu"
 
 export default function HistoryDay() {
   return (
@@ -110,9 +109,8 @@ export default function HistoryDay() {
 
         <h2><b>I need help with my research. How do I contact AAPB staff?</b></h2>
 
-        <p>Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>. Our team is happy to help.
-        </p>
-      </div >
+        <p>Email <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>. Our team is happy to help.</p>
+      </div>
     </div>
   )
 }

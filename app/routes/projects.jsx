@@ -4,7 +4,7 @@ import BarTitle from "../components/BarTitle"
 
 export default function Projects() {
   return (
-     <div className="body-container">
+    <div className="body-container">
       <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
       <BarTitle title="Projects" />
       <p>"Our vision is to to preserve and make accessible significant historical content created by public media, and to coordinate a national effort to save at-risk public media before its content is lost to posterity. We're fulfilling our vision through several exciting grant projects."</p> 
@@ -40,10 +40,9 @@ export default function Projects() {
       <p className="marbot"><img src="https://s3.amazonaws.com/americanarchive.org/org-logos/mellon_logo.png" alt="Mellon Logo Image" /> Founded in 1969, the Andrew W. Mellon Foundation endeavors to strengthen, promote, and, where necessary, defend the contributions of the humanities and the arts to human flourishing and to the well-being of diverse and democratic societies by supporting exemplary institutions of higher education and culture as they renew and provide access to an invaluable heritage of ambitious, path-breaking work. Additional information is available at <a href="https://www.mellon.org">www.mellon.org</a>.</p>
       <h3 id="national-endowment-for-the-humanities">National Endowment for the Humanities</h3>
       <p className="marbot"><img src="https://s3.amazonaws.com/americanarchive.org/org-logos/neh_logo.jpg" alt="NEH Logo Image" /> Created in 1965 as an independent federal agency, the National Endowment for the Humanities supports research and learning in history, literature, philosophy, and other areas of the humanities by funding selected, peer-reviewed proposals from around the nation. Additional information about the National Endowment for the Humanities and its grant programs is available at: www.neh.gov.</p>
-      
-      <div className="skinnier-body-container">
+      <div className="skinnier-content">
         <LinkBankFooter />
-        </div>
-        </div>
-        )
-      }
+      </div>
+    </div>
+  )
+}
