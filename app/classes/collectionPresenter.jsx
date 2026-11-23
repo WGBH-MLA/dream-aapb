@@ -34,7 +34,6 @@ export function renderCollection(collection, esConfig) {
         <div className="collection-section"></div>
         <h2 className="smarbot">Featured Items</h2>
         <div className="page-body marbot">
-          {/* for baby <div className="items-search smarbot"></div>*/}
           <div className="nice-items-container marbot">
             <div className="nice-items-wrapper">
               {niceItems}

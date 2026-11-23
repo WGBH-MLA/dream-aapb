@@ -1,8 +1,5 @@
-import LayoutSearch from "../components/LayoutSearch"
 import BarTitle from "../components/BarTitle"
-import LinkBankFooter from '../components/LinkBankFooter';
-import HeaderBar from "../components/HeaderBar"
-import { Link } from "lucide-react";
+import LinkBankFooter from '../components/LinkBankFooter'
 
 export default function ContactUs() {
   return (
