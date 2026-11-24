@@ -143,6 +143,7 @@ export function aboutToHtml(text) {
     )
     .map((p) => `<p>${p}</p>`)
     .join("")
+}
   
 export function withSuffix(label, suffix){
   if (!label) return suffix
