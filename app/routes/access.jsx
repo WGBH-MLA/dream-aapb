@@ -19,9 +19,9 @@ export default function Access() {
         </p>
 
         <h2><b>Visiting GBH</b></h2><br />
-        <div className="marbot" style={{ display: "flex" }}>
-          <img className="bmarleft" src='https://s3.amazonaws.com/americanarchive.org/on-location/wgbh-exterior.jpg' />
-          <ul className="blank-list">
+        <div className="marleft">
+          <img className="spaced-left" src='https://s3.amazonaws.com/americanarchive.org/on-location/wgbh-exterior.jpg' />
+          <ul className="blank-list" style={{ width: "auto", marginLeft: 0 }}>
             <li><b>Hours and Location:</b></li>
             <li>8 am to 5 pm, Monday through Friday</li>
             <li>WGBH Educational Foundation</li>
@@ -46,9 +46,9 @@ export default function Access() {
         </p>
 
         <h2><b>Recorded Sound Section</b></h2><br />
-        <div className="marbot" style={{ display: "flex" }}>
-          <img className="bmarleft" src='https://s3.amazonaws.com/americanarchive.org/on-location/library-exterior.jpg' />
-          <ul className="blank-list">
+        <div className="marleft">
+          <img className="spaced-left" src='https://s3.amazonaws.com/americanarchive.org/on-location/library-exterior.jpg' />
+          <ul className="blank-list" style={{ width: "auto", marginLeft: 0 }}>
             <li><b>Hours and Location:</b></li>
             <li>8:30 am to 5 pm, Monday through Friday</li>
             <li>Library of Congress</li>

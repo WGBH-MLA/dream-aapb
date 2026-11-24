@@ -7,8 +7,8 @@ export default function Terms() {
       <a className="back-link-nav" href="/about">&lt; About the AAPB</a>
       <BarTitle title="Policies" />
 
-          <div className="skinny-body-container">
-            <p><b>Terms of Use</b></p>
+      <div className="skinny-content">
+        <p><b>Terms of Use</b></p>
         <p>THE FOLLOWING TERMS AND CONDITIONS GOVERN YOUR USE OF THE SITE. PLEASE READ THESE TERMS OF USE CAREFULLY BEFORE USING THIS SITE." </p>
         <p> By using the American Archive of Public Broadcasting (“AAPB”) website you agree to be bound by these Terms of Use, Privacy Policy, and the Discussion and Comment Policy. If you do not agree to these Terms of Use, Privacy Policy, and Discussion and Comment Policy, please exit the Site and do not use the Site or any of its features.</p>
 
@@ -139,7 +139,7 @@ export default function Terms() {
 
       </div>
 
-      <div className="skinny-body-container marbot">
+      <div className="skinny-content marbot">
         <h2 className="marbot">Statement on AAPB Content, Metadata and Transcripts</h2>
         <p className="marbot">
           The American Archive of Public Broadcasting (AAPB) team seeks to make the vast AAPB collection widely accessible. With more than 100,000 digitized programs originating from diverse locations across the United States, we regret that we are not able to fully review and catalog each individual program in the collection. We recognize that gaps and inaccuracies in metadata and transcripts can be problematic for users of the archive.
@@ -155,7 +155,7 @@ export default function Terms() {
         </p>
       </div>
 
-      <div className="skinny-body-container marbot">
+      <div className="skinny-content marbot">
         <p>Thank you for visiting americanarchive.org (the “Site”). We know you don’t want the information you provide us shared indiscriminately. Here we explain what information the WGBH Educational Foundation (“GBH”) (and our third-party vendors and/or service providers (collectively “we”) acting on our behalf to help deliver the services and operate and analyze use of the Site), collects, what we do with the information, and what controls you have over the information collected. We’re committed to ensuring the privacy of your personally identifiable information, and to protecting your ability to make financial transactions and transmit your personal data with full confidence.</p>
 
         <p>The privacy policy set forth here refers solely to americanarchive.org. Please read it carefully, and if you have any questions or concerns, please contact us. Also, note that americanarchive.org links to other sites, such as the Corporation for Public Broadcasting (“CPB”), Library of Congress, and other participating organizations' websites. Please consult those sites to learn more about their policies.</p>
@@ -271,10 +271,10 @@ export default function Terms() {
           <li>Promote the discussion, rather than your own interests. the online community of this Site is not an appropriate venue for posters’ advertisements, promotions, campaigns, solicitations, or proselytizing. There can be a fine line between discussion and promotion of personal interests; use your best judgment and we’ll use ours.</li>
         </ol>
         <p>GBH will not publish comments that don’t meet these guidelines.</p>
-                </div>
-             <div className="skinnier-body-container">
-        <LinkBankFooter />
-             </div>
       </div>
+      <div className="skinnier-content">
+        <LinkBankFooter />
+      </div>
+    </div>
   )
 }

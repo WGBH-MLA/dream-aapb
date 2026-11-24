@@ -143,4 +143,13 @@ export function aboutToHtml(text) {
     )
     .map((p) => `<p>${p}</p>`)
     .join("")
+  
+export function withSuffix(label, suffix){
+  if (!label) return suffix
+  return label.toLowerCase().endsWith(suffix.toLowerCase()) ? label : `${label} ${suffix}`
+}
+
+export function isAapbSource(source) {
+  return !!source &&
+    source.trim().toLowerCase().replace(/^https?:\/\//, "").startsWith("americanarchive")
 }

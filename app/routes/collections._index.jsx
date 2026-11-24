@@ -46,8 +46,8 @@ export default function Collections() {
       and the American Bicentennial; and check out our rotating list of <a href="/featured-collections">featured</a>
       collections. Most of the materials in special collections are available
       online; however some items can only be accessed on site at GBH or the
-      Library of Congress, or through remote research access. Email us at{" "}
-      <a href="mailto:aapb_notifications@wgbh.org">aapb_notifications@wgbh.org</a>{" "}
+      Library of Congress, or through remote research access. Email us at
+      <a href="mailto:aapb_notifications@wgbh.org"> aapb_notifications@wgbh.org </a>
       to learn more.
     </p>
   </SummaryBox>

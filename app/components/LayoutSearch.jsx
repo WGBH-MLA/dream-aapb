@@ -10,13 +10,7 @@ export default function LayoutSearch(props){
   // })
 
   function goToSearch(){
-    let resource
-    if(window.location.pathname.includes("/catalog") && !window.location.pathname.includes("/catalog/")){
-      // different handling because we're already on the path (/catalog) we want to go to!
-      resource = "recatalog"
-    } else {
-      resource = "catalog"
-    }
+    let resource = "catalog"
 
     let destination
     if(props.searchFilter){

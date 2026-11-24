@@ -2,7 +2,7 @@ import BarTitle from "../components/BarTitle"
 import { useLoaderData } from 'react-router'
 import TVMenu from "../components/TVMenu"
 import { exhibitToTVProgram } from "../utils/toTVProgram"
-import { getExhibits, getFeatured } from "../utils/fetch"
+import { getExhibits } from "../utils/fetch"
 
 export const loader = async () => {
   let exhibits = await getExhibits()
@@ -23,7 +23,7 @@ export default function Exhibits() {
   let data = useLoaderData()
   return (
     <div className="body-container">
-        <a className="top-back-link-nav" href="/exhibits">&lt; Back to Exhibits</a>
+      <a className="top-back-link-nav" href="/exhibits">&lt; Back to Exhibits</a>
       <BarTitle title="Programming and Formats" />
       <TVMenu programs={ data.radio_and_tv } layout="grid" />
     </div>

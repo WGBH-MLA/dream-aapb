@@ -52,8 +52,6 @@ div, span, h1, h2, h3, h4, h5, a, ul, ol, pre {
 
 pre {
   padding: 2em;
-  /*word-wrap: break-word;*/
-  /*white-space: normal;*/
   background-color: #eee;
 }
 
@@ -109,14 +107,6 @@ div.viewer div.viewer-controls b {
   font-size: 0.8em;
 }
 
-/*
-div.viewer div.viewer-controls:after {
-  margin-left: 2em;
-  color: #3C439B;
-  font-size: 0.8em;
-  content: "(Click to toggle full PBCore view)";
-}
-*/
 div.viewer div.viewer-controls svg {
   margin-left: 1em;
   vertical-align: middle;
@@ -250,9 +240,8 @@ a:hover {
 
 /*general page layout*/
 div.body-container {
-  width: 91%;
+  width: 89%;
   margin-left: 5em;
-  margin-right: 5em;
 }
 
 div.body-container h1 {
@@ -374,7 +363,7 @@ div.skinny-body-container {
   margin-left: 10%;
   text-align: left;
 }
-
+/*
 div.skinny-body-container h3 {
   font-weight: 700;
   width: 80%;
@@ -386,8 +375,41 @@ div.skinny-body-container p {
   font-size: 0.80em;
   width: 95%;
 }
+*/
+/*div.skinny-body-container ul {
+  width: 80%;
+  margin-left: 8%;
+  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.8em;
+}
+*/
+div.skinny-body-container div.blue-box h3 {
+  text-align: left;
+}
 
-div.skinny-body-container ul {
+div.skinny-content {
+  font-size: 1.5em;
+  width: 75%;
+  margin-left: 8%;
+  text-align: left;
+}
+
+div.skinny-content h3 {
+  font-weight: 700;
+  width: 80%;
+  margin-left: 13.5%;
+  margin-top: 2em;
+}
+
+div.skinny-content p {
+  font-size: 0.80em;
+  width: 95%;
+}
+
+div.skinny-content ul, div.skinny-content ol {
   width: 80%;
   margin-left: 8%;
   margin-bottom: 2em;
@@ -397,7 +419,12 @@ div.skinny-body-container ul {
   font-size: 0.8em;
 }
 
-div.skinny-body-container div.blue-box h3 {
+div.skinnier-content {
+  overflow: visible;
+  font-size: 1.5em;
+  width: auto;
+  margin-left: 24%;
+  margin-right: 24%;
   text-align: left;
 }
 
@@ -457,7 +484,6 @@ button.donate {
 .skinny-body-container .back-link-nav {
   color: #3d439c;
   font-size: .6em;
-  margin-left: -.4em;
   text-decoration: none;
 }
 
@@ -685,19 +711,19 @@ div.static-logos img {
   max-height: 12em;
 }
 
-img.bmarright {
+img.spaced-right {
   float: right;
   width: 500px;
   height: auto;
   margin: 0 0 1em 1.5em;
 }
 
-img.bmarleft {
+img.spaced-left {
   float: left;
-  width: 200px;
-  max-width: 45%;
+  padding-left: 2em;
+  width: 300px;
   height: auto;
-  margin: 0 1.5em 1em 0;
+  margin: 0 1em 1em 0;
 }
 
 div.newsletter-bar {
@@ -1052,16 +1078,14 @@ div.layout-search button {
   border: none;
 }
 
-/*bar title*/
-h2.bar-title {
-  padding: 1em;
-  font-size: 2em;
+/*bar title + summary box headings*/
+h2.bar-title, div.summary-box-container h2 {
   background-color: #292A72;
-  width: 85vw;
-  padding: 18px 32px;
   color: #fff;
   position: relative;
-  width: 97.5%;
+  padding: 1em;
+  font-size: 2em;
+  width: auto;
 }
 
 /*summary box*/
@@ -1412,16 +1436,8 @@ div.drawermenu-container svg.lucide-chevron-down {
   flex-shrink: 0;
 }
 
-
-/*.drawer-title {
-  font-family: 'Red Hat Display', sans-serif;
-  font-weight: normal;
-}
-*/
-
 div.drawer-subtitle {
   font-size: 1em;
-  /*  font-weight: 300;*/
 }
 
 div.drawermenu-container div.drawermenu-items:before {
@@ -1683,7 +1699,6 @@ div#show-media div.show-thumbnail img {
   width: 100%;
   object-fit: cover;
   display: block;
-  /*little hacky but will true up em scale to the actual player later (9.85em) */
 }
 
 div#show-media div.show-thumbnail img.thumbnail-bar {
@@ -1722,7 +1737,7 @@ div.show-header-bar hr {
   width: 50%;
 }
 
-.show-box {
+dl.show-box {
   display: grid;
   grid-template-columns: var(--label-width, 25%) 1fr;
   column-gap: 1em;
@@ -1844,7 +1859,6 @@ div.transcript-viewer {
   padding-left: 1em;
   padding-top: 2em;
   padding-bottom: 1.2em;
-  /*height: 15.75em;*/
   height: 9.85em;
   overflow-y: scroll;
 }
@@ -1931,10 +1945,6 @@ div.transcript-viewer-container div.transcript-search a.transcript-search-button
   min-width: 3%;
   min-height: 1px;
   margin-left: 0.5em;
-}
-
-div.transcript-viewer-container div.transcript-search a.transcript-search-button.transcript-search-button-first {
-  /*margin-left: 0.2em;*/
 }
 
 div.transcript-viewer-container div.transcript-search a.transcript-search-button:hover {
@@ -2333,12 +2343,10 @@ div.sort-container.per-page{
 }
 
 div.sort-container.sort svg {
-  /*  right: 3.5em;*/
   margin-left: 4em;
 }
 
 div.sort-container.per-page svg {
-  /*  right: 4em;*/
   margin-left: 0em;
 }
 
@@ -2357,18 +2365,6 @@ div.current-refinements-container.closed {
   -webkit-mask-position: top;
   z-index: 100;
 }
-/*
-div.current-refinements-container.closed::after {
-  z-index: 110;
-  position: absolute;
-  top: 2em;
-  text-align: center;
-  width: 100%;
-  padding: 1em;
-  background-color: #3C439B;
-  color: #fff;
-  content: "More refinements hidden";
-}*/
 
 div.clear-refinements-container {
   margin-top: 1em;
@@ -2597,20 +2593,6 @@ div.nice-item div.show-thumbnail img {
   padding: 0;
 }
 
-div.items-search input {
-  height: 2em;
-  width: 33%;
-}
-
-/*title of whole page*/
-/*div.skinny-body-container.title h2 {
-  background-color: #d2d5e2;
-  padding: 1em;
-  margin-bottom: 2em;
-}
-*/
-
-
 div.skinny-body-container h2 {
   font-size: 1.2em;
   font-weight: 700;
@@ -2630,9 +2612,6 @@ div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-contai
 }
 
 div.page-container div.sidey-body-container.exhibit-title div.exhibit-top-container h2 {
-  /*  background-color: #E4C9FF;*/
-  /*  background-color: #CD9CFF;*/
-  /*  background-color: #e6cce9;*/
   border-radius: 8px 8px 0px 0px;
   padding: 2em;
   width: 30%;
@@ -2939,7 +2918,6 @@ table.exhibit-image.med-image {
 }
 table.exhibit-image.med-image img {
   max-height: 80em;
-  /*  max-width: 40em;*/
   padding: 0;
 }
 table.exhibit-image.med-image caption {
@@ -3174,10 +3152,6 @@ div.author div {
   display: block;
 }
 
-div.author div img {
-  /*  display: inline-flex;*/
-}
-
 div.author div span {
   display: block;
   font-size: 0.8em;
@@ -3284,7 +3258,7 @@ a.america-250 div span {
 .carousel-card-media {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* Enforces 1:1 square ratio */
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -3471,15 +3445,6 @@ div#mobile-sidebar-toggler {
   }
 
   div.header-bar img.header-squares {
-    /*display: none;*/
-
-    /*object-fit: cover;
-    width: 100%;
-    height: 4em;
-    margin-top: -2em;
-    z-index: 0;
-    display: block;*/
-
     position: absolute;
     right: 0;
     width: 100%;
@@ -3957,7 +3922,6 @@ div#mobile-sidebar-toggler {
 
     height: auto;
     color: #3C439B;
-    /*position: sticky;*/
     position: fixed;
     display: block;
     z-index: 1000001;
@@ -4152,10 +4116,6 @@ div#mobile-sidebar-toggler {
   }
 
   /*show page*/
-
-  div#show-media {
-    /*margin-bottom: 12em;*/
-  }
 
   /*bigtviewer*/
   div.transcript-viewer-container div.transcript-search {
