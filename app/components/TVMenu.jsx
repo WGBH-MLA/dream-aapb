@@ -51,6 +51,7 @@ export default function TVMenu({
   seeAllURL,
   columns,
   showDesc = false,
+  layout = "slider",
 }) {
 
   const scrollRef = useRef(null);
@@ -58,7 +59,9 @@ export default function TVMenu({
   const [canScrollRight, setCanScrollRight] = useState(false);
   
   const itemList = items.length > 0 ? items : programs;
-  const isThreeColumn = columns === 3 || itemList.length === 3;
+  const isGrid = layout === "grid";
+  const isThreeColumn = !isGrid && (columns === 3 || itemList.length === 3);
+  const showNav = !isThreeColumn && !isGrid;
 
   const checkScroll = () => {
     const el = scrollRef.current;
@@ -90,11 +93,10 @@ export default function TVMenu({
     });
   };
   
-  const showNav = !isThreeColumn;
-
   return (
-    <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""}`}>
+  <div className={`carousel-container ${isThreeColumn ? "three-columns" : ""} ${isGrid ? "grid-layout" : ""}`}>
 
+    {(title || seeAllURL) && (
       <div className="carousel-header">
         <h2 className="carousel-title">{title}</h2>
         {seeAllURL && (
@@ -103,28 +105,29 @@ export default function TVMenu({
           </a>
         )}
       </div>
+    )}
 
-      <div className="carousel-slider-wrapper">
-        {showNav && canScrollLeft && (
+    <div className="carousel-slider-wrapper">
+      {showNav && canScrollLeft && (
           <NavButton
             direction="left"
             onClick={() => handleScroll("left")}
           />
-        )}
+      )}
 
-        <div className="carousel-track" ref={scrollRef}>
-          {itemList.map((item, index) => (
-            <CarouselCard key={index} item={item} showDesc={showDesc} />
-          ))}
-        </div>
+      <div className="carousel-track" ref={scrollRef}>
+        {itemList.map((item, index) => (
+          <CarouselCard key={item.key ?? index} item={item} showDesc={showDesc} />
+        ))}
+      </div>
 
-        {showNav && canScrollRight && (
+      {showNav && canScrollRight && (
           <NavButton
             direction="right"
             onClick={() => handleScroll("right")}
           />
-        )}
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 }
