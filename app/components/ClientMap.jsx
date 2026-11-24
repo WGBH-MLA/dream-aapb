@@ -4,7 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from 'react-leaflet'
 import usStates from '../data/usStates.json'
 import orgs from '../data/orgs.json'
 
-export default function Mappy(props) {
+const stateSlug = (state) =>
+  `state-${state.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
+
+export default function ClientMap(props) {
   // aggregate by state oh great
   let orgsByState = {}
   Object.keys(orgs).forEach(org_id => {
@@ -21,47 +24,78 @@ export default function Mappy(props) {
     fillColor: '#7c147c',
     weight: 1,
     color: '#ccc',
-    dashArray: 3,
+    dashArray: '3',
     fillOpacity: 0.5,
   }
 
-  var sdata
-  // var mapData = orgsByState.values.map( () )
-  var mapFeatures = usStates.features.map(stateFeature => {
-    stateFeature.style = stateStyle
-    return stateFeature
-  })
-  sdata = {
-    type: 'FeatureCollection',
-    features: mapFeatures,
+  const onEachState = (feature, layer) => {
+    const stateName =
+      feature.properties?.name ||
+      feature.properties?.NAME ||
+      feature.properties?.state
+
+    if (!stateName) return
+
+    const matchedLink = props.stateLinks?.find(
+      (s) => s.name.toLowerCase() === stateName.toLowerCase()
+    )
+    const targetId = matchedLink
+      ? matchedLink.href.replace(/^#/, "")
+      : stateSlug(stateName)
+
+    layer.on({
+      click: () => {
+        const el = document.getElementById(targetId)
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" })
+          window.history.replaceState(null, "", `#${targetId}`)
+        } else {
+          window.location.hash = `#${targetId}`
+        }
+      },
+      mouseover: (e) => {
+        e.target.setStyle({
+          fillOpacity: 0.75,
+          weight: 2,
+        })
+      },
+      mouseout: (e) => {
+        e.target.setStyle(stateStyle)
+      },
+    })
   }
 
-  var markers = []
-  Object.values(orgsByState).map(orgsInState => {
-    Object.keys(orgsInState).map((orgID, i) => {
-      let org = orgs[orgID]
-      let logo =
-        org.Logo ?
-          <img
-            src={`https://s3.amazonaws.com/americanarchive.org/org-logos/${org.Logo}`}
-            className='mappy-logo'
-          />
-        : null
+  const markers = []
+  Object.values(orgsByState).forEach(orgsInState => {
+    Object.keys(orgsInState).forEach((orgID, i) => {
+      const org = orgs[orgID]
+      if (!org.location || org.location.length < 2) return
+
+      const orgName = org["Short name"] || org.Name
+      const logo = org.Logo ? (
+        <img
+          src={`https://s3.amazonaws.com/americanarchive.org/org-logos/${org.Logo}`}
+          alt={`${orgName} logo`}
+          className='mappy-logo'
+        />
+      ) : null
+
       markers.push(
         <Marker key={orgID + i} position={{ lat: org.location[0], lng: org.location[1] }}>
           <Popup>
-            <a href={`/organizations/${orgID}`} target='_blank' class='org-url'>
-              <h3>{org.Name}</h3>
+            <a href={`/organizations/${orgID}`} target='_blank' rel='noreferrer' className='org-url'>
+              <h3>{orgName}</h3>
             </a>
             <div>
               {org.City}, {org.State}
             </div>
             {logo}
             <a
-              href={ `/catalog?organization_id=${ orgID }` }
+              href={`/catalog?organization_id=${orgID}`}
               target='_blank'
-              class='btn btn-default btn-sm'>
-              View all records
+              rel='noreferrer'
+              className='btn btn-default btn-sm'>
+              VIEW ALL RECORDS
             </a>
           </Popup>
         </Marker>
@@ -77,7 +111,11 @@ export default function Mappy(props) {
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
 
-        <GeoJSON data={sdata} />
+        <GeoJSON
+          data={usStates}
+          style={stateStyle}
+          onEachFeature={onEachState}
+        />
         {markers}
       </MapContainer>
     </>

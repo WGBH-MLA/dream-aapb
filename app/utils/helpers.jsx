@@ -129,6 +129,22 @@ export function pageTitle(title){
   return `${title} - American Archive of Public Broadcasting`
 }
 
+export function aboutToHtml(text) {
+  if (!text) return ""
+  return text
+    .split("\n")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) =>
+      p.replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+    )
+    .map((p) => `<p>${p}</p>`)
+    .join("")
+}
+  
 export function withSuffix(label, suffix){
   if (!label) return suffix
   return label.toLowerCase().endsWith(suffix.toLowerCase()) ? label : `${label} ${suffix}`
