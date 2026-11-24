@@ -1,64 +1,66 @@
-import { useLoaderData, Link } from "react-router";
-import Mappy from "../components/Mappy";
-import orgs from "../data/orgs.json";
-import SummaryBox from "../components/SummaryBox";
-import { scrollToTop } from "../utils/helpers";
+import { useLoaderData, Link } from "react-router"
+import Mappy from "../components/Mappy"
+import orgs from "../data/orgs.json"
+import SummaryBox from "../components/SummaryBox"
+import { scrollToTop } from "../utils/helpers"
 
 export const loader = async () => {
   return {
     orgs: orgs || {},
-  };
-};
+    esIndex: process.env.ES_INDEX,
+    tsIndex: process.env.ES_TS_INDEX,
+  }
+}
 
 const stateSlug = (state) =>
-  `state-${state.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+  `state-${state.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
 
 export default function Organizations() {
-  const { orgs: orgData = {}, esIndex, tsIndex } = useLoaderData() || {};
-  const activeIndex = tsIndex ? `${esIndex},${tsIndex}` : esIndex;
+  const { orgs, esIndex, tsIndex } = useLoaderData() || {}
+  const activeIndex = tsIndex ? `${esIndex},${tsIndex}` : esIndex
 
   // Convert the keyed JSON object into an array with org IDs
-  const organizations = Object.entries(orgData).map(([orgid, org]) => ({
+  const organizations = Object.entries(orgs).map(([orgid, org]) => ({
     orgid,
     ...org,
-  }));
+  }))
 
   const organizationsByState = organizations.reduce((groups, org) => {
-    const state = org.State || "Other";
+    const state = org.State || "Other"
 
     if (!groups[state]) {
-      groups[state] = [];
+      groups[state] = []
     }
 
-    groups[state].push(org);
-    return groups;
-  }, {});
+    groups[state].push(org)
+    return groups
+  }, {})
 
-  const states = Object.keys(organizationsByState).sort();
+  const states = Object.keys(organizationsByState).sort()
 
   states.forEach((state) => {
     organizationsByState[state].sort((a, b) =>
       (a["Short name"] || a.Name || "").localeCompare(
         b["Short name"] || b.Name || ""
       )
-    );
-  });
+    )
+  })
 
   const stateLinks = states.map((state) => ({
     name: state,
     href: `#${stateSlug(state)}`,
-  }));
+  }))
 
   const stateCatalogUrl = (stateOrgs) => {
     const params = stateOrgs
       .map((org, i) => {
-        const orgName = org["Short name"] || org.Name;
-        return `${encodeURIComponent(activeIndex)}[refinementList][contributing_orgs][${i}]=${encodeURIComponent(orgName)}`;
+        const orgName = org["Short name"] || org.Name
+        return `${encodeURIComponent(activeIndex)}[refinementList][contributing_orgs][${i}]=${encodeURIComponent(orgName)}`
       })
-      .join("&");
+      .join("&")
 
-    return `/catalog?${params}`;
-  };
+    return `/catalog?${params}`
+  }
 
   return (
     <div className="body-container">
@@ -73,7 +75,7 @@ export default function Organizations() {
 
       <div className="organization-directory">
         {states.map((state) => {
-          const stateOrgs = organizationsByState[state];
+          const stateOrgs = organizationsByState[state]
 
           return (
             <section
@@ -122,9 +124,9 @@ export default function Organizations() {
                 </button>
               </div>
             </section>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }
